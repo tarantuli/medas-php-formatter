@@ -55,12 +55,11 @@ class Validator
             return $message;
         }
 
-        $message = str_replace($tempFile, '[code]', $message);
         $lineNumber = $match[1] - 1;
         $codeLines = explode("\n", $code);
 
         if (array_key_exists($lineNumber, $codeLines)) {
-            $message = str_replace('[code]', sprintf('"%s"', $codeLines[$lineNumber]), $message);
+            $message = str_replace($tempFile, sprintf('"%s"', $codeLines[$lineNumber]), $message);
         }
 
         return $message;
