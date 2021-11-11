@@ -1,0 +1,38 @@
+{
+    "name": "morphp/medas-php-reformatter",
+    "description": "Medas PHP reformatter",
+    "authors": [
+        {
+            "name": "Patrick Morpey",
+            "email": "patrick@morphp.nl"
+        }
+    ],
+    "type": "library",
+    "require": {
+        "morphp/medas-core": "@dev",
+        "morphp/medas-service-manager": "@dev"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.5"
+    },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../core"
+        },
+        {
+            "type": "path",
+            "url": "../service-manager"
+        },
+        {
+            "type": "path",
+            "url": "../config-manager"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Medas\\PhpReformatter\\": "src/",
+            "Medas\\Test\\": "tests/"
+        }
+    }
+}
