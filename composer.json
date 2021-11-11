@@ -10,6 +10,8 @@
     "type": "library",
     "require": {
         "morphp/medas-core": "@dev",
+        "morphp/medas-config-manager": "@dev",
+        "morphp/medas-filesystem": "@dev",
         "morphp/medas-service-manager": "@dev"
     },
     "require-dev": {
@@ -22,11 +24,15 @@
         },
         {
             "type": "path",
-            "url": "../service-manager"
+            "url": "../config-manager"
         },
         {
             "type": "path",
-            "url": "../config-manager"
+            "url": "../filesystem"
+        },
+        {
+            "type": "path",
+            "url": "../service-manager"
         }
     ],
     "autoload": {
