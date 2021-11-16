@@ -1,6 +1,6 @@
 {
-    "name": "morphp/medas-php-reformatter",
-    "description": "Medas PHP reformatter",
+    "name": "morphp/medas-php-beautifier",
+    "description": "Medas PHP beautifier",
     "authors": [
         {
             "name": "Patrick Morpey",
@@ -37,7 +37,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "Medas\\PhpReformatter\\": "src/",
+            "Medas\\PhpBeautifier\\": "src/",
             "Medas\\Test\\": "tests/"
         }
     }

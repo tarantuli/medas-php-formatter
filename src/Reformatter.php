@@ -2,30 +2,80 @@
 
 declare(strict_types=1);
 
-namespace Medas\PhpReformatter;
+namespace Medas\PhpBeautifier;
 
-use Medas\PhpReformatter\Exceptions\ReformattedCodeIsInvalidException;
+use Medas\PhpBeautifier\Exceptions\ReformattedCodeIsInvalidException;
+use Medas\PhpBeautifier\Reformatters\RequiredWhitespaceAdder;
+use Medas\PhpBeautifier\Tokens\Block;
+use Medas\PhpBeautifier\Tokens\BlockDumper;
+use Medas\PhpBeautifier\Tokens\StructureFinder;
+use Medas\PhpBeautifier\Tokens\TokenCollection;
+use Medas\ServiceManager\Attributes\Service;
 
+#[Service]
 class Reformatter
 {
-    /** @var \PhpToken[] $tokens */
-    public function __construct(private array $tokens, private Settings\Settings $settings)
+    private TokenCollection $tokens;
+    private Block $document;
+    private Settings\Settings $settings;
+
+    public function __construct(
+        private BlockPrinter $blockPrinter,
+    )
     {
     }
 
-    public function reformat(): string
+    public function reformat(TokenCollection $tokens, Settings\Settings $settings): string
     {
-        $result = 'done!';
+        $this->tokens = $tokens;
+        $this->settings = $settings;
+
+        $this->stripWhitespace();
+        $this->determineStructure();
+        $this->addRequiredWhitespace();
+
+        if (false) {
+            /** @noinspection PhpUnreachableStatementInspection */
+            sm()->resolve(BlockDumper::class)->dump($this->document);
+        }
+
+        $result = $this->blockPrinter->print(
+            $this->document,
+            (string) $this->settings->document->indentation(),
+            (string) $this->settings->document->lineEnding());
+
+        if (true) {
+            echo $result;
+        }
+
         $this->assertCodeIsValid($result);
         return $result;
     }
 
+    private function stripWhitespace()
+    {
+        $this->tokens->removeByType(T_WHITESPACE);
+    }
+
+    private function determineStructure()
+    {
+        $structureFinder = sm()->resolve(StructureFinder::class);
+        $this->document = $structureFinder->determine($this->tokens);
+    }
+
+    private function addRequiredWhitespace()
+    {
+        $adder = sm()->resolve(RequiredWhitespaceAdder::class);
+        $adder->add($this->tokens);
+    }
+
     private function assertCodeIsValid(string $code): void
     {
-        $validator = sm()->resolve(Validator::class);
+        $validator = sm()->resolve(CodeValidator::class);
 
         if (!$validator->validate($code)) {
             throw new ReformattedCodeIsInvalidException($code, $validator->getErrorMessage());
         }
     }
+
 }

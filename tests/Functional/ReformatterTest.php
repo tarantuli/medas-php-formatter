@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Medas\Test\Functional;
 
-use Medas\PhpReformatter\PhpReformatter;
-use Medas\PhpReformatter\Settings\Settings;
+use Medas\PhpBeautifier\PhpBeautifier;
+use Medas\PhpBeautifier\Settings\Settings;
 use PHPUnit\Framework\TestCase;
 
 class ReformatterTest extends TestCase
@@ -13,12 +13,12 @@ class ReformatterTest extends TestCase
     /** @dataProvider getTestFiles */
     public function testReformatter(string $sourceFile, string $expectedFile, Settings $settings = null): void
     {
-        $phpReformatter = sm()->resolve(PhpReformatter::class);
+        $phpReformatter = sm()->resolve(PhpBeautifier::class);
         $source = file_get_contents(__DIR__ . '/../TestFiles/' . $sourceFile);
 
         $expected = file_get_contents(__DIR__ . '/../TestFiles/' . $expectedFile);
 
-        $result = $phpReformatter->reformat($source, $settings);
+        $result = $phpReformatter->beautify($source, $settings);
 
         self::assertEquals($expected, $result, "$sourceFile => $expectedFile");
     }

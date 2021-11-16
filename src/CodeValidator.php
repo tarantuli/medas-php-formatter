@@ -2,22 +2,22 @@
 
 declare(strict_types=1);
 
-namespace Medas\PhpReformatter;
+namespace Medas\PhpBeautifier;
 
 use Medas\Core\System;
 use Medas\FileSystem\TemporaryFiles;
-use Medas\PhpReformatter\Exceptions\CannotRunCommandLineException;
+use Medas\PhpBeautifier\Exceptions\CannotRunCommandLineException;
 use Medas\ServiceManager\Attributes\ConfigValue;
 use Medas\ServiceManager\Attributes\Service;
 
 #[Service]
-class Validator
+class CodeValidator
 {
     private string $errorMessage;
 
     public function __construct(
         private TemporaryFiles $temporaryFiles,
-                               #[ConfigValue('validator.path_to_php')] private string $pathToPhp
+        #[ConfigValue('validator.path_to_php')] private string $pathToPhp
     )
     {
     }
