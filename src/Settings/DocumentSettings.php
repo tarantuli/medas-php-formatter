@@ -5,13 +5,22 @@ declare(strict_types=1);
 namespace Medas\PhpBeautifier\Settings;
 
 use Medas\PhpBeautifier\Settings\Indentations\Indentation;
+use Medas\PhpBeautifier\Settings\Indentations\NoIndentation;
 use Medas\PhpBeautifier\Settings\LineEndings\LineEnding;
+use Medas\PhpBeautifier\Settings\LineEndings\NoLineEnding;
 
 class DocumentSettings
 {
     private LineEnding $lineEnding;
     private Indentation $indentation;
-    private int $maxLineLength;
+    private ?int $maxLineLength;
+
+    public function __construct()
+    {
+        $this->lineEnding = new NoLineEnding();
+        $this->indentation = new NoIndentation();
+        $this->maxLineLength = null;
+    }
 
     public function lineEnding(): LineEnding
     {

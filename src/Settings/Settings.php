@@ -13,15 +13,19 @@ class Settings
     public DocumentSettings $document;
 
     /** @var TokenFormatter[] */
-    private array $tokenFormatters = [];
+    private array $tokenFormatters;
 
     /** @var BlockFormatter[] */
-    private array $blockFormatters = [];
+    private array $blockFormatters;
 
     public function __construct()
     {
         $this->document = new DocumentSettings();
-        $this->addTokenFormatter(service(RequiredWhitespace::class));
+        $this->tokenFormatters = [
+            service(RequiredWhitespace::class),
+        ];
+
+        $this->blockFormatters = [];
     }
 
     public function addTokenFormatter(TokenFormatter $formatter): self
