@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Medas\PhpBeautifier;
 
 use Medas\PhpBeautifier\Exceptions\ReformattedCodeIsInvalidException;
-use Medas\PhpBeautifier\Reformatters\RequiredWhitespaceAdder;
 use Medas\PhpBeautifier\Tokens\Block;
 use Medas\PhpBeautifier\Tokens\BlockDumper;
 use Medas\PhpBeautifier\Tokens\StructureFinder;
@@ -32,7 +31,7 @@ class Reformatter
 
         $this->stripWhitespace();
         $this->determineStructure();
-        $this->addRequiredWhitespace();
+        $this->applyFormatters();
 
         if (false) {
             /** @noinspection PhpUnreachableStatementInspection */
@@ -63,10 +62,15 @@ class Reformatter
         $this->document = $structureFinder->determine($this->tokens);
     }
 
-    private function addRequiredWhitespace()
+    private function applyFormatters(): void
     {
-        $adder = sm()->resolve(RequiredWhitespaceAdder::class);
-        $adder->add($this->tokens);
+        foreach ($this->settings->blockFormatters() as $formatter) {
+            $formatter->format($this->document);
+        }
+
+        foreach ($this->settings->tokenFormatters() as $formatter) {
+            $formatter->format($this->tokens);
+        }
     }
 
     private function assertCodeIsValid(string $code): void

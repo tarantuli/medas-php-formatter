@@ -17,7 +17,7 @@ class PhpBeautifier
         private AdditionalTokensDefiner $additionalTokensDefiner,
         private Reformatter             $reformatter)
     {
-        $this->settings = new Settings\Settings();
+        $this->settings = new Settings\Psr12();
     }
 
     public function beautify(string $code, Settings\Settings $settings = null): string

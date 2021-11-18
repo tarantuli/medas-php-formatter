@@ -21,6 +21,8 @@ class StructureFinder
 
     private bool $ignoreNextDoubleQuote = false;
     private bool $startNewStatementBeforeNext = false;
+    private bool $nextBraceOpensForClause = false;
+    private int $forClauseDepth = 0;
 
     public function determine(TokenCollection $tokens): Block
     {
@@ -29,7 +31,7 @@ class StructureFinder
         $this->inAttribute = false;
         $this->context = new GlobalScope();
 
-        $document = new Block($this->depth);
+        $document = new Block($this->depth, null);
         $this->block = $document;
         $this->statement = $this->block->appendNewStatement();
 
@@ -75,7 +77,12 @@ class StructureFinder
 
         $this->statement->appendToken($token);
 
-        if ($token->is([T_SEMICOLON, T_OPEN_TAG, T_CURLY_BRACKET_CLOSE])) {
+        if ($token->is([T_OPEN_TAG, T_CURLY_BRACKET_CLOSE])) {
+            // Next token starts on a new line
+            $this->startNewStatementBeforeNext = true;
+        }
+
+        if ($token->is(T_SEMICOLON) && !$this->forClauseDepth) {
             // Next token starts on a new line
             $this->startNewStatementBeforeNext = true;
         }
@@ -85,7 +92,7 @@ class StructureFinder
             $this->openBlocks[] = $this->block;
 
             // Next token starts in a new block
-            $newBlock = new Block(++$this->depth);
+            $newBlock = new Block(++$this->depth, $this->statement);
             $this->block->appendBlock($newBlock);
             $this->block = $newBlock;
             $this->statement = $this->block->appendNewStatement();
@@ -105,6 +112,19 @@ class StructureFinder
                 // Next token is in a string
                 $this->inString = true;
             }
+        }
+
+        if ($token->is(T_FOR)) {
+            $this->nextBraceOpensForClause = true;
+        }
+
+        if ($token->is(T_ROUND_BRACKET_OPEN) && ($this->forClauseDepth || $this->nextBraceOpensForClause)) {
+            $this->nextBraceOpensForClause = false;
+            ++$this->forClauseDepth;
+        }
+
+        if ($token->is(T_ROUND_BRACKET_CLOSE) && $this->forClauseDepth) {
+            --$this->forClauseDepth;
         }
     }
 }

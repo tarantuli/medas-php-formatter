@@ -17,30 +17,23 @@ class AdditionalTokensDefiner
         'T_COLON' => ':',
         'T_COMMA' => ',',
         'T_CONCATENATOR' => '.',
-        'T_CURLY_BRACKET_CLOSE'
-        => '}',
-        'T_CURLY_BRACKET_OPEN'
-        => '{',
+        'T_CURLY_BRACKET_CLOSE' => '}',
+        'T_CURLY_BRACKET_OPEN' => '{',
         'T_DOLLAR' => '$',
         'T_DOUBLE_QUOTE' => '"',
-        'T_EXCLAMATION_POINT'
-        => '!',
+        'T_EXCLAMATION_POINT' => '!',
         'T_LESS_THAN' => '<',
         'T_MINUS' => '-',
         'T_MOD' => '%',
         'T_MORE_THAN' => '>',
         'T_PLUS' => '+',
         'T_QUESTION_MARK' => '?',
-        'T_ROUND_BRACKET_CLOSE'
-        => ')',
-        'T_ROUND_BRACKET_OPEN'
-        => '(',
+        'T_ROUND_BRACKET_CLOSE' => ')',
+        'T_ROUND_BRACKET_OPEN' => '(',
         'T_SEMICOLON' => ';',
         'T_SLASH' => '/',
-        'T_SQUARE_BRACKET_CLOSE'
-        => ']',
-        'T_SQUARE_BRACKET_OPEN'
-        => '[',
+        'T_SQUARE_BRACKET_CLOSE' => ']',
+        'T_SQUARE_BRACKET_OPEN' => '[',
     ];
 
     public function __construct()

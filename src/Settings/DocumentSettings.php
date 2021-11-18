@@ -5,20 +5,13 @@ declare(strict_types=1);
 namespace Medas\PhpBeautifier\Settings;
 
 use Medas\PhpBeautifier\Settings\Indentations\Indentation;
-use Medas\PhpBeautifier\Settings\Indentations\Space;
 use Medas\PhpBeautifier\Settings\LineEndings\LineEnding;
-use Medas\PhpBeautifier\Settings\LineEndings\LineFeed;
 
 class DocumentSettings
 {
     private LineEnding $lineEnding;
     private Indentation $indentation;
-
-    public function __construct()
-    {
-        $this->lineEnding = new LineFeed();
-        $this->indentation = new Space(4);
-    }
+    private int $maxLineLength;
 
     public function lineEnding(): LineEnding
     {
@@ -40,6 +33,18 @@ class DocumentSettings
     public function setIndentation(Indentation $indentation): self
     {
         $this->indentation = $indentation;
+
+        return $this;
+    }
+
+    public function maxLineLength(): int
+    {
+        return $this->maxLineLength;
+    }
+
+    public function setMaxLineLength(int $maxLineLength): self
+    {
+        $this->maxLineLength = $maxLineLength;
 
         return $this;
     }

@@ -5,36 +5,74 @@ declare(strict_types=1);
 namespace Medas\ServiceManager;
 
 use Medas\ServiceManager\Attributes\Service;
+use Medas\ServiceManager\Attributes\Mervice as Pervice;
+
+use function A\B;
+use function A\C;
+use function A\D;
+use function B\E;
+
+use const C;
 
 #[Service(12)]
-class ServiceInstantiator
+abstract class ServiceInstantiator
 {
-    private MethodArgumentsValueResolver $methodArgumentsValueFinder;
+    private const CONST_NAME = [1, 2, 3, 4, 5];
 
-    public function __construct(ServiceManager $manager)
+    public function callback(int $a): callable
     {
-        $test = 'string';
-        echo "This is a test with $test in a string";
-        $this->methodArgumentsValueFinder = new MethodArgumentsValueResolver($manager);
-        $manager->bindService($this, ServiceInstantiator::class);
+        return fn($a) => strlen($a);
     }
 
-    public function instantiate(string $className): object
+    Protected Function test(RelativePath\RelativeClass $relativeClass, bool $isDefault = false, callable ...$callableArray)
     {
-        $class = new \ReflectionClass($className);
+        printf("\e[%sm%s\e[0m", implode(';', $formats), $string);
 
-        $arguments = $this->getConstructorArgumentValues($class);
-
-        return new $className(... $arguments);
-    }
-
-    private function getConstructorArgumentValues(\ReflectionClass $class): array
-    {
-        if (!$constructor = $class->getConstructor()) {
-            return [];
+        for ($i = 0; $i < 10; ++$i) {
+            // Line is a comment
         }
 
-        return $this->methodArgumentsValueFinder->resolve($constructor);
+        foreach ($relativeClass as $key => $value) {
+            $value += 2;
+            $value -= 2;
+            $value *= 2;
+            $value /= 2;
+            $value %= null;
+        }
+
+        while ($condition === TRUE && $value === 1278934987 && $key === 'a reasonably long string that pushes the length of the line over 120') {
+            // Test
+        }
+
+        do {
+            // Test
+        } while ($condition === true);
+
+        switch ($isDefault) {
+            case true:
+                // Test
+                break;
+
+            case 1:
+            case 2:
+                // Test
+                break;
+
+            default:
+        }
+
+        match ($condition) {
+            true => 1,
+            ($i > 100) => 2,
+            ($i < -100) => mb_strlen(2),
+            ($i >= 10) => self::create(),
+            ($i <= 10) => $this,
+            default => throw new \Exception('oops'),
+        };
     }
 
+    final public static function create(): static
+    {
+        return new static();
+    }
 }

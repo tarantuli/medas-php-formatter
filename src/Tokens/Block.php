@@ -9,7 +9,7 @@ class Block implements \IteratorAggregate
     /** @var Statement[]|Block[] */
     private array $elements = [];
 
-    public function __construct(public int $depth)
+    public function __construct(public int $depth, public Statement|null $opener)
     {
     }
 

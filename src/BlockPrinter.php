@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Medas\PhpBeautifier;
 
-use Medas\PhpBeautifier\Exceptions\ReformattedCodeIsInvalidException;
 use Medas\PhpBeautifier\Tokens\Block;
 use Medas\PhpBeautifier\Tokens\Statement;
 use Medas\ServiceManager\Attributes\Service;
@@ -41,12 +40,30 @@ class BlockPrinter
 
     private function printStatement(Statement $statement)
     {
-        echo str_repeat($this->indentation, $statement->block->depth);
+        $this->printIndentation($statement);
 
         foreach ($statement as $token) {
             echo $token->text;
+
+            if ($token->spaceAfter) {
+                echo ' ';
+            }
+
+            if ($token->lineBreakAfter) {
+                echo $this->lineEnding;
+                $this->printIndentation($statement);
+            }
         }
 
         echo $this->lineEnding;
+
+        if ($statement->blankLineAfter) {
+            echo $this->lineEnding;
+        }
+    }
+
+    private function printIndentation(Statement $statement): void
+    {
+        echo str_repeat($this->indentation, $statement->block->depth);
     }
 }

@@ -10,29 +10,33 @@ use Medas\ServiceManager\Attributes\Service;
 #[Service]
 class BlockDumper
 {
-    public function __construct(private Cli $cli)
+    private int $line = 0;
+
+    public function __construct(
+        private Cli                 $cli,
+        private StatementTypeFinder $typeFinder)
     {
     }
 
-    private int $line = 0;
-
     public function dump(Block $block): void
     {
-        foreach ($block as $blockOrStatement) {
-            if ($blockOrStatement instanceof Statement) {
-                // Start of line
-                $this->cli->print("\n")
-                    ->print(sprintf('%3s',(string) $this->line++), Cli::COLOR256 . '208')
-                    ->print(str_repeat('·', $blockOrStatement->block->depth), Cli::LIGHT_GRAY);
+        foreach ($block as $statement) {
+            if ($statement instanceof Block) {
+                $this->dump($statement);
+                continue;
+            }
+            // Start of line
+            $this->cli->print("\n")
+                ->print(sprintf('%3s', (string) $this->line++), Cli::COLOR256 . '208')
+                ->print(str_repeat('·', $statement->block->depth), Cli::LIGHT_GRAY);
 
-                // Print tokens on this line
-                foreach ($blockOrStatement as $index => $token) {
-                    $this->printToken($index, $token);
-                }
+            // Print tokens on this line
+            foreach ($statement as $index => $token) {
+                $this->printToken($index, $token);
             }
-            else {
-                $this->dump($blockOrStatement);
-            }
+
+            // Print statement type
+            $this->cli->print('  ' . $this->typeFinder->for($statement), Cli::BLUE);
         }
     }
 
