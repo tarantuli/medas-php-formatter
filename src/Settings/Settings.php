@@ -12,43 +12,31 @@ class Settings
 {
     public DocumentSettings $document;
 
-    /** @var TokenFormatter[] */
-    private array $tokenFormatters;
-
-    /** @var BlockFormatter[] */
-    private array $blockFormatters;
+    /** @var TokenFormatter[]|BlockFormatter[] */
+    private array $formatters = [];
 
     public function __construct()
     {
         $this->document = new DocumentSettings();
-        $this->tokenFormatters = [
-            service(RequiredWhitespace::class),
-        ];
-
-        $this->blockFormatters = [];
+        $this->addTokenFormatter(service(RequiredWhitespace::class));
     }
 
     public function addTokenFormatter(TokenFormatter $formatter): self
     {
-        $this->tokenFormatters[] = $formatter;
+        $this->formatters[] = $formatter;
 
         return $this;
-    }
-
-    public function tokenFormatters(): array
-    {
-        return $this->tokenFormatters;
     }
 
     public function addBlockFormatter(BlockFormatter $formatter): self
     {
-        $this->blockFormatters[] = $formatter;
+        $this->formatters[] = $formatter;
 
         return $this;
     }
 
-    public function blockFormatters(): array
+    public function formatters(): array
     {
-        return $this->blockFormatters;
+        return $this->formatters;
     }
 }

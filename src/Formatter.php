@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Medas\PhpBeautifier;
 
+use Medas\PhpBeautifier\BlockFormatters\BlockFormatter;
 use Medas\PhpBeautifier\Exceptions\ReformattedCodeIsInvalidException;
+use Medas\PhpBeautifier\TokenFormatters\TokenFormatter;
 use Medas\PhpBeautifier\Tokens\Block;
 use Medas\PhpBeautifier\Tokens\BlockDumper;
 use Medas\PhpBeautifier\Tokens\StructureFinder;
@@ -31,9 +33,9 @@ class Formatter
 
         $this->stripWhitespace();
         $this->determineStructure();
-        //$this->applyFormatters();
+        $this->applyFormatters();
 
-        if (true) {
+        if (false) {
             /** @noinspection PhpUnreachableStatementInspection */
             service(BlockDumper::class)->dump($this->document);
         }
@@ -64,12 +66,13 @@ class Formatter
 
     private function applyFormatters(): void
     {
-        foreach ($this->settings->blockFormatters() as $formatter) {
-            $formatter->format($this->document);
-        }
-
-        foreach ($this->settings->tokenFormatters() as $formatter) {
-            $formatter->format($this->tokens);
+        foreach ($this->settings->formatters() as $formatter) {
+            if ($formatter instanceof BlockFormatter) {
+                $formatter->format($this->document);
+            }
+            elseif ($formatter instanceof TokenFormatter) {
+                $formatter->format($this->tokens);
+            }
         }
     }
 

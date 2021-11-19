@@ -21,10 +21,11 @@ class Psr12 extends Settings
             ->setIndentation(new Space(4))
             ->setMaxLineLength(80);
 
+        $this->addTokenFormatter(service(KeywordsToLowercase::class));
+
         $this->addBlockFormatter(service(Psr12ElseifWhile::class));
         $this->addBlockFormatter(service(Psr12BlankLines::class));
 
-        $this->addTokenFormatter(service(KeywordsToLowercase::class));
         $this->addTokenFormatter(service(Psr12Whitespace::class));
     }
 }
