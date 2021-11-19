@@ -16,6 +16,6 @@ $sm->addPackages([
     Cli::class,
 ]);
 
-$sm->resolve(ConfigManager::class)
+service(ConfigManager::class)
     ->readEnv(__DIR__)
     ->addDirectory(__DIR__ . '/config');

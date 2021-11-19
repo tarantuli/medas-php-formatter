@@ -17,4 +17,9 @@ class Token extends \PhpToken
 
     public Token|null $previous = null;
     public Token|null $next = null;
+
+    public function isTrueFalseNull(): bool
+    {
+        return $this->is(T_STRING) && in_array(strtolower($this->text), ['true', 'false', 'null'], true);
+    }
 }

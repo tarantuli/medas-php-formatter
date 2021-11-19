@@ -13,7 +13,7 @@ class ReformatterTest extends TestCase
     /** @dataProvider getTestFiles */
     public function testReformatter(string $sourceFile, string $expectedFile, Settings $settings = null): void
     {
-        $phpReformatter = sm()->resolve(PhpBeautifier::class);
+        $phpReformatter = service(PhpBeautifier::class);
         $source = file_get_contents(__DIR__ . '/../TestFiles/' . $sourceFile);
 
         $expected = file_get_contents(__DIR__ . '/../TestFiles/' . $expectedFile);
@@ -26,7 +26,10 @@ class ReformatterTest extends TestCase
     public function getTestFiles(): array
     {
         return [
-            ['basic-preformatted.php', 'basic-preformatted.php'],
+            // ['basic-preformatted.php', 'basic-preformatted.php'],
+            // ['psr12-ifelse.php', 'psr12-ifelse.php'],
+            // ['inc-dec.php', 'inc-dec.php'],
+            ['complete-class.php', 'complete-class.php']
         ];
     }
 }

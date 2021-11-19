@@ -12,11 +12,18 @@ class TokenCollection implements \Iterator, \Countable
 
     public function __construct(string $code)
     {
-        $phpTokens = \PhpToken::tokenize($code, TOKEN_PARSE);
+        $this->initializeTokens($code);
+    }
+
+    private function initializeTokens(string $code): void
+    {
+        $tokens = Token::tokenize($code, TOKEN_PARSE);
         $previousToken = null;
 
-        foreach ($phpTokens as $phpToken) {
-            $token = $this->fromPhpToken($phpToken);
+        foreach ($tokens as $token) {
+            if ($token->is(T_OPEN_TAG)) {
+                $token->text = rtrim($token->text);
+            }
 
             if ($previousToken) {
                 $token->previous = $previousToken;
@@ -26,15 +33,6 @@ class TokenCollection implements \Iterator, \Countable
             $this->tokens[] = $token;
             $previousToken = $token;
         }
-    }
-
-    private function fromPhpToken(\PhpToken $phpToken): Token
-    {
-        if ($phpToken->is(T_OPEN_TAG)) {
-            $phpToken->text = rtrim($phpToken->text);
-        }
-
-        return new Token($phpToken->id, $phpToken->text, $phpToken->line, $phpToken->pos);
     }
 
     public function removeByType(int|string|array $kind)

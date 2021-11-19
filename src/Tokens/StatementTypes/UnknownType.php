@@ -8,6 +8,6 @@ class UnknownType implements StatementType
 {
     public function __toString()
     {
-        return '-';
+        return '';
     }
 }

@@ -45,7 +45,7 @@ class BlockPrinter
         foreach ($statement as $token) {
             echo $token->text;
 
-            if ($token->spaceAfter) {
+            if ($token->spaceAfter && $token  !== $statement->lastToken()) {
                 echo ' ';
             }
 

@@ -19,9 +19,16 @@ abstract class ServiceInstantiator
 {
     private const CONST_NAME = [1, 2, 3, 4, 5];
 
-    public function callback(int $a): callable
+    public ?string $cheese=NULL;
+
+    public function callback(int &$a, ?array $b = [], bool &...$questions): ?callable
     {
         return fn($a) => strlen($a);
+    }
+
+    public function ternary(): bool{
+        $i = $a ? true : false;
+        $j = $a ?: false;
     }
 
     Protected Function test(RelativePath\RelativeClass $relativeClass, bool $isDefault = false, callable ...$callableArray)
@@ -29,7 +36,7 @@ abstract class ServiceInstantiator
         printf("\e[%sm%s\e[0m", implode(';', $formats), $string);
 
         for ($i = 0; $i < 10; ++$i) {
-            // Line is a comment
+            // Test
         }
 
         foreach ($relativeClass as $key => $value) {
@@ -58,10 +65,15 @@ abstract class ServiceInstantiator
                 // Test
                 break;
 
+            case 3: {
+                // Test
+            }
+
             default:
+                // Test
         }
 
-        match ($condition) {
+        $result = match ($condition) {
             true => 1,
             ($i > 100) => 2,
             ($i < -100) => mb_strlen(2),
@@ -69,6 +81,8 @@ abstract class ServiceInstantiator
             ($i <= 10) => $this,
             default => throw new \Exception('oops'),
         };
+
+        return $result;
     }
 
     final public static function create(): static

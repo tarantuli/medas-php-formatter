@@ -7,10 +7,15 @@ namespace Medas\PhpBeautifier\Tokens;
 use Medas\PhpBeautifier\Tokens\StatementTypes\AttributeStatement;
 use Medas\PhpBeautifier\Tokens\StatementTypes\BlankLine;
 use Medas\PhpBeautifier\Tokens\StatementTypes\BlockCloser;
+use Medas\PhpBeautifier\Tokens\StatementTypes\ClassConstDeclaration;
 use Medas\PhpBeautifier\Tokens\StatementTypes\ClassDeclaration;
+use Medas\PhpBeautifier\Tokens\StatementTypes\ClassPropertyDeclaration;
+use Medas\PhpBeautifier\Tokens\StatementTypes\Comment;
+use Medas\PhpBeautifier\Tokens\StatementTypes\ControlStatement;
 use Medas\PhpBeautifier\Tokens\StatementTypes\DeclareStatement;
 use Medas\PhpBeautifier\Tokens\StatementTypes\FunctionDeclaration;
 use Medas\PhpBeautifier\Tokens\StatementTypes\NamespaceDeclaration;
+use Medas\PhpBeautifier\Tokens\StatementTypes\PhpOpenTag;
 use Medas\PhpBeautifier\Tokens\StatementTypes\StatementType;
 use Medas\PhpBeautifier\Tokens\StatementTypes\UnknownType;
 use Medas\PhpBeautifier\Tokens\StatementTypes\UseClassStatement;
@@ -21,6 +26,10 @@ use Medas\ServiceManager\Attributes\Service;
 #[Service]
 class StatementTypeFinder
 {
+    public function __construct(private TokenGroups $tokenGroups)
+    {
+    }
+
     public function for(Statement $statement): StatementType
     {
         if (isset($statement->type)) {
@@ -38,8 +47,16 @@ class StatementTypeFinder
             return new BlankLine();
         }
 
+        if ($firstToken->is(T_OPEN_TAG)) {
+            return new PhpOpenTag();
+        }
+
         if ($firstToken->is(T_DECLARE)) {
             return new DeclareStatement();
+        }
+
+        if ($firstToken->is(T_COMMENT)) {
+            return new Comment();
         }
 
         if ($firstToken->is(T_NAMESPACE)) {
@@ -71,10 +88,22 @@ class StatementTypeFinder
             return new ClassDeclaration();
         }
 
+        if ($statement->containsType(T_CONST)) {
+            return new ClassConstDeclaration();
+        }
+
         if ($statement->containsType(T_FUNCTION)) {
             return new FunctionDeclaration();
         }
-        return new UnknownType();
 
+        if ($statement->containsType($this->tokenGroups->visibilityKeywords())) {
+            return new ClassPropertyDeclaration();
+        }
+
+        if ($firstToken->is($this->tokenGroups->controlKeywords())) {
+            return new ControlStatement();
+        }
+
+        return new UnknownType();
     }
 }

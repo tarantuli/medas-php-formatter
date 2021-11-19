@@ -12,7 +12,7 @@ use Medas\PhpBeautifier\Tokens\TokenCollection;
 use Medas\ServiceManager\Attributes\Service;
 
 #[Service]
-class Reformatter
+class Formatter
 {
     private TokenCollection $tokens;
     private Block $document;
@@ -24,18 +24,18 @@ class Reformatter
     {
     }
 
-    public function reformat(TokenCollection $tokens, Settings\Settings $settings): string
+    public function format(TokenCollection $tokens, Settings\Settings $settings): string
     {
         $this->tokens = $tokens;
         $this->settings = $settings;
 
         $this->stripWhitespace();
         $this->determineStructure();
-        $this->applyFormatters();
+        //$this->applyFormatters();
 
-        if (false) {
+        if (true) {
             /** @noinspection PhpUnreachableStatementInspection */
-            sm()->resolve(BlockDumper::class)->dump($this->document);
+            service(BlockDumper::class)->dump($this->document);
         }
 
         $result = $this->blockPrinter->print(
@@ -58,7 +58,7 @@ class Reformatter
 
     private function determineStructure()
     {
-        $structureFinder = sm()->resolve(StructureFinder::class);
+        $structureFinder = service(StructureFinder::class);
         $this->document = $structureFinder->determine($this->tokens);
     }
 
@@ -75,7 +75,7 @@ class Reformatter
 
     private function assertCodeIsValid(string $code): void
     {
-        $validator = sm()->resolve(CodeValidator::class);
+        $validator = service(CodeValidator::class);
 
         if (!$validator->validate($code)) {
             throw new ReformattedCodeIsInvalidException($code, $validator->getErrorMessage());

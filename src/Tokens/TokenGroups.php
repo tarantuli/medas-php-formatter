@@ -9,34 +9,33 @@ use Medas\ServiceManager\Attributes\Service;
 #[Service]
 class TokenGroups
 {
-    public function getTexts(): array
+    public function texts(): array
     {
         return array_merge(
-            $this->getKeywords(),
-            $this->getTypeOperators(),
-            $this->getCasts(),
-            $this->getLanguageConstructs()
+            $this->keywords(),
+            $this->typeOperators(),
+            $this->casts(),
+            $this->languageConstructs()
         );
     }
 
-    public function getKeywords(): array
+    public function keywords(): array
     {
-        return [
+        return array_merge(
+            $this->controlKeywords(),
+            $this->visibilityKeywords(),
+            [
             T_ABSTRACT,
             T_AS,
             T_BREAK,
             T_CALLABLE,
             T_CASE,
-            T_CATCH,
             T_CLASS,
             T_CLONE,
             T_CONST,
             T_CONTINUE,
             T_DEFAULT,
-            T_DO,
             T_ECHO,
-            T_ELSE,
-            T_ELSEIF,
             T_ENDDECLARE,
             T_ENDFOR,
             T_ENDFOREACH,
@@ -47,50 +46,66 @@ class TokenGroups
             T_EXTENDS,
             T_FINAL,
             T_FINALLY,
-            T_FOR,
-            T_FOREACH,
             T_FUNCTION,
             T_GLOBAL,
             T_GOTO,
-            T_IF,
             T_IMPLEMENTS,
             T_INCLUDE,
             T_INCLUDE_ONCE,
             T_INSTEADOF,
             T_INTERFACE,
-            T_MATCH,
             T_NAMESPACE,
             T_NEW,
-            T_PRIVATE,
-            T_PROTECTED,
-            T_PUBLIC,
             T_REQUIRE,
             T_REQUIRE_ONCE,
             T_RETURN,
             T_STATIC,
-            T_SWITCH,
             T_THROW,
             T_TRAIT,
-            T_TRY,
             T_USE,
             T_VAR,
-            T_WHILE,
             T_YIELD,
             T_YIELD_FROM,
             T_LOGICAL_AND,
             T_LOGICAL_OR,
             T_LOGICAL_XOR,
+        ]);
+    }
+
+    public function visibilityKeywords(): array
+    {
+        return [
+            T_PRIVATE,
+            T_PROTECTED,
+            T_PUBLIC,
         ];
     }
 
-    public function getTypeOperators(): array
+    public function controlKeywords(): array
+    {
+        return [
+            T_CATCH,
+            T_DO,
+            T_ELSE,
+            T_ELSEIF,
+            T_FOR,
+            T_FOREACH,
+            T_IF,
+            T_MATCH,
+            T_SWITCH,
+            T_TRY,
+            T_WHILE,
+        ];
+    }
+
+    public function typeOperators(): array
     {
         return [
             T_INSTANCEOF,
         ];
     }
 
-    public function getCasts(): array
+    public function casts(): array
     {
         return [
             T_ARRAY_CAST,
@@ -103,7 +118,7 @@ class TokenGroups
         ];
     }
 
-    public function getLanguageConstructs(): array
+    public function languageConstructs(): array
     {
         return [
             T_ARRAY,
@@ -119,16 +134,16 @@ class TokenGroups
         ];
     }
 
-    public function getSymbolOperators(): array
+    public function symbolOperators(): array
     {
         return array_merge(
-            $this->getArithmicOperators(),
-            $this->getAssignmentOperators(),
-            $this->getBitwiseOperators(),
-            $this->getBrackets(),
-            $this->getComparisonOperators(),
-            $this->getLogicalOperators(),
-            $this->getTypeOperators(),
+            $this->arithmicOperators(),
+            $this->assignmentOperators(),
+            $this->bitwiseOperators(),
+            $this->brackets(),
+            $this->comparisonOperators(),
+            $this->logicalOperators(),
+            $this->typeOperators(),
             [
                 T_AMPERSAND,
                 T_ASSIGNMENT,
@@ -146,7 +161,7 @@ class TokenGroups
         );
     }
 
-    public function getArithmicOperators(): array
+    public function arithmicOperators(): array
     {
         return [
             T_POW,
@@ -159,7 +174,7 @@ class TokenGroups
         ];
     }
 
-    public function getAssignmentOperators(): array
+    public function assignmentOperators(): array
     {
         return [
             T_AND_EQUAL,
@@ -178,7 +193,7 @@ class TokenGroups
         ];
     }
 
-    public function getBitwiseOperators(): array
+    public function bitwiseOperators(): array
     {
         return [
             T_SL,
@@ -186,7 +201,7 @@ class TokenGroups
         ];
     }
 
-    public function getBrackets(): array
+    public function brackets(): array
     {
         return [
             T_ROUND_BRACKET_OPEN,
@@ -198,7 +213,7 @@ class TokenGroups
         ];
     }
 
-    public function getComparisonOperators(): array
+    public function comparisonOperators(): array
     {
         return [
             T_COALESCE,
@@ -214,7 +229,7 @@ class TokenGroups
         ];
     }
 
-    public function getLogicalOperators(): array
+    public function logicalOperators(): array
     {
         return [
             T_BOOLEAN_AND,
@@ -222,7 +237,7 @@ class TokenGroups
         ];
     }
 
-    public function getIncDecOperators(): array
+    public function incDecOperators(): array
     {
         return [
             T_DEC,
@@ -230,7 +245,7 @@ class TokenGroups
         ];
     }
 
-    public function getLiterals(): array
+    public function literals(): array
     {
         return [
             T_BAD_CHARACTER,
@@ -245,7 +260,7 @@ class TokenGroups
         ];
     }
 
-    public function getObjectOperators(): array
+    public function objectOperators(): array
     {
         return [
             T_DOUBLE_COLON,
@@ -254,7 +269,7 @@ class TokenGroups
         ];
     }
 
-    public function getMagicConstants(): array
+    public function magicConstants(): array
     {
         return [
             T_CLASS_C,
@@ -268,7 +283,7 @@ class TokenGroups
         ];
     }
 
-    public function getHtmlTags(): array
+    public function htmlTags(): array
     {
         return [
             T_CLOSE_TAG,
@@ -277,7 +292,7 @@ class TokenGroups
         ];
     }
 
-    public function getComments(): array
+    public function comments(): array
     {
         return [
             T_COMMENT,
@@ -285,7 +300,7 @@ class TokenGroups
         ];
     }
 
-    public function getVariables(): array
+    public function variables(): array
     {
         return [
             T_CURLY_OPEN,
@@ -295,7 +310,7 @@ class TokenGroups
         ];
     }
 
-    public function getOtherTokens(): array
+    public function otherTokens(): array
     {
         return [
             T_ATTRIBUTE,

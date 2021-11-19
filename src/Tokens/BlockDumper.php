@@ -10,7 +10,7 @@ use Medas\ServiceManager\Attributes\Service;
 #[Service]
 class BlockDumper
 {
-    private int $line = 0;
+    private int $line;
 
     public function __construct(
         private Cli                 $cli,
@@ -20,9 +20,16 @@ class BlockDumper
 
     public function dump(Block $block): void
     {
+        $this->line = 0;
+        $this->printBlock($block);
+        $this->cli->print("\n");
+    }
+
+    private function printBlock(Block $block): void
+    {
         foreach ($block as $statement) {
             if ($statement instanceof Block) {
-                $this->dump($statement);
+                $this->printBlock($statement);
                 continue;
             }
             // Start of line

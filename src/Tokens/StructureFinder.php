@@ -19,19 +19,17 @@ class StructureFinder
 
     private array $openBlocks = [];
 
-    private bool $ignoreNextDoubleQuote = false;
-    private bool $startNewStatementBeforeNext = false;
-    private bool $nextBraceOpensForClause = false;
-    private int $forClauseDepth = 0;
+    private bool $ignoreNextDoubleQuote;
+    private bool $startNewStatementBeforeNext;
+    private bool $nextBraceOpensForClause;
+    private int $forClauseDepth;
 
     public function determine(TokenCollection $tokens): Block
     {
-        $this->depth = 0;
-        $this->inString = false;
-        $this->inAttribute = false;
-        $this->context = new GlobalScope();
+        $this->reset();
 
         $document = new Block($this->depth, null);
+
         $this->block = $document;
         $this->statement = $this->block->appendNewStatement();
 
@@ -40,6 +38,21 @@ class StructureFinder
         }
 
         return $document;
+    }
+
+    private function reset(): void
+    {
+        $this->depth = 0;
+        $this->inString = false;
+        $this->inAttribute = false;
+        $this->context = new GlobalScope();
+
+        $this->openBlocks = [];
+
+        $this->ignoreNextDoubleQuote = false;
+        $this->startNewStatementBeforeNext = false;
+        $this->nextBraceOpensForClause = false;
+        $this->forClauseDepth = 0;
     }
 
     private function process(Token $token): void
@@ -77,7 +90,7 @@ class StructureFinder
 
         $this->statement->appendToken($token);
 
-        if ($token->is([T_OPEN_TAG, T_CURLY_BRACKET_CLOSE])) {
+        if ($token->is([T_OPEN_TAG, T_CURLY_BRACKET_CLOSE, T_COMMENT])) {
             // Next token starts on a new line
             $this->startNewStatementBeforeNext = true;
         }

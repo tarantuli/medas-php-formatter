@@ -15,9 +15,9 @@ class PhpBeautifier
 
     public function __construct(
         private AdditionalTokensDefiner $additionalTokensDefiner,
-        private Reformatter             $reformatter)
+        private Formatter               $reformatter)
     {
-        $this->settings = new Settings\Psr12();
+        $this->settings = new Settings\Medas();
     }
 
     public function beautify(string $code, Settings\Settings $settings = null): string
@@ -25,6 +25,6 @@ class PhpBeautifier
         $settings ??= $this->settings;
         $tokens = new TokenCollection($code);
 
-        return $this->reformatter->reformat($tokens, $settings);
+        return $this->reformatter->format($tokens, $settings);
     }
 }

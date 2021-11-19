@@ -99,4 +99,9 @@ class Statement implements \IteratorAggregate
 
         return $this->tokens[$index] ?? null;
     }
+
+    public function mergeWithPrevious(): void
+    {
+        $this->block->mergeWithPrevious($this);
+    }
 }

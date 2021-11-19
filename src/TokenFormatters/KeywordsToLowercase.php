@@ -17,10 +17,10 @@ class KeywordsToLowercase implements TokenFormatter
 
     public function format(TokenCollection $tokens): void
     {
-        $keywords = $this->tokenGroups->getTexts();
+        $reservedWords = $this->tokenGroups->texts();
 
         foreach ($tokens as $token) {
-            if ($token->is($keywords)) {
+            if ($token->is($reservedWords) || $token->isTrueFalseNull()) {
                 $token->text = strtolower($token->text);
             }
         }

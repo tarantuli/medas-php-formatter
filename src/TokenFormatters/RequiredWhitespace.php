@@ -21,12 +21,12 @@ class RequiredWhitespace implements TokenFormatter
         $spaceAroundNotNeeded = $this->getSpaceAroundNotNeeded();
 
         foreach ($tokens as $token) {
-            if ($token->is($spaceAroundRequired)) {
+            if ($token->is($spaceAroundRequired) || $token->isTrueFalseNull()) {
                 $token->spaceAfter = true;
             }
 
             if ($token->previous) {
-                if ($token->is($spaceAroundRequired) && !$token->previous->is($spaceAroundNotNeeded)) {
+                if (($token->is($spaceAroundRequired) || $token->isTrueFalseNull()) && !$token->previous->is($spaceAroundNotNeeded)) {
                     $token->previous->spaceAfter = true;
                 }
                 elseif ($token->is($spaceAroundNotNeeded)) {
@@ -38,11 +38,11 @@ class RequiredWhitespace implements TokenFormatter
 
     private function getSpaceAroundRequired(): array
     {
-        return $this->tokenGroups->getKeywords();
+        return $this->tokenGroups->keywords();
     }
 
     private function getSpaceAroundNotNeeded(): array
     {
-        return $this->tokenGroups->getSymbolOperators();
+        return $this->tokenGroups->symbolOperators();
     }
 }
