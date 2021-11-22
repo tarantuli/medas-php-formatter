@@ -23,11 +23,6 @@ class BlankLineAdder
     public function afterTypes(Block $block, array $afterTypes): void
     {
         foreach ($block as $statement) {
-            if ($statement instanceof Block) {
-                $this->afterTypes($statement, $afterTypes);
-                continue;
-            }
-
             $type = $this->typeFinder->for($statement);
 
             foreach ($afterTypes as $groupType) {
@@ -48,11 +43,6 @@ class BlankLineAdder
     public function beforeTypes(Block $block, array $beforeTypes): void
     {
         foreach ($block as $statement) {
-            if ($statement instanceof Block) {
-                $this->beforeTypes($statement, $beforeTypes);
-                continue;
-            }
-
             $type = $this->typeFinder->for($statement);
 
             foreach ($beforeTypes as $groupType) {

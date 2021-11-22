@@ -28,10 +28,6 @@ class BlockDumper
     private function printBlock(Block $block): void
     {
         foreach ($block as $statement) {
-            if ($statement instanceof Block) {
-                $this->printBlock($statement);
-                continue;
-            }
             // Start of line
             $this->cli->print("\n")
                 ->print(sprintf('%3s', (string) $this->line++), Cli::COLOR256 . '208')

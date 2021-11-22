@@ -25,11 +25,6 @@ class Psr12VisibilityMarkers implements BlockFormatter
     private function sortVisibilityMarkers(Block $block): void
     {
         foreach ($block as $statement) {
-            if ($statement instanceof Block) {
-                $this->sortVisibilityMarkers($statement);
-                continue;
-            }
-
             if (!$this->typeFinder->for($statement) instanceof FunctionDeclaration) {
                 continue;
             }

@@ -26,6 +26,7 @@ class Formatter
     {
     }
 
+    /** @noinspection RedundantSuppression */
     public function format(TokenCollection $tokens, Settings\Settings $settings): string
     {
         $this->tokens = $tokens;

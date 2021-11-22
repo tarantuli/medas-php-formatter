@@ -44,11 +44,6 @@ class Psr12BlankLines implements BlockFormatter
     private function additionalLines(Block $block): void
     {
         foreach ($block as $statement) {
-            if ($statement instanceof Block) {
-                $this->additionalLines($statement);
-                continue;
-            }
-
             $type = $this->typeFinder->for($statement);
 
             if ($type instanceof ClassDeclaration) {
@@ -70,7 +65,7 @@ class Psr12BlankLines implements BlockFormatter
                 $statement->blankLineAfter = true;
             }
 
-            if ($statement === $block->lastStatement()) {
+            if ($statement === $statement->block->lastStatement()) {
                 $statement->blankLineAfter = false;
             }
         }

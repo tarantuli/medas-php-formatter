@@ -21,11 +21,6 @@ class Psr12ElseifWhile implements BlockFormatter
     public function format(Block $block): void
     {
         foreach ($block as $statement) {
-            if ($statement instanceof Block) {
-                $this->format($statement);
-                continue;
-            }
-
             if ($statement->firstToken()->is([T_ELSE, T_ELSEIF])) {
                 $statement->mergeWithPrevious();
             }

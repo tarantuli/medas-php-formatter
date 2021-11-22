@@ -40,12 +40,21 @@ class Block implements \IteratorAggregate
     }
 
     /**
-     * @return \Generator|Statement[]|Block[]
+     * foreach ($block) only returns the statements in this block, recursively! Be careful to use $statement->block
+     * and not $block itself.
+     * @return \Generator|Statement[]
      * @noinspection PhpDocSignatureInspection
      */
     public function getIterator(): \Generator
     {
-        yield from $this->elements;
+        foreach ($this->elements as $element) {
+            if ($element instanceof Block) {
+                yield from $element;
+            }
+            else {
+                yield $element;
+            }
+        }
     }
 
     public function lastStatement(): Statement

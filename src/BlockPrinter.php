@@ -28,13 +28,8 @@ class BlockPrinter
 
     private function printBlock(Block $block)
     {
-        foreach ($block as $blockOrStatement) {
-            if ($blockOrStatement instanceof Statement) {
-                $this->printStatement($blockOrStatement);
-            }
-            else {
-                $this->printBlock($blockOrStatement);
-            }
+        foreach ($block as $statement) {
+            $this->printStatement($statement);
         }
     }
 
