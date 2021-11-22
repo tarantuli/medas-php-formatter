@@ -58,6 +58,11 @@ class StructureFinder
     private function process(Token $token): void
     {
         if ($token->is(T_CURLY_BRACKET_CLOSE)) {
+            // Delete the last statement if it's empty
+            if (null === $this->statement->firstToken()) {
+                $this->block->deleteStatement($this->statement);
+            }
+
             // The previous block is closed, return to the last open block
             $this->block = array_pop($this->openBlocks);
             $this->statement = $this->block->appendNewStatement();

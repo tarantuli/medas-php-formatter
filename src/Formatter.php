@@ -45,11 +45,8 @@ class Formatter
             (string) $this->settings->document->indentation(),
             (string) $this->settings->document->lineEnding());
 
-        if (true) {
-            echo $result;
-        }
-
         $this->assertCodeIsValid($result);
+
         return $result;
     }
 

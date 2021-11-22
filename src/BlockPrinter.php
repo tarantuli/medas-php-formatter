@@ -45,13 +45,12 @@ class BlockPrinter
         foreach ($statement as $token) {
             echo $token->text;
 
-            if ($token->spaceAfter && $token  !== $statement->lastToken()) {
-                echo ' ';
-            }
-
             if ($token->lineBreakAfter) {
                 echo $this->lineEnding;
                 $this->printIndentation($statement);
+            }
+            elseif ($token->spaceAfter && $token !== $statement->lastToken()) {
+                echo ' ';
             }
         }
 

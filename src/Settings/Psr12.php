@@ -6,6 +6,7 @@ namespace Medas\PhpBeautifier\Settings;
 
 use Medas\PhpBeautifier\BlockFormatters\Psr12BlankLines;
 use Medas\PhpBeautifier\BlockFormatters\Psr12ElseifWhile;
+use Medas\PhpBeautifier\BlockFormatters\Psr12VisibilityMarkers;
 use Medas\PhpBeautifier\Settings\Indentations\Space;
 use Medas\PhpBeautifier\Settings\LineEndings\LineFeed;
 use Medas\PhpBeautifier\TokenFormatters\KeywordsToLowercase;
@@ -22,6 +23,7 @@ class Psr12 extends Settings
             ->setMaxLineLength(80);
 
         $this->addTokenFormatter(service(KeywordsToLowercase::class));
+        $this->addBlockFormatter(service(Psr12VisibilityMarkers::class));
 
         $this->addBlockFormatter(service(Psr12ElseifWhile::class));
         $this->addBlockFormatter(service(Psr12BlankLines::class));

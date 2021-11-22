@@ -28,6 +28,14 @@ class Statement implements \IteratorAggregate
         yield from $this->tokens;
     }
 
+    public function prependToken(Token $token): void
+    {
+        array_unshift($this->tokens, $token);
+
+        $token->block = $this->block;
+        $token->statement = $this;
+    }
+
     public function appendToken(Token $token): void
     {
         $this->tokens[] = $token;
@@ -36,9 +44,15 @@ class Statement implements \IteratorAggregate
         $token->statement = $this;
     }
 
+    public function moveTokenAfter(Token $token, Token $after): void
+    {
+        $this->removeToken($token);
+        $this->insertTokenAfter($token, $after);
+    }
+
     public function removeToken(Token $token): void
     {
-        if (false === $i = array_search($token, $this->tokens)) {
+        if (false === $i = array_search($token, $this->tokens, true)) {
             throw new TokenNotFoundinStatementException($token, $this);
         }
 
@@ -46,9 +60,9 @@ class Statement implements \IteratorAggregate
         $this->tokens = array_values($this->tokens);
     }
 
-    public function insertTokenAfter(Token $after, Token $token): void
+    public function insertTokenAfter(Token $token, Token $after): void
     {
-        if (false === $i = array_search($after, $this->tokens)) {
+        if (false === $i = array_search($after, $this->tokens, true)) {
             throw new TokenNotFoundinStatementException($token, $this);
         }
 
@@ -82,9 +96,20 @@ class Statement implements \IteratorAggregate
         return false;
     }
 
+    public function findToken(array|int|string $type): ?Token
+    {
+        foreach ($this->tokens as $token) {
+            if ($token->is($type)) {
+                return $token;
+            }
+        }
+
+        return null;
+    }
+
     public function getTokenAfter(Token $token): Token|null
     {
-        if (false === $i = array_search($token, $this->tokens)) {
+        if (false === $i = array_search($token, $this->tokens, true)) {
             throw new TokenNotFoundinStatementException($token, $this);
         }
 

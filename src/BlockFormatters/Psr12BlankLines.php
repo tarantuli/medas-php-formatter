@@ -51,8 +51,19 @@ class Psr12BlankLines implements BlockFormatter
 
             $type = $this->typeFinder->for($statement);
 
-            if ($type instanceof ClassDeclaration || $type instanceof FunctionDeclaration) {
+            if ($type instanceof ClassDeclaration) {
                 $statement->getToken(-2)->lineBreakAfter = true;
+            }
+
+            if ($type instanceof FunctionDeclaration) {
+                if ($statement->lastToken()->is(T_CURLY_BRACKET_OPEN)) {
+                    // It's a non-abstract function declaration
+                    $statement->getToken(-2)->lineBreakAfter = true;
+                }
+                else {
+                    // It's an abstract function declaration
+                    $statement->blankLineAfter = true;
+                }
             }
 
             if ($type instanceof BlockCloser && !$statement->lastToken()->is(T_CURLY_BRACKET_OPEN)) {

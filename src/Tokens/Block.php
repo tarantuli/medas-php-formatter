@@ -63,4 +63,11 @@ class Block implements \IteratorAggregate
 
         return $elements;
     }
+
+    public function deleteStatement(Statement $statement): void
+    {
+        $index = array_search($statement, $this->elements, true);
+        array_splice($this->elements, $index, 1);
+        unset($statement);
+    }
 }

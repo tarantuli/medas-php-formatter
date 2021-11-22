@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\PhpBeautifier\TokenFormatters;
 
+use Medas\PhpBeautifier\Tokens\StatementTypeFinder;
 use Medas\PhpBeautifier\Tokens\StatementTypes\DeclareStatement;
 use Medas\PhpBeautifier\Tokens\TokenCollection;
 use Medas\PhpBeautifier\Tokens\TokenGroups;
@@ -12,7 +13,8 @@ use Medas\ServiceManager\Attributes\Service;
 #[Service]
 class Psr12Whitespace implements TokenFormatter
 {
-    public function __construct(private TokenGroups $tokenGroups)
+    public function __construct(private TokenGroups         $tokenGroups,
+                                private StatementTypeFinder $typeFinder)
     {
     }
 
@@ -29,7 +31,7 @@ class Psr12Whitespace implements TokenFormatter
 
         foreach ($tokens as $token) {
             // No spaces in a declare statement
-            if ($token->statement->type instanceof DeclareStatement) {
+            if ($this->typeFinder->for($token->statement) instanceof DeclareStatement) {
                 continue;
             }
 

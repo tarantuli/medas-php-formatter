@@ -44,6 +44,11 @@ class BlockDumper
 
             // Print statement type
             $this->cli->print('  ' . $this->typeFinder->for($statement), Cli::BLUE);
+
+            if ($statement->blankLineAfter) {
+                $this->cli->print(' ⇊', Cli::COLOR256 . '170');
+            }
+
         }
     }
 
@@ -78,6 +83,13 @@ class BlockDumper
             if (strlen($parts[3])) {
                 $this->cli->print($parts[3], Cli::LIGHT_GRAY_BG);
             }
+        }
+
+        if ($token->lineBreakAfter) {
+            $this->cli->print('↩', Cli::COLOR256 . '170');
+        }
+        elseif ($token->spaceAfter) {
+            $this->cli->print('‿', Cli::COLOR256 . '170');
         }
     }
 }
