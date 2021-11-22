@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace Medas\PhpBeautifier\TokenFormatters;
 
+use Medas\PhpBeautifier\Tokens\Contexts\MethodReturnType;
 use Medas\PhpBeautifier\Tokens\StatementTypeFinder;
+use Medas\PhpBeautifier\Tokens\StatementTypes\ClassPropertyDeclaration;
 use Medas\PhpBeautifier\Tokens\StatementTypes\DeclareStatement;
+use Medas\PhpBeautifier\Tokens\StatementTypes\FunctionDeclaration;
 use Medas\PhpBeautifier\Tokens\TokenCollection;
 use Medas\PhpBeautifier\Tokens\TokenGroups;
 use Medas\ServiceManager\Attributes\Service;
@@ -31,7 +34,9 @@ class Psr12Whitespace implements TokenFormatter
 
         foreach ($tokens as $token) {
             // No spaces in a declare statement
-            if ($this->typeFinder->for($token->statement) instanceof DeclareStatement) {
+            $statementType = $this->typeFinder->for($token->statement);
+
+            if ($statementType instanceof DeclareStatement) {
                 continue;
             }
 
@@ -44,9 +49,25 @@ class Psr12Whitespace implements TokenFormatter
                 $token->spaceAfter = true;
             }
 
+            // No space between "? type"
+            if ($token->is(T_QUESTION_MARK) &&
+                ($statementType instanceof ClassPropertyDeclaration || $statementType instanceof FunctionDeclaration)) {
+                $token->spaceAfter = false;
+            }
+
             if ($token->previous) {
                 if ($token->is($spaceBeforeRequired)) {
                     $token->previous->spaceAfter = true;
+                }
+
+                // No space between "):" in return type declarations
+                if ($token->is(T_COLON) && $token->context instanceof MethodReturnType) {
+                    $token->previous->spaceAfter = false;
+                }
+
+                // No space between "?:"
+                if ($token->is(T_COLON) && $token->previous->is(T_QUESTION_MARK)) {
+                    $token->previous->spaceAfter = false;
                 }
             }
         }
@@ -78,6 +99,8 @@ class Psr12Whitespace implements TokenFormatter
             [
                 T_ASSIGNMENT,
                 T_DOUBLE_ARROW,
+                T_COLON,
+                T_QUESTION_MARK,
             ]
         );
     }
@@ -88,7 +111,6 @@ class Psr12Whitespace implements TokenFormatter
             $this->getSpaceAroundRequired(),
             [
                 T_COMMA,
-                T_COLON,
             ]
         );
     }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\PhpBeautifier\Settings;
 
+use Medas\PhpBeautifier\BlockFormatters\BlankLinesBeforeBlocks;
 use Medas\PhpBeautifier\BlockFormatters\ClassPartsBlankLines;
 
 class Medas extends Psr12
@@ -13,5 +14,6 @@ class Medas extends Psr12
         parent::__construct();
 
         $this->addBlockFormatter(service(ClassPartsBlankLines::class));
+        $this->addBlockFormatter(service(BlankLinesBeforeBlocks::class));
     }
 }

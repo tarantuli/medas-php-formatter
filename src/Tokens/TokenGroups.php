@@ -149,6 +149,7 @@ class TokenGroups
                 T_ASSIGNMENT,
                 T_AT,
                 T_COLON,
+                T_COMMA,
                 T_DOLLAR,
                 T_DOUBLE_ARROW,
                 T_DOUBLE_QUOTE,

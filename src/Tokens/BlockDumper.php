@@ -54,6 +54,9 @@ class BlockDumper
             ->print((string) $index, Cli::BLUE)
             ->print(':');
 
+        $this->cli->print((string) $token->context, Cli::COLOR256 . '100')
+            ->print(':');
+
         if ($token->inAttribute) {
             $this->cli->print('A', Cli::COLOR256 . '184')
                 ->print(':');

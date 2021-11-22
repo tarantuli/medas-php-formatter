@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Medas\PhpBeautifier\Tokens\Contexts;
 
-class MethodDeclaration implements Context
+class MethodReturnType implements Context
 {
     public function __toString()
     {
-        return 'MD';
+        return 'MR';
     }
 }

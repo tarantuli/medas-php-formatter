@@ -6,5 +6,8 @@ namespace Medas\PhpBeautifier\Tokens\Contexts;
 
 class MethodBody implements Context
 {
-
+    public function __toString()
+    {
+        return 'M';
+    }
 }

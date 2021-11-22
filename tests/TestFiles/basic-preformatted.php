@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Medas\ServiceManager;
 
 use Medas\ServiceManager\Attributes\Service;
-use Medas\ServiceManager\Attributes\Mervice as Pervice;
 
 use function A\B;
 use function A\C;
@@ -19,19 +18,20 @@ abstract class ServiceInstantiator
 {
     private const CONST_NAME = [1, 2, 3, 4, 5];
 
-    public ?string $cheese=NULL;
+    public ?string $cheese = null;
 
     public function callback(int &$a, ?array $b = [], bool &...$questions): ?callable
     {
         return fn($a) => strlen($a);
     }
 
-    public function ternary(): bool{
+    public function ternary(): bool
+    {
         $i = $a ? true : false;
         $j = $a ?: false;
     }
 
-    Protected Function test(RelativePath\RelativeClass $relativeClass, bool $isDefault = false, callable ...$callableArray)
+    protected function test(RelativePath\RelativeClass $relativeClass, bool $isDefault = false, callable ...$callableArray)
     {
         printf("\e[%sm%s\e[0m", implode(';', $formats), $string);
 
@@ -47,7 +47,7 @@ abstract class ServiceInstantiator
             $value %= null;
         }
 
-        while ($condition === TRUE && $value === 1278934987 && $key === 'a reasonably long string that pushes the length of the line over 120') {
+        while ($condition === true && $value === 1278934987 && $key === 'a reasonably long string that pushes the length of the line over 120') {
             // Test
         }
 
@@ -65,7 +65,8 @@ abstract class ServiceInstantiator
                 // Test
                 break;
 
-            case 3: {
+            case 3:
+            {
                 // Test
             }
 

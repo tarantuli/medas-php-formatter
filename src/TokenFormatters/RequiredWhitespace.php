@@ -26,7 +26,7 @@ class RequiredWhitespace implements TokenFormatter
             }
 
             if ($token->previous) {
-                if (($token->is($spaceAroundRequired) || $token->isTrueFalseNull()) && !$token->previous->is($spaceAroundNotNeeded)) {
+                if ($token->spaceAfter && !$token->previous->is($spaceAroundNotNeeded)) {
                     $token->previous->spaceAfter = true;
                 }
                 elseif ($token->is($spaceAroundNotNeeded)) {

@@ -6,5 +6,8 @@ namespace Medas\PhpBeautifier\Tokens\Contexts;
 
 class ClassDeclaration implements Context
 {
-
+    public function __toString()
+    {
+        return 'CD';
+    }
 }

@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Medas\PhpBeautifier\Tokens;
 
 use Medas\PhpBeautifier\Tokens\Contexts\GlobalScope;
+use Medas\PhpBeautifier\Tokens\StatementTypes\ClassDeclaration;
+use Medas\PhpBeautifier\Tokens\StatementTypes\FunctionDeclaration;
 use Medas\ServiceManager\Attributes\Service;
 
 #[Service]
@@ -15,7 +17,6 @@ class StructureFinder
     private int $depth;
     private bool $inString;
     private bool $inAttribute;
-    private Contexts\Context $context;
 
     private array $openBlocks = [];
 
@@ -23,6 +24,10 @@ class StructureFinder
     private bool $startNewStatementBeforeNext;
     private bool $nextBraceOpensForClause;
     private int $forClauseDepth;
+
+    public function __construct(private StatementTypeFinder $typeFinder)
+    {
+    }
 
     public function determine(TokenCollection $tokens): Block
     {
@@ -37,6 +42,8 @@ class StructureFinder
             $this->process($token);
         }
 
+        $this->determineContext($document);
+
         return $document;
     }
 
@@ -45,7 +52,6 @@ class StructureFinder
         $this->depth = 0;
         $this->inString = false;
         $this->inAttribute = false;
-        $this->context = new GlobalScope();
 
         $this->openBlocks = [];
 
@@ -91,7 +97,6 @@ class StructureFinder
         $token->statement = $this->statement;
         $token->inString = $this->inString;
         $token->inAttribute = $this->inAttribute;
-        $token->context = $this->context;
 
         $this->statement->appendToken($token);
 
@@ -143,6 +148,64 @@ class StructureFinder
 
         if ($token->is(T_ROUND_BRACKET_CLOSE) && $this->forClauseDepth) {
             --$this->forClauseDepth;
+        }
+    }
+
+    private function determineContext(Block $block)
+    {
+        $context = new GlobalScope();
+        $globalScopeDepth = null;
+        $nextStatementIsClassBody = false;
+        $nextStatementIsMethodBody = false;
+
+        foreach ($block as $statement) {
+            if ($statement->block->depth === $globalScopeDepth) {
+                $context = new GlobalScope();
+                $globalScopeDepth = null;
+            }
+
+            if ($nextStatementIsClassBody) {
+                $context = new Contexts\ClassBody();
+                $nextStatementIsClassBody = false;
+            }
+
+            if ($nextStatementIsMethodBody) {
+                $context = new Contexts\MethodBody();
+                $nextStatementIsMethodBody = false;
+            }
+
+            $statementType = $this->typeFinder->for($statement);
+
+            if ($statementType instanceof ClassDeclaration) {
+                $context = new Contexts\ClassDeclaration();
+                $globalScopeDepth = $statement->block->depth;
+                $nextStatementIsClassBody = true;
+            }
+
+            if ($statementType instanceof FunctionDeclaration) {
+                $context = new Contexts\MethodDeclaration();
+                $nextStatementIsMethodBody = true;
+                $openParentheses = 0;
+            }
+
+            foreach ($statement as $token) {
+                $token->context = $context;
+
+                if ($statementType instanceof FunctionDeclaration) {
+                    // The context of the following tokens may change
+                    if ($token->is(T_ROUND_BRACKET_OPEN)) {
+                        ++$openParentheses;
+                        $context = new Contexts\MethodParameters();
+                    }
+                    if ($token->is(T_ROUND_BRACKET_CLOSE)) {
+                        $token->context = new Contexts\MethodDeclaration();
+                        if (--$openParentheses === 0) {
+                            $context = new Contexts\MethodReturnType();
+                        }
+                    }
+                }
+            }
+
         }
     }
 }

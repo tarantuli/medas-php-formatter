@@ -53,6 +53,11 @@ class ReformatterTest extends TestCase
         $this->assertRemainsTheSame('inc-dec', new Medas());
     }
 
+    public function testTernaryExpressions(): void
+    {
+        $this->assertRemainsTheSame('ternary-expressions', new Medas());
+    }
+
     public function testVisibility(): void
     {
         $this->assertChanges('psr12-visibility-pre', 'psr12-visibility-post', new Psr12());
@@ -61,5 +66,10 @@ class ReformatterTest extends TestCase
     private function assertChanges(string $sourceFile, string $targetFile, Settings $settings)
     {
         $this->compare($sourceFile, $targetFile, $settings, "$sourceFile => $targetFile");
+    }
+
+    public function testBasicPreformatted(): void
+    {
+        $this->assertRemainsTheSame('basic-preformatted', new Medas());
     }
 }
