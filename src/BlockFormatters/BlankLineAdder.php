@@ -7,6 +7,7 @@ namespace Medas\PhpBeautifier\BlockFormatters;
 use Medas\PhpBeautifier\Tokens\Block;
 use Medas\PhpBeautifier\Tokens\Statement;
 use Medas\PhpBeautifier\Tokens\StatementTypeFinder;
+use Medas\PhpBeautifier\Tokens\StatementTypes\Comment;
 use Medas\PhpBeautifier\Tokens\StatementTypes\StatementType;
 use Medas\ServiceManager\Attributes\Service;
 
@@ -46,10 +47,20 @@ class BlankLineAdder
             $type = $this->typeFinder->for($statement);
 
             foreach ($beforeTypes as $groupType) {
-                if ($type instanceof $groupType
-                    && $this->previousStatement->block === $statement->block) {
-                    $this->previousStatement->blankLineAfter = true;
+                if (!$type instanceof $groupType) {
+                    // This statement is not of the given types
+                    continue;
                 }
+                if ($this->previousStatement->block !== $statement->block) {
+                    // There's never a blank line before the first statement of a block
+                    continue;
+                }
+                if ($this->previousStatement->type instanceof Comment) {
+                    // There's never a blank line after a comment
+                    continue;
+                }
+
+                $this->previousStatement->blankLineAfter = true;
             }
 
             $this->previousStatement = $statement;

@@ -48,9 +48,9 @@ class ReformatterTest extends TestCase
         $this->assertRemainsTheSame('psr12-ifelse', new Psr12());
     }
 
-    public function testIncDec(): void
+    public function testPlusAndMinus(): void
     {
-        $this->assertRemainsTheSame('inc-dec', new Medas());
+        $this->assertRemainsTheSame('plus-and-minus', new Medas());
     }
 
     public function testTernaryExpressions(): void
@@ -68,8 +68,18 @@ class ReformatterTest extends TestCase
         $this->compare($sourceFile, $targetFile, $settings, "$sourceFile => $targetFile");
     }
 
+    public function testMatch(): void
+    {
+        $this->assertRemainsTheSame('match', new Medas());
+    }
+
     public function testBasicPreformatted(): void
     {
         $this->assertRemainsTheSame('basic-preformatted', new Medas());
+    }
+
+    public function testCompleteClass(): void
+    {
+        $this->assertRemainsTheSame('complete-class', new Medas());
     }
 }

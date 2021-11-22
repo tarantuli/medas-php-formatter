@@ -111,6 +111,7 @@ class Psr12Whitespace implements TokenFormatter
             $this->getSpaceAroundRequired(),
             [
                 T_COMMA,
+                T_SEMICOLON,
             ]
         );
     }
@@ -119,6 +120,7 @@ class Psr12Whitespace implements TokenFormatter
     {
         $spaceBeforeForbidden = $this->getSpaceBeforeForbidden();
         $spaceAfterForbidden = $this->getSpaceAfterForbidden();
+        $symbolOperators = $this->tokenGroups->symbolOperators();
 
         foreach ($tokens as $token) {
             if ($token->is($spaceAfterForbidden)) {
@@ -133,6 +135,16 @@ class Psr12Whitespace implements TokenFormatter
                 // No space between inc/dec operators and variables
                 if ($token->is(T_VARIABLE) && $token->previous->is([T_INC, T_DEC])) {
                     $token->previous->spaceAfter = false;
+                }
+
+                // No space between pluses and minuses before numbers, that follow an operator
+                if ($token->next) {
+                    if ($token->previous->is($symbolOperators)
+                        && $token->is([T_PLUS, T_MINUS])
+                        && $token->next->is([T_LNUMBER, T_DNUMBER])
+                    ) {
+                        $token->spaceAfter = false;
+                    }
                 }
             }
         }

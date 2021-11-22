@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace Medas\PhpBeautifier\Tokens;
 
-use Medas\PhpBeautifier\Tokens\Contexts\GlobalScope;
-use Medas\PhpBeautifier\Tokens\StatementTypes\ClassDeclaration;
-use Medas\PhpBeautifier\Tokens\StatementTypes\FunctionDeclaration;
 use Medas\ServiceManager\Attributes\Service;
 
 #[Service]
@@ -14,7 +11,7 @@ class StructureFinder
 {
     private Block $block;
     private Statement $statement;
-    private int $depth;
+    private int $blockDepth;
     private bool $inString;
     private bool $inAttribute;
 
@@ -25,15 +22,15 @@ class StructureFinder
     private bool $nextBraceOpensForClause;
     private int $forClauseDepth;
 
-    public function __construct(private StatementTypeFinder $typeFinder)
-    {
-    }
+    private int $matchClauseDepth;
+    private bool $nextCommaEndsStatement;
+    private bool $nextBraceOpensMatchClause;
 
     public function determine(TokenCollection $tokens): Block
     {
         $this->reset();
 
-        $document = new Block($this->depth, null);
+        $document = new Block($this->blockDepth, null);
 
         $this->block = $document;
         $this->statement = $this->block->appendNewStatement();
@@ -42,14 +39,12 @@ class StructureFinder
             $this->process($token);
         }
 
-        $this->determineContext($document);
-
         return $document;
     }
 
     private function reset(): void
     {
-        $this->depth = 0;
+        $this->blockDepth = 0;
         $this->inString = false;
         $this->inAttribute = false;
 
@@ -59,6 +54,10 @@ class StructureFinder
         $this->startNewStatementBeforeNext = false;
         $this->nextBraceOpensForClause = false;
         $this->forClauseDepth = 0;
+
+        $this->matchClauseDepth = 0;
+        $this->nextBraceOpensMatchClause = false;
+        $this->nextCommaEndsStatement = false;
     }
 
     private function process(Token $token): void
@@ -73,7 +72,7 @@ class StructureFinder
             $this->block = array_pop($this->openBlocks);
             $this->statement = $this->block->appendNewStatement();
             $this->startNewStatementBeforeNext = false;
-            --$this->depth;
+            --$this->blockDepth;
         }
 
         if ($this->startNewStatementBeforeNext) {
@@ -100,7 +99,7 @@ class StructureFinder
 
         $this->statement->appendToken($token);
 
-        if ($token->is([T_OPEN_TAG, T_CURLY_BRACKET_CLOSE, T_COMMENT])) {
+        if ($token->is([T_OPEN_TAG, T_COMMENT])) {
             // Next token starts on a new line
             $this->startNewStatementBeforeNext = true;
         }
@@ -110,12 +109,27 @@ class StructureFinder
             $this->startNewStatementBeforeNext = true;
         }
 
+        if ($token->is(T_CURLY_BRACKET_CLOSE) && !$this->matchClauseDepth) {
+            // Next token starts on a new line
+            $this->startNewStatementBeforeNext = true;
+        }
+
+        if ($token->is(T_DOUBLE_ARROW) && $this->matchClauseDepth) {
+            $this->nextCommaEndsStatement = true;
+        }
+
+        if ($token->is(T_COMMA) && $this->nextCommaEndsStatement) {
+            // Next token starts on a new line
+            $this->startNewStatementBeforeNext = true;
+            $this->nextCommaEndsStatement = false;
+        }
+
         if ($token->is(T_CURLY_BRACKET_OPEN)) {
             // Store the current open block
             $this->openBlocks[] = $this->block;
 
             // Next token starts in a new block
-            $newBlock = new Block(++$this->depth, $this->statement);
+            $newBlock = new Block(++$this->blockDepth, $this->statement);
             $this->block->appendBlock($newBlock);
             $this->block = $newBlock;
             $this->statement = $this->block->appendNewStatement();
@@ -149,63 +163,18 @@ class StructureFinder
         if ($token->is(T_ROUND_BRACKET_CLOSE) && $this->forClauseDepth) {
             --$this->forClauseDepth;
         }
-    }
 
-    private function determineContext(Block $block)
-    {
-        $context = new GlobalScope();
-        $globalScopeDepth = null;
-        $nextStatementIsClassBody = false;
-        $nextStatementIsMethodBody = false;
+        if ($token->is(T_MATCH)) {
+            $this->nextBraceOpensMatchClause = true;
+        }
 
-        foreach ($block as $statement) {
-            if ($statement->block->depth === $globalScopeDepth) {
-                $context = new GlobalScope();
-                $globalScopeDepth = null;
-            }
+        if ($token->is(T_CURLY_BRACKET_OPEN) && ($this->matchClauseDepth || $this->nextBraceOpensMatchClause)) {
+            $this->nextBraceOpensMatchClause = false;
+            ++$this->matchClauseDepth;
+        }
 
-            if ($nextStatementIsClassBody) {
-                $context = new Contexts\ClassBody();
-                $nextStatementIsClassBody = false;
-            }
-
-            if ($nextStatementIsMethodBody) {
-                $context = new Contexts\MethodBody();
-                $nextStatementIsMethodBody = false;
-            }
-
-            $statementType = $this->typeFinder->for($statement);
-
-            if ($statementType instanceof ClassDeclaration) {
-                $context = new Contexts\ClassDeclaration();
-                $globalScopeDepth = $statement->block->depth;
-                $nextStatementIsClassBody = true;
-            }
-
-            if ($statementType instanceof FunctionDeclaration) {
-                $context = new Contexts\MethodDeclaration();
-                $nextStatementIsMethodBody = true;
-                $openParentheses = 0;
-            }
-
-            foreach ($statement as $token) {
-                $token->context = $context;
-
-                if ($statementType instanceof FunctionDeclaration) {
-                    // The context of the following tokens may change
-                    if ($token->is(T_ROUND_BRACKET_OPEN)) {
-                        ++$openParentheses;
-                        $context = new Contexts\MethodParameters();
-                    }
-                    if ($token->is(T_ROUND_BRACKET_CLOSE)) {
-                        $token->context = new Contexts\MethodDeclaration();
-                        if (--$openParentheses === 0) {
-                            $context = new Contexts\MethodReturnType();
-                        }
-                    }
-                }
-            }
-
+        if ($token->is(T_CURLY_BRACKET_CLOSE) && $this->matchClauseDepth) {
+            --$this->matchClauseDepth;
         }
     }
 }

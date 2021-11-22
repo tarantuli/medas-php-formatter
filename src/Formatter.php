@@ -9,6 +9,7 @@ use Medas\PhpBeautifier\Exceptions\ReformattedCodeIsInvalidException;
 use Medas\PhpBeautifier\TokenFormatters\TokenFormatter;
 use Medas\PhpBeautifier\Tokens\Block;
 use Medas\PhpBeautifier\Tokens\BlockDumper;
+use Medas\PhpBeautifier\Tokens\ContextFinder;
 use Medas\PhpBeautifier\Tokens\StructureFinder;
 use Medas\PhpBeautifier\Tokens\TokenCollection;
 use Medas\ServiceManager\Attributes\Service;
@@ -34,6 +35,7 @@ class Formatter
 
         $this->stripWhitespace();
         $this->determineStructure();
+        $this->determineContext();
         $this->applyFormatters();
 
         if (false) {
@@ -62,7 +64,14 @@ class Formatter
         $this->document = $structureFinder->determine($this->tokens);
     }
 
+    private function determineContext()
+    {
+        $contextFinder = service(ContextFinder::class);
+        $contextFinder->determine($this->document);
+    }
+
     private function applyFormatters(): void
+
     {
         foreach ($this->settings->formatters() as $formatter) {
             if ($formatter instanceof BlockFormatter) {
