@@ -44,7 +44,7 @@ class Statement implements \IteratorAggregate
         $token->statement = $this;
     }
 
-    public function moveTokenAfter(Token $token, Token $after): void
+    public function moveTokenAfter(Token $after, Token $token): void
     {
         $this->removeToken($token);
         $this->insertTokenAfter($token, $after);

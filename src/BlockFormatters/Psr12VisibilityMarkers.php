@@ -34,6 +34,7 @@ class Psr12VisibilityMarkers implements BlockFormatter
             $static = $statement->findToken(T_STATIC);
 
             if (!$visibility) {
+                // Ensure that there is a visibility marker
                 $visibility = clone $statement->firstToken();
                 $visibility->id = T_PUBLIC;
                 $visibility->text = 'public';
@@ -41,11 +42,11 @@ class Psr12VisibilityMarkers implements BlockFormatter
             }
 
             if ($abstractFinal) {
-                $statement->moveTokenAfter($visibility, $abstractFinal);
+                $statement->moveTokenAfter($abstractFinal, $visibility);
             }
 
             if ($static) {
-                $statement->moveTokenAfter($static, $visibility);
+                $statement->moveTokenAfter($visibility, $static);
             }
         }
     }
