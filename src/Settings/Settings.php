@@ -4,31 +4,23 @@ declare(strict_types=1);
 
 namespace Medas\PhpBeautifier\Settings;
 
-use Medas\PhpBeautifier\BlockFormatters\BlockFormatter;
-use Medas\PhpBeautifier\TokenFormatters\RequiredWhitespace;
-use Medas\PhpBeautifier\TokenFormatters\TokenFormatter;
+use Medas\PhpBeautifier\Formatters\Formatter;
+use Medas\PhpBeautifier\Formatters\RequiredWhitespace;
 
 class Settings
 {
     public DocumentSettings $document;
 
-    /** @var TokenFormatter[]|BlockFormatter[] */
+    /** @var Formatter[] */
     private array $formatters = [];
 
     public function __construct()
     {
         $this->document = new DocumentSettings();
-        $this->addTokenFormatter(service(RequiredWhitespace::class));
+        $this->addFormatter(service(RequiredWhitespace::class));
     }
 
-    public function addTokenFormatter(TokenFormatter $formatter): self
-    {
-        $this->formatters[] = $formatter;
-
-        return $this;
-    }
-
-    public function addBlockFormatter(BlockFormatter $formatter): self
+    public function addFormatter(Formatter $formatter): self
     {
         $this->formatters[] = $formatter;
 

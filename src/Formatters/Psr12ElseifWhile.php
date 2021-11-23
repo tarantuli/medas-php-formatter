@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Medas\PhpBeautifier\BlockFormatters;
+namespace Medas\PhpBeautifier\Formatters;
 
-use Medas\PhpBeautifier\Tokens\Block;
 use Medas\PhpBeautifier\Tokens\Statement;
 use Medas\PhpBeautifier\Tokens\StatementTypeFinder;
+use Medas\PhpBeautifier\Tokens\TokenCollection;
 use Medas\ServiceManager\Attributes\Service;
 
 #[Service]
-class Psr12ElseifWhile implements BlockFormatter
+class Psr12ElseifWhile implements Formatter
 {
     private ?Statement $previousStatement = null;
 
@@ -18,9 +18,9 @@ class Psr12ElseifWhile implements BlockFormatter
     {
     }
 
-    public function format(Block $block): void
+    public function format(TokenCollection $tokens): void
     {
-        foreach ($block as $statement) {
+        foreach ($tokens->structure as $statement) {
             if ($statement->firstToken()->is([T_ELSE, T_ELSEIF])) {
                 $statement->mergeWithPrevious();
             }

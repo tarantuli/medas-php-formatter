@@ -9,6 +9,7 @@ class TokenCollection implements \Iterator, \Countable
     /** @var Token[] */
     private array $tokens = [];
     private int $index = 0;
+    public Block $structure;
 
     public function __construct(string $code)
     {

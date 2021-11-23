@@ -4,10 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\PhpBeautifier;
 
-use Medas\PhpBeautifier\BlockFormatters\BlockFormatter;
 use Medas\PhpBeautifier\Exceptions\ReformattedCodeIsInvalidException;
-use Medas\PhpBeautifier\TokenFormatters\TokenFormatter;
-use Medas\PhpBeautifier\Tokens\Block;
 use Medas\PhpBeautifier\Tokens\BlockDumper;
 use Medas\PhpBeautifier\Tokens\ContextFinder;
 use Medas\PhpBeautifier\Tokens\StructureFinder;
@@ -18,7 +15,6 @@ use Medas\ServiceManager\Attributes\Service;
 class Formatter
 {
     private TokenCollection $tokens;
-    private Block $document;
     private Settings\Settings $settings;
 
     public function __construct(
@@ -40,11 +36,11 @@ class Formatter
 
         if (false) {
             /** @noinspection PhpUnreachableStatementInspection */
-            service(BlockDumper::class)->dump($this->document);
+            service(BlockDumper::class)->dump($this->tokens->structure);
         }
 
         $result = $this->blockPrinter->print(
-            $this->document,
+            $this->tokens->structure,
             (string) $this->settings->document->indentation(),
             (string) $this->settings->document->lineEnding());
 
@@ -61,25 +57,19 @@ class Formatter
     private function determineStructure()
     {
         $structureFinder = service(StructureFinder::class);
-        $this->document = $structureFinder->determine($this->tokens);
+        $this->tokens->structure = $structureFinder->determine($this->tokens);
     }
 
     private function determineContext()
     {
         $contextFinder = service(ContextFinder::class);
-        $contextFinder->determine($this->document);
+        $contextFinder->determine($this->tokens->structure);
     }
 
     private function applyFormatters(): void
-
     {
         foreach ($this->settings->formatters() as $formatter) {
-            if ($formatter instanceof BlockFormatter) {
-                $formatter->format($this->document);
-            }
-            elseif ($formatter instanceof TokenFormatter) {
-                $formatter->format($this->tokens);
-            }
+            $formatter->format($this->tokens);
         }
     }
 

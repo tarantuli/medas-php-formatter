@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Medas\PhpBeautifier\Settings;
 
-use Medas\PhpBeautifier\BlockFormatters\Psr12BlankLines;
-use Medas\PhpBeautifier\BlockFormatters\Psr12ElseifWhile;
-use Medas\PhpBeautifier\BlockFormatters\Psr12VisibilityMarkers;
 use Medas\PhpBeautifier\Settings\Indentations\Space;
 use Medas\PhpBeautifier\Settings\LineEndings\LineFeed;
-use Medas\PhpBeautifier\TokenFormatters\KeywordsToLowercase;
-use Medas\PhpBeautifier\TokenFormatters\Psr12Whitespace;
+use Medas\PhpBeautifier\Formatters\KeywordsToLowercase;
+use Medas\PhpBeautifier\Formatters\Psr12BlankLines;
+use Medas\PhpBeautifier\Formatters\Psr12ElseifWhile;
+use Medas\PhpBeautifier\Formatters\Psr12VisibilityMarkers;
+use Medas\PhpBeautifier\Formatters\Psr12Whitespace;
 
 class Psr12 extends Settings
 {
@@ -22,12 +22,12 @@ class Psr12 extends Settings
             ->setIndentation(new Space(4))
             ->setMaxLineLength(80);
 
-        $this->addTokenFormatter(service(KeywordsToLowercase::class));
-        $this->addBlockFormatter(service(Psr12VisibilityMarkers::class));
+        $this->addFormatter(service(KeywordsToLowercase::class));
+        $this->addFormatter(service(Psr12VisibilityMarkers::class));
 
-        $this->addBlockFormatter(service(Psr12ElseifWhile::class));
-        $this->addBlockFormatter(service(Psr12BlankLines::class));
+        $this->addFormatter(service(Psr12ElseifWhile::class));
+        $this->addFormatter(service(Psr12BlankLines::class));
 
-        $this->addTokenFormatter(service(Psr12Whitespace::class));
+        $this->addFormatter(service(Psr12Whitespace::class));
     }
 }

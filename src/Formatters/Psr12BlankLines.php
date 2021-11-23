@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Medas\PhpBeautifier\BlockFormatters;
+namespace Medas\PhpBeautifier\Formatters;
 
 use Medas\PhpBeautifier\Tokens\Block;
 use Medas\PhpBeautifier\Tokens\StatementTypeFinder;
@@ -15,10 +15,11 @@ use Medas\PhpBeautifier\Tokens\StatementTypes\PhpOpenTag;
 use Medas\PhpBeautifier\Tokens\StatementTypes\UseClassStatement;
 use Medas\PhpBeautifier\Tokens\StatementTypes\UseConstStatement;
 use Medas\PhpBeautifier\Tokens\StatementTypes\UseFunctionStatement;
+use Medas\PhpBeautifier\Tokens\TokenCollection;
 use Medas\ServiceManager\Attributes\Service;
 
 #[Service]
-class Psr12BlankLines implements BlockFormatter
+class Psr12BlankLines implements Formatter
 {
     public function __construct(
         private BlankLineAdder      $blankLineAdder,
@@ -27,9 +28,9 @@ class Psr12BlankLines implements BlockFormatter
     {
     }
 
-    public function format(Block $block): void
+    public function format(TokenCollection $tokens): void
     {
-        $this->blankLineAdder->afterTypes($block, [
+        $this->blankLineAdder->afterTypes($tokens->structure, [
             PhpOpenTag::class,
             DeclareStatement::class,
             NamespaceDeclaration::class,
@@ -38,7 +39,7 @@ class Psr12BlankLines implements BlockFormatter
             UseConstStatement::class,
         ]);
 
-        $this->additionalLines($block);
+        $this->additionalLines($tokens->structure);
     }
 
     private function additionalLines(Block $block): void

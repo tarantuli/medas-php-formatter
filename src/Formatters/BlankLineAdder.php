@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Medas\PhpBeautifier\BlockFormatters;
+namespace Medas\PhpBeautifier\Formatters;
 
 use Medas\PhpBeautifier\Tokens\Block;
 use Medas\PhpBeautifier\Tokens\Statement;

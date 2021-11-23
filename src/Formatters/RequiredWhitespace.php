@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Medas\PhpBeautifier\TokenFormatters;
+namespace Medas\PhpBeautifier\Formatters;
 
 use Medas\PhpBeautifier\Tokens\TokenCollection;
 use Medas\PhpBeautifier\Tokens\TokenGroups;
 use Medas\ServiceManager\Attributes\Service;
 
 #[Service]
-class RequiredWhitespace implements TokenFormatter
+class RequiredWhitespace implements Formatter
 {
     public function __construct(private TokenGroups $tokenGroups)
     {

@@ -2,24 +2,25 @@
 
 declare(strict_types=1);
 
-namespace Medas\PhpBeautifier\BlockFormatters;
+namespace Medas\PhpBeautifier\Formatters;
 
 use Medas\PhpBeautifier\Tokens\Block;
 use Medas\PhpBeautifier\Tokens\StatementTypeFinder;
 use Medas\PhpBeautifier\Tokens\StatementTypes\FunctionDeclaration;
+use Medas\PhpBeautifier\Tokens\TokenCollection;
 use Medas\ServiceManager\Attributes\Service;
 
 #[Service]
-class Psr12VisibilityMarkers implements BlockFormatter
+class Psr12VisibilityMarkers implements Formatter
 {
     public function __construct(private StatementTypeFinder $typeFinder,
     )
     {
     }
 
-    public function format(Block $block): void
+    public function format(TokenCollection $tokens): void
     {
-        $this->sortVisibilityMarkers($block);
+        $this->sortVisibilityMarkers($tokens->structure);
     }
 
     private function sortVisibilityMarkers(Block $block): void

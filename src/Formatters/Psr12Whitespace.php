@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Medas\PhpBeautifier\TokenFormatters;
+namespace Medas\PhpBeautifier\Formatters;
 
 use Medas\PhpBeautifier\Tokens\Contexts\MethodReturnType;
 use Medas\PhpBeautifier\Tokens\StatementTypeFinder;
@@ -14,7 +14,7 @@ use Medas\PhpBeautifier\Tokens\TokenGroups;
 use Medas\ServiceManager\Attributes\Service;
 
 #[Service]
-class Psr12Whitespace implements TokenFormatter
+class Psr12Whitespace implements Formatter
 {
     public function __construct(private TokenGroups         $tokenGroups,
                                 private StatementTypeFinder $typeFinder)

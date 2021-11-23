@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Medas\PhpBeautifier\TokenFormatters;
+namespace Medas\PhpBeautifier\Formatters;
 
 use Medas\PhpBeautifier\Tokens\TokenCollection;
 
-interface TokenFormatter
+interface Formatter
 {
     public function format(TokenCollection $tokens): void;
 }
