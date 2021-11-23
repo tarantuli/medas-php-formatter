@@ -17,7 +17,7 @@ use Medas\PhpBeautifier\Tokens\StatementTypes\FunctionDeclaration;
 use Medas\PhpBeautifier\Tokens\StatementTypes\NamespaceDeclaration;
 use Medas\PhpBeautifier\Tokens\StatementTypes\PhpOpenTag;
 use Medas\PhpBeautifier\Tokens\StatementTypes\StatementType;
-use Medas\PhpBeautifier\Tokens\StatementTypes\UnknownType;
+use Medas\PhpBeautifier\Tokens\StatementTypes\GenericStatement;
 use Medas\PhpBeautifier\Tokens\StatementTypes\UseClassStatement;
 use Medas\PhpBeautifier\Tokens\StatementTypes\UseConstStatement;
 use Medas\PhpBeautifier\Tokens\StatementTypes\UseFunctionStatement;
@@ -104,6 +104,6 @@ class StatementTypeFinder
             return new ControlStatement();
         }
 
-        return new UnknownType();
+        return new GenericStatement();
     }
 }

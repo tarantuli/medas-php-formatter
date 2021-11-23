@@ -11,7 +11,7 @@ use Medas\PhpBeautifier\Tokens\TokenCollection;
 use Medas\ServiceManager\Attributes\Service;
 
 #[Service]
-class ClassPartsBlankLines implements Formatter
+class BlankLinesBetweenClassSections implements Formatter
 {
     public function __construct(private BlankLineAdder $blankLineAdder)
     {

@@ -24,10 +24,8 @@ class Psr12 extends Settings
 
         $this->addFormatter(service(KeywordsToLowercase::class));
         $this->addFormatter(service(Psr12VisibilityMarkers::class));
-
         $this->addFormatter(service(Psr12ElseifWhile::class));
         $this->addFormatter(service(Psr12BlankLines::class));
-
         $this->addFormatter(service(Psr12Whitespace::class));
     }
 }

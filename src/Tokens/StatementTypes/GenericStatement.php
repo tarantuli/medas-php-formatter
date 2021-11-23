@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\PhpBeautifier\Tokens\StatementTypes;
 
-class UnknownType implements StatementType
+class GenericStatement implements StatementType
 {
     public function __toString()
     {
