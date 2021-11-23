@@ -18,6 +18,7 @@ use Medas\PhpBeautifier\Tokens\StatementTypes\NamespaceDeclaration;
 use Medas\PhpBeautifier\Tokens\StatementTypes\PhpOpenTag;
 use Medas\PhpBeautifier\Tokens\StatementTypes\StatementType;
 use Medas\PhpBeautifier\Tokens\StatementTypes\GenericStatement;
+use Medas\PhpBeautifier\Tokens\StatementTypes\SwitchBranch;
 use Medas\PhpBeautifier\Tokens\StatementTypes\UseClassStatement;
 use Medas\PhpBeautifier\Tokens\StatementTypes\UseConstStatement;
 use Medas\PhpBeautifier\Tokens\StatementTypes\UseFunctionStatement;
@@ -102,6 +103,10 @@ class StatementTypeFinder
 
         if ($firstToken->is($this->tokenGroups->controlKeywords())) {
             return new ControlStatement();
+        }
+
+        if ($firstToken->is([T_CASE, T_DEFAULT])) {
+            return new SwitchBranch();
         }
 
         return new GenericStatement();

@@ -4,20 +4,17 @@ switch ($a) {
     case 1:
     case 2:
         return 'cheese';
-
     case 3:
         echo 'sugar';
         break;
-
     case $a ? $b : $c :
         return 'ternary';
-
     case 'John':
         foreach ($b as $c) {
             print($c);
         }
-        break;
 
+        break;
     case 'Erik':
         switch ($b) {
             case 1:

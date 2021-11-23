@@ -58,6 +58,9 @@ class BlockPrinter
 
     private function printIndentation(Statement $statement): void
     {
-        echo str_repeat($this->indentation, $statement->block->depth);
+        echo str_repeat(
+            $this->indentation,
+            $statement->block->depth + $statement->additionalIndentation
+        );
     }
 }

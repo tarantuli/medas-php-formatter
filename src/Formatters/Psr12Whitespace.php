@@ -9,6 +9,7 @@ use Medas\PhpBeautifier\Tokens\StatementTypeFinder;
 use Medas\PhpBeautifier\Tokens\StatementTypes\ClassPropertyDeclaration;
 use Medas\PhpBeautifier\Tokens\StatementTypes\DeclareStatement;
 use Medas\PhpBeautifier\Tokens\StatementTypes\FunctionDeclaration;
+use Medas\PhpBeautifier\Tokens\StatementTypes\SwitchBranch;
 use Medas\PhpBeautifier\Tokens\TokenCollection;
 use Medas\PhpBeautifier\Tokens\TokenGroups;
 use Medas\ServiceManager\Attributes\Service;
@@ -67,6 +68,11 @@ class Psr12Whitespace implements Formatter
 
                 // No space between "?:"
                 if ($token->is(T_COLON) && $token->previous->is(T_QUESTION_MARK)) {
+                    $token->previous->spaceAfter = false;
+                }
+
+                // No space before ":" in case/default statements
+                if ($token->is(T_COLON) && $statementType instanceof SwitchBranch) {
                     $token->previous->spaceAfter = false;
                 }
             }

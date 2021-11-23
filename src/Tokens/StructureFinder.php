@@ -21,6 +21,7 @@ class StructureFinder
     private bool $startNewStatementBeforeNext;
     private bool $nextBraceOpensForClause;
     private int $forClauseDepth;
+    private array $switchDepths;
 
     private int $matchClauseDepth;
     private bool $nextCommaEndsStatement;
@@ -54,6 +55,7 @@ class StructureFinder
         $this->startNewStatementBeforeNext = false;
         $this->nextBraceOpensForClause = false;
         $this->forClauseDepth = 0;
+        $this->switchDepths = [];
 
         $this->matchClauseDepth = 0;
         $this->nextBraceOpensMatchClause = false;
@@ -72,6 +74,7 @@ class StructureFinder
             $this->block = array_pop($this->openBlocks);
             $this->statement = $this->block->appendNewStatement();
             $this->startNewStatementBeforeNext = false;
+            $this->switchDepths = array_filter($this->switchDepths, fn($depth) => $depth !== $this->blockDepth);
             --$this->blockDepth;
         }
 
@@ -124,6 +127,10 @@ class StructureFinder
             $this->nextCommaEndsStatement = false;
         }
 
+        if ($token->is(T_COLON) && in_array($this->blockDepth, $this->switchDepths, true)) {
+            $this->startNewStatementBeforeNext = true;
+        }
+
         if ($token->is(T_CURLY_BRACKET_OPEN)) {
             // Store the current open block
             $this->openBlocks[] = $this->block;
@@ -166,6 +173,10 @@ class StructureFinder
 
         if ($token->is(T_MATCH)) {
             $this->nextBraceOpensMatchClause = true;
+        }
+
+        if ($token->is(T_SWITCH)) {
+            $this->switchDepths[] = $this->blockDepth + 1;
         }
 
         if ($token->is(T_CURLY_BRACKET_OPEN) && ($this->matchClauseDepth || $this->nextBraceOpensMatchClause)) {

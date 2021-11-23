@@ -12,6 +12,7 @@ use Medas\PhpBeautifier\Tokens\StatementTypes\DeclareStatement;
 use Medas\PhpBeautifier\Tokens\StatementTypes\FunctionDeclaration;
 use Medas\PhpBeautifier\Tokens\StatementTypes\NamespaceDeclaration;
 use Medas\PhpBeautifier\Tokens\StatementTypes\PhpOpenTag;
+use Medas\PhpBeautifier\Tokens\StatementTypes\SwitchBranch;
 use Medas\PhpBeautifier\Tokens\StatementTypes\UseClassStatement;
 use Medas\PhpBeautifier\Tokens\StatementTypes\UseConstStatement;
 use Medas\PhpBeautifier\Tokens\StatementTypes\UseFunctionStatement;
@@ -40,6 +41,7 @@ class Psr12BlankLines implements Formatter
         ]);
 
         $this->additionalLines($tokens->structure);
+        $this->addSwitchIndentation($tokens->structure);
     }
 
     private function additionalLines(Block $block): void
@@ -68,6 +70,27 @@ class Psr12BlankLines implements Formatter
 
             if ($statement === $statement->block->lastStatement()) {
                 $statement->blankLineAfter = false;
+            }
+        }
+    }
+
+    private function addSwitchIndentation(Block $block): void
+    {
+        $switchDepths = [];
+
+        foreach ($block as $statement) {
+            $type = $this->typeFinder->for($statement);
+
+            if ($statement->firstToken()->is(T_CURLY_BRACKET_CLOSE)) {
+                $switchDepths = array_filter($switchDepths, fn($depth) => $depth !== $statement->block->depth + 1);
+            }
+
+            // Add additional indentation to each statement equal to the number of open switch blocks
+            // decreased by one if this statement itself is a case or default statement
+            $statement->additionalIndentation += count($switchDepths) - $type instanceof SwitchBranch;
+
+            if ($statement->firstToken()->is(T_SWITCH)) {
+                $switchDepths[] = $statement->block->depth + 1;
             }
         }
     }

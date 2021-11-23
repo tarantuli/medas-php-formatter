@@ -11,6 +11,7 @@ class Statement implements \IteratorAggregate
 {
     public StatementType $type;
     public bool $blankLineAfter = false;
+    public int $additionalIndentation = 0;
 
     /** @var Token[] */
     private array $tokens = [];
