@@ -130,4 +130,14 @@ class Statement implements \IteratorAggregate
     {
         $this->block->mergeWithPrevious($this);
     }
+
+    public function previous(): Statement|null
+    {
+        return $this->block->getPreviousStatement($this);
+    }
+
+    public function next(): Statement|null
+    {
+        return $this->block->getNextStatement($this);
+    }
 }

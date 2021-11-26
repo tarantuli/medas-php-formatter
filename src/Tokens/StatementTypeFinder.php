@@ -14,10 +14,10 @@ use Medas\PhpBeautifier\Tokens\StatementTypes\Comment;
 use Medas\PhpBeautifier\Tokens\StatementTypes\ControlStatement;
 use Medas\PhpBeautifier\Tokens\StatementTypes\DeclareStatement;
 use Medas\PhpBeautifier\Tokens\StatementTypes\FunctionDeclaration;
+use Medas\PhpBeautifier\Tokens\StatementTypes\GenericStatement;
 use Medas\PhpBeautifier\Tokens\StatementTypes\NamespaceDeclaration;
 use Medas\PhpBeautifier\Tokens\StatementTypes\PhpOpenTag;
 use Medas\PhpBeautifier\Tokens\StatementTypes\StatementType;
-use Medas\PhpBeautifier\Tokens\StatementTypes\GenericStatement;
 use Medas\PhpBeautifier\Tokens\StatementTypes\SwitchBranch;
 use Medas\PhpBeautifier\Tokens\StatementTypes\UseClassStatement;
 use Medas\PhpBeautifier\Tokens\StatementTypes\UseConstStatement;
@@ -43,6 +43,7 @@ class StatementTypeFinder
     private function determineType(Statement $statement): StatementType
     {
         $firstToken = $statement->firstToken();
+        $secondToken = $statement->getToken(1);
 
         if (null === $firstToken) {
             return new BlankLine();
@@ -65,8 +66,6 @@ class StatementTypeFinder
         }
 
         if ($firstToken->is(T_USE)) {
-            $secondToken = $statement->getToken(1);
-
             if ($secondToken->is(T_FUNCTION)) {
                 return new UseFunctionStatement();
             }
@@ -98,6 +97,7 @@ class StatementTypeFinder
         }
 
         if ($statement->containsType($this->tokenGroups->visibilityKeywords())) {
+            // It's not a class const or class method, those were found before
             return new ClassPropertyDeclaration();
         }
 
@@ -105,7 +105,12 @@ class StatementTypeFinder
             return new ControlStatement();
         }
 
-        if ($firstToken->is([T_CASE, T_DEFAULT])) {
+        if ($firstToken->is(T_CASE)) {
+            return new SwitchBranch();
+        }
+
+        if ($firstToken->is(T_DEFAULT) && !$secondToken->is(T_DOUBLE_ARROW)) {
+            // A default followed by a double arrow is a match branch
             return new SwitchBranch();
         }
 

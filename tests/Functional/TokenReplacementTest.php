@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Medas\Test\Functional;
 
-use Medas\PhpBeautifier\Formatters\TokenReplacements\UseDieInsteadOfExit;
-use Medas\PhpBeautifier\Formatters\TokenReplacements\UseExitInsteadOfDie;
-use Medas\PhpBeautifier\Formatters\TokenReplacements\UseImplodeInsteadOfJoin;
+use Medas\PhpBeautifier\Formatters\Replacements\UseDieInsteadOfExit;
+use Medas\PhpBeautifier\Formatters\Replacements\UseExitInsteadOfDie;
+use Medas\PhpBeautifier\Formatters\Replacements\UseImplodeInsteadOfJoin;
 use Medas\PhpBeautifier\Settings\Psr12;
 
 class TokenReplacementTest extends BaseTest

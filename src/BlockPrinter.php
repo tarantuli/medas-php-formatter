@@ -44,7 +44,7 @@ class BlockPrinter
                 echo $this->lineEnding;
                 $this->printIndentation($statement);
             }
-            elseif ($token->spaceAfter && $token !== $statement->lastToken()) {
+            elseif ($token->spaceAfter && !$token->isLastToken()) {
                 echo ' ';
             }
         }

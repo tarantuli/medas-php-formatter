@@ -23,9 +23,29 @@ class Block implements \IteratorAggregate
         $this->elements[] = $block;
     }
 
-    public function mergeWithPrevious(Statement $secondStatement): void
+    public function getPreviousStatement(Statement $statement): ?Statement
     {
-        $second = array_search($secondStatement, $this->elements, true);
+        $index = $this->getIndex($statement);
+        return $this->elements[$index - 1] ?? null;
+    }
+
+    private function getIndex(Statement $statement): int|null
+    {
+        $index = array_search($statement, $this->elements, true);
+
+        return false === $index ? null : $index;
+    }
+
+    public function getNextStatement(Statement $statement): ?Statement
+    {
+        $index = $this->getIndex($statement);
+        return $this->elements[$index + 1] ?? null;
+    }
+
+    public function mergeWithPrevious(Statement $secondStatement): void
+
+    {
+        $second = $this->getIndex($secondStatement);
         $first = $second - 1;
         $firstStatement = $this->elements[$first];
 
@@ -42,6 +62,7 @@ class Block implements \IteratorAggregate
     /**
      * foreach ($block) only returns the statements in this block, recursively! Be careful to use $statement->block
      * and not $block itself.
+     *
      * @return \Generator|Statement[]
      * @noinspection PhpDocSignatureInspection
      */
@@ -75,7 +96,7 @@ class Block implements \IteratorAggregate
 
     public function deleteStatement(Statement $statement): void
     {
-        $index = array_search($statement, $this->elements, true);
+        $index = $this->getIndex($statement);
         array_splice($this->elements, $index, 1);
         unset($statement);
     }

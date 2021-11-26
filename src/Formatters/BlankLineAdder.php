@@ -9,13 +9,14 @@ use Medas\PhpBeautifier\Tokens\Statement;
 use Medas\PhpBeautifier\Tokens\StatementTypeFinder;
 use Medas\PhpBeautifier\Tokens\StatementTypes\Comment;
 use Medas\PhpBeautifier\Tokens\StatementTypes\StatementType;
+use Medas\PhpBeautifier\Tokens\StatementTypes\SwitchBranch;
 use Medas\ServiceManager\Attributes\Service;
 
 #[Service]
 class BlankLineAdder
 {
-    private ?Statement $previousStatement = null;
-    private ?StatementType $previousType = null;
+    private Statement|null $previousStatement = null;
+    private StatementType|null $previousType = null;
 
     public function __construct(private StatementTypeFinder $typeFinder)
     {
@@ -51,10 +52,17 @@ class BlankLineAdder
                     // This statement is not of the given types
                     continue;
                 }
+
                 if ($this->previousStatement->block !== $statement->block) {
                     // There's never a blank line before the first statement of a block
                     continue;
                 }
+
+                if ($this->previousStatement->type instanceof SwitchBranch) {
+                    // There's never a blank line after a switch case/default statement
+                    continue;
+                }
+
                 if ($this->previousStatement->type instanceof Comment) {
                     // There's never a blank line after a comment
                     continue;

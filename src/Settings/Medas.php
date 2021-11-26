@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\PhpBeautifier\Settings;
 
-use Medas\PhpBeautifier\Formatters\TokenReplacements\UseExitInsteadOfDie;
+use Medas\PhpBeautifier\Formatters\Replacements\UseExitInsteadOfDie;
 use Medas\PhpBeautifier\Formatters\BlankLinesBeforeBlocks;
 use Medas\PhpBeautifier\Formatters\BlankLinesBetweenClassSections;
 

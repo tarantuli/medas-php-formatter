@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Medas\PhpBeautifier\Formatters\TokenReplacements;
+namespace Medas\PhpBeautifier\Formatters\Replacements;
 
 use Medas\PhpBeautifier\Formatters\Formatter;
 use Medas\PhpBeautifier\Tokens\Token;

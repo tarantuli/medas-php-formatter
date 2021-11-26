@@ -22,4 +22,14 @@ class Token extends \PhpToken
     {
         return $this->is(T_STRING) && in_array(strtolower($this->text), ['true', 'false', 'null'], true);
     }
+
+    public function isLastToken(): bool
+    {
+        return $this === $this->statement->lastToken();
+    }
+
+    public function isFirstToken(): bool
+    {
+        return $this === $this->statement->firstToken();
+    }
 }

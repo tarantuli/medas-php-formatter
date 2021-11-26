@@ -71,8 +71,10 @@ class Psr12Whitespace implements Formatter
                     $token->previous->spaceAfter = false;
                 }
 
-                // No space before ":" in case/default statements
-                if ($token->is(T_COLON) && $statementType instanceof SwitchBranch) {
+                // No space before ":" in case/default statements if it's the last token
+                if ($token->is(T_COLON)
+                    && $statementType instanceof SwitchBranch
+                    && $token->isLastToken()) {
                     $token->previous->spaceAfter = false;
                 }
             }
@@ -107,6 +109,7 @@ class Psr12Whitespace implements Formatter
                 T_DOUBLE_ARROW,
                 T_COLON,
                 T_QUESTION_MARK,
+                T_CASE,
             ]
         );
     }

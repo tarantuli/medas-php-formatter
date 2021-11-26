@@ -59,17 +59,10 @@ abstract class ServiceInstantiator
             case true:
                 // Test
                 break;
-
             case 1:
             case 2:
                 // Test
                 break;
-
-            case 3:
-            {
-                // Test
-            }
-
             default:
                 // Test
         }

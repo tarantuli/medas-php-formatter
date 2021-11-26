@@ -7,7 +7,7 @@ switch ($a) {
     case 3:
         echo 'sugar';
         break;
-    case $a ? $b : $c :
+    case ($a ? $b : $c):
         return 'ternary';
     case 'John':
         foreach ($b as $c) {
