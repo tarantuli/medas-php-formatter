@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace Medas\PhpBeautifier\Settings;
 
-use Medas\PhpBeautifier\Formatters\Replacements\UseExitInsteadOfDie;
 use Medas\PhpBeautifier\Formatters\BlankLinesBeforeBlocks;
 use Medas\PhpBeautifier\Formatters\BlankLinesBetweenClassSections;
+use Medas\PhpBeautifier\Formatters\NoCommentsAtLineEnd;
+use Medas\PhpBeautifier\Formatters\Replacements\UseExitInsteadOfDie;
 
 class Medas extends Psr12
 {
@@ -17,5 +18,6 @@ class Medas extends Psr12
         $this->addFormatter(service(BlankLinesBetweenClassSections::class));
         $this->addFormatter(service(BlankLinesBeforeBlocks::class));
         $this->addFormatter(service(UseExitInsteadOfDie::class));
+        $this->addFormatter(service(NoCommentsAtLineEnd::class));
     }
 }

@@ -44,7 +44,13 @@ class ReformatterTest extends BaseTest
         $this->assertRemainsTheSame('switch-statement', new Psr12());
     }
 
+    public function testComments(): void
+    {
+        $this->assertRemainsTheSame('comments', new Psr12());
+    }
+
     public function testBasicPreformatted(): void
+
     {
         $this->assertRemainsTheSame('basic-preformatted', new Medas());
     }

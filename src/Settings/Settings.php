@@ -24,6 +24,10 @@ class Settings
     {
         $this->formatters[] = $formatter;
 
+        foreach ($formatter->additionalFormatters() as $additionalFormatter) {
+            $this->addFormatter($additionalFormatter);
+        }
+
         return $this;
     }
 

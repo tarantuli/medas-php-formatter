@@ -30,4 +30,9 @@ class NoCommentsAtLineEnd extends BaseFormatter
     {
         return new BeforeStrippingWhitespace();
     }
+
+    public function additionalFormatters(): array
+    {
+        return [service(MoveCommentsAtLineEnd::class)];
+    }
 }

@@ -119,6 +119,11 @@ class StructureFinder
             $this->startNewStatementBeforeNext = true;
         }
 
+        if ($token->is(T_DOC_COMMENT) && substr_count($token->text, "\n") >= 1) {
+            // Thiss is a multi-line doccomment, hext token starts a new statement
+            $this->startNewStatementBeforeNext = true;
+        }
+
         if ($token->is(T_SEMICOLON) && !$this->forClauseDepth) {
             // Next token starts on a new line
             $this->startNewStatementBeforeNext = true;

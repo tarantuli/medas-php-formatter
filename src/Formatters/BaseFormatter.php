@@ -13,4 +13,9 @@ abstract class BaseFormatter implements Formatter
     {
         return new AfterDeterminingContext();
     }
+
+    public function additionalFormatters(): array
+    {
+        return [];
+    }
 }

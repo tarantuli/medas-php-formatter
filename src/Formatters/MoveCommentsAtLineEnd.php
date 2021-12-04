@@ -7,6 +7,10 @@ namespace Medas\PhpBeautifier\Formatters;
 use Medas\PhpBeautifier\Tokens\TokenCollection;
 use Medas\ServiceManager\Attributes\Service;
 
+/**
+ * This formatter processes the tokens marked by NoCommentsAtLineEnd. That class also registers this class, so
+ * no need to add it manually to Settings.
+ */
 #[Service]
 class MoveCommentsAtLineEnd extends BaseFormatter
 {

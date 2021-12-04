@@ -140,4 +140,9 @@ class Statement implements \IteratorAggregate
     {
         return $this->block->getNextStatement($this);
     }
+
+    public function breakAfter(Token $token): void
+    {
+        diedump($this, $token);
+    }
 }

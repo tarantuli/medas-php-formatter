@@ -12,4 +12,6 @@ interface Formatter
     public function format(TokenCollection $tokens): void;
 
     public function applyWhen(): FormattingPhase;
+
+    public function additionalFormatters(): array;
 }
