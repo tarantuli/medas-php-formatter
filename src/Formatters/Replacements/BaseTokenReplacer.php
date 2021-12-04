@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Medas\PhpBeautifier\Formatters\Replacements;
 
-use Medas\PhpBeautifier\Formatters\Formatter;
+use Medas\PhpBeautifier\Formatters\BaseFormatter;
 use Medas\PhpBeautifier\Tokens\Token;
 use Medas\PhpBeautifier\Tokens\TokenCollection;
 
-abstract class BaseTokenReplacer implements Formatter
+abstract class BaseTokenReplacer extends BaseFormatter
 {
     public function format(TokenCollection $tokens): void
     {

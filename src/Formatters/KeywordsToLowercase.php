@@ -9,7 +9,7 @@ use Medas\PhpBeautifier\Tokens\TokenGroups;
 use Medas\ServiceManager\Attributes\Service;
 
 #[Service]
-class KeywordsToLowercase implements Formatter
+class KeywordsToLowercase extends BaseFormatter
 {
     public function __construct(private TokenGroups $tokenGroups)
     {

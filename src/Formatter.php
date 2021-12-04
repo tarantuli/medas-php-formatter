@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Medas\PhpBeautifier;
 
 use Medas\PhpBeautifier\Exceptions\ReformattedCodeIsInvalidException;
+use Medas\PhpBeautifier\Formatters\Phases\AfterDeterminingContext;
+use Medas\PhpBeautifier\Formatters\Phases\BeforeStrippingWhitespace;
 use Medas\PhpBeautifier\Tokens\BlockDumper;
 use Medas\PhpBeautifier\Tokens\ContextFinder;
 use Medas\PhpBeautifier\Tokens\StructureFinder;
@@ -29,10 +31,11 @@ class Formatter
         $this->tokens = $tokens;
         $this->settings = $settings;
 
+        $this->applyFormatters(BeforeStrippingWhitespace::class);
         $this->stripWhitespace();
         $this->determineStructure();
         $this->determineContext();
-        $this->applyFormatters();
+        $this->applyFormatters(AfterDeterminingContext::class);
 
         if (false) {
             /** @noinspection PhpUnreachableStatementInspection */
@@ -47,6 +50,15 @@ class Formatter
         $this->assertCodeIsValid($result);
 
         return $result;
+    }
+
+    private function applyFormatters(string $phase): void
+    {
+        foreach ($this->settings->formatters() as $formatter) {
+            if ($formatter->applyWhen() instanceof $phase) {
+                $formatter->format($this->tokens);
+            }
+        }
     }
 
     private function stripWhitespace()
@@ -64,13 +76,6 @@ class Formatter
     {
         $contextFinder = service(ContextFinder::class);
         $contextFinder->determine($this->tokens->structure);
-    }
-
-    private function applyFormatters(): void
-    {
-        foreach ($this->settings->formatters() as $formatter) {
-            $formatter->format($this->tokens);
-        }
     }
 
     private function assertCodeIsValid(string $code): void

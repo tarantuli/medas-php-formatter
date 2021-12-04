@@ -94,10 +94,22 @@ class Block implements \IteratorAggregate
         return $elements;
     }
 
-    public function deleteStatement(Statement $statement): void
+    public function moveStatementAfter(Statement $after, Statement $statement): void
+    {
+        $this->removeStatement($statement);
+        $this->insertStatementAfter($statement, $after);
+
+    }
+
+    public function removeStatement(Statement $statement): void
     {
         $index = $this->getIndex($statement);
         array_splice($this->elements, $index, 1);
-        unset($statement);
+    }
+
+    public function insertStatementAfter(Statement $statement, Statement $after): void
+    {
+        $index = $this->getIndex($after);
+        array_splice($this->elements, $index + 1, 0, [$statement]);
     }
 }

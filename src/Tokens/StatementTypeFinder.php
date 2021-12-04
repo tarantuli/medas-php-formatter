@@ -57,7 +57,7 @@ class StatementTypeFinder
             return new DeclareStatement();
         }
 
-        if ($firstToken->is(T_COMMENT)) {
+        if ($firstToken->is($this->tokenGroups->comments())) {
             return new Comment();
         }
 

@@ -70,7 +70,7 @@ class StructureFinder
         if ($token->is(T_CURLY_BRACKET_CLOSE)) {
             // Delete the last statement if it's empty
             if (null === $this->statement->firstToken()) {
-                $this->block->deleteStatement($this->statement);
+                $this->block->removeStatement($this->statement);
             }
 
             // The previous block is closed, return to the last open block

@@ -10,7 +10,7 @@ use Medas\PhpBeautifier\Tokens\TokenCollection;
 use Medas\ServiceManager\Attributes\Service;
 
 #[Service]
-class Psr12ElseifWhile implements Formatter
+class Psr12ElseifWhile extends BaseFormatter
 {
     private ?Statement $previousStatement = null;
 

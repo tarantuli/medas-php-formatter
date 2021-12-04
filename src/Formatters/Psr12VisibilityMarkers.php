@@ -11,7 +11,7 @@ use Medas\PhpBeautifier\Tokens\TokenCollection;
 use Medas\ServiceManager\Attributes\Service;
 
 #[Service]
-class Psr12VisibilityMarkers implements Formatter
+class Psr12VisibilityMarkers extends BaseFormatter
 {
     public function __construct(private StatementTypeFinder $typeFinder,
     )

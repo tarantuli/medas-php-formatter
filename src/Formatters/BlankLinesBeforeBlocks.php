@@ -9,7 +9,7 @@ use Medas\PhpBeautifier\Tokens\TokenCollection;
 use Medas\ServiceManager\Attributes\Service;
 
 #[Service]
-class BlankLinesBeforeBlocks implements Formatter
+class BlankLinesBeforeBlocks extends BaseFormatter
 {
     public function __construct(private BlankLineAdder $blankLineAdder)
     {

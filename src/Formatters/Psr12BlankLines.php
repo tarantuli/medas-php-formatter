@@ -20,7 +20,7 @@ use Medas\PhpBeautifier\Tokens\TokenCollection;
 use Medas\ServiceManager\Attributes\Service;
 
 #[Service]
-class Psr12BlankLines implements Formatter
+class Psr12BlankLines extends BaseFormatter
 {
     public function __construct(
         private BlankLineAdder      $blankLineAdder,

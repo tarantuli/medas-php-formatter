@@ -15,7 +15,7 @@ use Medas\PhpBeautifier\Tokens\TokenGroups;
 use Medas\ServiceManager\Attributes\Service;
 
 #[Service]
-class Psr12Whitespace implements Formatter
+class Psr12Whitespace extends BaseFormatter
 {
     public function __construct(private TokenGroups         $tokenGroups,
                                 private StatementTypeFinder $typeFinder)
@@ -110,6 +110,7 @@ class Psr12Whitespace implements Formatter
                 T_COLON,
                 T_QUESTION_MARK,
                 T_CASE,
+                T_DOC_COMMENT,
             ]
         );
     }

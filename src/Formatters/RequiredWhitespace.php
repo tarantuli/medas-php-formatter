@@ -9,7 +9,7 @@ use Medas\PhpBeautifier\Tokens\TokenGroups;
 use Medas\ServiceManager\Attributes\Service;
 
 #[Service]
-class RequiredWhitespace implements Formatter
+class RequiredWhitespace extends BaseFormatter
 {
     public function __construct(private TokenGroups $tokenGroups)
     {

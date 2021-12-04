@@ -1,247 +1,564 @@
 <?php
+namespace Shared\Charts;
 
-declare(strict_types=1);
+use Shared\Databases\Interfaces\DatasetInterface;
+use Shared\DateControl\Date;
+use Shared\Http\HttpHeaders;
 
-namespace Medas\PhpBeautifier\Tokens;
-
-use Medas\PhpBeautifier\Tokens\Contexts\GlobalScope;
-use Medas\PhpBeautifier\Tokens\StatementTypes\ClassDeclaration;
-use Medas\PhpBeautifier\Tokens\StatementTypes\FunctionDeclaration;
-use Medas\ServiceManager\Attributes\Service;
-
-#[Service]
-class StructureFinder
+/**
+ * (no summary)
+ */
+class Chart
 {
-    private Block $block;
-    private Statement $statement;
-    private int $blockDepth;
-    private bool $inString;
-    private bool $inAttribute;
+    /**************************
+     *   Instance variables   *
+     *************************/
 
-    private array $openBlocks = [];
+    /**
+     * @var  Settings
+     */
+    public $settings;
 
-    private bool $ignoreNextDoubleQuote;
-    private bool $startNewStatementBeforeNext;
-    private bool $nextBraceOpensForClause;
-    private int $forClauseDepth;
+    /**
+     * @var  bool
+     */
+    private $dimensionsHaveBeenCalculated;
 
-    private int $matchClauseDepth;
-    private bool $nextCommaEndsStatement;
-    private bool $nextBraceOpensMatchClause;
+    /**
+     * @var  bool
+     */
+    private $imageHasBeenCreated;
 
-    public function __construct(private StatementTypeFinder $typeFinder)
+    /**
+     * @var  bool
+     */
+    private $imageHasBeenInitialized;
+
+    /**
+     * @var  array
+     */
+    private $lines = [];
+
+
+    /************************
+     *   Instance methods   *
+     ***********************/
+
+    public function __construct()
     {
+        $this->settings = new Settings();
     }
 
-    public function determine(TokenCollection $tokens): Block
+    public function addArray(array $array, string $name = null, int $rowFormat = null): void
     {
-        $this->reset();
-
-        $document = new Block($this->blockDepth, null);
-
-        $this->block = $document;
-        $this->statement = $this->block->appendNewStatement();
-
-        foreach ($tokens as $token) {
-            $this->process($token);
-        }
-
-        $this->determineContext($document);
-
-        return $document;
+        $this->settings->getData()->addArray($array, $name, $rowFormat);
     }
 
-    private function reset(): void
+    /**
+     * @param  int|string|null  $name
+     *
+     * @return  Interfaces\DatasetInterface
+     */
+    public function getDataset($name = null): ?Interfaces\DatasetInterface
     {
-        $this->blockDepth = 0;
-        $this->inString = false;
-        $this->inAttribute = false;
-
-        $this->openBlocks = [];
-
-        $this->ignoreNextDoubleQuote = false;
-        $this->startNewStatementBeforeNext = false;
-        $this->nextBraceOpensForClause = false;
-        $this->forClauseDepth = 0;
-
-        $this->matchClauseDepth = 0;
-        $this->nextBraceOpensMatchClause = false;
-        $this->nextCommaEndsStatement = false;
+        return $this->settings->getData()->getDataset($name);
     }
 
-    private function process(Token $token): void
+    public function addDatastoreDataset(DatasetInterface $data, string $name = null): void
     {
-        if ($token->is(T_CURLY_BRACKET_CLOSE)) {
-            // Delete the last statement if it's empty
-            if (null === $this->statement->firstToken()) {
-                $this->block->deleteStatement($this->statement);
-            }
-
-            // The previous block is closed, return to the last open block
-            $this->block = array_pop($this->openBlocks);
-            $this->statement = $this->block->appendNewStatement();
-            $this->startNewStatementBeforeNext = false;
-            --$this->blockDepth;
-        }
-
-        if ($this->startNewStatementBeforeNext) {
-            $this->statement = $this->block->appendNewStatement();
-            $this->startNewStatementBeforeNext = false;
-        }
-
-        if ($this->inAttribute && $token->is(T_SQUARE_BRACKET_CLOSE)) {
-            // This token closes an attribute
-            $this->inAttribute = false;
-            $this->startNewStatementBeforeNext = true;
-        }
-
-        if ($this->inString && $token->is(T_DOUBLE_QUOTE)) {
-            // This token closes a string
-            $this->inString = false;
-            $this->ignoreNextDoubleQuote = true;
-        }
-
-        $token->block = $this->block;
-        $token->statement = $this->statement;
-        $token->inString = $this->inString;
-        $token->inAttribute = $this->inAttribute;
-
-        $this->statement->appendToken($token);
-
-        if ($token->is([T_OPEN_TAG, T_COMMENT])) {
-            // Next token starts on a new line
-            $this->startNewStatementBeforeNext = true;
-        }
-
-        if ($token->is(T_SEMICOLON) && !$this->forClauseDepth) {
-            // Next token starts on a new line
-            $this->startNewStatementBeforeNext = true;
-        }
-
-        if ($token->is(T_CURLY_BRACKET_CLOSE) && !$this->matchClauseDepth) {
-            // Next token starts on a new line
-            $this->startNewStatementBeforeNext = true;
-        }
-
-        if ($token->is(T_DOUBLE_ARROW) && $this->matchClauseDepth) {
-            $this->nextCommaEndsStatement = true;
-        }
-
-        if ($token->is(T_COMMA) && $this->nextCommaEndsStatement) {
-            // Next token starts on a new line
-            $this->startNewStatementBeforeNext = true;
-            $this->nextCommaEndsStatement = false;
-        }
-
-        if ($token->is(T_CURLY_BRACKET_OPEN)) {
-            // Store the current open block
-            $this->openBlocks[] = $this->block;
-
-            // Next token starts in a new block
-            $newBlock = new Block(++$this->blockDepth, $this->statement);
-            $this->block->appendBlock($newBlock);
-            $this->block = $newBlock;
-            $this->statement = $this->block->appendNewStatement();
-        }
-
-        if ($token->is(T_ATTRIBUTE)) {
-            // Next token is in an attribute
-            $this->inAttribute = true;
-        }
-
-        if ($token->is(T_DOUBLE_QUOTE)) {
-            if ($this->ignoreNextDoubleQuote) {
-                // This double quote _closed_ a string already
-                $this->ignoreNextDoubleQuote = false;
-            }
-            else {
-                // Next token is in a string
-                $this->inString = true;
-            }
-        }
-
-        if ($token->is(T_FOR)) {
-            $this->nextBraceOpensForClause = true;
-        }
-
-        if ($token->is(T_ROUND_BRACKET_OPEN) && ($this->forClauseDepth || $this->nextBraceOpensForClause)) {
-            $this->nextBraceOpensForClause = false;
-            ++$this->forClauseDepth;
-        }
-
-        if ($token->is(T_ROUND_BRACKET_CLOSE) && $this->forClauseDepth) {
-            --$this->forClauseDepth;
-        }
-
-        if ($token->is(T_MATCH)) {
-            $this->nextBraceOpensMatchClause = true;
-        }
-
-        if ($token->is(T_CURLY_BRACKET_OPEN) && ($this->matchClauseDepth || $this->nextBraceOpensMatchClause)) {
-            $this->nextBraceOpensMatchClause = false;
-            ++$this->matchClauseDepth;
-        }
-
-        if ($token->is(T_CURLY_BRACKET_CLOSE) && $this->matchClauseDepth) {
-            --$this->matchClauseDepth;
-        }
-
+        $this->addArray($data->toArray(), $name);
     }
 
-    private function determineContext(Block $block)
+    public function getError(int $index = null): ?string
     {
-        $context = new GlobalScope();
-        $globalScopeDepth = null;
-        $nextStatementIsClassBody = false;
-        $nextStatementIsMethodBody = false;
+        $errorCount = count($this->settings->getErrors());
 
-        foreach ($block as $statement) {
-            if ($statement->block->depth === $globalScopeDepth) {
-                $context = new GlobalScope();
-                $globalScopeDepth = null;
+        if ($errorCount === 0) {
+            return null;
+        }
+
+        if (is_numeric($index) && isset($this->errors[$errorCount - 1 - $index])) {
+            return $this->settings->getErrors()[$errorCount - 1 - $index];
+        }
+
+        if ($index === null) {
+            return $this->settings->getErrors()[$errorCount - 1];
+        }
+
+        return null;
+    }
+
+    public function addFormula(string $formula, float $from, float $to, string $name = null): void
+    {
+        $this->settings->getData()->addFormula($formula, $from, $to, $name);
+    }
+
+    public function addHorizontalLine(float $y, Color $color): void
+    {
+        $this->lines[] = [null, $y, null, $y, $color];
+    }
+
+    public function addLine(float $x1, float $y1, float $x2, float $y2, Color $color): void
+    {
+        $this->lines[] = [$x1, $y1, $x2, $y2, $color];
+    }
+
+    public function addMovingAverage(Interfaces\DatasetInterface $sourceSet, int $span, bool $addTails = true, string $name = null): void
+    {
+        $this->settings->getData()->addMovingAverage($sourceSet, $span, $addTails, $name);
+    }
+
+    public function addMovingAverage2(Interfaces\DatasetInterface $sourceSet, float $width, string $name = null): void
+    {
+        $this->settings->getData()->addMovingAverage2($sourceSet, $width, $name);
+    }
+
+    public function toBrowser(): void
+    {
+        HttpHeaders::checkIfSendable();
+
+        $this->createImage();
+        $this->settings->getIm()->toBrowser();
+    }
+
+    public function toFile(string $filename = null): string
+    {
+        $this->createImage();
+
+        if (empty($filename)) {
+            $filename = $this->settings->getFileDir() . uniqid() . '.png';
+        }
+
+        $this->settings->getIm()->toFile($filename);
+
+        return $filename;
+    }
+
+    public function toString(): string
+    {
+        $this->createImage();
+
+        return $this->settings->getIm()->toString();
+    }
+
+    public function addVerticalLine(float $x, Color $color): void
+    {
+        $this->lines[] = [$x, null, $x, null, $color];
+    }
+
+    private function calculateDimensions(): void
+    {
+        if ($this->dimensionsHaveBeenCalculated !== null) {
+            return;
+        }
+
+        $this->dimensionsHaveBeenCalculated = false;
+
+        $this->settings->getXAxis()->autofitRange(
+            $this->settings->getData()->getMinX(),
+            $this->settings->getData()->getMaxX()
+        );
+        $this->settings->getYAxis()->autofitRange(
+            $this->settings->getData()->getMinY(),
+            $this->settings->getData()->getMaxY()
+        );
+        $this->settings->getY2Axis()->autofitRange(
+            $this->settings->getData()->getMinY2(),
+            $this->settings->getData()->getMaxY2()
+        );
+        $this->calculateXDimensions();
+        $this->calculateYDimensions();
+
+        // The dimenions have been calculated
+        $this->dimensionsHaveBeenCalculated = true;
+    }
+
+    private function calculateXDimensions(): void
+    {
+        /*
+         * The width consists of:
+         *  - Left padding
+         *  - Y axis width
+         *  - Chart width
+         *  - Secondary Y axis with if applicable
+         *  - Legend width if it's positioned in the right margin
+         *  - Left padding
+         */
+        $leftPadding  = $this->settings->getImageLeftPadding();
+        $yAxisWidth   = $this->settings->getYAxis()->getWidth();
+        $y2AxisWidth  = $this->settings->getY2Axis()->getWidth();
+        $legendWidth  = $this->settings->getLegend()->getWidthInRightMargin();
+        $rightPadding = $this->settings->getImageRightPadding();
+
+        if ($this->settings->getSizeLock() === Settings::IMAGE_SIZE) {
+            $imageWidth = $this->settings->getImageWidth();
+
+            $chartWidth = $imageWidth
+                - $leftPadding
+                - $yAxisWidth
+                - $y2AxisWidth
+                - $legendWidth
+                - $rightPadding;
+
+            if ($chartWidth < 1) {
+                throw new Exceptions\ImageNotWideEnoughException(-$chartWidth);
             }
 
-            if ($nextStatementIsClassBody) {
-                $context = new Contexts\ClassBody();
-                $nextStatementIsClassBody = false;
+            $this->settings->setChartWidth($chartWidth);
+        }
+        else {
+            $chartWidth = $this->settings->getChartWidth();
+
+            $imageWidth = $leftPadding
+                + $yAxisWidth
+                + $y2AxisWidth
+                + $chartWidth
+                + $legendWidth
+                + $rightPadding;
+
+            $this->settings->setImageWidth($imageWidth);
+        }
+
+        $this->settings->setXo($leftPadding + $yAxisWidth);
+        $this->settings->setXm($leftPadding + $yAxisWidth + $chartWidth);
+    }
+
+    private function calculateYDimensions(): void
+    {
+        /*
+         * The height consists of:
+         *  - Top padding
+         *  - Chart title height
+         *  - Chart height
+         *  - X axis height
+         *  - Bottom padding
+         */
+        $topPadding       = $this->settings->getImageTopPadding();
+        $chartTitleHeight = $this->getChartTitleHeight();
+        $xAxisHeight      = $this->settings->getXAxis()->getHeight();
+        $bottomPadding    = $this->settings->getImageBottomPadding();
+
+        if ($this->settings->getSizeLock() === Settings::IMAGE_SIZE) {
+            $imageHeight = $this->settings->getImageHeight();
+            $chartHeight = $imageHeight - $topPadding - $chartTitleHeight - $xAxisHeight - $bottomPadding;
+
+            if ($chartHeight < 1) {
+                throw new Exceptions\ImageNotHighEnoughException(-$chartHeight);
             }
 
-            if ($nextStatementIsMethodBody) {
-                $context = new Contexts\MethodBody();
-                $nextStatementIsMethodBody = false;
-            }
+            $this->settings->setChartHeight($chartHeight);
+        }
+        else {
+            $chartHeight = $this->settings->getChartHeight();
+            $imageHeight = $topPadding + $chartTitleHeight + $chartHeight + $xAxisHeight + $bottomPadding;
 
-            $statementType = $this->typeFinder->for($statement);
+            $this->settings->setImageHeight($imageHeight);
+        }
 
-            if ($statementType instanceof ClassDeclaration) {
-                $context = new Contexts\ClassDeclaration();
-                $globalScopeDepth = $statement->block->depth;
-                $nextStatementIsClassBody = true;
-            }
+        $this->settings->setYo($topPadding + $chartTitleHeight + $chartHeight);
+        $this->settings->setYm($topPadding + $chartTitleHeight);
+    }
 
-            if ($statementType instanceof FunctionDeclaration) {
-                $context = new Contexts\MethodDeclaration();
-                $nextStatementIsMethodBody = true;
-                $openParentheses = 0;
-            }
+    private function getChartTitleHeight(): float
+    {
+        if (!$this->settings->getShowChartTitle() || !$this->settings->getChartTitle()) {
+            return 0.0;
+        }
 
-            foreach ($statement as $token) {
-                $token->context = $context;
+        $height = Functions::getTextHeight(
+            $this->settings->getChartTitle(),
+            $this->settings->getChartTitleFont(),
+            $this->settings->getChartTitleSize()
+        );
 
-                if ($statementType instanceof FunctionDeclaration) {
-                    // The context of the tokens following this one may change
-                    if ($token->is(T_ROUND_BRACKET_OPEN)) {
-                        ++$openParentheses;
-                        $context = new Contexts\MethodParameters();
-                    }
-                    if ($token->is(T_ROUND_BRACKET_CLOSE)) {
-                        $token->context = new Contexts\MethodDeclaration();
-                        if (--$openParentheses === 0) {
-                            $context = new Contexts\MethodReturnType();
-                        }
-                    }
+        return $height + $this->settings->getChartTitleMargin();
+    }
+
+    private function checkValueForWeekendDayBackground(float $subvalue, Color $fillColor): void
+    {
+        if (!in_array(date('w', $subvalue), [0, 6])) {
+            return;
+        }
+
+        $xAxis = $this->settings->getXAxis();
+
+        // The left side of the block should be the start of this day
+        $x  = $xAxis->valueToCoordinate(Date::fromTimestamp($subvalue)->getTimestamp());
+        $xm = $this->settings->getXm();
+
+        if (Functions::isMoreThanOrEqual($x, $xm)) {
+            $x = $xm;
+        }
+
+        // The right side of the block should be the start of the next day
+        $nextX = $xAxis->valueToCoordinate(Date::fromTimestamp($subvalue)->getNext()->getTimestamp());
+
+        $this->settings->getIm()->drawRectangle(
+            max($x, $this->settings->getXo()),
+            $this->settings->getYo(),
+            min($nextX, $xm),
+            $this->settings->getYm(),
+            $fillColor,
+            $fillColor
+        );
+    }
+
+    private function drawAxes(): void
+    {
+        $this->settings->getXAxis()->drawYourLine();
+        $this->settings->getYAxis()->drawYourLine();
+        $this->settings->getY2Axis()->drawYourLine();
+        $this->settings->getXAxis()->drawYourLabels();
+        $this->settings->getYAxis()->drawYourLabels();
+        $this->settings->getY2Axis()->drawYourLabels();
+    }
+
+    private function drawData(): void
+    {
+        $this->settings->getData()->drawData();
+
+        // Verwijderen wat "buiten de lijntjes" van het grid getekend is, met een kleine marge (data_grid_overflow)
+        $image      = $this->settings->getIm();
+        $dataGridOverflow = $this->settings->getDataGridOverflow();
+        $bgcolor    = $this->settings->getBackgroundColor();
+        $xo         = $this->settings->getXo();
+        $xm         = $this->settings->getXm();
+        $ym         = $this->settings->getYm();
+        $yo         = $this->settings->getYo();
+        $imageWidth = $this->settings->getImageWidth();
+        $imageHeight = $this->settings->getImageHeight();
+
+        $image->drawRectangle(0, 0, $imageWidth, $ym - $dataGridOverflow, null, $bgcolor);
+        $image->drawRectangle(
+            0,
+            $ym - $dataGridOverflow,
+            $xo - $dataGridOverflow,
+            $yo + $dataGridOverflow,
+            null,
+            $bgcolor
+        );
+        $image->drawRectangle(0, $yo + $dataGridOverflow, $imageWidth, $imageHeight, null, $bgcolor);
+        $image->drawRectangle(
+            $xm + $dataGridOverflow,
+            $ym - $dataGridOverflow,
+            $imageWidth,
+            $yo + $dataGridOverflow,
+            null,
+            $bgcolor
+        );
+    }
+
+    private function drawGrid(): void
+    {
+        // Draw x axis subgrid lines
+        $subgridColor = $this->settings->getSubgridColor();
+        $gridColor = $this->settings->getGridColor();
+        $image     = $this->settings->getIm();
+        $xAxis     = $this->settings->getXAxis();
+        $yAxis     = $this->settings->getYAxis();
+        $xo        = $this->settings->getXo();
+        $xm        = $this->settings->getXm();
+        $yo        = $this->settings->getYo();
+        $ym        = $this->settings->getYm();
+
+        if ($xAxis->shouldFillWeekendDays()) {
+            $this->fillWeekendDaysBackground();
+        }
+
+        // Draw whispy lines
+        $image->setLineThickness(.5);
+
+        /** @noinspection PhpUnusedLocalVariableInspection */
+        foreach ($xAxis as $value) {
+            $xAxis->rewindSubloop();
+
+            while (true) {
+                $subvalue = $xAxis->nextSubloop();
+
+                if ($subvalue === null) {
+                    break;
                 }
+
+                $x = $xAxis->valueToCoordinate($subvalue);
+
+                if (Functions::isMoreThanOrEqual($x, $xm)) {
+                    break;
+                }
+
+                $image->drawLine($x, $yo, $x, $ym, $subgridColor);
             }
         }
+
+        // Draw y axis subgrid lines
+        /** @noinspection PhpUnusedLocalVariableInspection */
+        foreach ($yAxis as $value) {
+            $yAxis->rewindSubloop();
+
+            while (true) {
+                $subvalue = $yAxis->nextSubloop();
+
+                if ($subvalue === null) {
+                    break;
+                }
+
+                $y = $yAxis->valueToCoordinate($subvalue);
+
+                if (Functions::isLessThanOrEqual($y, $ym)) {
+                    break;
+                }
+
+                $image->drawLine($xo, $y, $xm, $y, $subgridColor);
+            }
+        }
+
+        // Draw x axis primary grid lines
+        foreach ($xAxis as $value) {
+            $x = $xAxis->valueToCoordinate($value);
+
+            $image->drawLine($x, $yo, $x, $ym, $gridColor);
+        }
+
+        // Draw y axis primary grid lines
+        foreach ($yAxis as $value) {
+            $y = $yAxis->valueToCoordinate($value);
+
+            $image->drawLine($xo, $y, $xm, $y, $gridColor);
+        }
+
+        // Draw manually added lines
+        foreach ($this->lines as $line) {
+            [$x1, $y1, $x2, $y2, $color] = $line;
+
+            $x1 = ($x1 === null) ? $xo : $xAxis->valueToCoordinate($x1);
+            $y1 = ($y1 === null) ? $yo : $yAxis->valueToCoordinate($y1);
+            $x2 = ($x2 === null) ? $xm : $xAxis->valueToCoordinate($x2);
+            $y2 = ($y2 === null) ? $ym : $yAxis->valueToCoordinate($y2);
+
+            $image->drawLine($x1, $y1, $x2, $y2, $color);
+        }
+
+        // Restore line thickness
+        $image->setLineThickness(1);
+    }
+
+    private function drawLegend(): void
+    {
+        if (!$this->settings->getShowLegend()) {
+            return;
+        }
+
+        $this->settings->getLegend()->drawYourself();
+    }
+
+    private function drawTitles(): void
+    {
+        if (!$this->settings->getShowChartTitle() || !$this->settings->getChartTitle()) {
+            return;
+        }
+
+        $this->settings->getIm()->drawText(
+            $this->settings->getChartTitle(),
+            ($this->settings->getXo() + $this->settings->getXm()) / 2,
+            $this->settings->getYm() - $this->settings->getChartTitleMargin(),
+            $this->settings->getChartTitleSize(),
+            $this->settings->getChartTitleColor(),
+            $this->settings->getChartTitleFont(),
+            Image::CENTER,
+            0
+        );
+    }
+
+    private function drawYourself(): void
+    {
+        $image = $this->settings->getIm();
+
+        // Draw the grid
+        $this->drawGrid();
+        $this->drawData();
+
+        // Undo our magic for textual elements
+        $image->undoPseudofactor();
+        $image->useAlphaBlending();
+
+        // Draw textual elements
+        $this->drawLegend();
+        $this->drawAxes();
+        $this->drawTitles();
+    }
+
+    private function fillWeekendDaysBackground(): void
+    {
+        $fillColor = Color::mix(
+            $this->settings->getSubgridColor(),
+            $this->settings->getBackgroundColor(),
+            .8
+        );
+
+        $xAxis = $this->settings->getXAxis();
+
+        foreach ($xAxis as $value) {
+            $this->checkValueForWeekendDayBackground($value, $fillColor);
+            $xAxis->rewindSubloop();
+
+            while (true) {
+                $subvalue = $xAxis->nextSubloop();
+
+                if ($subvalue === null) {
+                    break;
+                }
+
+                $this->checkValueForWeekendDayBackground($subvalue, $fillColor);
+            }
+        }
+    }
+
+    private function createImage(): void
+    {
+        if ($this->imageHasBeenCreated !== null) {
+            return;
+        }
+
+        $this->imageHasBeenCreated = false;
+
+        $this->calculateDimensions();
+        $this->initializeImage();
+        $this->drawYourself();
+
+        // The image has been created
+        $this->imageHasBeenCreated = true;
+    }
+
+    private function initializeImage(): void
+    {
+        if ($this->imageHasBeenInitialized !== null) {
+            return;
+        }
+
+        $this->imageHasBeenInitialized = false;
+
+        $this->calculateDimensions();
+
+        $image = new Image(
+            $this->settings->getImageWidth(),
+            $this->settings->getImageHeight(),
+            $this->settings->getPseudoAntialiasing()
+        );
+
+        $this->settings->setIm($image);
+
+        if (Functions::areEqual($this->settings->getPseudoAntialiasing(), 1)) {
+            $image->setAntialias(true);
+        }
+
+        $image->useTransparency($this->settings->getTransparentBackground());
+        $image->setBackground($this->settings->getBackgroundColor());
+
+        $legendBackgroundColor = $this->settings->getBackgroundColor();
+
+        $legendBackgroundColor->setOpacity($this->settings->getLegendBackgroundOpacity() / 100);
+        $this->settings->setLegendBackgroundColor($legendBackgroundColor);
+
+        // The image has been initialized
+        $this->imageHasBeenInitialized = true;
     }
 }

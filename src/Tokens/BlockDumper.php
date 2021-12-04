@@ -71,7 +71,7 @@ class BlockDumper
 
         if ($token->getTokenName() !== $token->text) {
             $this->cli->print('=');
-            preg_match('/^(\s*)(.*?)(\s*)$/', $token->text, $parts);
+            preg_match('/^(\s*)(.*?)(\s*)$/ms', $token->text, $parts);
 
             if (strlen($parts[1])) {
                 $this->cli->print($parts[1], Cli::LIGHT_GRAY_BG);
