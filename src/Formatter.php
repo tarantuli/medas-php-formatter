@@ -87,4 +87,8 @@ class Formatter
         }
     }
 
+    public function settings(): Settings\Settings
+    {
+        return $this->settings;
+    }
 }

@@ -90,6 +90,7 @@ class Psr12Whitespace extends BaseFormatter
                 T_AMPERSAND,
                 T_QUESTION_MARK,
                 T_ELLIPSIS,
+                T_SQUARE_BRACKET_OPEN,
             ]
         );
     }
@@ -164,6 +165,7 @@ class Psr12Whitespace extends BaseFormatter
     {
         return [
             T_ROUND_BRACKET_CLOSE,
+            T_SQUARE_BRACKET_CLOSE,
         ];
     }
 
@@ -171,8 +173,10 @@ class Psr12Whitespace extends BaseFormatter
     {
         return [
             T_ROUND_BRACKET_OPEN,
+            T_SQUARE_BRACKET_OPEN,
             T_AMPERSAND,
             T_ELLIPSIS,
+            T_PIPE,
         ];
     }
 }

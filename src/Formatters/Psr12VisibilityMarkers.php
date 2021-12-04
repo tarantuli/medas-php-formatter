@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Medas\PhpBeautifier\Formatters;
 
 use Medas\PhpBeautifier\Tokens\Block;
+use Medas\PhpBeautifier\Tokens\Contexts\MethodDeclaration;
 use Medas\PhpBeautifier\Tokens\StatementTypeFinder;
 use Medas\PhpBeautifier\Tokens\StatementTypes\FunctionDeclaration;
 use Medas\PhpBeautifier\Tokens\TokenCollection;
@@ -27,6 +28,10 @@ class Psr12VisibilityMarkers extends BaseFormatter
     {
         foreach ($block as $statement) {
             if (!$this->typeFinder->for($statement) instanceof FunctionDeclaration) {
+                continue;
+            }
+
+            if (!$statement->firstToken()->context instanceof MethodDeclaration) {
                 continue;
             }
 

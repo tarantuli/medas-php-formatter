@@ -29,7 +29,18 @@ class ReformatterTest extends BaseTest
         $this->assertRemainsTheSame('ternary-expressions', new Medas());
     }
 
+    public function testMethodsAndFunctions(): void
+    {
+        $this->assertRemainsTheSame('methods-and-functions', new Medas());
+    }
+
+    public function testSquareBraces(): void
+    {
+        $this->assertRemainsTheSame('square-braces', new Medas());
+    }
+
     public function testVisibility(): void
+
     {
         $this->assertChanges('psr12-visibility-pre', 'psr12-visibility-post', new Psr12());
     }
@@ -53,10 +64,5 @@ class ReformatterTest extends BaseTest
 
     {
         $this->assertRemainsTheSame('basic-preformatted', new Medas());
-    }
-
-    public function testCompleteClass(): void
-    {
-        $this->assertRemainsTheSame('complete-class', new Medas());
     }
 }

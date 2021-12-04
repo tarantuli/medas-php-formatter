@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\PhpBeautifier\Tokens;
 
+use Medas\PhpBeautifier\Tokens\Contexts\ClassBody;
 use Medas\PhpBeautifier\Tokens\Contexts\GlobalScope;
 use Medas\PhpBeautifier\Tokens\StatementTypes\ClassDeclaration;
 use Medas\PhpBeautifier\Tokens\StatementTypes\FunctionDeclaration;
@@ -20,6 +21,7 @@ class ContextFinder
     {
         $context = new GlobalScope();
         $globalScopeDepth = null;
+        $classBodyDepth = null;
         $nextStatementIsClassBody = false;
         $nextStatementIsMethodBody = false;
 
@@ -29,8 +31,13 @@ class ContextFinder
                 $globalScopeDepth = null;
             }
 
+            if ($statement->block->depth === $classBodyDepth) {
+                $context = new ClassBody();
+            }
+
             if ($nextStatementIsClassBody) {
                 $context = new Contexts\ClassBody();
+                $classBodyDepth = $statement->block->depth;
                 $nextStatementIsClassBody = false;
             }
 
@@ -48,8 +55,17 @@ class ContextFinder
             }
 
             if ($statementType instanceof FunctionDeclaration) {
-                $context = new Contexts\MethodDeclaration();
-                $nextStatementIsMethodBody = true;
+                // In the context of a class body, this is a method declaration; otherwise, it's a function declaration
+                $context = ($context instanceof Contexts\ClassBody)
+                    ? new Contexts\MethodDeclaration()
+                    : new Contexts\FunctionDeclaration();
+
+                // If it ends in a semicolon, it's an abstract or interface declaration
+                // If it ends in a curly bracket open, a body will follow
+                if ($statement->lastToken()->is(T_CURLY_BRACKET_OPEN)) {
+                    $nextStatementIsMethodBody = true;
+                }
+
                 $openParentheses = 0;
             }
 

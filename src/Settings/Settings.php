@@ -10,6 +10,7 @@ use Medas\PhpBeautifier\Formatters\RequiredWhitespace;
 class Settings
 {
     public DocumentSettings $document;
+    public ImportSettings $import;
 
     /** @var Formatter[] */
     private array $formatters = [];
@@ -17,6 +18,7 @@ class Settings
     public function __construct()
     {
         $this->document = new DocumentSettings();
+        $this->import = new ImportSettings();
         $this->addFormatter(service(RequiredWhitespace::class));
     }
 
