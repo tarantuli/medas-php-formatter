@@ -8,6 +8,8 @@ use Medas\PhpBeautifier\Tokens\Contexts\ClassBody;
 use Medas\PhpBeautifier\Tokens\Contexts\GlobalScope;
 use Medas\PhpBeautifier\Tokens\StatementTypes\ClassDeclaration;
 use Medas\PhpBeautifier\Tokens\StatementTypes\FunctionDeclaration;
+use Medas\PhpBeautifier\Tokens\StatementTypes\UseClassStatement;
+use Medas\PhpBeautifier\Tokens\StatementTypes\UseTraitStatement;
 use Medas\ServiceManager\Attributes\Service;
 
 #[Service]
@@ -52,6 +54,12 @@ class ContextFinder
                 $context = new Contexts\ClassDeclaration();
                 $globalScopeDepth = $statement->block->depth;
                 $nextStatementIsClassBody = true;
+            }
+
+            // If the statement type is UseClassStatement, but we're already in a class body,
+            // then it's a UseTraitStatement. The type finder can't know that, but we can.
+            if ($statementType instanceof UseClassStatement && $context instanceof ClassBody) {
+                $statement->type = new UseTraitStatement();
             }
 
             if ($statementType instanceof FunctionDeclaration) {

@@ -8,9 +8,8 @@ use Medas\PhpBeautifier\Exceptions\ReformattedCodeIsInvalidException;
 use Medas\PhpBeautifier\Formatters\Phases\AfterDeterminingContext;
 use Medas\PhpBeautifier\Formatters\Phases\BeforeStrippingWhitespace;
 use Medas\PhpBeautifier\Tokens\BlockDumper;
-use Medas\PhpBeautifier\Tokens\ContextFinder;
-use Medas\PhpBeautifier\Tokens\StructureFinder;
 use Medas\PhpBeautifier\Tokens\TokenCollection;
+use Medas\PhpBeautifier\Tokens\Tokenizer;
 use Medas\ServiceManager\Attributes\Service;
 
 #[Service]
@@ -20,21 +19,20 @@ class Formatter
     private Settings\Settings $settings;
 
     public function __construct(
+        private Tokenizer $tokenizer,
         private BlockPrinter $blockPrinter,
     )
     {
     }
 
     /** @noinspection RedundantSuppression */
-    public function format(TokenCollection $tokens, Settings\Settings $settings): string
+    public function format(string $code, Settings\Settings $settings): string
     {
-        $this->tokens = $tokens;
+        $this->tokens = $this->tokenizer->tokenize($code, determineStructureAndContext: false);
         $this->settings = $settings;
 
         $this->applyFormatters(BeforeStrippingWhitespace::class);
-        $this->stripWhitespace();
-        $this->determineStructure();
-        $this->determineContext();
+        $this->tokenizer->determineStructureAndContext($this->tokens);
         $this->applyFormatters(AfterDeterminingContext::class);
 
         if (false) {
@@ -59,23 +57,6 @@ class Formatter
                 $formatter->format($this->tokens);
             }
         }
-    }
-
-    private function stripWhitespace()
-    {
-        $this->tokens->removeByType(T_WHITESPACE);
-    }
-
-    private function determineStructure()
-    {
-        $structureFinder = service(StructureFinder::class);
-        $this->tokens->structure = $structureFinder->determine($this->tokens);
-    }
-
-    private function determineContext()
-    {
-        $contextFinder = service(ContextFinder::class);
-        $contextFinder->determine($this->tokens->structure);
     }
 
     private function assertCodeIsValid(string $code): void

@@ -6,34 +6,15 @@ namespace Medas\PhpBeautifier\Tokens;
 
 class TokenCollection implements \Iterator, \Countable
 {
+    public Block $structure;
     /** @var Token[] */
     private array $tokens = [];
     private int $index = 0;
-    public Block $structure;
+    private string $sourceHash;
 
-    public function __construct(string $code)
+    public function add(Token $token): void
     {
-        $this->initializeTokens($code);
-    }
-
-    private function initializeTokens(string $code): void
-    {
-        $tokens = Token::tokenize($code, TOKEN_PARSE);
-        $previousToken = null;
-
-        foreach ($tokens as $token) {
-            if ($token->is(T_OPEN_TAG)) {
-                $token->text = rtrim($token->text);
-            }
-
-            if ($previousToken) {
-                $token->previous = $previousToken;
-                $previousToken->next = $token;
-            }
-
-            $this->tokens[] = $token;
-            $previousToken = $token;
-        }
+        $this->tokens[] = $token;
     }
 
     public function removeByType(int|string|array $kind)
@@ -67,6 +48,18 @@ class TokenCollection implements \Iterator, \Countable
         if ($index <= $this->index) {
             --$this->index;
         }
+    }
+
+    public function sourceHash(): string
+    {
+        return $this->sourceHash;
+    }
+
+    public function setSourceHash(string $sourceHash): self
+    {
+        $this->sourceHash = $sourceHash;
+
+        return $this;
     }
 
     public function current(): Token
