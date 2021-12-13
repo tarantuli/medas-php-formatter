@@ -29,20 +29,20 @@ class StructureFinder
     private bool $nextCommaEndsStatement;
     private bool $nextBraceOpensMatchClause;
 
-    public function determine(TokenCollection $tokens): Block
+    public function determine(TokenCollection $tokens): void
     {
         $this->reset();
 
-        $document = new Block($this->blockDepth, null);
+        $structure = new Block($this->blockDepth, null);
 
-        $this->block = $document;
+        $this->block = $structure;
         $this->statement = $this->block->appendNewStatement();
 
         foreach ($tokens as $token) {
             $this->process($token);
         }
 
-        return $document;
+        $tokens->structure = $structure;
     }
 
     private function reset(): void

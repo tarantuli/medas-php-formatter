@@ -1,0 +1,55 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Medas\PhpBeautifier\Tokens\ClassAnalyser;
+
+use Medas\PhpBeautifier\Tokens\Token;
+use Medas\PhpBeautifier\Tokens\TokenCollection;
+use Medas\ServiceManager\Attributes\Service;
+
+/**
+ * Finds the namespace of the file, the class name, the class type (class, interface, trait)
+ * and modifiers (abstract, final).
+ */
+#[Service]
+class NameFinder
+{
+    private const CLASS_TYPES = [T_CLASS, T_INTERFACE, T_TRAIT];
+
+    public function find(TokenCollection $tokens, ClassAnalysis $results): void
+    {
+        foreach ($tokens as $token) {
+            if ($token->is(T_NAMESPACE)) {
+                $results->namespace = $token->next->text;
+            }
+
+            if ($token->is(self::CLASS_TYPES)) {
+                $this->processName($token, $results);
+
+                // We found both the namespace and the name, we're done!
+                return;
+            }
+        }
+    }
+
+    private function processName(Token $token, ClassAnalysis $results): void
+    {
+        $results->name = $token->next->text;
+        $results->fqn = '\\' . $results->namespace . '\\' . $results->name;
+
+        match ($token->id) {
+            T_CLASS => $results->isClass = true,
+            T_INTERFACE => $results->isInterface = true,
+            T_TRAIT => $results->isTrait = true,
+        };
+
+        if ($token->statement->containsType(T_FINAL)) {
+            $results->isFinal = true;
+        }
+
+        if ($token->statement->containsType(T_ABSTRACT)) {
+            $results->isAbstract = true;
+        }
+    }
+}

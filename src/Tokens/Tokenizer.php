@@ -13,6 +13,7 @@ class Tokenizer
                                 private StructureFinder         $structureFinder,
                                 private ContextFinder           $contextFinder)
     {
+        // AdditionalTokensDefiner only needs to be initialized, it isn't used otherwise
     }
 
     public function tokenize(string $code, bool $determineStructureAndContext = true): TokenCollection
@@ -63,7 +64,7 @@ class Tokenizer
 
     private function determineStructure(TokenCollection $tokens)
     {
-        $tokens->structure = $this->structureFinder->determine($tokens);
+        $this->structureFinder->determine($tokens);
     }
 
     private function determineContext(TokenCollection $tokens)
