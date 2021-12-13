@@ -37,9 +37,4 @@ class ClassAnalysis
 
         return null;
     }
-
-    public function addUses(array $uses): void
-    {
-        $this->uses = array_merge($this->uses, $uses);
-    }
 }

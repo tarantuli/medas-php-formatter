@@ -16,6 +16,8 @@ use const C;
 #[Service(12)]
 abstract class ServiceInstantiator
 {
+    use Cheese;
+
     private const CONST_NAME = [1, 2, 3, 4, 5];
 
     public ?string $cheese = null;

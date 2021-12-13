@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Medas\Test\Functional;
 
-use Medas\PhpBeautifier\Tokens\TokenCollection;
+use Medas\PhpBeautifier\Tokens\Tokenizer;
 use PHPUnit\Framework\TestCase;
 
 class TokenCollectionTest extends TestCase
 {
     public function testLoop(): void
     {
-        $collection = new TokenCollection('<?php $var = 1;');
+        $collection = service(Tokenizer::class)->tokenize('<?php $var = 1;');
 
         foreach ($collection as $token) {
             self::assertEquals(T_OPEN_TAG, $token->id);

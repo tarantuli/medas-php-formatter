@@ -16,6 +16,12 @@ class ClassAnalyserTest extends BaseTest
 
         $results = $analyser->analyse($code);
 
-        diedump($results->uses);
+        self::assertEquals('MyNamespace', $results->namespace);
+        self::assertEquals('MyClass', $results->name);
+        self::assertEquals('\MyNamespace\MyClass', $results->fqn);
+        self::assertEquals('\MyNamespace\ChildNamespace\BaseClass', $results->extends->fqn);
+        self::assertCount(2, $results->implements);
+        self::assertEquals(true, $results->isClass);
+        self::assertCount(18, $results->uses);
     }
 }

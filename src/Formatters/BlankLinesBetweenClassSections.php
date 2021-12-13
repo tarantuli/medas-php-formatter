@@ -7,6 +7,7 @@ namespace Medas\PhpBeautifier\Formatters;
 use Medas\PhpBeautifier\Tokens\StatementTypes\ClassConstDeclaration;
 use Medas\PhpBeautifier\Tokens\StatementTypes\ClassPropertyDeclaration;
 use Medas\PhpBeautifier\Tokens\StatementTypes\Comment;
+use Medas\PhpBeautifier\Tokens\StatementTypes\UseTraitStatement;
 use Medas\PhpBeautifier\Tokens\TokenCollection;
 use Medas\ServiceManager\Attributes\Service;
 
@@ -20,6 +21,7 @@ class BlankLinesBetweenClassSections extends BaseFormatter
     public function format(TokenCollection $tokens): void
     {
         $this->blankLineAdder->afterTypes($tokens->structure, [
+            UseTraitStatement::class,
             ClassConstDeclaration::class,
             ClassPropertyDeclaration::class,
         ]);
