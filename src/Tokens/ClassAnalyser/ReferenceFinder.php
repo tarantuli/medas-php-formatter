@@ -26,14 +26,14 @@ class ReferenceFinder
     {
         foreach ($tokens as $token) {
             if ($token->is(T_EXTENDS)) {
-                // Class extension declaration, object instantiaion or instanceof comparison
+                // Class extension declaration
                 $results->extends = $this->resolveReference($results, $token->next);
             }
 
             if ($token->is(T_IMPLEMENTS)) {
                 // Class implementation declaration, could be multiple
-                foreach ($this->collectTokens($token->next) as $implementToken) {
-                    $this->addImplement($results, $implementToken);
+                foreach ($this->gatherCommaSeparatedTokens($token->next) as $implementToken) {
+                    $this->addImplements($results, $implementToken);
                 }
             }
 
@@ -43,20 +43,21 @@ class ReferenceFinder
             }
 
             if ($token->is(T_USE) && $token->statement->type instanceof UseTraitStatement) {
-                // A use trait statement
-                foreach ($this->collectTokens($token->next) as $useToken) {
+                // A use trait statement, could be multiple
+                foreach ($this->gatherCommaSeparatedTokens($token->next) as $useToken) {
                     $this->addUsage($results, $useToken);
                 }
             }
 
             if ($this->couldBeClassName($token)) {
                 if ($token->next->is(T_DOUBLE_COLON)) {
-                    // "Class::..."
+                    // "ClassName::..."
                     $this->addUsage($results, $token);
                 }
 
                 if ($token->context instanceof MethodParameters
                     || $token->context instanceof MethodReturnType) {
+                    // Parameter type or return type
                     $this->addUsage($results, $token);
                 }
             }
@@ -93,7 +94,7 @@ class ReferenceFinder
         return str_contains($path, '\\') ? substr($path, 0, strpos($path, '\\')) : $path;
     }
 
-    private function collectTokens(Token $token): array
+    private function gatherCommaSeparatedTokens(Token $token): array
     {
         $tokens = [];
 
@@ -106,7 +107,7 @@ class ReferenceFinder
 
     }
 
-    private function addImplement(ClassAnalysis $results, Token $token): void
+    private function addImplements(ClassAnalysis $results, Token $token): void
     {
         $reference = $this->resolveReference($results, $token);
         $results->implements[$reference->reference] = $reference;
@@ -119,8 +120,8 @@ class ReferenceFinder
     }
 
     private function couldBeClassName(Token $token): bool
-
     {
-        return $token->is(self::REFERENCE_TYPES) && !in_array($token->text, self::INTERNAL_TYPES, true);
+        return $token->is(self::REFERENCE_TYPES)
+            && !in_array($token->text, self::INTERNAL_TYPES, true);
     }
 }
