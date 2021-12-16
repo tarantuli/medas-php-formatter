@@ -19,7 +19,7 @@ class Formatter
     private Settings\Settings $settings;
 
     public function __construct(
-        private Tokenizer $tokenizer,
+        private Tokenizer    $tokenizer,
         private BlockPrinter $blockPrinter,
     )
     {
