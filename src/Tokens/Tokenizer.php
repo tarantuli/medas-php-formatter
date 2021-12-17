@@ -11,21 +11,23 @@ class Tokenizer
 {
     public function __construct(private AdditionalTokensDefiner $additionalTokensDefiner,
                                 private StructureFinder         $structureFinder,
-                                private ContextFinder           $contextFinder)
+                                private ContextAdder            $contextAdder)
     {
         // AdditionalTokensDefiner only needs to be initialized, it isn't used otherwise
     }
 
-    public function tokenize(string $code, bool $determineStructureAndContext = true): TokenCollection
+    public function makeTree(string $code): TokenTree
+    {
+        $collection = $this->tokenize($code);
+        return $this->determineTree($collection);
+    }
+
+    public function tokenize(string $code): TokenCollection
     {
         $collection = new TokenCollection();
 
         $this->addTokens($collection, $code);
         $collection->setSourceHash(sha1($code));
-
-        if ($determineStructureAndContext) {
-            $this->determineStructureAndContext($collection);
-        }
 
         return $collection;
     }
@@ -33,42 +35,31 @@ class Tokenizer
     private function addTokens(TokenCollection $collection, string $code): void
     {
         $tokens = Token::tokenize($code, TOKEN_PARSE);
-        $previousToken = null;
 
         foreach ($tokens as $token) {
             if ($token->is(T_OPEN_TAG)) {
                 $token->text = rtrim($token->text);
             }
 
-            if ($previousToken) {
-                $token->previous = $previousToken;
-                $previousToken->next = $token;
-            }
-
             $collection->add($token);
-            $previousToken = $token;
         }
     }
 
-    public function determineStructureAndContext(TokenCollection $tokens): void
+    public function determineTree(TokenCollection $tokens): TokenTree
     {
-        $this->stripWhitespace($tokens);
-        $this->determineStructure($tokens);
-        $this->determineContext($tokens);
+        $tree = $this->determineStructure($tokens);
+        $this->addContext($tree);
+
+        return $tree;
     }
 
-    private function stripWhitespace(TokenCollection $tokens)
+    private function determineStructure(TokenCollection $tokens): TokenTree
     {
-        $tokens->removeByType(T_WHITESPACE);
+        return $this->structureFinder->determine($tokens);
     }
 
-    private function determineStructure(TokenCollection $tokens)
+    private function addContext(TokenTree $tree)
     {
-        $this->structureFinder->determine($tokens);
-    }
-
-    private function determineContext(TokenCollection $tokens)
-    {
-        $this->contextFinder->determine($tokens->structure);
+        $this->contextAdder->add($tree);
     }
 }

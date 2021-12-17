@@ -19,8 +19,14 @@ class SettingsHasher
             $settings->import->maxRelativeDepth,
         ];
 
+        $data['formatters'] = [];
         foreach ($settings->formatters() as $formatter) {
-            $data[] = $formatter::class;
+            $data['formatters'] = $formatter::class;
+        }
+
+        $data['preparsers'] = [];
+        foreach ($settings->preparsers() as $preparser) {
+            $data['preparsers'] = $preparser::class;
         }
 
         return sha1(json_encode($data));

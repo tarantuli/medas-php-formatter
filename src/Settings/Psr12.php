@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Medas\PhpBeautifier\Settings;
 
-use Medas\PhpBeautifier\Settings\Indentations\Space;
-use Medas\PhpBeautifier\Settings\LineEndings\LineFeed;
 use Medas\PhpBeautifier\Formatters\KeywordsToLowercase;
 use Medas\PhpBeautifier\Formatters\Psr12BlankLines;
 use Medas\PhpBeautifier\Formatters\Psr12ElseifWhile;
@@ -18,9 +16,7 @@ class Psr12 extends Settings
     {
         parent::__construct();
 
-        $this->document->setLineEnding(new LineFeed())
-            ->setIndentation(new Space(4))
-            ->setMaxLineLength(80);
+        $this->document->setMaxLineLength(80);
 
         $this->addFormatter(service(KeywordsToLowercase::class));
         $this->addFormatter(service(Psr12VisibilityMarkers::class));

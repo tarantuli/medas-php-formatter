@@ -27,7 +27,9 @@ use Medas\ServiceManager\Attributes\Service;
 #[Service]
 class StatementTypeFinder
 {
-    public function __construct(private TokenGroups $tokenGroups)
+    public function __construct(
+        private TokenGroups $tokenGroups,
+    )
     {
     }
 

@@ -21,7 +21,7 @@ class Statement implements \IteratorAggregate
     }
 
     /**
-     * @return \Generator|Token[]
+     * @return Token[]|\Generator
      * @noinspection PhpDocSignatureInspection
      */
     public function getIterator(): \Generator
@@ -45,10 +45,10 @@ class Statement implements \IteratorAggregate
         $token->statement = $this;
     }
 
-    public function moveTokenAfter(Token $after, Token $token): void
+    public function moveTokenAfter(Token $token, Token $after): void
     {
         $this->removeToken($token);
-        $this->insertTokenAfter($after, $token);
+        $this->insertTokenAfter($token, $after);
     }
 
     public function removeToken(Token $token): void
@@ -61,7 +61,7 @@ class Statement implements \IteratorAggregate
         $this->tokens = array_values($this->tokens);
     }
 
-    public function insertTokenAfter(Token $after, Token $token): void
+    public function insertTokenAfter(Token $token, Token $after): void
     {
         if (false === $i = array_search($after, $this->tokens, true)) {
             throw new TokenNotFoundinStatementException($token, $this);
@@ -139,10 +139,5 @@ class Statement implements \IteratorAggregate
     public function next(): Statement|null
     {
         return $this->block->getNextStatement($this);
-    }
-
-    public function breakAfter(Token $token): void
-    {
-        diedump($this, $token);
     }
 }

@@ -2,8 +2,11 @@
 
 namespace MyNamespace;
 
-use GlobalNamespaceClass;
 use AnotherNamespace\ClassName;
+use GlobalNamespaceClass;
+use Unused\Alias as UnusedAlias;
+use Medas\Attributes\Types as Type;
+use MyNamespace\ChildPath\ThisCanBeInlined;
 use So\Many\Layers\Namespace as AliasedNamespace;
 use YetAnotherNamespace\ClassName as AliasOfClassName;
 
@@ -12,11 +15,19 @@ class MyClass extends ChildNamespace\BaseClass implements Interfaces\MyInterface
     use AnotherNamespace\TraitName;
     use Comma, Separated, Traits;
 
+    #[Type\Integer]
+    private int $id;
+
+    #[Type\Text]
+    private string $name;
+
     public function a(Relative\ClassName $relativeClass): Relative\ReturnType
     {
         if ($relativeClass instanceof AliasedNamespace\SemiRelativeClass) {
             return false;
         }
+
+        This\Relative\Path\Is\Too\Deep::class;
 
         return AlsoRelative\ClassName::class;
     }
@@ -28,7 +39,12 @@ class MyClass extends ChildNamespace\BaseClass implements Interfaces\MyInterface
 
     public function c(ClassA|ClassB $aClass): ClassC|ClassD|null
     {
-        return \Absolute\Classname::class;
+        return [
+            \My\Clashing\ClassName::class,
+            \My\Clavicle\ClassName::class,
+            \Your\Clashing\ClassName::class,
+            \Clashing\MyClass::class,
+        ];
     }
 
     public function d(StringClass $stringClass): StringClass
@@ -38,6 +54,6 @@ class MyClass extends ChildNamespace\BaseClass implements Interfaces\MyInterface
 
     public function e(int $int, string $string, array $array, object $object, bool $bool): int|string|array|object|bool|null
     {
-        return null;
+        return [\ReflectionClass::class, ThisCanBeInlined::class];
     }
 }

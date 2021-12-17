@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Medas\Test\Functional;
 
 use Medas\PhpBeautifier\Settings\Medas;
+use Medas\PhpBeautifier\Settings\MinimalSize;
 use Medas\PhpBeautifier\Settings\Psr12;
 
 class ReformatterTest extends BaseTest
@@ -61,8 +62,12 @@ class ReformatterTest extends BaseTest
     }
 
     public function testBasicPreformatted(): void
-
     {
         $this->assertRemainsTheSame('basic-preformatted', new Medas());
+    }
+
+    public function testRequiredWhitespace(): void
+    {
+        $this->assertChanges('basic-preformatted', 'basic-preformatted-minimal-whitespace', new MinimalSize());
     }
 }

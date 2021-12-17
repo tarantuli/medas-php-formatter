@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Medas\PhpBeautifier\Formatters;
 
-use Medas\PhpBeautifier\Tokens\Block;
 use Medas\PhpBeautifier\Tokens\Statement;
 use Medas\PhpBeautifier\Tokens\StatementTypeFinder;
 use Medas\PhpBeautifier\Tokens\StatementTypes\Comment;
 use Medas\PhpBeautifier\Tokens\StatementTypes\StatementType;
 use Medas\PhpBeautifier\Tokens\StatementTypes\SwitchBranch;
+use Medas\PhpBeautifier\Tokens\TokenTree;
 use Medas\ServiceManager\Attributes\Service;
 
 #[Service]
@@ -22,9 +22,9 @@ class BlankLineAdder
     {
     }
 
-    public function afterTypes(Block $block, array $afterTypes): void
+    public function afterTypes(TokenTree $tree, array $afterTypes): void
     {
-        foreach ($block as $statement) {
+        foreach ($tree->block() as $statement) {
             $type = $this->typeFinder->for($statement);
 
             foreach ($afterTypes as $groupType) {
@@ -32,6 +32,7 @@ class BlankLineAdder
                     $statement->blankLineAfter = true;
 
                     if ($this->previousType instanceof $groupType) {
+                        /** @noinspection PhpFieldImmediatelyRewrittenInspection */
                         $this->previousStatement->blankLineAfter = false;
                     }
                 }
@@ -42,9 +43,9 @@ class BlankLineAdder
         }
     }
 
-    public function beforeTypes(Block $block, array $beforeTypes): void
+    public function beforeTypes(TokenTree $tree, array $beforeTypes): void
     {
-        foreach ($block as $statement) {
+        foreach ($tree->block() as $statement) {
             $type = $this->typeFinder->for($statement);
 
             foreach ($beforeTypes as $groupType) {

@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Medas\PhpBeautifier\Formatters;
 
-use Medas\PhpBeautifier\Tokens\Block;
 use Medas\PhpBeautifier\Tokens\Contexts\MethodDeclaration;
+use Medas\PhpBeautifier\Tokens\Statement;
 use Medas\PhpBeautifier\Tokens\StatementTypeFinder;
 use Medas\PhpBeautifier\Tokens\StatementTypes\FunctionDeclaration;
-use Medas\PhpBeautifier\Tokens\TokenCollection;
+use Medas\PhpBeautifier\Tokens\TokenTree;
 use Medas\ServiceManager\Attributes\Service;
 
 #[Service]
@@ -19,14 +19,14 @@ class Psr12VisibilityMarkers extends BaseFormatter
     {
     }
 
-    public function format(TokenCollection $tokens): void
+    public function format(TokenTree $tree): void
     {
-        $this->sortVisibilityMarkers($tokens->structure);
+        $this->sortVisibilityMarkers($tree);
     }
 
-    private function sortVisibilityMarkers(Block $block): void
+    private function sortVisibilityMarkers(TokenTree $tree): void
     {
-        foreach ($block as $statement) {
+        foreach ($tree->block() as $statement) {
             if (!$this->typeFinder->for($statement) instanceof FunctionDeclaration) {
                 continue;
             }
@@ -35,25 +35,30 @@ class Psr12VisibilityMarkers extends BaseFormatter
                 continue;
             }
 
-            $abstractFinal = $statement->findToken([T_ABSTRACT, T_FINAL]);
-            $visibility = $statement->findToken([T_PUBLIC, T_PROTECTED, T_PRIVATE]);
-            $static = $statement->findToken(T_STATIC);
+            $this->processStatement($statement);
+        }
+    }
 
-            if (!$visibility) {
-                // Ensure that there is a visibility marker
-                $visibility = clone $statement->firstToken();
-                $visibility->id = T_PUBLIC;
-                $visibility->text = 'public';
-                $statement->prependToken($visibility);
-            }
+    private function processStatement(Statement $statement): void
+    {
+        $abstractFinal = $statement->findToken([T_ABSTRACT, T_FINAL]);
+        $visibility = $statement->findToken([T_PUBLIC, T_PROTECTED, T_PRIVATE]);
+        $static = $statement->findToken(T_STATIC);
 
-            if ($abstractFinal) {
-                $statement->moveTokenAfter($abstractFinal, $visibility);
-            }
+        if (!$visibility) {
+            // Ensure that there is a visibility marker, defaulting to "public"
+            $visibility = clone $statement->firstToken();
+            $visibility->id = T_PUBLIC;
+            $visibility->text = 'public';
+            $statement->prependToken($visibility);
+        }
 
-            if ($static) {
-                $statement->moveTokenAfter($visibility, $static);
-            }
+        if ($abstractFinal) {
+            $statement->moveTokenAfter($visibility, $abstractFinal);
+        }
+
+        if ($static) {
+            $statement->moveTokenAfter($static, $visibility);
         }
     }
 }

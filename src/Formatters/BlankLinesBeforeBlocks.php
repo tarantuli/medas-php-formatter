@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Medas\PhpBeautifier\Formatters;
 
 use Medas\PhpBeautifier\Tokens\StatementTypes\ControlStatement;
-use Medas\PhpBeautifier\Tokens\TokenCollection;
+use Medas\PhpBeautifier\Tokens\TokenTree;
 use Medas\ServiceManager\Attributes\Service;
 
 #[Service]
@@ -15,9 +15,9 @@ class BlankLinesBeforeBlocks extends BaseFormatter
     {
     }
 
-    public function format(TokenCollection $tokens): void
+    public function format(TokenTree $tree): void
     {
-        $this->blankLineAdder->beforeTypes($tokens->structure, [
+        $this->blankLineAdder->beforeTypes($tree, [
             ControlStatement::class,
         ]);
     }

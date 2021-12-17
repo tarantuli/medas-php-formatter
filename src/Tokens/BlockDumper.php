@@ -30,7 +30,7 @@ class BlockDumper
         foreach ($block as $statement) {
             // Start of line
             $this->cli->print("\n")
-                ->print(sprintf('%3s', (string) $this->line++), Cli::COLOR256 . '208')
+                ->print(sprintf('%3s', $this->line++), Cli::COLOR256 . '208')
                 ->print(str_repeat('·', $statement->block->depth), Cli::LIGHT_GRAY);
 
             // Print tokens on this line

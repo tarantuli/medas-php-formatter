@@ -6,5 +6,4 @@ namespace Medas\PhpBeautifier\Settings\LineEndings;
 
 interface LineEnding extends \Stringable
 {
-
 }

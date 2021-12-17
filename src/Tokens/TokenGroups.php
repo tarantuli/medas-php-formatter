@@ -23,6 +23,7 @@ class TokenGroups
     {
         return array_merge(
             $this->controlKeywords(),
+            $this->typeOperators(),
             $this->visibilityKeywords(),
             [
             T_ABSTRACT,

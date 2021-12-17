@@ -18,6 +18,8 @@ class Token extends \PhpToken
     public Token|null $previous = null;
     public Token|null $next = null;
 
+    public ClassAnalyser\ClassReference $reference;
+
     public function isTrueFalseNull(): bool
     {
         return $this->is(T_STRING) && in_array(strtolower($this->text), ['true', 'false', 'null'], true);
@@ -31,5 +33,23 @@ class Token extends \PhpToken
     public function isFirstToken(): bool
     {
         return $this === $this->statement->firstToken();
+    }
+
+    public function context(Contexts\Context $context): self
+    {
+        $this->context = $context;
+        return $this;
+    }
+
+    public function id(int $id): self
+    {
+        $this->id = $id;
+        return $this;
+    }
+
+    public function text(string $text): self
+    {
+        $this->text = $text;
+        return $this;
     }
 }

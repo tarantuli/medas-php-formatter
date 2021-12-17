@@ -6,9 +6,10 @@ namespace Medas\PhpBeautifier\Tokens\ClassAnalyser;
 
 use Medas\PhpBeautifier\Tokens\Contexts\MethodParameters;
 use Medas\PhpBeautifier\Tokens\Contexts\MethodReturnType;
+use Medas\PhpBeautifier\Tokens\StatementTypes\AttributeStatement;
 use Medas\PhpBeautifier\Tokens\StatementTypes\UseTraitStatement;
 use Medas\PhpBeautifier\Tokens\Token;
-use Medas\PhpBeautifier\Tokens\TokenCollection;
+use Medas\PhpBeautifier\Tokens\TokenTree;
 use Medas\ServiceManager\Attributes\Service;
 
 #[Service]
@@ -22,18 +23,26 @@ class ReferenceFinder
 
     private const REFERENCE_TYPES = [T_STRING, T_NAME_QUALIFIED, T_NAME_RELATIVE, T_NAME_FULLY_QUALIFIED];
 
-    public function find(TokenCollection $tokens, ClassAnalysis $results)
+    public function __construct(
+        private FqnProperties $fqnProperties,
+    )
     {
-        foreach ($tokens as $token) {
+    }
+
+    public function find(TokenTree $tree, ClassAnalysis $results)
+    {
+        foreach ($tree as $token) {
             if ($token->is(T_EXTENDS)) {
                 // Class extension declaration
-                $results->extends = $this->resolveReference($results, $token->next);
+                $results->extends = $this->getReference($results, $token->next);
+                $this->addUsage($results, $token->next);
             }
 
             if ($token->is(T_IMPLEMENTS)) {
                 // Class implementation declaration, could be multiple
                 foreach ($this->gatherCommaSeparatedTokens($token->next) as $implementToken) {
                     $this->addImplements($results, $implementToken);
+                    $this->addUsage($results, $implementToken);
                 }
             }
 
@@ -56,42 +65,53 @@ class ReferenceFinder
                 }
 
                 if ($token->context instanceof MethodParameters
-                    || $token->context instanceof MethodReturnType) {
-                    // Parameter type or return type
+                    || $token->context instanceof MethodReturnType
+                    || $token->statement->type instanceof AttributeStatement) {
+                    // Parameter type, return type or name within an attribute
                     $this->addUsage($results, $token);
                 }
             }
         }
     }
 
+    private function getReference(ClassAnalysis $results, Token $token): ClassReference
+    {
+        $reference = $this->resolveReference($results, $token);
+        $token->reference = $reference;
+
+        return $reference;
+    }
+
     private function resolveReference(ClassAnalysis $results, Token $token): ClassReference
     {
-        $reference = $token->text;
-        $firstPart = $this->getFirstPart($reference);
+        $label = $token->text;
+        $firstPart = $this->fqnProperties->getFirstPart($label);
 
         if ($firstPart === '') {
             // It's an absolute path
-            return new ClassReference($reference, $reference);
+            return new ClassReference($label, $label);
         }
 
         $resolvedFirstPart = $results->resolveImport($firstPart);
 
         if ($resolvedFirstPart === null) {
             // It's a path relative to the namespace
-            return new ClassReference($reference, '\\' . $results->namespace . '\\' . $reference);
+            $fqn = $results->namespace ? '\\' . $results->namespace . '\\' . $label : '\\' . $label;
+            return new ClassReference($label, $fqn);
         }
         else {
             // It's a path relative to an alias
             return new ClassReference(
-                $reference,
-                $resolvedFirstPart . substr($reference, strlen($firstPart))
+                $label,
+                $resolvedFirstPart . substr($label, strlen($firstPart))
             );
         }
     }
 
-    private function getFirstPart(string $path): string
+    private function addUsage(ClassAnalysis $results, Token $token): void
     {
-        return str_contains($path, '\\') ? substr($path, 0, strpos($path, '\\')) : $path;
+        $reference = $this->getReference($results, $token);
+        $results->uses[$reference->label] = $reference;
     }
 
     private function gatherCommaSeparatedTokens(Token $token): array
@@ -109,14 +129,8 @@ class ReferenceFinder
 
     private function addImplements(ClassAnalysis $results, Token $token): void
     {
-        $reference = $this->resolveReference($results, $token);
-        $results->implements[$reference->reference] = $reference;
-    }
-
-    private function addUsage(ClassAnalysis $results, Token $token): void
-    {
-        $reference = $this->resolveReference($results, $token);
-        $results->uses[$reference->reference] = $reference;
+        $reference = $this->getReference($results, $token);
+        $results->implements[$reference->label] = $reference;
     }
 
     private function couldBeClassName(Token $token): bool

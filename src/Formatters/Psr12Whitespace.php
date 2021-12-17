@@ -10,8 +10,8 @@ use Medas\PhpBeautifier\Tokens\StatementTypes\ClassPropertyDeclaration;
 use Medas\PhpBeautifier\Tokens\StatementTypes\DeclareStatement;
 use Medas\PhpBeautifier\Tokens\StatementTypes\FunctionDeclaration;
 use Medas\PhpBeautifier\Tokens\StatementTypes\SwitchBranch;
-use Medas\PhpBeautifier\Tokens\TokenCollection;
 use Medas\PhpBeautifier\Tokens\TokenGroups;
+use Medas\PhpBeautifier\Tokens\TokenTree;
 use Medas\ServiceManager\Attributes\Service;
 
 #[Service]
@@ -22,18 +22,18 @@ class Psr12Whitespace extends BaseFormatter
     {
     }
 
-    public function format(TokenCollection $tokens): void
+    public function format(TokenTree $tree): void
     {
-        $this->addSpaces($tokens);
-        $this->removeSpaces($tokens);
+        $this->addSpaces($tree);
+        $this->removeSpaces($tree);
     }
 
-    private function addSpaces(TokenCollection $tokens): void
+    private function addSpaces(TokenTree $tree): void
     {
         $spaceBeforeRequired = $this->getSpaceBeforeRequired();
         $spaceAfterRequired = $this->getSpaceAfterRequired();
 
-        foreach ($tokens as $token) {
+        foreach ($tree as $token) {
             // No spaces in a declare statement
             $statementType = $this->typeFinder->for($token->statement);
 
@@ -50,7 +50,7 @@ class Psr12Whitespace extends BaseFormatter
                 $token->spaceAfter = true;
             }
 
-            // No space between "? type"
+            // No space between "?type"
             if ($token->is(T_QUESTION_MARK) &&
                 ($statementType instanceof ClassPropertyDeclaration || $statementType instanceof FunctionDeclaration)) {
                 $token->spaceAfter = false;
@@ -127,13 +127,13 @@ class Psr12Whitespace extends BaseFormatter
         );
     }
 
-    private function removeSpaces(TokenCollection $tokens): void
+    private function removeSpaces(TokenTree $tree): void
     {
         $spaceBeforeForbidden = $this->getSpaceBeforeForbidden();
         $spaceAfterForbidden = $this->getSpaceAfterForbidden();
         $symbolOperators = $this->tokenGroups->symbolOperators();
 
-        foreach ($tokens as $token) {
+        foreach ($tree as $token) {
             if ($token->is($spaceAfterForbidden)) {
                 $token->spaceAfter = false;
             }

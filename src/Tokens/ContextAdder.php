@@ -13,13 +13,15 @@ use Medas\PhpBeautifier\Tokens\StatementTypes\UseTraitStatement;
 use Medas\ServiceManager\Attributes\Service;
 
 #[Service]
-class ContextFinder
+class ContextAdder
 {
-    public function __construct(private StatementTypeFinder $typeFinder)
+    public function __construct(
+        private StatementTypeFinder $typeFinder,
+    )
     {
     }
 
-    public function determine(Block $block): void
+    public function add(TokenTree $tree): void
     {
         $context = new GlobalScope();
         $globalScopeDepth = null;
@@ -27,7 +29,7 @@ class ContextFinder
         $nextStatementIsClassBody = false;
         $nextStatementIsMethodBody = false;
 
-        foreach ($block as $statement) {
+        foreach ($tree->block() as $statement) {
             if ($statement->block->depth === $globalScopeDepth) {
                 $context = new GlobalScope();
                 $globalScopeDepth = null;

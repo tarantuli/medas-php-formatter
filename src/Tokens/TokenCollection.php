@@ -4,26 +4,32 @@ declare(strict_types=1);
 
 namespace Medas\PhpBeautifier\Tokens;
 
-class TokenCollection implements \Iterator, \Countable
+class TokenCollection implements \IteratorAggregate
 {
-    public Block $structure;
     /** @var Token[] */
     private array $tokens = [];
-    private int $index = 0;
     private string $sourceHash;
+    private Token|null $previousToken = null;
+
+    /**
+     * @return Token[]|\Generator
+     * @noinspection PhpDocSignatureInspection
+     */
+    public function getIterator(): \Generator
+    {
+        yield from $this->tokens;
+    }
 
     public function add(Token $token): void
     {
         $this->tokens[] = $token;
-    }
 
-    public function removeByType(int|string|array $kind)
-    {
-        foreach ($this as $i => $token) {
-            if ($token->is($kind)) {
-                $this->remove($i);
-            }
+        if ($this->previousToken) {
+            $this->previousToken->next = $token;
+            $token->previous = $this->previousToken;
         }
+
+        $this->previousToken = $token;
     }
 
     public function remove(int $index)
@@ -44,10 +50,6 @@ class TokenCollection implements \Iterator, \Countable
                 $this->tokens[$index]->previous = null;
             }
         }
-
-        if ($index <= $this->index) {
-            --$this->index;
-        }
     }
 
     public function sourceHash(): string
@@ -60,35 +62,5 @@ class TokenCollection implements \Iterator, \Countable
         $this->sourceHash = $sourceHash;
 
         return $this;
-    }
-
-    public function current(): Token
-    {
-        return $this->tokens[$this->index];
-    }
-
-    public function next(): void
-    {
-        ++$this->index;
-    }
-
-    public function key(): int
-    {
-        return $this->index;
-    }
-
-    public function valid(): bool
-    {
-        return array_key_exists($this->index, $this->tokens);
-    }
-
-    public function rewind(): void
-    {
-        $this->index = 0;
-    }
-
-    public function count(): int
-    {
-        return count($this->tokens);
     }
 }

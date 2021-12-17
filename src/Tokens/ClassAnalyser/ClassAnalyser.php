@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Medas\PhpBeautifier\Tokens\ClassAnalyser;
 
-use Medas\PhpBeautifier\Tokens\TokenCollection;
 use Medas\PhpBeautifier\Tokens\Tokenizer;
+use Medas\PhpBeautifier\Tokens\TokenTree;
 use Medas\ServiceManager\Attributes\Service;
 
 #[Service]
@@ -22,18 +22,18 @@ class ClassAnalyser
 
     public function analyse(string $code): ClassAnalysis
     {
-        $tokens = $this->tokenizer->tokenize($code);
+        $tree = $this->tokenizer->makeTree($code);
 
-        return $this->analyseTokenCollection($tokens);
+        return $this->analyseTokenCollection($tree);
     }
 
-    public function analyseTokenCollection(TokenCollection $tokens): ClassAnalysis
+    public function analyseTokenCollection(TokenTree $tree): ClassAnalysis
     {
         $results = new ClassAnalysis();
 
-        $this->importsFinder->find($tokens, $results);
-        $this->nameFinder->find($tokens, $results);
-        $this->referenceFinder->find($tokens, $results);
+        $this->importsFinder->find($tree, $results);
+        $this->nameFinder->find($tree, $results);
+        $this->referenceFinder->find($tree, $results);
 
         return $results;
     }

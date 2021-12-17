@@ -6,7 +6,7 @@ namespace Medas\PhpBeautifier\Tokens\ClassAnalyser;
 
 class ClassReference
 {
-    public function __construct(public string $reference,
+    public function __construct(public string $label,
                                 public string $fqn
     )
     {

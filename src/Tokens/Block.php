@@ -13,6 +13,25 @@ class Block implements \IteratorAggregate
     {
     }
 
+    /**
+     * foreach ($block) returns the statements in this block, recursively.
+     * Be careful to use $statement->block and not $block itself.
+     *
+     * @return Statement[]|\Generator
+     * @noinspection PhpDocSignatureInspection
+     */
+    public function getIterator(): \Generator
+    {
+        foreach ($this->elements as $element) {
+            if ($element instanceof Block) {
+                yield from $element;
+            }
+            else {
+                yield $element;
+            }
+        }
+    }
+
     public function appendNewStatement(): Statement
     {
         return $this->elements[] = new Statement($this);
@@ -59,25 +78,6 @@ class Block implements \IteratorAggregate
         unset($secondStatement);
     }
 
-    /**
-     * foreach ($block) only returns the statements in this block, recursively! Be careful to use $statement->block
-     * and not $block itself.
-     *
-     * @return \Generator|Statement[]
-     * @noinspection PhpDocSignatureInspection
-     */
-    public function getIterator(): \Generator
-    {
-        foreach ($this->elements as $element) {
-            if ($element instanceof Block) {
-                yield from $element;
-            }
-            else {
-                yield $element;
-            }
-        }
-    }
-
     public function lastStatement(): Statement
     {
         return $this->elements[count($this->elements) - 1];
@@ -94,17 +94,23 @@ class Block implements \IteratorAggregate
         return $elements;
     }
 
-    public function moveStatementAfter(Statement $after, Statement $statement): void
+    public function moveStatementAfter(Statement $statement, Statement $after): void
     {
         $this->removeStatement($statement);
         $this->insertStatementAfter($statement, $after);
 
     }
 
-    public function removeStatement(Statement $statement): void
+    public function removeStatement(Statement $statement, bool $deleteTokens = false): void
     {
         $index = $this->getIndex($statement);
         array_splice($this->elements, $index, 1);
+
+        if ($deleteTokens) {
+            foreach ($statement as $token) {
+                $statement->removeToken($token);
+            }
+        }
     }
 
     public function insertStatementAfter(Statement $statement, Statement $after): void

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Medas\PhpBeautifier\Formatters;
 
-use Medas\PhpBeautifier\Tokens\TokenCollection;
 use Medas\PhpBeautifier\Tokens\TokenGroups;
+use Medas\PhpBeautifier\Tokens\TokenTree;
 use Medas\ServiceManager\Attributes\Service;
 
 #[Service]
@@ -15,12 +15,12 @@ class RequiredWhitespace extends BaseFormatter
     {
     }
 
-    public function format(TokenCollection $tokens): void
+    public function format(TokenTree $tree): void
     {
         $spaceAroundRequired = $this->getSpaceAroundRequired();
         $spaceAroundNotNeeded = $this->getSpaceAroundNotNeeded();
 
-        foreach ($tokens as $token) {
+        foreach ($tree as $token) {
             if ($token->is($spaceAroundRequired) || $token->isTrueFalseNull()) {
                 $token->spaceAfter = true;
             }

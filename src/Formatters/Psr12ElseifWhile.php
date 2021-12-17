@@ -6,7 +6,7 @@ namespace Medas\PhpBeautifier\Formatters;
 
 use Medas\PhpBeautifier\Tokens\Statement;
 use Medas\PhpBeautifier\Tokens\StatementTypeFinder;
-use Medas\PhpBeautifier\Tokens\TokenCollection;
+use Medas\PhpBeautifier\Tokens\TokenTree;
 use Medas\ServiceManager\Attributes\Service;
 
 #[Service]
@@ -18,9 +18,9 @@ class Psr12ElseifWhile extends BaseFormatter
     {
     }
 
-    public function format(TokenCollection $tokens): void
+    public function format(TokenTree $tree): void
     {
-        foreach ($tokens->structure as $statement) {
+        foreach ($tree->block() as $statement) {
             if ($statement->firstToken()->is([T_ELSE, T_ELSEIF])) {
                 $statement->mergeWithPrevious();
             }

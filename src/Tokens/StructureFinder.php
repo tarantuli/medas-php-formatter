@@ -29,20 +29,21 @@ class StructureFinder
     private bool $nextCommaEndsStatement;
     private bool $nextBraceOpensMatchClause;
 
-    public function determine(TokenCollection $tokens): void
+    public function determine(TokenCollection $tokens): TokenTree
     {
         $this->reset();
+        $this->removeWhitespace($tokens);
 
-        $structure = new Block($this->blockDepth, null);
+        $tree = new Block($this->blockDepth, null);
 
-        $this->block = $structure;
+        $this->block = $tree;
         $this->statement = $this->block->appendNewStatement();
 
         foreach ($tokens as $token) {
             $this->process($token);
         }
 
-        $tokens->structure = $structure;
+        return new TokenTree($tree);
     }
 
     private function reset(): void
@@ -63,6 +64,19 @@ class StructureFinder
         $this->matchClauseDepth = 0;
         $this->nextBraceOpensMatchClause = false;
         $this->nextCommaEndsStatement = false;
+    }
+
+    private function removeWhitespace(TokenCollection $tokens)
+    {
+        {
+            $counter = 0;
+            foreach ($tokens as $token) {
+                ++$counter;
+                if ($token->is(T_WHITESPACE)) {
+                    $tokens->remove(--$counter);
+                }
+            }
+        }
     }
 
     private function process(Token $token): void

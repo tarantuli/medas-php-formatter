@@ -11,12 +11,14 @@ use Medas\ServiceManager\Attributes\Service;
 #[Service]
 class ClassAnalysisManager
 {
-    public function __construct(private ClassAnalyser $analyser)
+    public function __construct(
+        private ClassAnalyser $analyser,
+    )
     {
     }
 
-    public function forTokens(TokenCollection $tokens): ClassAnalysis
+    public function forTokens(TokenTree $tree): ClassAnalysis
     {
-        return $this->analyser->analyseTokenCollection($tokens);
+        return $this->analyser->analyseTokenCollection($tree);
     }
 }

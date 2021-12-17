@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Medas\PhpBeautifier\Tokens\ClassAnalyser;
 
 use Medas\PhpBeautifier\Tokens\Token;
-use Medas\PhpBeautifier\Tokens\TokenCollection;
+use Medas\PhpBeautifier\Tokens\TokenTree;
 use Medas\ServiceManager\Attributes\Service;
 
 /**
@@ -17,9 +17,9 @@ class NameFinder
 {
     private const CLASS_TYPES = [T_CLASS, T_INTERFACE, T_TRAIT];
 
-    public function find(TokenCollection $tokens, ClassAnalysis $results): void
+    public function find(TokenTree $tree, ClassAnalysis $results): void
     {
-        foreach ($tokens as $token) {
+        foreach ($tree as $token) {
             if ($token->is(T_NAMESPACE)) {
                 $results->namespace = $token->next->text;
             }

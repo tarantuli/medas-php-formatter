@@ -6,7 +6,6 @@ namespace Medas\PhpBeautifier\Settings\LineEndings;
 
 class CrLf implements LineEnding
 {
-
     public function __toString()
     {
         return "\r\n";
