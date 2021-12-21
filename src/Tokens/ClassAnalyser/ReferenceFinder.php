@@ -6,6 +6,7 @@ namespace Medas\PhpBeautifier\Tokens\ClassAnalyser;
 
 use Medas\PhpBeautifier\Tokens\Contexts\MethodParameters;
 use Medas\PhpBeautifier\Tokens\Contexts\MethodReturnType;
+use Medas\PhpBeautifier\Tokens\StatementTypeFinder;
 use Medas\PhpBeautifier\Tokens\StatementTypes\AttributeStatement;
 use Medas\PhpBeautifier\Tokens\StatementTypes\UseTraitStatement;
 use Medas\PhpBeautifier\Tokens\Token;
@@ -25,6 +26,7 @@ class ReferenceFinder
 
     public function __construct(
         private FqnProperties $fqnProperties,
+        private StatementTypeFinder $statementTypeFinder,
     )
     {
     }
@@ -51,7 +53,7 @@ class ReferenceFinder
                 $this->addUsage($results, $token->next);
             }
 
-            if ($token->is(T_USE) && $token->statement->type instanceof UseTraitStatement) {
+            if ($token->is(T_USE) && $this->statementTypeFinder->for($token->statement) instanceof UseTraitStatement) {
                 // A use trait statement, could be multiple
                 foreach ($this->gatherCommaSeparatedTokens($token->next) as $useToken) {
                     $this->addUsage($results, $useToken);
@@ -66,7 +68,7 @@ class ReferenceFinder
 
                 if ($token->context instanceof MethodParameters
                     || $token->context instanceof MethodReturnType
-                    || $token->statement->type instanceof AttributeStatement) {
+                    || $this->statementTypeFinder->for($token->statement) instanceof AttributeStatement) {
                     // Parameter type, return type or name within an attribute
                     $this->addUsage($results, $token);
                 }

@@ -7,6 +7,7 @@ namespace Medas\PhpBeautifier\Formatters\Imports;
 use Medas\PhpBeautifier\Tokens\ClassAnalyser\FqnProperties;
 use Medas\PhpBeautifier\Tokens\Contexts\GlobalScope;
 use Medas\PhpBeautifier\Tokens\Statement;
+use Medas\PhpBeautifier\Tokens\StatementTypeFinder;
 use Medas\PhpBeautifier\Tokens\StatementTypes\DeclareStatement;
 use Medas\PhpBeautifier\Tokens\StatementTypes\NamespaceDeclaration;
 use Medas\PhpBeautifier\Tokens\StatementTypes\PhpOpenTag;
@@ -19,14 +20,15 @@ use Medas\ServiceManager\Attributes\Service;
 class NewImportsInserter
 {
     public function __construct(
-        private FqnProperties $fqnProperties,
+        private FqnProperties       $fqnProperties,
+        private StatementTypeFinder $statementTypeFinder,
     )
     {
     }
 
     public function insert(TokenTree $tree, ReferencesAndImports $referencesAndImports): void
     {
-        $tree->removeStatementsByType(UseClassStatement::class);
+        $this->removeExistingImportStatements($tree);
         // Sort the new imports in reverse order
         krsort($referencesAndImports->imports);
 
@@ -52,16 +54,36 @@ class NewImportsInserter
         }
     }
 
+    private function removeExistingImportStatements(TokenTree $tree): void
+    {
+        foreach ($tree->block() as $statement) {
+            if ($this->statementTypeFinder->for($statement) instanceof UseClassStatement) {
+                $tree->block()->removeStatement($statement, true);
+            }
+        }
+    }
+
     private function findImportInsertionSpot(TokenTree $tree): Statement
     {
-        if (null !== $after = $tree->getStatementByType(NamespaceDeclaration::class)) {
+        if (null !== $after = $this->getStatementByType($tree, NamespaceDeclaration::class)) {
             return $after;
         }
 
-        if (null !== $after = $tree->getStatementByType(DeclareStatement::class)) {
+        if (null !== $after = $this->getStatementByType($tree, DeclareStatement::class)) {
             return $after;
         }
 
-        return $tree->getStatementByType(PhpOpenTag::class);
+        return $this->getStatementByType($tree, PhpOpenTag::class);
+    }
+
+    private function getStatementByType(TokenTree $tree, string $type): Statement|null
+    {
+        foreach ($tree->block() as $statement) {
+            if ($this->statementTypeFinder->for($statement) instanceof $type) {
+                return $statement;
+            }
+        }
+
+        return null;
     }
 }

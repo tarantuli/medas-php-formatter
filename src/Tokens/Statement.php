@@ -9,10 +9,10 @@ use Medas\PhpBeautifier\Tokens\StatementTypes\StatementType;
 
 class Statement implements \IteratorAggregate
 {
-    public StatementType $type;
     public bool $blankLineAfter = false;
     public int $additionalDepth = 0;
 
+    private StatementType|null $type = null;
     /** @var Token[] */
     private array $tokens = [];
 
@@ -29,12 +29,27 @@ class Statement implements \IteratorAggregate
         yield from $this->tokens;
     }
 
+    public function type(callable $setter): StatementType
+    {
+        if ($this->type === null) {
+            $this->type = $setter();
+        }
+
+        return $this->type;
+    }
+
+    public function setType(StatementType $type): void
+    {
+        $this->type = $type;
+    }
+
     public function prependToken(Token $token): void
     {
         array_unshift($this->tokens, $token);
 
         $token->block = $this->block;
         $token->statement = $this;
+        $this->type = null;
     }
 
     public function appendToken(Token $token): void
@@ -43,12 +58,16 @@ class Statement implements \IteratorAggregate
 
         $token->block = $this->block;
         $token->statement = $this;
+
+        $this->type = null;
     }
 
     public function moveTokenAfter(Token $token, Token $after): void
     {
         $this->removeToken($token);
         $this->insertTokenAfter($token, $after);
+
+        $this->type = null;
     }
 
     public function removeToken(Token $token): void
@@ -59,6 +78,8 @@ class Statement implements \IteratorAggregate
 
         unset($this->tokens[$i]);
         $this->tokens = array_values($this->tokens);
+
+        $this->type = null;
     }
 
     public function insertTokenAfter(Token $token, Token $after): void
@@ -74,6 +95,8 @@ class Statement implements \IteratorAggregate
 
         array_splice($this->tokens, $i + 1, 0, [$token]);
         $this->tokens = array_values($this->tokens);
+
+        $this->type = null;
     }
 
     public function lastToken(): Token|null

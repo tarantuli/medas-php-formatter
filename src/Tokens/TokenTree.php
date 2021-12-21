@@ -52,26 +52,6 @@ class TokenTree implements \IteratorAggregate
         $this->doResetLinks = false;
     }
 
-    public function removeStatementsByType(string $type, bool $deleteTokens = true): void
-    {
-        foreach ($this->block as $statement) {
-            if ($statement->type instanceof $type) {
-                $this->block->removeStatement($statement, $deleteTokens);
-            }
-        }
-    }
-
-    public function getStatementByType(string $type): Statement|null
-    {
-        foreach ($this->block as $statement) {
-            if ($statement->type instanceof $type) {
-                return $statement;
-            }
-        }
-
-        return null;
-    }
-
     public function doResetLinks(): void
     {
         $this->doResetLinks = true;

@@ -4,26 +4,6 @@ declare(strict_types=1);
 
 namespace Medas\PhpBeautifier\Tokens;
 
-use Medas\PhpBeautifier\Tokens\StatementTypes\AttributeStatement;
-use Medas\PhpBeautifier\Tokens\StatementTypes\BlankLine;
-use Medas\PhpBeautifier\Tokens\StatementTypes\BlockCloser;
-use Medas\PhpBeautifier\Tokens\StatementTypes\ClassConstDeclaration;
-use Medas\PhpBeautifier\Tokens\StatementTypes\ClassDeclaration;
-use Medas\PhpBeautifier\Tokens\StatementTypes\ClassPropertyDeclaration;
-use Medas\PhpBeautifier\Tokens\StatementTypes\Comment;
-use Medas\PhpBeautifier\Tokens\StatementTypes\ControlStatement;
-use Medas\PhpBeautifier\Tokens\StatementTypes\DeclareStatement;
-use Medas\PhpBeautifier\Tokens\StatementTypes\FunctionDeclaration;
-use Medas\PhpBeautifier\Tokens\StatementTypes\GenericStatement;
-use Medas\PhpBeautifier\Tokens\StatementTypes\NamespaceDeclaration;
-use Medas\PhpBeautifier\Tokens\StatementTypes\PhpOpenTag;
-use Medas\PhpBeautifier\Tokens\StatementTypes\ReturnStatement;
-use Medas\PhpBeautifier\Tokens\StatementTypes\StatementType;
-use Medas\PhpBeautifier\Tokens\StatementTypes\SwitchBranch;
-use Medas\PhpBeautifier\Tokens\StatementTypes\ThrowStatement;
-use Medas\PhpBeautifier\Tokens\StatementTypes\UseClassStatement;
-use Medas\PhpBeautifier\Tokens\StatementTypes\UseConstStatement;
-use Medas\PhpBeautifier\Tokens\StatementTypes\UseFunctionStatement;
 use Medas\ServiceManager\Attributes\Service;
 
 #[Service]
@@ -35,97 +15,93 @@ class StatementTypeFinder
     {
     }
 
-    public function for(Statement $statement): StatementType
+    public function for(Statement $statement): StatementTypes\StatementType
     {
-        if (isset($statement->type)) {
-            return $statement->type;
-        }
-
-        return $statement->type = $this->determineType($statement);
+        return $statement->type(fn() => $this->determineType($statement));
     }
 
-    private function determineType(Statement $statement): StatementType
+    private function determineType(Statement $statement): StatementTypes\StatementType
     {
         $firstToken = $statement->firstToken();
         $secondToken = $statement->getToken(1);
 
         if (null === $firstToken) {
-            return new BlankLine();
+            return new StatementTypes\BlankLine();
         }
 
         if ($firstToken->is(T_OPEN_TAG)) {
-            return new PhpOpenTag();
+            return new StatementTypes\PhpOpenTag();
         }
 
         if ($firstToken->is(T_DECLARE)) {
-            return new DeclareStatement();
+            return new StatementTypes\DeclareStatement();
         }
 
         if ($firstToken->is($this->tokenGroups->comments())) {
-            return new Comment();
+            return new StatementTypes\Comment();
         }
 
         if ($firstToken->is(T_NAMESPACE)) {
-            return new NamespaceDeclaration();
+            return new StatementTypes\NamespaceDeclaration();
         }
 
         if ($firstToken->is(T_USE)) {
             if ($secondToken->is(T_FUNCTION)) {
-                return new UseFunctionStatement();
+                return new StatementTypes\UseFunctionStatement();
             }
             elseif ($secondToken->is(T_CONST)) {
-                return new UseConstStatement();
+                return new StatementTypes\UseConstStatement();
             }
 
-            return new UseClassStatement();
+            return new StatementTypes\UseClassStatement();
         }
 
         if ($firstToken->is(T_ATTRIBUTE)) {
-            return new AttributeStatement();
+            return new StatementTypes\AttributeStatement();
         }
 
         if ($firstToken->is(T_CURLY_BRACKET_CLOSE)) {
-            return new BlockCloser();
+            return new StatementTypes\BlockCloser();
         }
 
         if ($statement->containsType(T_CLASS)) {
-            return new ClassDeclaration();
+            return new StatementTypes\ClassDeclaration();
         }
 
         if ($statement->containsType(T_CONST)) {
-            return new ClassConstDeclaration();
+            return new StatementTypes\ClassConstDeclaration();
         }
 
         if ($statement->containsType(T_FUNCTION)) {
-            return new FunctionDeclaration();
+            return new StatementTypes\FunctionDeclaration();
         }
 
         if ($statement->containsType($this->tokenGroups->visibilityKeywords())) {
             // It's not a class const or class method, those were found before
-            return new ClassPropertyDeclaration();
+            return new StatementTypes\ClassPropertyDeclaration();
         }
 
         if ($firstToken->is($this->tokenGroups->controlKeywords())) {
-            return new ControlStatement();
+            return new StatementTypes\ControlStatement();
         }
 
         if ($firstToken->is(T_CASE)) {
-            return new SwitchBranch();
+            return new StatementTypes\SwitchBranch();
         }
 
         if ($firstToken->is(T_DEFAULT) && !$secondToken->is(T_DOUBLE_ARROW)) {
             // A default followed by a double arrow is a match branch
-            return new SwitchBranch();
+            return new StatementTypes\SwitchBranch();
         }
 
         if ($firstToken->is(T_RETURN)) {
-            return new ReturnStatement();
+            return new StatementTypes\ReturnStatement();
         }
 
         if ($firstToken->is(T_THROW)) {
-            return new ThrowStatement();
+            return new StatementTypes\ThrowStatement();
         }
 
-        return new GenericStatement();
+        return new StatementTypes\GenericStatement();
     }
 }

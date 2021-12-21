@@ -18,14 +18,16 @@ class BlankLineAdder
     private Statement|null $previousStatement = null;
     private StatementType|null $previousType = null;
 
-    public function __construct(private StatementTypeFinder $typeFinder)
+    public function __construct(
+        private StatementTypeFinder $statementTypeFinder,
+    )
     {
     }
 
     public function afterTypes(TokenTree $tree, array $afterTypes): void
     {
         foreach ($tree->block() as $statement) {
-            $type = $this->typeFinder->for($statement);
+            $type = $this->statementTypeFinder->for($statement);
 
             foreach ($afterTypes as $groupType) {
                 if ($type instanceof $groupType) {
@@ -46,7 +48,7 @@ class BlankLineAdder
     public function beforeTypes(TokenTree $tree, array $beforeTypes): void
     {
         foreach ($tree->block() as $statement) {
-            $type = $this->typeFinder->for($statement);
+            $type = $this->statementTypeFinder->for($statement);
 
             foreach ($beforeTypes as $groupType) {
                 if (!$type instanceof $groupType) {
@@ -59,12 +61,12 @@ class BlankLineAdder
                     continue;
                 }
 
-                if ($this->previousStatement->type instanceof SwitchBranch) {
+                if ($this->statementTypeFinder->for($this->previousStatement) instanceof SwitchBranch) {
                     // There's never a blank line after a switch case/default statement
                     continue;
                 }
 
-                if ($this->previousStatement->type instanceof Comment) {
+                if ($this->statementTypeFinder->for($this->previousStatement) instanceof Comment) {
                     // There's never a blank line after a comment
                     continue;
                 }
