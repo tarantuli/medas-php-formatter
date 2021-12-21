@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Medas\ServiceManager;
 
-use Medas\ServiceManager\Attributes\Service;
-
 use function A\B;
 use function A\C;
 use function A\D;
@@ -13,7 +11,7 @@ use function B\E;
 
 use const C;
 
-#[Service(12)]
+#[Attributes\Service(12)]
 abstract class ServiceInstantiator
 {
     use Cheese;

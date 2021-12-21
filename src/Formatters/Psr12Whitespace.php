@@ -112,6 +112,8 @@ class Psr12Whitespace extends BaseFormatter
                 T_QUESTION_MARK,
                 T_CASE,
                 T_DOC_COMMENT,
+                T_AS,
+                T_RETURN,
             ]
         );
     }
@@ -157,6 +159,14 @@ class Psr12Whitespace extends BaseFormatter
                         $token->spaceAfter = false;
                     }
                 }
+
+                // No spaces between variables and [
+                if ($token->next) {
+                    if ($token->is([T_VARIABLE, T_ROUND_BRACKET_CLOSE, T_STRING])
+                     && $token->next->is(T_SQUARE_BRACKET_OPEN)) {
+                        $token->spaceAfter = false;
+                    }
+                }
             }
         }
     }
@@ -166,6 +176,7 @@ class Psr12Whitespace extends BaseFormatter
         return [
             T_ROUND_BRACKET_CLOSE,
             T_SQUARE_BRACKET_CLOSE,
+            T_SEMICOLON,
         ];
     }
 
@@ -177,6 +188,7 @@ class Psr12Whitespace extends BaseFormatter
             T_AMPERSAND,
             T_ELLIPSIS,
             T_PIPE,
+            T_EXCLAMATION_POINT,
         ];
     }
 }

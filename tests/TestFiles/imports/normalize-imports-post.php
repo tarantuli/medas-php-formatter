@@ -2,17 +2,17 @@
 
 namespace MyNamespace;
 
-use \Absolute\ClassName;
-use \Absolute\Path\To\AnotherInterface;
-use \Absolute\ReturnType;
-use \Clashing\MyClass as ClaMyClass;
-use \Medas\Attributes\Types as Type;
-use \MyNamespace\This\Relative\Path\Is\Too\Deep;
-use \My\Clashing\ClassName as ClaClassName;
-use \My\Clavicle\ClassName as ClaClassName1;
-use \So\Many\Layers\Namespace as AliasedNamespace;
-use \YetAnotherNamespace\ClassName as AliasOfClassName;
-use \Your\Clashing\ClassName as ClaClassName2;
+use Absolute\ClassName;
+use Absolute\Path\To\AnotherInterface;
+use Absolute\ReturnType;
+use Clashing\MyClass as ClaMyClass;
+use Medas\Attributes\Types as Type;
+use MyNamespace\This\Relative\Path\Is\Too\Deep;
+use My\Clashing\ClassName as ClaClassName;
+use My\Clavicle\ClassName as ClaClassName1;
+use So\Many\Layers\Namespace as AliasedNamespace;
+use YetAnotherNamespace\ClassName as AliasOfClassName;
+use Your\Clashing\ClassName as ClaClassName2;
 
 class MyClass extends ChildNamespace\BaseClass implements Interfaces\MyInterface, AnotherInterface
 {
@@ -32,6 +32,7 @@ class MyClass extends ChildNamespace\BaseClass implements Interfaces\MyInterface
         }
 
         Deep::class;
+
         return AlsoRelative\ClassName::class;
     }
 

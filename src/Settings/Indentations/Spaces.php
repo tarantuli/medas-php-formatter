@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\PhpBeautifier\Settings\Indentations;
 
-class Space implements Indentation
+class Spaces implements Indentation
 {
     private string $indentation;
 

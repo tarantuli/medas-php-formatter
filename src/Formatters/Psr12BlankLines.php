@@ -90,9 +90,9 @@ class Psr12BlankLines extends BaseFormatter
                 $switchDepths = array_filter($switchDepths, fn($depth) => $depth !== $statement->block->depth + 1);
             }
 
-            // Add additional indentation to each statement equal to the number of open switch blocks
+            // Add additional depth levels to each statement equal to the number of open switch blocks
             // decreased by one if this statement itself is a case or default statement
-            $statement->additionalIndentation += count($switchDepths) - $type instanceof SwitchBranch;
+            $statement->additionalDepth += count($switchDepths) - $type instanceof SwitchBranch;
 
             if ($statement->firstToken()->is(T_SWITCH)) {
                 $switchDepths[] = $statement->block->depth + 1;

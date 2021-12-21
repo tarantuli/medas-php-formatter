@@ -40,7 +40,7 @@ class NewImportsInserter
         foreach ($referencesAndImports->imports as $fqn => $alias) {
             $statement = $tree->block()->appendNewStatement();
             $statement->appendToken((clone $baseToken)->id(T_USE)->text('use'));
-            $statement->appendToken((clone $baseToken)->id(T_NAME_QUALIFIED)->text($fqn));
+            $statement->appendToken((clone $baseToken)->id(T_NAME_QUALIFIED)->text(substr($fqn, 1)));
 
             if ($alias !== $this->fqnProperties->getLastPart($fqn)) {
                 $statement->appendToken((clone $baseToken)->id(T_AS)->text('as'));

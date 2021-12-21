@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\PhpBeautifier\Tokens\ClassAnalyser;
 
+use Medas\PhpBeautifier\Tokens\StatementTypeFinder;
 use Medas\PhpBeautifier\Tokens\StatementTypes\UseClassStatement;
 use Medas\PhpBeautifier\Tokens\Token;
 use Medas\PhpBeautifier\Tokens\TokenTree;
@@ -14,6 +15,7 @@ class ImportsFinder
 {
     public function __construct(
         private FqnProperties $fqnProperties,
+        private StatementTypeFinder $typeFinder,
     )
     {
     }
@@ -21,7 +23,7 @@ class ImportsFinder
     public function find(TokenTree $tree, ClassAnalysis $results)
     {
         foreach ($tree as $token) {
-            if ($token->is(T_USE) && $token->statement->type instanceof UseClassStatement) {
+            if ($token->is(T_USE) && $this->typeFinder->for($token->statement) instanceof UseClassStatement) {
                 $this->processImport($token->next, $results);
             }
         }

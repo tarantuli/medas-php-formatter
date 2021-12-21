@@ -7,7 +7,7 @@ namespace Medas\PhpBeautifier\Tokens\ClassAnalyser;
 class ClassAnalysis
 {
     public string $namespace = '';
-    public string $name;
+    public string|null $name = null;
     public string $fqn;
 
     public ClassReference $extends;

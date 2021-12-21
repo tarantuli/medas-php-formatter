@@ -72,7 +72,7 @@ class BlockPrinter
     {
         echo str_repeat(
             $this->indentation,
-            $statement->block->depth + $statement->additionalIndentation
+            $statement->block->depth + $statement->additionalDepth
         );
     }
 }

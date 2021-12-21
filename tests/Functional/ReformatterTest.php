@@ -35,9 +35,14 @@ class ReformatterTest extends BaseTest
         $this->assertRemainsTheSame('methods-and-functions', new Medas());
     }
 
-    public function testSquareBraces(): void
+    public function testParentheses(): void
     {
-        $this->assertRemainsTheSame('square-braces', new Medas());
+        $this->assertRemainsTheSame('parentheses', new Medas());
+    }
+
+    public function testSquareBrackets(): void
+    {
+        $this->assertRemainsTheSame('square-brackets', new Medas());
     }
 
     public function testVisibility(): void
@@ -58,7 +63,7 @@ class ReformatterTest extends BaseTest
 
     public function testComments(): void
     {
-        $this->assertRemainsTheSame('comments', new Psr12());
+        $this->assertRemainsTheSame('comments', new Medas());
     }
 
     public function testBasicPreformatted(): void

@@ -17,8 +17,10 @@ use Medas\PhpBeautifier\Tokens\StatementTypes\FunctionDeclaration;
 use Medas\PhpBeautifier\Tokens\StatementTypes\GenericStatement;
 use Medas\PhpBeautifier\Tokens\StatementTypes\NamespaceDeclaration;
 use Medas\PhpBeautifier\Tokens\StatementTypes\PhpOpenTag;
+use Medas\PhpBeautifier\Tokens\StatementTypes\ReturnStatement;
 use Medas\PhpBeautifier\Tokens\StatementTypes\StatementType;
 use Medas\PhpBeautifier\Tokens\StatementTypes\SwitchBranch;
+use Medas\PhpBeautifier\Tokens\StatementTypes\ThrowStatement;
 use Medas\PhpBeautifier\Tokens\StatementTypes\UseClassStatement;
 use Medas\PhpBeautifier\Tokens\StatementTypes\UseConstStatement;
 use Medas\PhpBeautifier\Tokens\StatementTypes\UseFunctionStatement;
@@ -114,6 +116,14 @@ class StatementTypeFinder
         if ($firstToken->is(T_DEFAULT) && !$secondToken->is(T_DOUBLE_ARROW)) {
             // A default followed by a double arrow is a match branch
             return new SwitchBranch();
+        }
+
+        if ($firstToken->is(T_RETURN)) {
+            return new ReturnStatement();
+        }
+
+        if ($firstToken->is(T_THROW)) {
+            return new ThrowStatement();
         }
 
         return new GenericStatement();

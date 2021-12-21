@@ -133,8 +133,8 @@ class StructureFinder
             $this->startNewStatementBeforeNext = true;
         }
 
-        if ($token->is(T_DOC_COMMENT) && substr_count($token->text, "\n") >= 1) {
-            // Thiss is a multi-line doccomment, hext token starts a new statement
+        if ($token->is(T_DOC_COMMENT) && $token->isFirstToken()) {
+            // This is a doccomment at the start of a statement, hext token starts a new statement
             $this->startNewStatementBeforeNext = true;
         }
 

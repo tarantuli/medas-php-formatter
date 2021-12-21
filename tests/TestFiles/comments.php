@@ -3,6 +3,9 @@
 // Comment flush left
 class A
 {
+    /** @var Type[]  */
+    private array $int;
+
     /**
      * Doccomment for method startsWithDoccomment()
      */

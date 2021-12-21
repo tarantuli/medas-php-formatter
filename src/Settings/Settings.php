@@ -7,7 +7,7 @@ namespace Medas\PhpBeautifier\Settings;
 use Medas\PhpBeautifier\Formatters\Formatter;
 use Medas\PhpBeautifier\Formatters\RequiredWhitespace;
 use Medas\PhpBeautifier\Preparsers\Preparser;
-use Medas\PhpBeautifier\Settings\Indentations\Space;
+use Medas\PhpBeautifier\Settings\Indentations\Spaces;
 use Medas\PhpBeautifier\Settings\LineEndings\LineFeed;
 
 class Settings
@@ -27,7 +27,7 @@ class Settings
         $this->import = new ImportSettings();
 
         $this->document->setLineEnding(new LineFeed())
-            ->setIndentation(new Space(4));
+            ->setIndentation(new Spaces(4));
 
         $this->addFormatter(service(RequiredWhitespace::class));
     }

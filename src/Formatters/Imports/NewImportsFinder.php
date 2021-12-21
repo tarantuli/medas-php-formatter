@@ -16,7 +16,7 @@ class NewImportsFinder
     {
     }
 
-    public function determine(ReferencesAndImports $referencesAndImports, string $className)
+    public function determine(ReferencesAndImports $referencesAndImports, string|null $className)
     {
         foreach ($referencesAndImports->references as $fqn => $label) {
             if ($label !== null) {
