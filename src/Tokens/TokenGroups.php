@@ -150,6 +150,7 @@ class TokenGroups
                 T_ASSIGNMENT,
                 T_AT,
                 T_COLON,
+                T_PAAMAYIM_NEKUDOTAYIM,
                 T_COMMA,
                 T_DOLLAR,
                 T_DOUBLE_ARROW,
@@ -259,6 +260,7 @@ class TokenGroups
             T_LNUMBER,
             T_DNUMBER,
             T_STRING,
+            T_STRING_VARNAME,
         ];
     }
 
