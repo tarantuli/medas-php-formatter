@@ -20,7 +20,7 @@ class Psr12ElseifWhile extends BaseFormatter
 
     public function format(TokenTree $tree): void
     {
-        foreach ($tree->block() as $statement) {
+        foreach ($tree->statements() as $statement) {
             if ($statement->firstToken()->is([T_ELSE, T_ELSEIF])) {
                 $statement->mergeWithPrevious();
             }

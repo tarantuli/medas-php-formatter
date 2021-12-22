@@ -26,7 +26,7 @@ class Psr12VisibilityMarkers extends BaseFormatter
 
     private function sortVisibilityMarkers(TokenTree $tree): void
     {
-        foreach ($tree->block() as $statement) {
+        foreach ($tree->statements() as $statement) {
             if (!$this->typeFinder->for($statement) instanceof FunctionDeclaration) {
                 continue;
             }

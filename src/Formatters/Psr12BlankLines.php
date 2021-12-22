@@ -45,7 +45,7 @@ class Psr12BlankLines extends BaseFormatter
 
     private function additionalLines(TokenTree $tree): void
     {
-        foreach ($tree->block() as $statement) {
+        foreach ($tree->statements() as $statement) {
             $type = $this->typeFinder->for($statement);
 
             if ($type instanceof ClassDeclaration) {
@@ -83,7 +83,7 @@ class Psr12BlankLines extends BaseFormatter
     {
         $switchDepths = [];
 
-        foreach ($tree->block() as $statement) {
+        foreach ($tree->statements() as $statement) {
             $type = $this->typeFinder->for($statement);
 
             if ($statement->firstToken()->is(T_CURLY_BRACKET_CLOSE)) {

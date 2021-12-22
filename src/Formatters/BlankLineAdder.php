@@ -26,7 +26,7 @@ class BlankLineAdder
 
     public function afterTypes(TokenTree $tree, array $afterTypes): void
     {
-        foreach ($tree->block() as $statement) {
+        foreach ($tree->statements() as $statement) {
             $type = $this->statementTypeFinder->for($statement);
 
             foreach ($afterTypes as $groupType) {
@@ -47,7 +47,7 @@ class BlankLineAdder
 
     public function beforeTypes(TokenTree $tree, array $beforeTypes): void
     {
-        foreach ($tree->block() as $statement) {
+        foreach ($tree->statements() as $statement) {
             $type = $this->statementTypeFinder->for($statement);
 
             foreach ($beforeTypes as $groupType) {

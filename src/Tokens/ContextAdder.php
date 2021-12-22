@@ -29,7 +29,7 @@ class ContextAdder
         $nextStatementIsClassBody = false;
         $nextStatementIsMethodBody = false;
 
-        foreach ($tree->block() as $statement) {
+        foreach ($tree->statements() as $statement) {
             if ($statement->block->depth === $globalScopeDepth) {
                 $context = new GlobalScope();
                 $globalScopeDepth = null;

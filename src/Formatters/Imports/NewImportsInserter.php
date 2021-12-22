@@ -56,7 +56,7 @@ class NewImportsInserter
 
     private function removeExistingImportStatements(TokenTree $tree): void
     {
-        foreach ($tree->block() as $statement) {
+        foreach ($tree->statements() as $statement) {
             if ($this->statementTypeFinder->for($statement) instanceof UseClassStatement) {
                 $tree->block()->removeStatement($statement, true);
             }
@@ -78,7 +78,7 @@ class NewImportsInserter
 
     private function getStatementByType(TokenTree $tree, string $type): Statement|null
     {
-        foreach ($tree->block() as $statement) {
+        foreach ($tree->statements() as $statement) {
             if ($this->statementTypeFinder->for($statement) instanceof $type) {
                 return $statement;
             }

@@ -57,6 +57,12 @@ class TokenTree implements \IteratorAggregate
         $this->doResetLinks = true;
     }
 
+    public function statements(): Block
+    {
+        // This method helps with readability in: foreach ($tree->statements() as $statement)
+        return $this->block;
+    }
+
     public function block(): Block
     {
         return $this->block;
