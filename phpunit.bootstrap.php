@@ -3,18 +3,11 @@
 declare(strict_types=1);
 
 use Medas\ConfigManager\ConfigManager;
-use Medas\Core\Cli;
-use Medas\FileSystem\TemporaryFiles;
-use Medas\PhpBeautifier\PhpBeautifier;
+use Medas\PhpBeautifier\PhpFormatterPackage;
 use Medas\ServiceManager\ServiceManager;
 
 $sm = ServiceManager::get();
-$sm->addPackages([
-    PhpBeautifier::class,
-    ConfigManager::class,
-    TemporaryFiles::class,
-    Cli::class,
-]);
+$sm->addPackage(new PhpFormatterPackage());
 
 service(ConfigManager::class)
     ->readEnv(__DIR__)

@@ -28,6 +28,8 @@ class Formatter
 
     public function format(string $code, Settings\Settings $settings): string
     {
+        $this->assertCodeIsValid($code);
+
         $this->settings = $settings;
 
         $tokens = $this->tokenizer->tokenize($code);
@@ -50,6 +52,13 @@ class Formatter
         return $result;
     }
 
+    private function assertCodeIsValid(string $code): void
+    {
+        if (!$this->codeValidator->validate($code)) {
+            throw new ReformattedCodeIsInvalidException($code, $this->codeValidator->getErrorMessage());
+        }
+    }
+
     private function applyPreparsers(TokenCollection $tokens): void
     {
         foreach ($this->settings->preparsers() as $preparser) {
@@ -61,13 +70,6 @@ class Formatter
     {
         foreach ($this->settings->formatters() as $formatter) {
             $formatter->format($tree);
-        }
-    }
-
-    private function assertCodeIsValid(string $code): void
-    {
-        if (!$this->codeValidator->validate($code)) {
-            throw new ReformattedCodeIsInvalidException($code, $this->codeValidator->getErrorMessage());
         }
     }
 

@@ -1,6 +1,6 @@
 {
-    "name": "morphp/medas-php-beautifier",
-    "description": "Medas PHP beautifier",
+    "name": "morphp/medas-php-formatter",
+    "description": "Medas PHP formatter",
     "authors": [
         {
             "name": "Patrick Morpey",
