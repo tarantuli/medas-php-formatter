@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Medas\PhpBeautifier\Settings;
+namespace Medas\PhpFormatter\Settings;
 
 use Medas\ServiceManager\Attributes\Service;
 

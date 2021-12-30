@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Medas\PhpBeautifier\Preparsers;
+namespace Medas\PhpFormatter\Preparsers;
 
-use Medas\PhpBeautifier\Formatters\MoveCommentsAtLineEnd;
-use Medas\PhpBeautifier\Tokens\TokenCollection;
+use Medas\PhpFormatter\Formatters\MoveCommentsAtLineEnd;
+use Medas\PhpFormatter\Tokens\TokenCollection;
 use Medas\ServiceManager\Attributes\Service;
 
 #[Service]

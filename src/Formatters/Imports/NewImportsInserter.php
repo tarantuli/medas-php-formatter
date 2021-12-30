@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace Medas\PhpBeautifier\Formatters\Imports;
+namespace Medas\PhpFormatter\Formatters\Imports;
 
-use Medas\PhpBeautifier\Tokens\ClassAnalyser\FqnProperties;
-use Medas\PhpBeautifier\Tokens\Contexts\GlobalScope;
-use Medas\PhpBeautifier\Tokens\Statement;
-use Medas\PhpBeautifier\Tokens\StatementTypeFinder;
-use Medas\PhpBeautifier\Tokens\StatementTypes\DeclareStatement;
-use Medas\PhpBeautifier\Tokens\StatementTypes\NamespaceDeclaration;
-use Medas\PhpBeautifier\Tokens\StatementTypes\PhpOpenTag;
-use Medas\PhpBeautifier\Tokens\StatementTypes\UseClassStatement;
-use Medas\PhpBeautifier\Tokens\Token;
-use Medas\PhpBeautifier\Tokens\TokenTree;
+use Medas\PhpFormatter\Tokens\ClassAnalyser\FqnProperties;
+use Medas\PhpFormatter\Tokens\Contexts\GlobalScope;
+use Medas\PhpFormatter\Tokens\Statement;
+use Medas\PhpFormatter\Tokens\StatementTypeFinder;
+use Medas\PhpFormatter\Tokens\StatementTypes\DeclareStatement;
+use Medas\PhpFormatter\Tokens\StatementTypes\NamespaceDeclaration;
+use Medas\PhpFormatter\Tokens\StatementTypes\PhpOpenTag;
+use Medas\PhpFormatter\Tokens\StatementTypes\UseClassStatement;
+use Medas\PhpFormatter\Tokens\Token;
+use Medas\PhpFormatter\Tokens\TokenTree;
 use Medas\ServiceManager\Attributes\Service;
 
 #[Service]

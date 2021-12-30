@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Medas\PhpBeautifier\Formatters;
+namespace Medas\PhpFormatter\Formatters;
 
-use Medas\PhpBeautifier\Tokens\Statement;
-use Medas\PhpBeautifier\Tokens\StatementTypeFinder;
-use Medas\PhpBeautifier\Tokens\TokenTree;
+use Medas\PhpFormatter\Tokens\Statement;
+use Medas\PhpFormatter\Tokens\StatementTypeFinder;
+use Medas\PhpFormatter\Tokens\TokenTree;
 use Medas\ServiceManager\Attributes\Service;
 
 #[Service]

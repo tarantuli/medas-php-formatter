@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Medas\PhpBeautifier\Formatters;
+namespace Medas\PhpFormatter\Formatters;
 
-use Medas\PhpBeautifier\Tokens\Statement;
-use Medas\PhpBeautifier\Tokens\StatementTypeFinder;
-use Medas\PhpBeautifier\Tokens\StatementTypes\Comment;
-use Medas\PhpBeautifier\Tokens\StatementTypes\StatementType;
-use Medas\PhpBeautifier\Tokens\StatementTypes\SwitchBranch;
-use Medas\PhpBeautifier\Tokens\TokenTree;
+use Medas\PhpFormatter\Tokens\Statement;
+use Medas\PhpFormatter\Tokens\StatementTypeFinder;
+use Medas\PhpFormatter\Tokens\StatementTypes\Comment;
+use Medas\PhpFormatter\Tokens\StatementTypes\StatementType;
+use Medas\PhpFormatter\Tokens\StatementTypes\SwitchBranch;
+use Medas\PhpFormatter\Tokens\TokenTree;
 use Medas\ServiceManager\Attributes\Service;
 
 #[Service]

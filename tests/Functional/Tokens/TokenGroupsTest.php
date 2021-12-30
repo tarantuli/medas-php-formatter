@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\Test\Functional\Tokens;
 
-use Medas\PhpBeautifier\Tokens\TokenGroups;
+use Medas\PhpFormatter\Tokens\TokenGroups;
 use Medas\Test\Functional\BaseTest;
 
 class TokenGroupsTest extends BaseTest

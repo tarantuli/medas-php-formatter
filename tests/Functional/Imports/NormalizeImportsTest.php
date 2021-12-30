@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Medas\Test\Functional\Imports;
 
-use Medas\PhpBeautifier\Formatters\Imports\NormalizeImports;
-use Medas\PhpBeautifier\Settings\Medas;
+use Medas\PhpFormatter\Formatters\Imports\NormalizeImports;
+use Medas\PhpFormatter\Settings\Medas;
 use Medas\Test\Functional\BaseTest;
 
 class NormalizeImportsTest extends BaseTest

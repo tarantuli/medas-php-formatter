@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Medas\PhpBeautifier;
+namespace Medas\PhpFormatter;
 
 use Medas\Core\System;
 use Medas\FileSystem\TemporaryFiles;
-use Medas\PhpBeautifier\Exceptions\CannotRunCommandLineException;
+use Medas\PhpFormatter\Exceptions\CannotRunCommandLineException;
 use Medas\ServiceManager\Attributes\ConfigValue;
 use Medas\ServiceManager\Attributes\Service;
 

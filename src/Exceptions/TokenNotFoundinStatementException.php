@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Medas\PhpBeautifier\Exceptions;
+namespace Medas\PhpFormatter\Exceptions;
 
 use Medas\Core\Exceptions\BaseException;
-use Medas\PhpBeautifier\Tokens\Statement;
-use Medas\PhpBeautifier\Tokens\Token;
+use Medas\PhpFormatter\Tokens\Statement;
+use Medas\PhpFormatter\Tokens\Token;
 
 class TokenNotFoundinStatementException extends BaseException
 {

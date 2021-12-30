@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Medas\PhpBeautifier\Settings\Indentations;
+namespace Medas\PhpFormatter\Settings\Indentations;
 
 class Spaces implements Indentation
 {

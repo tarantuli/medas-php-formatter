@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Medas\PhpBeautifier\Tokens;
+namespace Medas\PhpFormatter\Tokens;
 
-use Medas\PhpBeautifier\Tokens\ClassAnalyser\ClassAnalyser;
-use Medas\PhpBeautifier\Tokens\ClassAnalyser\ClassAnalysis;
+use Medas\PhpFormatter\Tokens\ClassAnalyser\ClassAnalyser;
+use Medas\PhpFormatter\Tokens\ClassAnalyser\ClassAnalysis;
 use Medas\ServiceManager\Attributes\Service;
 
 #[Service]

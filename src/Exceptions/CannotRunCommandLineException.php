@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Medas\PhpBeautifier\Exceptions;
+namespace Medas\PhpFormatter\Exceptions;
 
 use Medas\Core\Exceptions\BaseException;
 

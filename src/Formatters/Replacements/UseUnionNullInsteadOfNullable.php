@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Medas\PhpBeautifier\Formatters\Replacements;
+namespace Medas\PhpFormatter\Formatters\Replacements;
 
-use Medas\PhpBeautifier\Formatters\BaseFormatter;
-use Medas\PhpBeautifier\Tokens\TokenTree;
+use Medas\PhpFormatter\Formatters\BaseFormatter;
+use Medas\PhpFormatter\Tokens\TokenTree;
 use Medas\ServiceManager\Attributes\Service;
 
 /**

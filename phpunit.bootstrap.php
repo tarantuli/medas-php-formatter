@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use Medas\ConfigManager\ConfigManager;
-use Medas\PhpBeautifier\PhpFormatterPackage;
+use Medas\PhpFormatter\PhpFormatterPackage;
 use Medas\ServiceManager\ServiceManager;
 
 $sm = ServiceManager::get();

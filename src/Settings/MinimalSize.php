@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Medas\PhpBeautifier\Settings;
+namespace Medas\PhpFormatter\Settings;
 
-use Medas\PhpBeautifier\Settings\Indentations\NoIndentation;
-use Medas\PhpBeautifier\Settings\LineEndings\NoLineEnding;
+use Medas\PhpFormatter\Settings\Indentations\NoIndentation;
+use Medas\PhpFormatter\Settings\LineEndings\NoLineEnding;
 
 class MinimalSize extends Settings
 {

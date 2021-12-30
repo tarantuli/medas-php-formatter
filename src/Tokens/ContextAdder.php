@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Medas\PhpBeautifier\Tokens;
+namespace Medas\PhpFormatter\Tokens;
 
-use Medas\PhpBeautifier\Tokens\Contexts\ClassBody;
-use Medas\PhpBeautifier\Tokens\Contexts\GlobalScope;
-use Medas\PhpBeautifier\Tokens\StatementTypes\ClassDeclaration;
-use Medas\PhpBeautifier\Tokens\StatementTypes\FunctionDeclaration;
-use Medas\PhpBeautifier\Tokens\StatementTypes\UseClassStatement;
-use Medas\PhpBeautifier\Tokens\StatementTypes\UseTraitStatement;
+use Medas\PhpFormatter\Tokens\Contexts\ClassBody;
+use Medas\PhpFormatter\Tokens\Contexts\GlobalScope;
+use Medas\PhpFormatter\Tokens\StatementTypes\ClassDeclaration;
+use Medas\PhpFormatter\Tokens\StatementTypes\FunctionDeclaration;
+use Medas\PhpFormatter\Tokens\StatementTypes\UseClassStatement;
+use Medas\PhpFormatter\Tokens\StatementTypes\UseTraitStatement;
 use Medas\ServiceManager\Attributes\Service;
 
 #[Service]

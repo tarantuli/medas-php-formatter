@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Medas\PhpBeautifier\Formatters;
+namespace Medas\PhpFormatter\Formatters;
 
-use Medas\PhpBeautifier\Tokens\Contexts\MethodReturnType;
-use Medas\PhpBeautifier\Tokens\StatementTypeFinder;
-use Medas\PhpBeautifier\Tokens\StatementTypes\ClassPropertyDeclaration;
-use Medas\PhpBeautifier\Tokens\StatementTypes\DeclareStatement;
-use Medas\PhpBeautifier\Tokens\StatementTypes\FunctionDeclaration;
-use Medas\PhpBeautifier\Tokens\StatementTypes\SwitchBranch;
-use Medas\PhpBeautifier\Tokens\TokenGroups;
-use Medas\PhpBeautifier\Tokens\TokenTree;
+use Medas\PhpFormatter\Tokens\Contexts\MethodReturnType;
+use Medas\PhpFormatter\Tokens\StatementTypeFinder;
+use Medas\PhpFormatter\Tokens\StatementTypes\ClassPropertyDeclaration;
+use Medas\PhpFormatter\Tokens\StatementTypes\DeclareStatement;
+use Medas\PhpFormatter\Tokens\StatementTypes\FunctionDeclaration;
+use Medas\PhpFormatter\Tokens\StatementTypes\SwitchBranch;
+use Medas\PhpFormatter\Tokens\TokenGroups;
+use Medas\PhpFormatter\Tokens\TokenTree;
 use Medas\ServiceManager\Attributes\Service;
 
 #[Service]

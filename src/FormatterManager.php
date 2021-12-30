@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Medas\PhpBeautifier;
+namespace Medas\PhpFormatter;
 
-use Medas\PhpBeautifier\Tokens\AdditionalTokensDefiner;
+use Medas\PhpFormatter\Tokens\AdditionalTokensDefiner;
 use Medas\ServiceManager\Attributes\Service;
 
 #[Service]
-class PhpBeautifier
+class FormatterManager
 {
     private Settings\Settings $settings;
 
@@ -19,7 +19,7 @@ class PhpBeautifier
         $this->settings = new Settings\Medas();
     }
 
-    public function beautify(string $code, Settings\Settings $settings = null): string
+    public function format(string $code, Settings\Settings $settings = null): string
     {
         $settings ??= $this->settings;
 

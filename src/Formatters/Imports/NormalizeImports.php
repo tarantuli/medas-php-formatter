@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Medas\PhpBeautifier\Formatters\Imports;
+namespace Medas\PhpFormatter\Formatters\Imports;
 
-use Medas\PhpBeautifier\Formatter;
-use Medas\PhpBeautifier\Formatters\BaseFormatter;
-use Medas\PhpBeautifier\Tokens\ClassAnalyser\ClassAnalyser;
-use Medas\PhpBeautifier\Tokens\TokenTree;
+use Medas\PhpFormatter\Formatter;
+use Medas\PhpFormatter\Formatters\BaseFormatter;
+use Medas\PhpFormatter\Tokens\ClassAnalyser\ClassAnalyser;
+use Medas\PhpFormatter\Tokens\TokenTree;
 use Medas\ServiceManager\Attributes\Service;
 
 /**

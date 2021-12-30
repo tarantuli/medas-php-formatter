@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Medas\PhpBeautifier\Tokens\Contexts;
+namespace Medas\PhpFormatter\Tokens\Contexts;
 
 class ClassBody implements Context
 {

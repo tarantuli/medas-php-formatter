@@ -11,7 +11,7 @@
     "require": {
         "morphp/medas-core": "@dev",
         "morphp/medas-config-manager": "@dev",
-        "morphp/medas-filesystem": "@dev",
+        "morphp/medas-file-system": "@dev",
         "morphp/medas-service-manager": "@dev"
     },
     "require-dev": {
@@ -28,7 +28,7 @@
         },
         {
             "type": "path",
-            "url": "../filesystem"
+            "url": "../file-system"
         },
         {
             "type": "path",
@@ -37,7 +37,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "Medas\\PhpBeautifier\\": "src/",
+            "Medas\\PhpFormatter\\": "../src/PhpFormatter/",
             "Medas\\Test\\": "tests/"
         }
     }

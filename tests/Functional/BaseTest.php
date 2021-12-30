@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Medas\Test\Functional;
 
-use Medas\PhpBeautifier\PhpBeautifier;
-use Medas\PhpBeautifier\Settings\Settings;
+use Medas\PhpFormatter\FormatterManager;
+use Medas\PhpFormatter\Settings\Settings;
 use PHPUnit\Framework\TestCase;
 
 abstract class BaseTest extends TestCase
@@ -28,12 +28,12 @@ abstract class BaseTest extends TestCase
 
     protected function format(string $sourceFile, string $expectedFile, Settings $settings): array
     {
-        $phpReformatter = service(PhpBeautifier::class);
+        $formatterManager = service(FormatterManager::class);
         $source = file_get_contents(__DIR__ . '/../TestFiles/' . $sourceFile . '.php');
 
         $expected = file_get_contents(__DIR__ . '/../TestFiles/' . $expectedFile . '.php');
 
-        return [$phpReformatter->beautify($source, $settings), $expected];
+        return [$formatterManager->format($source, $settings), $expected];
     }
 
     protected function assertChanges(string $sourceFile, string $targetFile, Settings $settings)

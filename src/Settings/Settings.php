@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Medas\PhpBeautifier\Settings;
+namespace Medas\PhpFormatter\Settings;
 
-use Medas\PhpBeautifier\Formatters\Formatter;
-use Medas\PhpBeautifier\Formatters\RequiredWhitespace;
-use Medas\PhpBeautifier\Preparsers\Preparser;
-use Medas\PhpBeautifier\Settings\Indentations\Spaces;
-use Medas\PhpBeautifier\Settings\LineEndings\LineFeed;
+use Medas\PhpFormatter\Formatters\Formatter;
+use Medas\PhpFormatter\Formatters\RequiredWhitespace;
+use Medas\PhpFormatter\Preparsers\Preparser;
+use Medas\PhpFormatter\Settings\Indentations\Spaces;
+use Medas\PhpFormatter\Settings\LineEndings\LineFeed;
 
 class Settings
 {

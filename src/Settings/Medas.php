@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Medas\PhpBeautifier\Settings;
+namespace Medas\PhpFormatter\Settings;
 
-use Medas\PhpBeautifier\Formatters\BlankLinesBeforeBlocks;
-use Medas\PhpBeautifier\Formatters\BlankLinesBetweenClassSections;
-use Medas\PhpBeautifier\Formatters\Imports\NormalizeImports;
-use Medas\PhpBeautifier\Formatters\Replacements\UseExitInsteadOfDie;
-use Medas\PhpBeautifier\Preparsers\NoCommentsAtLineEnd;
+use Medas\PhpFormatter\Formatters\BlankLinesBeforeBlocks;
+use Medas\PhpFormatter\Formatters\BlankLinesBetweenClassSections;
+use Medas\PhpFormatter\Formatters\Imports\NormalizeImports;
+use Medas\PhpFormatter\Formatters\Replacements\UseExitInsteadOfDie;
+use Medas\PhpFormatter\Preparsers\NoCommentsAtLineEnd;
 
 class Medas extends Psr12
 {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Medas\PhpBeautifier\Tokens\StatementTypes;
+namespace Medas\PhpFormatter\Tokens\StatementTypes;
 
 class ClassPropertyDeclaration implements StatementType
 {

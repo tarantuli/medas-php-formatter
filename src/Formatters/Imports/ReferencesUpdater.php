@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Medas\PhpBeautifier\Formatters\Imports;
+namespace Medas\PhpFormatter\Formatters\Imports;
 
-use Medas\PhpBeautifier\Tokens\TokenTree;
+use Medas\PhpFormatter\Tokens\TokenTree;
 use Medas\ServiceManager\Attributes\Service;
 
 #[Service]

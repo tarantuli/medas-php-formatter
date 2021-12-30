@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Medas\PhpBeautifier\Settings;
+namespace Medas\PhpFormatter\Settings;
 
-use Medas\PhpBeautifier\Settings\Indentations\Indentation;
-use Medas\PhpBeautifier\Settings\LineEndings\LineEnding;
+use Medas\PhpFormatter\Settings\Indentations\Indentation;
+use Medas\PhpFormatter\Settings\LineEndings\LineEnding;
 
 class DocumentSettings
 {

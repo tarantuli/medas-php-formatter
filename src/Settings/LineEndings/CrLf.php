@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Medas\PhpBeautifier\Settings\LineEndings;
+namespace Medas\PhpFormatter\Settings\LineEndings;
 
 class CrLf implements LineEnding
 {

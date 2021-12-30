@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Medas\PhpBeautifier\Tokens;
+namespace Medas\PhpFormatter\Tokens;
 
-use Medas\PhpBeautifier\Exceptions\TokenNotFoundinStatementException;
-use Medas\PhpBeautifier\Tokens\StatementTypes\StatementType;
+use Medas\PhpFormatter\Exceptions\TokenNotFoundinStatementException;
+use Medas\PhpFormatter\Tokens\StatementTypes\StatementType;
 
 class Statement implements \IteratorAggregate
 {

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Medas\PhpBeautifier;
+namespace Medas\PhpFormatter;
 
-use Medas\PhpBeautifier\Tokens\Block;
-use Medas\PhpBeautifier\Tokens\Statement;
+use Medas\PhpFormatter\Tokens\Block;
+use Medas\PhpFormatter\Tokens\Statement;
 use Medas\ServiceManager\Attributes\Service;
 
 #[Service]

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Medas\PhpBeautifier\Tokens\ClassAnalyser;
+namespace Medas\PhpFormatter\Tokens\ClassAnalyser;
 
 use Medas\ServiceManager\Attributes\Service;
 

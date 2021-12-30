@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Medas\PhpBeautifier\Formatters;
+namespace Medas\PhpFormatter\Formatters;
 
-use Medas\PhpBeautifier\Tokens\StatementTypes\ControlStatement;
-use Medas\PhpBeautifier\Tokens\StatementTypes\ReturnStatement;
-use Medas\PhpBeautifier\Tokens\StatementTypes\ThrowStatement;
-use Medas\PhpBeautifier\Tokens\TokenTree;
+use Medas\PhpFormatter\Tokens\StatementTypes\ControlStatement;
+use Medas\PhpFormatter\Tokens\StatementTypes\ReturnStatement;
+use Medas\PhpFormatter\Tokens\StatementTypes\ThrowStatement;
+use Medas\PhpFormatter\Tokens\TokenTree;
 use Medas\ServiceManager\Attributes\Service;
 
 #[Service]

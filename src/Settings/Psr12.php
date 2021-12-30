@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Medas\PhpBeautifier\Settings;
+namespace Medas\PhpFormatter\Settings;
 
-use Medas\PhpBeautifier\Formatters\KeywordsToLowercase;
-use Medas\PhpBeautifier\Formatters\Psr12BlankLines;
-use Medas\PhpBeautifier\Formatters\Psr12ElseifWhile;
-use Medas\PhpBeautifier\Formatters\Psr12VisibilityMarkers;
-use Medas\PhpBeautifier\Formatters\Psr12Whitespace;
+use Medas\PhpFormatter\Formatters\KeywordsToLowercase;
+use Medas\PhpFormatter\Formatters\Psr12BlankLines;
+use Medas\PhpFormatter\Formatters\Psr12ElseifWhile;
+use Medas\PhpFormatter\Formatters\Psr12VisibilityMarkers;
+use Medas\PhpFormatter\Formatters\Psr12Whitespace;
 
 class Psr12 extends Settings
 {

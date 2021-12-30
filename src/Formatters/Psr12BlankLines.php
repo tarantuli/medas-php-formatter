@@ -2,20 +2,20 @@
 
 declare(strict_types=1);
 
-namespace Medas\PhpBeautifier\Formatters;
+namespace Medas\PhpFormatter\Formatters;
 
-use Medas\PhpBeautifier\Tokens\StatementTypeFinder;
-use Medas\PhpBeautifier\Tokens\StatementTypes\BlockCloser;
-use Medas\PhpBeautifier\Tokens\StatementTypes\ClassDeclaration;
-use Medas\PhpBeautifier\Tokens\StatementTypes\DeclareStatement;
-use Medas\PhpBeautifier\Tokens\StatementTypes\FunctionDeclaration;
-use Medas\PhpBeautifier\Tokens\StatementTypes\NamespaceDeclaration;
-use Medas\PhpBeautifier\Tokens\StatementTypes\PhpOpenTag;
-use Medas\PhpBeautifier\Tokens\StatementTypes\SwitchBranch;
-use Medas\PhpBeautifier\Tokens\StatementTypes\UseClassStatement;
-use Medas\PhpBeautifier\Tokens\StatementTypes\UseConstStatement;
-use Medas\PhpBeautifier\Tokens\StatementTypes\UseFunctionStatement;
-use Medas\PhpBeautifier\Tokens\TokenTree;
+use Medas\PhpFormatter\Tokens\StatementTypeFinder;
+use Medas\PhpFormatter\Tokens\StatementTypes\BlockCloser;
+use Medas\PhpFormatter\Tokens\StatementTypes\ClassDeclaration;
+use Medas\PhpFormatter\Tokens\StatementTypes\DeclareStatement;
+use Medas\PhpFormatter\Tokens\StatementTypes\FunctionDeclaration;
+use Medas\PhpFormatter\Tokens\StatementTypes\NamespaceDeclaration;
+use Medas\PhpFormatter\Tokens\StatementTypes\PhpOpenTag;
+use Medas\PhpFormatter\Tokens\StatementTypes\SwitchBranch;
+use Medas\PhpFormatter\Tokens\StatementTypes\UseClassStatement;
+use Medas\PhpFormatter\Tokens\StatementTypes\UseConstStatement;
+use Medas\PhpFormatter\Tokens\StatementTypes\UseFunctionStatement;
+use Medas\PhpFormatter\Tokens\TokenTree;
 use Medas\ServiceManager\Attributes\Service;
 
 #[Service]

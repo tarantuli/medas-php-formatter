@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Medas\Test\Functional;
 
-use Medas\PhpBeautifier\Formatters\Replacements\UseDieInsteadOfExit;
-use Medas\PhpBeautifier\Formatters\Replacements\UseExitInsteadOfDie;
-use Medas\PhpBeautifier\Formatters\Replacements\UseImplodeInsteadOfJoin;
-use Medas\PhpBeautifier\Settings\Psr12;
+use Medas\PhpFormatter\Formatters\Replacements\UseDieInsteadOfExit;
+use Medas\PhpFormatter\Formatters\Replacements\UseExitInsteadOfDie;
+use Medas\PhpFormatter\Formatters\Replacements\UseImplodeInsteadOfJoin;
+use Medas\PhpFormatter\Settings\Psr12;
 
 class TokenReplacementTest extends BaseTest
 {

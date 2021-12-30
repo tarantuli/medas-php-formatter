@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Medas\PhpBeautifier\Formatters\Replacements;
+namespace Medas\PhpFormatter\Formatters\Replacements;
 
-use Medas\PhpBeautifier\Formatters\BaseFormatter;
-use Medas\PhpBeautifier\Tokens\Token;
-use Medas\PhpBeautifier\Tokens\TokenTree;
+use Medas\PhpFormatter\Formatters\BaseFormatter;
+use Medas\PhpFormatter\Tokens\Token;
+use Medas\PhpFormatter\Tokens\TokenTree;
 
 abstract class BaseTokenReplacer extends BaseFormatter
 {

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Medas\PhpBeautifier\Formatters\Replacements;
+namespace Medas\PhpFormatter\Formatters\Replacements;
 
-use Medas\PhpBeautifier\Tokens\Token;
+use Medas\PhpFormatter\Tokens\Token;
 use Medas\ServiceManager\Attributes\Service;
 
 #[Service]

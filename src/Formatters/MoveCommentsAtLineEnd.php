@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Medas\PhpBeautifier\Formatters;
+namespace Medas\PhpFormatter\Formatters;
 
-use Medas\PhpBeautifier\Preparsers\NoCommentsAtLineEnd;
-use Medas\PhpBeautifier\Tokens\TokenTree;
+use Medas\PhpFormatter\Preparsers\NoCommentsAtLineEnd;
+use Medas\PhpFormatter\Tokens\TokenTree;
 use Medas\ServiceManager\Attributes\Service;
 
 /**

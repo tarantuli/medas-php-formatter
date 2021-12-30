@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Medas\PhpBeautifier;
+namespace Medas\PhpFormatter;
 
 use Medas\ConfigManager\ConfigManagerPackage;
 use Medas\Core\CorePackage;

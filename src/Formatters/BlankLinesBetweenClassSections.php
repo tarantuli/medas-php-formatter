@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Medas\PhpBeautifier\Formatters;
+namespace Medas\PhpFormatter\Formatters;
 
-use Medas\PhpBeautifier\Tokens\StatementTypes\ClassConstDeclaration;
-use Medas\PhpBeautifier\Tokens\StatementTypes\ClassPropertyDeclaration;
-use Medas\PhpBeautifier\Tokens\StatementTypes\Comment;
-use Medas\PhpBeautifier\Tokens\StatementTypes\UseTraitStatement;
-use Medas\PhpBeautifier\Tokens\TokenTree;
+use Medas\PhpFormatter\Tokens\StatementTypes\ClassConstDeclaration;
+use Medas\PhpFormatter\Tokens\StatementTypes\ClassPropertyDeclaration;
+use Medas\PhpFormatter\Tokens\StatementTypes\Comment;
+use Medas\PhpFormatter\Tokens\StatementTypes\UseTraitStatement;
+use Medas\PhpFormatter\Tokens\TokenTree;
 use Medas\ServiceManager\Attributes\Service;
 
 #[Service]

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\Test\Functional;
 
-use Medas\PhpBeautifier\Tokens\Tokenizer;
+use Medas\PhpFormatter\Tokens\Tokenizer;
 use PHPUnit\Framework\TestCase;
 
 class TokenCollectionTest extends TestCase

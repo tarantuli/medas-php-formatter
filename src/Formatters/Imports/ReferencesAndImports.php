@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Medas\PhpBeautifier\Formatters\Imports;
+namespace Medas\PhpFormatter\Formatters\Imports;
 
 class ReferencesAndImports
 {

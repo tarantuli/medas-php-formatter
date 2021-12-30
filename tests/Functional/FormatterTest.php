@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Medas\Test\Functional;
 
-use Medas\PhpBeautifier\Settings\Medas;
-use Medas\PhpBeautifier\Settings\MinimalSize;
-use Medas\PhpBeautifier\Settings\Psr12;
+use Medas\PhpFormatter\Settings\Medas;
+use Medas\PhpFormatter\Settings\MinimalSize;
+use Medas\PhpFormatter\Settings\Psr12;
 
-class ReformatterTest extends BaseTest
+class FormatterTest extends BaseTest
 {
     public function testEmptyMethodBody(): void
     {

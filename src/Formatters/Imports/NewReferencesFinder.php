@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Medas\PhpBeautifier\Formatters\Imports;
+namespace Medas\PhpFormatter\Formatters\Imports;
 
-use Medas\PhpBeautifier\Settings\ImportSettings;
-use Medas\PhpBeautifier\Tokens\ClassAnalyser\ClassAnalysis;
-use Medas\PhpBeautifier\Tokens\ClassAnalyser\ClassReference;
+use Medas\PhpFormatter\Settings\ImportSettings;
+use Medas\PhpFormatter\Tokens\ClassAnalyser\ClassAnalysis;
+use Medas\PhpFormatter\Tokens\ClassAnalyser\ClassReference;
 use Medas\ServiceManager\Attributes\Service;
 
 #[Service]
