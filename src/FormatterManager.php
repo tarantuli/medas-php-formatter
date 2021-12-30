@@ -14,7 +14,7 @@ class FormatterManager
 
     public function __construct(
         private AdditionalTokensDefiner $additionalTokensDefiner,
-        private Formatter               $reformatter)
+        private Formatter               $formatter)
     {
         $this->settings = new Settings\Medas();
     }
@@ -23,6 +23,6 @@ class FormatterManager
     {
         $settings ??= $this->settings;
 
-        return $this->reformatter->format($code, $settings);
+        return $this->formatter->format($code, $settings);
     }
 }
