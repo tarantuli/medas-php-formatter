@@ -28,7 +28,7 @@ class CodeValidator
             throw new CannotRunCommandLineException();
         }
 
-        $tempFile = $this->temporaryFiles->write($code);
+        $tempFile = $this->temporaryFiles->create($code);
 
         $command = sprintf(
             '%s -l -n -d display_errors=1 %s',

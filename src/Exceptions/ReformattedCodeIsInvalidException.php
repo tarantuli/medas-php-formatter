@@ -16,7 +16,7 @@ class ReformattedCodeIsInvalidException extends BaseException
         parent::__construct($logfile, $errorMessage);
     }
 
-    public function getPattern(): string
+    public function pattern(): string
     {
         return 'reformatted code in %s is invalid: %s';
     }

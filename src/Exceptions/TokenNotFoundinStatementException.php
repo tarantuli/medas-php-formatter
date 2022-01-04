@@ -15,7 +15,7 @@ class TokenNotFoundinStatementException extends BaseException
         parent::__construct($token, $statement);
     }
 
-    public function getPattern(): string
+    public function pattern(): string
     {
         return 'token %s not found in statement %s';
     }
