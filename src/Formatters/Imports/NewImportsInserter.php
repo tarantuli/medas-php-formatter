@@ -35,7 +35,7 @@ class NewImportsInserter
         $after = $this->findImportInsertionSpot($tree);
 
         $baseToken = new Token(ord(';'), ';');
-        $baseToken->context = new GlobalScope();
+        $baseToken->context = GlobalScope::instance();
         $baseToken->inString = false;
         $baseToken->inAttribute = false;
 

@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Medas\PhpFormatter\Tokens;
 
-use Medas\PhpFormatter\Tokens\Contexts\ClassBody;
-use Medas\PhpFormatter\Tokens\Contexts\GlobalScope;
 use Medas\PhpFormatter\Tokens\StatementTypes\ClassDeclaration;
 use Medas\PhpFormatter\Tokens\StatementTypes\FunctionDeclaration;
 use Medas\PhpFormatter\Tokens\StatementTypes\UseClassStatement;
@@ -23,7 +21,7 @@ class ContextAdder
 
     public function add(TokenTree $tree): void
     {
-        $context = new GlobalScope();
+        $context = Contexts\GlobalScope::instance();
         $globalScopeDepth = null;
         $classBodyDepth = null;
         $nextStatementIsClassBody = false;
@@ -31,44 +29,44 @@ class ContextAdder
 
         foreach ($tree->statements() as $statement) {
             if ($statement->block->depth === $globalScopeDepth) {
-                $context = new GlobalScope();
+                $context = Contexts\GlobalScope::instance();
                 $globalScopeDepth = null;
             }
 
             if ($statement->block->depth === $classBodyDepth) {
-                $context = new ClassBody();
+                $context = Contexts\ClassBody::instance();
             }
 
             if ($nextStatementIsClassBody) {
-                $context = new Contexts\ClassBody();
+                $context = Contexts\ClassBody::instance();
                 $classBodyDepth = $statement->block->depth;
                 $nextStatementIsClassBody = false;
             }
 
             if ($nextStatementIsMethodBody) {
-                $context = new Contexts\MethodBody();
+                $context = Contexts\MethodBody::instance();
                 $nextStatementIsMethodBody = false;
             }
 
             $statementType = $this->typeFinder->for($statement);
 
             if ($statementType instanceof ClassDeclaration) {
-                $context = new Contexts\ClassDeclaration();
+                $context = Contexts\ClassDeclaration::instance();
                 $globalScopeDepth = $statement->block->depth;
                 $nextStatementIsClassBody = true;
             }
 
             // If the statement type is UseClassStatement, but we're already in a class body,
             // then it's a UseTraitStatement. The type finder can't know that, but we can.
-            if ($statementType instanceof UseClassStatement && $context instanceof ClassBody) {
+            if ($statementType instanceof UseClassStatement && $context instanceof Contexts\ClassBody) {
                 $statement->setType(UseTraitStatement::instance());
             }
 
             if ($statementType instanceof FunctionDeclaration) {
                 // In the context of a class body, this is a method declaration; otherwise, it's a function declaration
                 $context = ($context instanceof Contexts\ClassBody)
-                    ? new Contexts\MethodDeclaration()
-                    : new Contexts\FunctionDeclaration();
+                    ? Contexts\MethodDeclaration::instance()
+                    : Contexts\FunctionDeclaration::instance();
 
                 // If it ends in a semicolon, it's an abstract or interface declaration
                 // If it ends in a curly bracket open, a body will follow
@@ -86,12 +84,12 @@ class ContextAdder
                     // The context of the following tokens may change
                     if ($token->is(T_ROUND_BRACKET_OPEN)) {
                         ++$openParentheses;
-                        $context = new Contexts\MethodParameters();
+                        $context = Contexts\MethodParameters::instance();
                     }
                     if ($token->is(T_ROUND_BRACKET_CLOSE)) {
-                        $token->context = new Contexts\MethodDeclaration();
+                        $token->context = Contexts\MethodDeclaration::instance();
                         if (--$openParentheses === 0) {
-                            $context = new Contexts\MethodReturnType();
+                            $context = Contexts\MethodReturnType::instance();
                         }
                     }
                 }
