@@ -61,7 +61,7 @@ class ContextAdder
             // If the statement type is UseClassStatement, but we're already in a class body,
             // then it's a UseTraitStatement. The type finder can't know that, but we can.
             if ($statementType instanceof UseClassStatement && $context instanceof ClassBody) {
-                $statement->setType(new UseTraitStatement());
+                $statement->setType(UseTraitStatement::instance());
             }
 
             if ($statementType instanceof FunctionDeclaration) {
