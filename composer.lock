@@ -74,12 +74,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:tarantuli/medas-config-manager.git",
-                "reference": "7fc2e7cc3cf6fa4d91d878914a6d7501bf860748"
+                "reference": "390b03cb4725589290de13a0ee7aa91b943b31f2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-config-manager/zipball/7fc2e7cc3cf6fa4d91d878914a6d7501bf860748",
-                "reference": "7fc2e7cc3cf6fa4d91d878914a6d7501bf860748",
+                "url": "https://api.github.com/repos/tarantuli/medas-config-manager/zipball/390b03cb4725589290de13a0ee7aa91b943b31f2",
+                "reference": "390b03cb4725589290de13a0ee7aa91b943b31f2",
                 "shasum": ""
             },
             "require": {
@@ -110,7 +110,7 @@
                 "source": "https://github.com/tarantuli/medas-config-manager/tree/dev",
                 "issues": "https://github.com/tarantuli/medas-config-manager/issues"
             },
-            "time": "2022-01-17T09:05:50+00:00"
+            "time": "2022-01-21T14:36:00+00:00"
         },
         {
             "name": "morphp/medas-core",
@@ -118,12 +118,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:tarantuli/medas-core.git",
-                "reference": "151de5e37e428402421b4118e32e4032fdf06cdc"
+                "reference": "a6a04b87383eca61e7c78aa810cfc8d74b3d220f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-core/zipball/151de5e37e428402421b4118e32e4032fdf06cdc",
-                "reference": "151de5e37e428402421b4118e32e4032fdf06cdc",
+                "url": "https://api.github.com/repos/tarantuli/medas-core/zipball/a6a04b87383eca61e7c78aa810cfc8d74b3d220f",
+                "reference": "a6a04b87383eca61e7c78aa810cfc8d74b3d220f",
                 "shasum": ""
             },
             "require": {
@@ -156,7 +156,7 @@
                 "source": "https://github.com/tarantuli/medas-core/tree/dev",
                 "issues": "https://github.com/tarantuli/medas-core/issues"
             },
-            "time": "2022-01-17T08:11:17+00:00"
+            "time": "2022-01-21T14:38:19+00:00"
         },
         {
             "name": "morphp/medas-file-system",
@@ -164,12 +164,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:tarantuli/medas-file-system.git",
-                "reference": "7dcca7abff8ce5809ce06ef72bb122fc215a0e44"
+                "reference": "7b194148230d8d5b1f05a597bd7ecd9290539417"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-file-system/zipball/7dcca7abff8ce5809ce06ef72bb122fc215a0e44",
-                "reference": "7dcca7abff8ce5809ce06ef72bb122fc215a0e44",
+                "url": "https://api.github.com/repos/tarantuli/medas-file-system/zipball/7b194148230d8d5b1f05a597bd7ecd9290539417",
+                "reference": "7b194148230d8d5b1f05a597bd7ecd9290539417",
                 "shasum": ""
             },
             "require": {
@@ -197,7 +197,7 @@
                 "source": "https://github.com/tarantuli/medas-file-system/tree/dev",
                 "issues": "https://github.com/tarantuli/medas-file-system/issues"
             },
-            "time": "2022-01-05T10:36:09+00:00"
+            "time": "2022-01-21T14:36:13+00:00"
         },
         {
             "name": "morphp/medas-service-manager",
@@ -205,12 +205,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:tarantuli/medas-service-manager.git",
-                "reference": "1308e85ba3472969e21f76b61c223e4ae4d00ae9"
+                "reference": "305f20da558a2a2ee0fc40c61ecbeb3373a6eaa8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-service-manager/zipball/1308e85ba3472969e21f76b61c223e4ae4d00ae9",
-                "reference": "1308e85ba3472969e21f76b61c223e4ae4d00ae9",
+                "url": "https://api.github.com/repos/tarantuli/medas-service-manager/zipball/305f20da558a2a2ee0fc40c61ecbeb3373a6eaa8",
+                "reference": "305f20da558a2a2ee0fc40c61ecbeb3373a6eaa8",
                 "shasum": ""
             },
             "require": {
@@ -244,7 +244,7 @@
                 "source": "https://github.com/tarantuli/medas-service-manager/tree/dev",
                 "issues": "https://github.com/tarantuli/medas-service-manager/issues"
             },
-            "time": "2022-01-17T09:40:37+00:00"
+            "time": "2022-01-21T08:54:17+00:00"
         },
         {
             "name": "phpoption/phpoption",
@@ -1881,16 +1881,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "9.5.11",
+            "version": "9.5.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "2406855036db1102126125537adb1406f7242fdd"
+                "reference": "93d4bf4c37aec6384bb9e5d390d9049a463a7256"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/2406855036db1102126125537adb1406f7242fdd",
-                "reference": "2406855036db1102126125537adb1406f7242fdd",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/93d4bf4c37aec6384bb9e5d390d9049a463a7256",
+                "reference": "93d4bf4c37aec6384bb9e5d390d9049a463a7256",
                 "shasum": ""
             },
             "require": {
@@ -1968,7 +1968,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.5.11"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.5.12"
             },
             "funding": [
                 {
@@ -1980,7 +1980,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-12-25T07:07:57+00:00"
+            "time": "2022-01-21T05:54:47+00:00"
         },
         {
             "name": "sebastian/cli-parser",

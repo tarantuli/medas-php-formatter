@@ -7,7 +7,7 @@ use Medas\PhpFormatter\PhpFormatterPackage;
 use Medas\ServiceManager\ServiceManager;
 
 $sm = ServiceManager::get();
-$sm->addPackage(new PhpFormatterPackage());
+$sm->addPackage(PhpFormatterPackage::instance());
 
 service(ConfigManager::class)
     ->readEnv(__DIR__)
