@@ -259,6 +259,7 @@ class TokenGroups
 
     public function literals(): array
     {
+        /** @noinspection PhpElementIsNotAvailableInCurrentPhpVersionInspection */
         return [
             T_BAD_CHARACTER,
             T_CONSTANT_ENCAPSED_STRING,

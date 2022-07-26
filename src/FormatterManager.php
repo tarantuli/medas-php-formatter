@@ -13,8 +13,8 @@ class FormatterManager
     private Settings\Settings $settings;
 
     public function __construct(
-        private AdditionalTokensDefiner $additionalTokensDefiner,
-        private Formatter               $formatter)
+        private readonly AdditionalTokensDefiner $additionalTokensDefiner,
+        private readonly Formatter               $formatter)
     {
         $this->settings = new Settings\Medas();
     }

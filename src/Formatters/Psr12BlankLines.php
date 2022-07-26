@@ -22,8 +22,8 @@ use Medas\ServiceManager\Attributes\Service;
 class Psr12BlankLines extends BaseFormatter
 {
     public function __construct(
-        private BlankLineAdder      $blankLineAdder,
-        private StatementTypeFinder $typeFinder,
+        private readonly BlankLineAdder      $blankLineAdder,
+        private readonly StatementTypeFinder $typeFinder,
     )
     {
     }

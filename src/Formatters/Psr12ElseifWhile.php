@@ -14,7 +14,7 @@ class Psr12ElseifWhile extends BaseFormatter
 {
     private ?Statement $previousStatement = null;
 
-    public function __construct(private StatementTypeFinder $typeFinder)
+    public function __construct(private readonly StatementTypeFinder $typeFinder)
     {
     }
 

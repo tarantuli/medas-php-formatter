@@ -13,7 +13,7 @@ use Medas\ServiceManager\Attributes\Service;
 #[Service]
 class BlankLinesBeforeBlocks extends BaseFormatter
 {
-    public function __construct(private BlankLineAdder $blankLineAdder)
+    public function __construct(private readonly BlankLineAdder $blankLineAdder)
     {
     }
 

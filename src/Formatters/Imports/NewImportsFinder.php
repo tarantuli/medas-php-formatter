@@ -11,12 +11,12 @@ use Medas\ServiceManager\Attributes\Service;
 class NewImportsFinder
 {
     public function __construct(
-        private FqnProperties $fqnProperties,
+        private readonly FqnProperties $fqnProperties,
     )
     {
     }
 
-    public function determine(ReferencesAndImports $referencesAndImports, string|null $className)
+    public function determine(ReferencesAndImports $referencesAndImports, string|null $className): void
     {
         foreach ($referencesAndImports->references as $fqn => $label) {
             if ($label !== null) {

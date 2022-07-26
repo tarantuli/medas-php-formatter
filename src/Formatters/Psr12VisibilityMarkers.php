@@ -14,7 +14,7 @@ use Medas\ServiceManager\Attributes\Service;
 #[Service]
 class Psr12VisibilityMarkers extends BaseFormatter
 {
-    public function __construct(private StatementTypeFinder $typeFinder,
+    public function __construct(private readonly StatementTypeFinder $typeFinder,
     )
     {
     }

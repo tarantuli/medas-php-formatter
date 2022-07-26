@@ -66,7 +66,7 @@ class StructureFinder
         $this->nextCommaEndsStatement = false;
     }
 
-    private function removeWhitespace(TokenCollection $tokens)
+    private function removeWhitespace(TokenCollection $tokens): void
     {
         {
             $counter = 0;

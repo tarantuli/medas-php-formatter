@@ -12,7 +12,7 @@ use Medas\ServiceManager\Attributes\Service;
 class ClassAnalysisManager
 {
     public function __construct(
-        private ClassAnalyser $analyser,
+        private readonly ClassAnalyser $analyser,
     )
     {
     }

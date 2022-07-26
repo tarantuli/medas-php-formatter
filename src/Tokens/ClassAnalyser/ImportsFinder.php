@@ -14,13 +14,13 @@ use Medas\ServiceManager\Attributes\Service;
 class ImportsFinder
 {
     public function __construct(
-        private FqnProperties $fqnProperties,
-        private StatementTypeFinder $typeFinder,
+        private readonly FqnProperties       $fqnProperties,
+        private readonly StatementTypeFinder $typeFinder,
     )
     {
     }
 
-    public function find(TokenTree $tree, ClassAnalysis $results)
+    public function find(TokenTree $tree, ClassAnalysis $results): void
     {
         foreach ($tree as $token) {
             if ($token->is(T_USE) && $this->typeFinder->for($token->statement) instanceof UseClassStatement) {

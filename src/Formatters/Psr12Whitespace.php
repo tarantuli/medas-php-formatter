@@ -17,8 +17,8 @@ use Medas\ServiceManager\Attributes\Service;
 #[Service]
 class Psr12Whitespace extends BaseFormatter
 {
-    public function __construct(private TokenGroups         $tokenGroups,
-                                private StatementTypeFinder $typeFinder)
+    public function __construct(private readonly TokenGroups         $tokenGroups,
+                                private readonly StatementTypeFinder $typeFinder)
     {
     }
 

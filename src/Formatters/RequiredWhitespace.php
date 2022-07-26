@@ -11,7 +11,7 @@ use Medas\ServiceManager\Attributes\Service;
 #[Service]
 class RequiredWhitespace extends BaseFormatter
 {
-    public function __construct(private TokenGroups $tokenGroups)
+    public function __construct(private readonly TokenGroups $tokenGroups)
     {
     }
 

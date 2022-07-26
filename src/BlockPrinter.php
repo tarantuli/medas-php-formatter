@@ -33,14 +33,14 @@ class BlockPrinter
         return ob_get_clean();
     }
 
-    private function printBlock(Block $block)
+    private function printBlock(Block $block): void
     {
         foreach ($block as $statement) {
             $this->printStatement($statement);
         }
     }
 
-    private function printStatement(Statement $statement)
+    private function printStatement(Statement $statement): void
     {
         $this->printIndentation($statement);
 

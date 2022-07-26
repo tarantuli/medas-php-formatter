@@ -28,12 +28,12 @@ use Medas\ServiceManager\Attributes\Service;
 class NormalizeImports extends BaseFormatter
 {
     public function __construct(
-        private ClassAnalyser       $classAnalyser,
-        private Formatter           $formatter,
-        private NewImportsFinder    $newImportsFinder,
-        private NewImportsInserter  $newImportsInserter,
-        private NewReferencesFinder $newReferencesFinder,
-        private ReferencesUpdater   $referencesUpdater,
+        private readonly ClassAnalyser       $classAnalyser,
+        private readonly Formatter           $formatter,
+        private readonly NewImportsFinder    $newImportsFinder,
+        private readonly NewImportsInserter  $newImportsInserter,
+        private readonly NewReferencesFinder $newReferencesFinder,
+        private readonly ReferencesUpdater   $referencesUpdater,
     )
     {
     }

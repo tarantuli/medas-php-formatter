@@ -17,7 +17,7 @@ use Medas\ServiceManager\Attributes\Service;
 class NameFinder
 {
     public function __construct(
-        private TokenGroups $tokenGroups,
+        private readonly TokenGroups $tokenGroups,
     )
     {
     }

@@ -17,8 +17,8 @@ class CodeValidator
     private string $errorMessage;
 
     public function __construct(
-        private TemporaryFiles $temporaryFiles,
-        #[ConfigValue(PathToPhp::class)] private string $pathToPhp
+        private readonly TemporaryFiles                          $temporaryFiles,
+        #[ConfigValue(PathToPhp::class)] private readonly string $pathToPhp
     )
     {
     }

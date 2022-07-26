@@ -19,7 +19,7 @@ class BlankLineAdder
     private StatementType|null $previousType = null;
 
     public function __construct(
-        private StatementTypeFinder $statementTypeFinder,
+        private readonly StatementTypeFinder $statementTypeFinder,
     )
     {
     }

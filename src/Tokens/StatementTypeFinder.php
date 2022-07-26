@@ -10,7 +10,7 @@ use Medas\ServiceManager\Attributes\Service;
 class StatementTypeFinder
 {
     public function __construct(
-        private TokenGroups $tokenGroups,
+        private readonly TokenGroups $tokenGroups,
     )
     {
     }
