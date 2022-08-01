@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Medas\PhpFormatter;
 
+use Medas\ConfigOptions\Attributes\ConfigValue;
 use Medas\Core\System;
 use Medas\FileSystem\TemporaryFiles;
 use Medas\PhpFormatter\ConfigOptions\PathToPhp;
 use Medas\PhpFormatter\Exceptions\CannotRunCommandLineException;
-use Medas\ServiceManager\Attributes\ConfigValue;
 use Medas\ServiceManager\Attributes\Service;
 
 #[Service]

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Medas\PhpFormatter;
 
 use Medas\ConfigManager\ConfigManagerPackage;
+use Medas\ConfigOptions\ConfigOptionsPackage;
 use Medas\Core\CorePackage;
 use Medas\FileSystem\FileSystemPackage;
 use Medas\ServiceManager\AsSingleton;
@@ -18,6 +19,7 @@ class PhpFormatterPackage extends BasePackage
     {
         return $this->dependenciesByClass([
             ConfigManagerPackage::class,
+            ConfigOptionsPackage::class,
             CorePackage::class,
             FileSystemPackage::class,
         ]);
