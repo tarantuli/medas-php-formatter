@@ -163,7 +163,7 @@ class Psr12Whitespace extends BaseFormatter
                 // No spaces between variables and [
                 if ($token->next) {
                     if ($token->is([T_VARIABLE, T_ROUND_BRACKET_CLOSE, T_STRING])
-                     && $token->next->is(T_SQUARE_BRACKET_OPEN)) {
+                        && $token->next->is(T_SQUARE_BRACKET_OPEN)) {
                         $token->spaceAfter = false;
                     }
                 }
