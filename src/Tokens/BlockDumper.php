@@ -44,7 +44,6 @@ class BlockDumper
             if ($statement->blankLineAfter) {
                 $this->cli->print(' ⇊', Cli::COLOR256 . '170');
             }
-
         }
     }
 

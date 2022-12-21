@@ -11,7 +11,9 @@ use Medas\ServiceManager\Attributes\Service;
 #[Service]
 class KeywordsToLowercase extends BaseFormatter
 {
-    public function __construct(private readonly TokenGroups $tokenGroups)
+    public function __construct(
+        private readonly TokenGroups $tokenGroups,
+    )
     {
     }
 

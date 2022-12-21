@@ -55,7 +55,6 @@ class NewReferencesFinder
                 $referencesAndImports->imports[$aliasedPath] = $alias;
             }
         }
-
     }
 
     private function isGlobalReference(ClassReference $reference): bool

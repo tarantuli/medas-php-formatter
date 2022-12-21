@@ -126,7 +126,6 @@ class ReferenceFinder
         } while ($token->previous->is(T_COMMA));
 
         return $tokens;
-
     }
 
     private function addImplements(ClassAnalysis $results, Token $token): void

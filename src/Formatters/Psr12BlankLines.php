@@ -70,7 +70,6 @@ class Psr12BlankLines extends BaseFormatter
             // No blank line needed before a case or default branch
             if ($type instanceof SwitchBranch && $previousStatement = $statement->previous()) {
                 $previousStatement->blankLineAfter = false;
-
             }
 
             if ($statement === $statement->block->lastStatement()) {

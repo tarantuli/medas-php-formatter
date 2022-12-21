@@ -8,7 +8,9 @@ class TokenTree implements \IteratorAggregate
 {
     public bool $doResetLinks = false;
 
-    public function __construct(private readonly Block $block)
+    public function __construct(
+        private readonly Block $block,
+    )
     {
     }
 

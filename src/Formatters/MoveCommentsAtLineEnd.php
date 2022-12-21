@@ -15,7 +15,9 @@ use Medas\ServiceManager\Attributes\Service;
 #[Service]
 class MoveCommentsAtLineEnd extends BaseFormatter
 {
-    public function __construct(private readonly NoCommentsAtLineEnd $preparser)
+    public function __construct(
+        private readonly NoCommentsAtLineEnd $preparser,
+    )
     {
     }
 

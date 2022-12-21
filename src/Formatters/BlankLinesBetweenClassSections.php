@@ -14,7 +14,9 @@ use Medas\ServiceManager\Attributes\Service;
 #[Service]
 class BlankLinesBetweenClassSections extends BaseFormatter
 {
-    public function __construct(private readonly BlankLineAdder $blankLineAdder)
+    public function __construct(
+        private readonly BlankLineAdder $blankLineAdder,
+    )
     {
     }
 

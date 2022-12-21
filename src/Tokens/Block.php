@@ -98,7 +98,6 @@ class Block implements \IteratorAggregate
     {
         $this->removeStatement($statement);
         $this->insertStatementAfter($statement, $after);
-
     }
 
     public function removeStatement(Statement $statement, bool $deleteTokens = false): void

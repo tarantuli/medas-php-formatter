@@ -8,7 +8,9 @@ class Spaces implements Indentation
 {
     private string $indentation;
 
-    public function __construct(private readonly int $length)
+    public function __construct(
+        private readonly int $length,
+    )
     {
         $this->indentation = str_repeat(' ', $this->length);
     }
