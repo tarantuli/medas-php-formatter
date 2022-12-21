@@ -8,14 +8,17 @@
         }
     ],
     "type": "library",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "require": {
-        "morphp/medas-core": "@dev",
-        "morphp/medas-config-manager": "@dev",
-        "morphp/medas-file-system": "@dev",
-        "morphp/medas-service-manager": "@dev"
+        "morphp/medas-service-manager": "dev-dev",
+        "morphp/medas-file-system": "dev-dev"
     },
     "require-dev": {
-        "phpunit/phpunit": "^9.5"
+        "phpunit/phpunit": "^9.5",
+        "morphp/medas-console-printer": "dev-dev",
+        "morphp/medas-config-manager": "dev-dev",
+        "morphp/medas-config-options": "dev-dev"
     },
     "autoload": {
         "psr-4": {

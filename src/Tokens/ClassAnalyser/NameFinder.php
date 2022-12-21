@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Medas\PhpFormatter\Tokens\ClassAnalyser;
 
 use Medas\PhpFormatter\Tokens\Token;
+use Medas\PhpFormatter\Tokens\TokenGroups;
 use Medas\PhpFormatter\Tokens\TokenTree;
 use Medas\ServiceManager\Attributes\Service;
 
@@ -15,7 +16,11 @@ use Medas\ServiceManager\Attributes\Service;
 #[Service]
 class NameFinder
 {
-    private const CLASS_TYPES = [T_CLASS, T_INTERFACE, T_TRAIT];
+    public function __construct(
+        private readonly TokenGroups $tokenGroups,
+    )
+    {
+    }
 
     public function find(TokenTree $tree, ClassAnalysis $results): void
     {
@@ -24,7 +29,7 @@ class NameFinder
                 $results->namespace = $token->next->text;
             }
 
-            if ($token->is(self::CLASS_TYPES)) {
+            if ($token->is($this->tokenGroups->structureTypes())) {
                 $this->processName($token, $results);
 
                 // We found both the namespace and the name, we're done!

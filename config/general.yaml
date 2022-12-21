@@ -1,3 +1,0 @@
-validator:
-  path_to_php: $env(PATH_TO_PHP)
-

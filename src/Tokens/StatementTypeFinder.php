@@ -26,82 +26,82 @@ class StatementTypeFinder
         $secondToken = $statement->getToken(1);
 
         if (null === $firstToken) {
-            return new StatementTypes\BlankLine();
+            return StatementTypes\BlankLine::instance();
         }
 
         if ($firstToken->is(T_OPEN_TAG)) {
-            return new StatementTypes\PhpOpenTag();
+            return StatementTypes\PhpOpenTag::instance();
         }
 
         if ($firstToken->is(T_DECLARE)) {
-            return new StatementTypes\DeclareStatement();
+            return StatementTypes\DeclareStatement::instance();
         }
 
         if ($firstToken->is($this->tokenGroups->comments())) {
-            return new StatementTypes\Comment();
+            return StatementTypes\Comment::instance();
         }
 
         if ($firstToken->is(T_NAMESPACE)) {
-            return new StatementTypes\NamespaceDeclaration();
+            return StatementTypes\NamespaceDeclaration::instance();
         }
 
         if ($firstToken->is(T_USE)) {
             if ($secondToken->is(T_FUNCTION)) {
-                return new StatementTypes\UseFunctionStatement();
+                return StatementTypes\UseFunctionStatement::instance();
             }
             elseif ($secondToken->is(T_CONST)) {
-                return new StatementTypes\UseConstStatement();
+                return StatementTypes\UseConstStatement::instance();
             }
 
-            return new StatementTypes\UseClassStatement();
+            return StatementTypes\UseClassStatement::instance();
         }
 
         if ($firstToken->is(T_ATTRIBUTE)) {
-            return new StatementTypes\AttributeStatement();
+            return StatementTypes\AttributeStatement::instance();
         }
 
         if ($firstToken->is(T_CURLY_BRACKET_CLOSE)) {
-            return new StatementTypes\BlockCloser();
+            return StatementTypes\BlockCloser::instance();
         }
 
         if ($statement->containsType(T_CLASS)) {
-            return new StatementTypes\ClassDeclaration();
+            return StatementTypes\ClassDeclaration::instance();
         }
 
         if ($statement->containsType(T_CONST)) {
-            return new StatementTypes\ClassConstDeclaration();
+            return StatementTypes\ClassConstDeclaration::instance();
         }
 
         if ($statement->containsType(T_FUNCTION)) {
-            return new StatementTypes\FunctionDeclaration();
+            return StatementTypes\FunctionDeclaration::instance();
         }
 
         if ($statement->containsType($this->tokenGroups->visibilityKeywords())) {
             // It's not a class const or class method, those were found before
-            return new StatementTypes\ClassPropertyDeclaration();
+            return StatementTypes\ClassPropertyDeclaration::instance();
         }
 
         if ($firstToken->is($this->tokenGroups->controlKeywords())) {
-            return new StatementTypes\ControlStatement();
+            return StatementTypes\ControlStatement::instance();
         }
 
         if ($firstToken->is(T_CASE)) {
-            return new StatementTypes\SwitchBranch();
+            return StatementTypes\SwitchBranch::instance();
         }
 
         if ($firstToken->is(T_DEFAULT) && !$secondToken->is(T_DOUBLE_ARROW)) {
             // A default followed by a double arrow is a match branch
-            return new StatementTypes\SwitchBranch();
+            return StatementTypes\SwitchBranch::instance();
         }
 
         if ($firstToken->is(T_RETURN)) {
-            return new StatementTypes\ReturnStatement();
+            return StatementTypes\ReturnStatement::instance();
         }
 
         if ($firstToken->is(T_THROW)) {
-            return new StatementTypes\ThrowStatement();
+            return StatementTypes\ThrowStatement::instance();
         }
 
-        return new StatementTypes\GenericStatement();
+        return StatementTypes\GenericStatement::instance();
     }
 }
