@@ -6,7 +6,7 @@ namespace Medas\PhpFormatter\Settings\LineEndings;
 
 class CarriageReturn implements LineEnding
 {
-    public function __toString()
+    public function __toString(): string
     {
         return "\r";
     }

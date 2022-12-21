@@ -6,7 +6,7 @@ namespace Medas\PhpFormatter\Tokens\Contexts;
 
 class MethodReturnType implements Context
 {
-    public function __toString()
+    public function __toString(): string
     {
         return 'MR';
     }

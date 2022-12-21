@@ -16,7 +16,7 @@ use Medas\ServiceManager\Attributes\Service;
 class ContextAdder
 {
     public function __construct(
-        private StatementTypeFinder $typeFinder,
+        private readonly StatementTypeFinder $typeFinder,
     )
     {
     }

@@ -6,7 +6,7 @@ namespace Medas\PhpFormatter\Settings\LineEndings;
 
 class LineFeed implements LineEnding
 {
-    public function __toString()
+    public function __toString(): string
     {
         return "\n";
     }

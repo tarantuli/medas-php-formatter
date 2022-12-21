@@ -12,10 +12,10 @@ use Medas\ServiceManager\Attributes\Service;
 class ClassAnalyser
 {
     public function __construct(
-        private ImportsFinder   $importsFinder,
-        private NameFinder      $nameFinder,
-        private ReferenceFinder $referenceFinder,
-        private Tokenizer       $tokenizer,
+        private readonly ImportsFinder   $importsFinder,
+        private readonly NameFinder      $nameFinder,
+        private readonly ReferenceFinder $referenceFinder,
+        private readonly Tokenizer       $tokenizer,
     )
     {
     }

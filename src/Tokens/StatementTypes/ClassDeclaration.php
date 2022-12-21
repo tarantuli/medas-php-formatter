@@ -6,7 +6,7 @@ namespace Medas\PhpFormatter\Tokens\StatementTypes;
 
 class ClassDeclaration implements StatementType
 {
-    public function __toString()
+    public function __toString(): string
     {
         return 'class declaration';
     }

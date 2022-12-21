@@ -37,12 +37,20 @@ class AdditionalTokensDefiner
         'T_SQUARE_BRACKET_OPEN' => '[',
     ];
 
-    public function __construct()
+    private bool $haveDefined = false;
+
+    public function define(): void
     {
+        if ($this->haveDefined) {
+            return;
+        }
+
         foreach (self::ADDITIONAL_TOKENS as $tokenName => $value) {
             if (!defined($tokenName)) {
                 define($tokenName, $value);
             }
         }
+
+        $this->haveDefined = true;
     }
 }

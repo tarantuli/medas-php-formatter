@@ -16,8 +16,8 @@ class CodeValidator
     private string $errorMessage;
 
     public function __construct(
-        private TemporaryFiles $temporaryFiles,
-        #[ConfigValue('validator.path_to_php')] private string $pathToPhp
+        private readonly TemporaryFiles                                 $temporaryFiles,
+        #[ConfigValue('validator.path_to_php')] private readonly string $pathToPhp
     )
     {
     }

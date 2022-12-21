@@ -18,10 +18,10 @@ class Formatter
     private bool $dumpTree = false;
 
     public function __construct(
-        private BlockDumper   $blockDumper,
-        private BlockPrinter  $blockPrinter,
-        private CodeValidator $codeValidator,
-        private Tokenizer     $tokenizer,
+        private readonly BlockDumper   $blockDumper,
+        private readonly BlockPrinter  $blockPrinter,
+        private readonly CodeValidator $codeValidator,
+        private readonly Tokenizer     $tokenizer,
     )
     {
     }

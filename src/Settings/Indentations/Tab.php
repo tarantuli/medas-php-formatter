@@ -6,7 +6,7 @@ namespace Medas\PhpFormatter\Settings\Indentations;
 
 class Tab implements Indentation
 {
-    public function __toString()
+    public function __toString(): string
     {
         return "\t";
     }

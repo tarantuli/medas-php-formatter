@@ -25,13 +25,13 @@ class ReferenceFinder
     private const REFERENCE_TYPES = [T_STRING, T_NAME_QUALIFIED, T_NAME_RELATIVE, T_NAME_FULLY_QUALIFIED];
 
     public function __construct(
-        private FqnProperties $fqnProperties,
-        private StatementTypeFinder $statementTypeFinder,
+        private readonly FqnProperties       $fqnProperties,
+        private readonly StatementTypeFinder $statementTypeFinder,
     )
     {
     }
 
-    public function find(TokenTree $tree, ClassAnalysis $results)
+    public function find(TokenTree $tree, ClassAnalysis $results): void
     {
         foreach ($tree as $token) {
             if ($token->is(T_EXTENDS)) {

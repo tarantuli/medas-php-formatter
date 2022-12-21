@@ -29,9 +29,9 @@ abstract class BaseTest extends TestCase
     protected function format(string $sourceFile, string $expectedFile, Settings $settings): array
     {
         $formatterManager = service(FormatterManager::class);
-        $source = file_get_contents(__DIR__ . '/../TestFiles/' . $sourceFile . '.php');
 
-        $expected = file_get_contents(__DIR__ . '/../TestFiles/' . $expectedFile . '.php');
+        $source = str_replace("\r\n", "\n", file_get_contents(__DIR__ . '/../TestFiles/' . $sourceFile . '.php'));
+        $expected = str_replace("\r\n", "\n", file_get_contents(__DIR__ . '/../TestFiles/' . $expectedFile . '.php'));
 
         return [$formatterManager->format($source, $settings), $expected];
     }

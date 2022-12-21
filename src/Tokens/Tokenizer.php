@@ -9,11 +9,13 @@ use Medas\ServiceManager\Attributes\Service;
 #[Service]
 class Tokenizer
 {
-    public function __construct(private AdditionalTokensDefiner $additionalTokensDefiner,
-                                private StructureFinder         $structureFinder,
-                                private ContextAdder            $contextAdder)
+    public function __construct(
+        private readonly AdditionalTokensDefiner $additionalTokensDefiner,
+        private readonly StructureFinder         $structureFinder,
+        private readonly ContextAdder            $contextAdder,
+    )
     {
-        // AdditionalTokensDefiner only needs to be initialized, it isn't used otherwise
+        $this->additionalTokensDefiner->define();
     }
 
     public function makeTree(string $code): TokenTree
@@ -58,7 +60,7 @@ class Tokenizer
         return $this->structureFinder->determine($tokens);
     }
 
-    private function addContext(TokenTree $tree)
+    private function addContext(TokenTree $tree): void
     {
         $this->contextAdder->add($tree);
     }

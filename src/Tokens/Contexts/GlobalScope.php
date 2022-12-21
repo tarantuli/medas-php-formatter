@@ -6,7 +6,7 @@ namespace Medas\PhpFormatter\Tokens\Contexts;
 
 class GlobalScope implements Context
 {
-    public function __toString()
+    public function __toString(): string
     {
         return 'G';
     }

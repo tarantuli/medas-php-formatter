@@ -12,7 +12,7 @@ use Medas\ServiceManager\Attributes\Service;
 #[Service]
 class UseImplodeInsteadOfJoin extends BaseTokenReplacer
 {
-    public function __construct(private StatementTypeFinder $typeFinder)
+    public function __construct(private readonly StatementTypeFinder $typeFinder)
     {
     }
 

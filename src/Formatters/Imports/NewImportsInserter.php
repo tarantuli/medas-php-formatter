@@ -20,8 +20,8 @@ use Medas\ServiceManager\Attributes\Service;
 class NewImportsInserter
 {
     public function __construct(
-        private FqnProperties       $fqnProperties,
-        private StatementTypeFinder $statementTypeFinder,
+        private readonly FqnProperties       $fqnProperties,
+        private readonly StatementTypeFinder $statementTypeFinder,
     )
     {
     }

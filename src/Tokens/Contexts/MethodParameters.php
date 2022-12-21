@@ -6,7 +6,7 @@ namespace Medas\PhpFormatter\Tokens\Contexts;
 
 class MethodParameters implements Context
 {
-    public function __toString()
+    public function __toString(): string
     {
         return 'MP';
     }

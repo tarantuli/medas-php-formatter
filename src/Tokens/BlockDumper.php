@@ -13,8 +13,8 @@ class BlockDumper
     private int $line;
 
     public function __construct(
-        private Cli                 $cli,
-        private StatementTypeFinder $typeFinder)
+        private readonly Cli                 $cli,
+        private readonly StatementTypeFinder $typeFinder)
     {
     }
 

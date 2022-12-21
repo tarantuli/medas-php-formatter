@@ -6,7 +6,7 @@ namespace Medas\PhpFormatter\Tokens\StatementTypes;
 
 class GenericStatement implements StatementType
 {
-    public function __toString()
+    public function __toString(): string
     {
         return '';
     }

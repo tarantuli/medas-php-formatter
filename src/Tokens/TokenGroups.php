@@ -43,6 +43,7 @@ class TokenGroups
             T_ENDIF,
             T_ENDSWITCH,
             T_ENDWHILE,
+            T_ENUM,
             T_EXIT,
             T_EXTENDS,
             T_FINAL,
@@ -57,6 +58,7 @@ class TokenGroups
             T_INTERFACE,
             T_NAMESPACE,
             T_NEW,
+            T_READONLY,
             T_REQUIRE,
             T_REQUIRE_ONCE,
             T_RETURN,
@@ -317,6 +319,8 @@ class TokenGroups
     public function otherTokens(): array
     {
         return [
+            T_AMPERSAND_FOLLOWED_BY_VAR_OR_VARARG,
+            T_AMPERSAND_NOT_FOLLOWED_BY_VAR_OR_VARARG,
             T_ATTRIBUTE,
             T_END_HEREDOC,
             T_INLINE_HTML,
