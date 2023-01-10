@@ -75,15 +75,6 @@ class TokenGroups
             ]);
     }
 
-    public function visibilityKeywords(): array
-    {
-        return [
-            T_PRIVATE,
-            T_PROTECTED,
-            T_PUBLIC,
-        ];
-    }
-
     public function controlKeywords(): array
     {
         return [
@@ -105,6 +96,15 @@ class TokenGroups
     {
         return [
             T_INSTANCEOF,
+        ];
+    }
+
+    public function visibilityKeywords(): array
+    {
+        return [
+            T_PRIVATE,
+            T_PROTECTED,
+            T_PUBLIC,
         ];
     }
 
@@ -326,6 +326,16 @@ class TokenGroups
             T_INLINE_HTML,
             T_START_HEREDOC,
             T_WHITESPACE,
+        ];
+    }
+
+    public function structureTypes(): array
+    {
+        return [
+            T_CLASS,
+            T_ENUM,
+            T_INTERFACE,
+            T_TRAIT,
         ];
     }
 }

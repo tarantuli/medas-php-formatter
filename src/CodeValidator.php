@@ -6,9 +6,10 @@ namespace Medas\PhpFormatter;
 
 use Medas\Core\System;
 use Medas\FileSystem\TemporaryFiles;
+use Medas\PhpFormatter\ConfigOptions\PathToPhp;
 use Medas\PhpFormatter\Exceptions\CannotRunCommandLineException;
-use Medas\ServiceManager\Attributes\ConfigValue;
 use Medas\ServiceManager\Attributes\Service;
+use Medas\ServiceManager\ConfigOptions\ConfigValue;
 
 #[Service]
 class CodeValidator
@@ -16,8 +17,8 @@ class CodeValidator
     private string $errorMessage;
 
     public function __construct(
-        private readonly TemporaryFiles                                 $temporaryFiles,
-        #[ConfigValue('validator.path_to_php')] private readonly string $pathToPhp
+        private readonly TemporaryFiles                          $temporaryFiles,
+        #[ConfigValue(PathToPhp::class)] private readonly string $pathToPhp
     )
     {
     }

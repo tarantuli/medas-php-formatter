@@ -6,5 +6,5 @@ namespace Medas\PhpFormatter\Tokens\Contexts;
 
 interface Context extends \Stringable
 {
-
+    public static function instance(): self;
 }

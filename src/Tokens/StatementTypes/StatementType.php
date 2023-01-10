@@ -6,5 +6,5 @@ namespace Medas\PhpFormatter\Tokens\StatementTypes;
 
 interface StatementType extends \Stringable
 {
-
+    public static function instance(): self;
 }
