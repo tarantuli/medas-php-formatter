@@ -8,7 +8,7 @@ use Medas\PhpFormatter\Settings\Medas;
 use Medas\PhpFormatter\Settings\MinimalSize;
 use Medas\PhpFormatter\Settings\Psr12;
 
-class FormatterTest extends BaseTest
+class FormatterTest extends BaseTestClass
 {
     public function testEmptyMethodBody(): void
     {

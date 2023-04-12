@@ -6,9 +6,9 @@ namespace Medas\Test\Functional\Imports;
 
 use Medas\PhpFormatter\Formatters\Imports\NormalizeImports;
 use Medas\PhpFormatter\Settings\Medas;
-use Medas\Test\Functional\BaseTest;
+use Medas\Test\Functional\BaseTestClass;
 
-class NormalizeImportsTest extends BaseTest
+class NormalizeImportsTest extends BaseTestClass
 {
     public function testNormalize(): void
     {

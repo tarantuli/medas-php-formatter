@@ -7,7 +7,7 @@ namespace Medas\Test\Functional;
 use Medas\PhpFormatter\Preparsers\NoCommentsAtLineEnd;
 use Medas\PhpFormatter\Settings\Psr12;
 
-class NoCommentsAtLineEndTest extends BaseTest
+class NoCommentsAtLineEndTest extends BaseTestClass
 {
     public function testMoveCommentsToLineBefore(): void
     {

@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Medas\Test\Functional\Tokens;
 
 use Medas\PhpFormatter\Tokens\TokenGroups;
-use Medas\Test\Functional\BaseTest;
+use Medas\Test\Functional\BaseTestClass;
 
-class TokenGroupsTest extends BaseTest
+class TokenGroupsTest extends BaseTestClass
 {
     public function testAllTokensMentioned(): void
     {

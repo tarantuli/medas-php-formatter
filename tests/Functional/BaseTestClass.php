@@ -8,7 +8,7 @@ use Medas\PhpFormatter\FormatterManager;
 use Medas\PhpFormatter\Settings\Settings;
 use PHPUnit\Framework\TestCase;
 
-abstract class BaseTest extends TestCase
+abstract class BaseTestClass extends TestCase
 {
     protected function assertRemainsTheSame(string $sourceFile, Settings $settings)
     {

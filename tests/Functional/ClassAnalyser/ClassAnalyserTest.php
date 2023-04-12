@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Medas\Test\Functional\ClassAnalyser;
 
 use Medas\PhpFormatter\Tokens\ClassAnalyser\ClassAnalyser;
-use Medas\Test\Functional\BaseTest;
+use Medas\Test\Functional\BaseTestClass;
 
-class ClassAnalyserTest extends BaseTest
+class ClassAnalyserTest extends BaseTestClass
 {
     public function testClassAnalyser(): void
     {

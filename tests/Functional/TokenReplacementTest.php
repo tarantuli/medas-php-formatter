@@ -9,7 +9,7 @@ use Medas\PhpFormatter\Formatters\Replacements\UseExitInsteadOfDie;
 use Medas\PhpFormatter\Formatters\Replacements\UseImplodeInsteadOfJoin;
 use Medas\PhpFormatter\Settings\Psr12;
 
-class TokenReplacementTest extends BaseTest
+class TokenReplacementTest extends BaseTestClass
 {
     public function testDieInsteadOfExit(): void
     {
