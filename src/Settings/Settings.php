@@ -4,11 +4,8 @@ declare(strict_types=1);
 
 namespace Medas\PhpFormatter\Settings;
 
-use Medas\PhpFormatter\Formatters\Formatter;
-use Medas\PhpFormatter\Formatters\RequiredWhitespace;
+use Medas\PhpFormatter\Formatters\{Formatter, RequiredWhitespace};
 use Medas\PhpFormatter\Preparsers\Preparser;
-use Medas\PhpFormatter\Settings\Indentations\Spaces;
-use Medas\PhpFormatter\Settings\LineEndings\LineFeed;
 
 class Settings
 {
@@ -26,8 +23,8 @@ class Settings
         $this->document = new DocumentSettings();
         $this->import = new ImportSettings();
 
-        $this->document->setLineEnding(new LineFeed())
-            ->setIndentation(new Spaces(4));
+        $this->document->setLineEnding(new LineEndings\LineFeed())
+            ->setIndentation(new Indentations\Spaces(4));
 
         $this->addFormatter(service(RequiredWhitespace::class));
     }

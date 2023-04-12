@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace Medas\PhpFormatter\Tokens;
 
-use Medas\Core\Cli;
-use Medas\ServiceManager\Attributes\Service;
+use Medas\Console\Printer;
+use Medas\ConsolePrinter\Printer\BashFormat;
+use Medas\ServiceManager\Service;
 
 #[Service]
 class BlockDumper
@@ -13,7 +14,7 @@ class BlockDumper
     private int $line;
 
     public function __construct(
-        private readonly Cli|null            $cli,
+        private readonly Printer             $printer,
         private readonly StatementTypeFinder $typeFinder)
     {
     }
@@ -22,16 +23,16 @@ class BlockDumper
     {
         $this->line = 0;
         $this->printBlock($block);
-        $this->cli->print("\n");
+        $this->printer->printText("\n");
     }
 
     private function printBlock(Block $block): void
     {
         foreach ($block as $statement) {
             // Start of line
-            $this->cli->print("\n")
-                ->print(sprintf('%3s', $this->line++), Cli::COLOR256 . '208')
-                ->print(str_repeat('·', $statement->block->depth), Cli::LIGHT_GRAY);
+            $this->printer->printText("\n")
+                ->printText(sprintf('%3s', $this->line++), BashFormat::COLOR256 . '208')
+                ->printText(str_repeat('·', $statement->block->depth), BashFormat::LIGHT_GRAY);
 
             // Print tokens on this line
             foreach ($statement as $index => $token) {
@@ -39,55 +40,55 @@ class BlockDumper
             }
 
             // Print statement type
-            $this->cli->print('  ' . $this->typeFinder->for($statement), Cli::BLUE);
+            $this->printer->printText('  ' . $this->typeFinder->for($statement), BashFormat::BLUE);
 
             if ($statement->blankLineAfter) {
-                $this->cli->print(' ⇊', Cli::COLOR256 . '170');
+                $this->printer->printText(' ⇊', BashFormat::COLOR256 . '170');
             }
         }
     }
 
     private function printToken(int $index, Token $token): void
     {
-        $this->cli->print('|')
-            ->print((string) $index, Cli::BLUE)
-            ->print(':');
+        $this->printer->printText('|')
+            ->printText((string) $index, BashFormat::BLUE)
+            ->printText(':');
 
-        $this->cli->print((string) $token->context, Cli::COLOR256 . '100')
-            ->print(':');
+        $this->printer->printText((string) $token->context, BashFormat::COLOR256 . '100')
+            ->printText(':');
 
         if ($token->inAttribute) {
-            $this->cli->print('A', Cli::COLOR256 . '184')
-                ->print(':');
+            $this->printer->printText('A', BashFormat::COLOR256 . '184')
+                ->printText(':');
         }
 
         if ($token->inString) {
-            $this->cli->print('S', Cli::COLOR256 . '160')
-                ->print(':');
+            $this->printer->printText('S', BashFormat::COLOR256 . '160')
+                ->printText(':');
         }
 
-        $this->cli->print($token->getTokenName(), Cli::COLOR256 . '28');
+        $this->printer->printText($token->getTokenName(), BashFormat::COLOR256 . '28');
 
         if ($token->getTokenName() !== $token->text) {
-            $this->cli->print('=');
+            $this->printer->printText('=');
             preg_match('/^(\s*)(.*?)(\s*)$/ms', $token->text, $parts);
 
             if (strlen($parts[1])) {
-                $this->cli->print($parts[1], Cli::LIGHT_GRAY_BG);
+                $this->printer->printText($parts[1], BashFormat::LIGHT_GRAY_BG);
             }
             if (strlen($parts[2])) {
-                $this->cli->print($parts[2], Cli::LIGHT_GRAY);
+                $this->printer->printText($parts[2], BashFormat::LIGHT_GRAY);
             }
             if (strlen($parts[3])) {
-                $this->cli->print($parts[3], Cli::LIGHT_GRAY_BG);
+                $this->printer->printText($parts[3], BashFormat::LIGHT_GRAY_BG);
             }
         }
 
         if ($token->lineBreakAfter) {
-            $this->cli->print('↩', Cli::COLOR256 . '170');
+            $this->printer->printText('↩', BashFormat::COLOR256 . '170');
         }
         elseif ($token->spaceAfter) {
-            $this->cli->print('‿', Cli::COLOR256 . '170');
+            $this->printer->printText('‿', BashFormat::COLOR256 . '170');
         }
     }
 }

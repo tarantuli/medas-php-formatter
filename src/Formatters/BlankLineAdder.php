@@ -6,11 +6,9 @@ namespace Medas\PhpFormatter\Formatters;
 
 use Medas\PhpFormatter\Tokens\Statement;
 use Medas\PhpFormatter\Tokens\StatementTypeFinder;
-use Medas\PhpFormatter\Tokens\StatementTypes\Comment;
-use Medas\PhpFormatter\Tokens\StatementTypes\StatementType;
-use Medas\PhpFormatter\Tokens\StatementTypes\SwitchBranch;
+use Medas\PhpFormatter\Tokens\StatementTypes\{Comment, StatementType, SwitchBranch};
 use Medas\PhpFormatter\Tokens\TokenTree;
-use Medas\ServiceManager\Attributes\Service;
+use Medas\ServiceManager\Service;
 
 #[Service]
 class BlankLineAdder

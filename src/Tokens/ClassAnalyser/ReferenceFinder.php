@@ -11,7 +11,7 @@ use Medas\PhpFormatter\Tokens\StatementTypes\AttributeStatement;
 use Medas\PhpFormatter\Tokens\StatementTypes\UseTraitStatement;
 use Medas\PhpFormatter\Tokens\Token;
 use Medas\PhpFormatter\Tokens\TokenTree;
-use Medas\ServiceManager\Attributes\Service;
+use Medas\ServiceManager\Service;
 
 #[Service]
 class ReferenceFinder

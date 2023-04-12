@@ -7,7 +7,7 @@ namespace Medas\PhpFormatter\Tokens\ClassAnalyser;
 use Medas\PhpFormatter\Tokens\Token;
 use Medas\PhpFormatter\Tokens\TokenGroups;
 use Medas\PhpFormatter\Tokens\TokenTree;
-use Medas\ServiceManager\Attributes\Service;
+use Medas\ServiceManager\Service;
 
 /**
  * Finds the namespace of the file, the class name, the class type (class, interface, trait)

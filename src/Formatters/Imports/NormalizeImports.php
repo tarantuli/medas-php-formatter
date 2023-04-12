@@ -8,7 +8,7 @@ use Medas\PhpFormatter\Formatter;
 use Medas\PhpFormatter\Formatters\BaseFormatter;
 use Medas\PhpFormatter\Tokens\ClassAnalyser\ClassAnalyser;
 use Medas\PhpFormatter\Tokens\TokenTree;
-use Medas\ServiceManager\Attributes\Service;
+use Medas\ServiceManager\Service;
 
 /**
  * This service normalizes all imports in a file.

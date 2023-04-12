@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Medas\PhpFormatter;
 
+use Medas\Core\Attributes\ConfigValue;
 use Medas\Core\System;
 use Medas\FileSystem\TemporaryFiles;
 use Medas\PhpFormatter\ConfigOptions\PathToPhp;
 use Medas\PhpFormatter\Exceptions\CannotRunCommandLineException;
-use Medas\ServiceManager\Attributes\Service;
-use Medas\ServiceManager\ConfigOptions\ConfigValue;
+use Medas\ServiceManager\Service;
 
 #[Service]
 class CodeValidator

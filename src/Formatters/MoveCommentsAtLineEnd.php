@@ -6,7 +6,7 @@ namespace Medas\PhpFormatter\Formatters;
 
 use Medas\PhpFormatter\Preparsers\NoCommentsAtLineEnd;
 use Medas\PhpFormatter\Tokens\TokenTree;
-use Medas\ServiceManager\Attributes\Service;
+use Medas\ServiceManager\Service;
 
 /**
  * This formatter processes the tokens marked by the preparser NoCommentsAtLineEnd. That class also registers this

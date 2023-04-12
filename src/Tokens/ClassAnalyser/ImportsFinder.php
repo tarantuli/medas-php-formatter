@@ -8,7 +8,7 @@ use Medas\PhpFormatter\Tokens\StatementTypeFinder;
 use Medas\PhpFormatter\Tokens\StatementTypes\UseClassStatement;
 use Medas\PhpFormatter\Tokens\Token;
 use Medas\PhpFormatter\Tokens\TokenTree;
-use Medas\ServiceManager\Attributes\Service;
+use Medas\ServiceManager\Service;
 
 #[Service]
 class ImportsFinder

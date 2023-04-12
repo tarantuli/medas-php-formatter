@@ -6,7 +6,7 @@ namespace Medas\PhpFormatter\Formatters\Replacements;
 
 use Medas\PhpFormatter\Formatters\BaseFormatter;
 use Medas\PhpFormatter\Tokens\TokenTree;
-use Medas\ServiceManager\Attributes\Service;
+use Medas\ServiceManager\Service;
 
 /**
  * Use "type|null" instead of "?type" in property, parameter and return type definitions

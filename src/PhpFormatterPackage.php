@@ -5,8 +5,7 @@ declare(strict_types=1);
 namespace Medas\PhpFormatter;
 
 use Medas\FileSystem\FileSystemPackage;
-use Medas\ServiceManager\AsSingleton;
-use Medas\ServiceManager\BasePackage;
+use Medas\ServiceManager\{AsSingleton, BasePackage};
 
 class PhpFormatterPackage extends BasePackage
 {

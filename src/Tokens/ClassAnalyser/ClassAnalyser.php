@@ -6,7 +6,7 @@ namespace Medas\PhpFormatter\Tokens\ClassAnalyser;
 
 use Medas\PhpFormatter\Tokens\Tokenizer;
 use Medas\PhpFormatter\Tokens\TokenTree;
-use Medas\ServiceManager\Attributes\Service;
+use Medas\ServiceManager\Service;
 
 #[Service]
 class ClassAnalyser

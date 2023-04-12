@@ -6,13 +6,13 @@ namespace Medas\PhpFormatter\Formatters;
 
 use Medas\PhpFormatter\Tokens\Contexts\MethodReturnType;
 use Medas\PhpFormatter\Tokens\StatementTypeFinder;
-use Medas\PhpFormatter\Tokens\StatementTypes\ClassPropertyDeclaration;
-use Medas\PhpFormatter\Tokens\StatementTypes\DeclareStatement;
-use Medas\PhpFormatter\Tokens\StatementTypes\FunctionDeclaration;
-use Medas\PhpFormatter\Tokens\StatementTypes\SwitchBranch;
+use Medas\PhpFormatter\Tokens\StatementTypes\{ClassPropertyDeclaration,
+    DeclareStatement,
+    FunctionDeclaration,
+    SwitchBranch};
 use Medas\PhpFormatter\Tokens\TokenGroups;
 use Medas\PhpFormatter\Tokens\TokenTree;
-use Medas\ServiceManager\Attributes\Service;
+use Medas\ServiceManager\Service;
 
 #[Service]
 class Psr12Whitespace extends BaseFormatter

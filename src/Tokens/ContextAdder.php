@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Medas\PhpFormatter\Tokens;
 
-use Medas\PhpFormatter\Tokens\StatementTypes\ClassDeclaration;
-use Medas\PhpFormatter\Tokens\StatementTypes\FunctionDeclaration;
-use Medas\PhpFormatter\Tokens\StatementTypes\UseClassStatement;
-use Medas\PhpFormatter\Tokens\StatementTypes\UseTraitStatement;
-use Medas\ServiceManager\Attributes\Service;
+use Medas\PhpFormatter\Tokens\StatementTypes\{ClassDeclaration,
+    FunctionDeclaration,
+    UseClassStatement,
+    UseTraitStatement};
+use Medas\ServiceManager\Service;
 
 #[Service]
 class ContextAdder

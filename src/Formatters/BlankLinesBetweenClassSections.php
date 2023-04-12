@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Medas\PhpFormatter\Formatters;
 
-use Medas\PhpFormatter\Tokens\StatementTypes\ClassConstDeclaration;
-use Medas\PhpFormatter\Tokens\StatementTypes\ClassPropertyDeclaration;
-use Medas\PhpFormatter\Tokens\StatementTypes\Comment;
-use Medas\PhpFormatter\Tokens\StatementTypes\UseTraitStatement;
+use Medas\PhpFormatter\Tokens\StatementTypes\{ClassConstDeclaration,
+    ClassPropertyDeclaration,
+    Comment,
+    UseTraitStatement};
 use Medas\PhpFormatter\Tokens\TokenTree;
-use Medas\ServiceManager\Attributes\Service;
+use Medas\ServiceManager\Service;
 
 #[Service]
 class BlankLinesBetweenClassSections extends BaseFormatter

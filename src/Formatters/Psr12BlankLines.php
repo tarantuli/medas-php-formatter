@@ -5,18 +5,18 @@ declare(strict_types=1);
 namespace Medas\PhpFormatter\Formatters;
 
 use Medas\PhpFormatter\Tokens\StatementTypeFinder;
-use Medas\PhpFormatter\Tokens\StatementTypes\BlockCloser;
-use Medas\PhpFormatter\Tokens\StatementTypes\ClassDeclaration;
-use Medas\PhpFormatter\Tokens\StatementTypes\DeclareStatement;
-use Medas\PhpFormatter\Tokens\StatementTypes\FunctionDeclaration;
-use Medas\PhpFormatter\Tokens\StatementTypes\NamespaceDeclaration;
-use Medas\PhpFormatter\Tokens\StatementTypes\PhpOpenTag;
-use Medas\PhpFormatter\Tokens\StatementTypes\SwitchBranch;
-use Medas\PhpFormatter\Tokens\StatementTypes\UseClassStatement;
-use Medas\PhpFormatter\Tokens\StatementTypes\UseConstStatement;
-use Medas\PhpFormatter\Tokens\StatementTypes\UseFunctionStatement;
+use Medas\PhpFormatter\Tokens\StatementTypes\{BlockCloser,
+    ClassDeclaration,
+    DeclareStatement,
+    FunctionDeclaration,
+    NamespaceDeclaration,
+    PhpOpenTag,
+    SwitchBranch,
+    UseClassStatement,
+    UseConstStatement,
+    UseFunctionStatement};
 use Medas\PhpFormatter\Tokens\TokenTree;
-use Medas\ServiceManager\Attributes\Service;
+use Medas\ServiceManager\Service;
 
 #[Service]
 class Psr12BlankLines extends BaseFormatter

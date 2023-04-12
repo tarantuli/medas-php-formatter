@@ -6,7 +6,7 @@ namespace Medas\PhpFormatter\Preparsers;
 
 use Medas\PhpFormatter\Formatters\MoveCommentsAtLineEnd;
 use Medas\PhpFormatter\Tokens\TokenCollection;
-use Medas\ServiceManager\Attributes\Service;
+use Medas\ServiceManager\Service;
 
 #[Service]
 class NoCommentsAtLineEnd implements Preparser

@@ -7,7 +7,7 @@ namespace Medas\PhpFormatter\Formatters\Imports;
 use Medas\PhpFormatter\Settings\ImportSettings;
 use Medas\PhpFormatter\Tokens\ClassAnalyser\ClassAnalysis;
 use Medas\PhpFormatter\Tokens\ClassAnalyser\ClassReference;
-use Medas\ServiceManager\Attributes\Service;
+use Medas\ServiceManager\Service;
 
 #[Service]
 class NewReferencesFinder

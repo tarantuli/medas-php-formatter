@@ -4,33 +4,30 @@ declare(strict_types=1);
 
 namespace Medas\PhpFormatter\Settings;
 
-use Medas\PhpFormatter\Settings\Indentations\Indentation;
-use Medas\PhpFormatter\Settings\LineEndings\LineEnding;
-
 class DocumentSettings
 {
-    private LineEnding $lineEnding;
-    private Indentation $indentation;
+    private LineEndings\LineEnding $lineEnding;
+    private Indentations\Indentation $indentation;
     private ?int $maxLineLength;
 
-    public function lineEnding(): LineEnding
+    public function lineEnding(): LineEndings\LineEnding
     {
         return $this->lineEnding;
     }
 
-    public function setLineEnding(LineEnding $lineEnding): self
+    public function setLineEnding(LineEndings\LineEnding $lineEnding): self
     {
         $this->lineEnding = $lineEnding;
 
         return $this;
     }
 
-    public function indentation(): Indentation
+    public function indentation(): Indentations\Indentation
     {
         return $this->indentation;
     }
 
-    public function setIndentation(Indentation $indentation): self
+    public function setIndentation(Indentations\Indentation $indentation): self
     {
         $this->indentation = $indentation;
 
