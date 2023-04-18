@@ -7,6 +7,7 @@ namespace Medas\PhpFormatter\Tokens;
 use Medas\Console\Printer;
 use Medas\ConsolePrinter\Printer\BashFormat;
 use Medas\Core\Attributes\Service;
+use Medas\PhpFormatter\Exceptions\NoConsolePrinterFoundException;
 
 #[Service]
 class BlockDumper
@@ -14,13 +15,17 @@ class BlockDumper
     private int $line;
 
     public function __construct(
-        private readonly Printer             $printer,
+        private readonly Printer|null        $printer,
         private readonly StatementTypeFinder $typeFinder)
     {
     }
 
     public function dump(Block $block): void
     {
+        if (!$this->printer) {
+            throw new NoConsolePrinterFoundException();
+        }
+
         $this->line = 0;
         $this->printBlock($block);
         $this->printer->printText("\n");
