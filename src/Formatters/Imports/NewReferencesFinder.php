@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Medas\PhpFormatter\Formatters\Imports;
 
+use Medas\Core\Attributes\Service;
 use Medas\PhpFormatter\Settings\ImportSettings;
 use Medas\PhpFormatter\Tokens\ClassAnalyser\ClassAnalysis;
 use Medas\PhpFormatter\Tokens\ClassAnalyser\ClassReference;
-use Medas\ServiceManager\Service;
 
 #[Service]
 class NewReferencesFinder

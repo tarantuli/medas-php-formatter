@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Medas\PhpFormatter\Formatters\Imports;
 
+use Medas\Core\Attributes\Service;
 use Medas\PhpFormatter\Formatter;
 use Medas\PhpFormatter\Formatters\BaseFormatter;
 use Medas\PhpFormatter\Tokens\ClassAnalyser\ClassAnalyser;
 use Medas\PhpFormatter\Tokens\TokenTree;
-use Medas\ServiceManager\Service;
 
 /**
  * This service normalizes all imports in a file.

@@ -6,7 +6,7 @@ namespace Medas\PhpFormatter\Tokens;
 
 use Medas\Console\Printer;
 use Medas\ConsolePrinter\Printer\BashFormat;
-use Medas\ServiceManager\Service;
+use Medas\Core\Attributes\Service;
 
 #[Service]
 class BlockDumper

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\PhpFormatter\Tokens\ClassAnalyser;
 
+use Medas\Core\Attributes\Service;
 use Medas\PhpFormatter\Tokens\Contexts\MethodParameters;
 use Medas\PhpFormatter\Tokens\Contexts\MethodReturnType;
 use Medas\PhpFormatter\Tokens\StatementTypeFinder;
@@ -11,7 +12,6 @@ use Medas\PhpFormatter\Tokens\StatementTypes\AttributeStatement;
 use Medas\PhpFormatter\Tokens\StatementTypes\UseTraitStatement;
 use Medas\PhpFormatter\Tokens\Token;
 use Medas\PhpFormatter\Tokens\TokenTree;
-use Medas\ServiceManager\Service;
 
 #[Service]
 class ReferenceFinder

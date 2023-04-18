@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Medas\PhpFormatter;
 
+use Medas\Core\Attributes\Service;
 use Medas\PhpFormatter\Exceptions\ReformattedCodeIsInvalidException;
 use Medas\PhpFormatter\Tokens\{BlockDumper, TokenCollection, Tokenizer, TokenTree};
-use Medas\ServiceManager\Service;
 
 #[Service]
 class Formatter

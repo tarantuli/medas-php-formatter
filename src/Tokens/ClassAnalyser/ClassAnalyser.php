@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Medas\PhpFormatter\Tokens\ClassAnalyser;
 
+use Medas\Core\Attributes\Service;
 use Medas\PhpFormatter\Tokens\Tokenizer;
 use Medas\PhpFormatter\Tokens\TokenTree;
-use Medas\ServiceManager\Service;
 
 #[Service]
 class ClassAnalyser

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\PhpFormatter\Formatters;
 
+use Medas\Core\Attributes\Service;
 use Medas\PhpFormatter\Tokens\StatementTypeFinder;
 use Medas\PhpFormatter\Tokens\StatementTypes\{BlockCloser,
     ClassDeclaration,
@@ -16,7 +17,6 @@ use Medas\PhpFormatter\Tokens\StatementTypes\{BlockCloser,
     UseConstStatement,
     UseFunctionStatement};
 use Medas\PhpFormatter\Tokens\TokenTree;
-use Medas\ServiceManager\Service;
 
 #[Service]
 class Psr12BlankLines extends BaseFormatter

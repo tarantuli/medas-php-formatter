@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Medas\PhpFormatter\Tokens\ClassAnalyser;
 
+use Medas\Core\Attributes\Service;
 use Medas\PhpFormatter\Tokens\StatementTypeFinder;
 use Medas\PhpFormatter\Tokens\StatementTypes\UseClassStatement;
 use Medas\PhpFormatter\Tokens\Token;
 use Medas\PhpFormatter\Tokens\TokenTree;
-use Medas\ServiceManager\Service;
 
 #[Service]
 class ImportsFinder

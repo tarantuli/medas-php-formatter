@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Medas\PhpFormatter\Formatters\Imports;
 
+use Medas\Core\Attributes\Service;
 use Medas\PhpFormatter\Tokens\TokenTree;
-use Medas\ServiceManager\Service;
 
 #[Service]
 class ReferencesUpdater

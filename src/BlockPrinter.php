@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Medas\PhpFormatter;
 
+use Medas\Core\Attributes\Service;
 use Medas\PhpFormatter\Tokens\{Block, Statement};
-use Medas\ServiceManager\Service;
 
 #[Service]
 class BlockPrinter

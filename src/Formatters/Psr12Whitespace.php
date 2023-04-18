@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\PhpFormatter\Formatters;
 
+use Medas\Core\Attributes\Service;
 use Medas\PhpFormatter\Tokens\Contexts\MethodReturnType;
 use Medas\PhpFormatter\Tokens\StatementTypeFinder;
 use Medas\PhpFormatter\Tokens\StatementTypes\{ClassPropertyDeclaration,
@@ -12,7 +13,6 @@ use Medas\PhpFormatter\Tokens\StatementTypes\{ClassPropertyDeclaration,
     SwitchBranch};
 use Medas\PhpFormatter\Tokens\TokenGroups;
 use Medas\PhpFormatter\Tokens\TokenTree;
-use Medas\ServiceManager\Service;
 
 #[Service]
 class Psr12Whitespace extends BaseFormatter

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Medas\PhpFormatter\Formatters;
 
+use Medas\Core\Attributes\Service;
 use Medas\PhpFormatter\Preparsers\NoCommentsAtLineEnd;
 use Medas\PhpFormatter\Tokens\TokenTree;
-use Medas\ServiceManager\Service;
 
 /**
  * This formatter processes the tokens marked by the preparser NoCommentsAtLineEnd. That class also registers this

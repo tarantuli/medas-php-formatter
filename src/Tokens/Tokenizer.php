@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\PhpFormatter\Tokens;
 
-use Medas\ServiceManager\Service;
+use Medas\Core\Attributes\Service;
 
 #[Service]
 class Tokenizer
