@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\PhpFormatter\Tokens\StatementTypes;
 
-use Medas\ServiceManager\AsSingleton;
+use Medas\Core\AsSingleton;
 
 class DeclareStatement implements StatementType
 {
