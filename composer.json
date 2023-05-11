@@ -12,11 +12,12 @@
     "prefer-stable": true,
     "require": {
         "morphp/medas-service-manager": "dev-dev",
+        "morphp/medas-php-tokenizer": "dev-dev",
+        "morphp/medas-php-class-analysis": "dev-dev",
         "morphp/medas-file-system": "dev-dev"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5",
-        "morphp/medas-console-printer": "dev-dev",
         "morphp/medas-config-manager": "dev-dev",
         "morphp/medas-config-options": "dev-dev"
     },

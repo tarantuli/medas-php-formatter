@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\PhpFormatter\Formatters;
 
-use Medas\PhpFormatter\Tokens\TokenTree;
+use Medas\PhpTokenizer\TokenTree;
 
 interface Formatter
 {

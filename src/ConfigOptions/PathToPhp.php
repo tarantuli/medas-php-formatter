@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Medas\PhpFormatter\ConfigOptions;
 
-use Medas\Core\Interfaces\{ConfigGroup, ConfigOption};
 use Medas\Core\AsSingleton;
+use Medas\Core\Interfaces\{ConfigGroup, ConfigOption};
 
 class PathToPhp implements ConfigOption
 {

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\PhpFormatter\Preparsers;
 
-use Medas\PhpFormatter\Tokens\TokenCollection;
+use Medas\PhpTokenizer\TokenCollection;
 
 interface Preparser
 {

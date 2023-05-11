@@ -5,10 +5,9 @@ declare(strict_types=1);
 namespace Medas\PhpFormatter\Formatters\Imports;
 
 use Medas\Core\Attributes\Service;
-use Medas\PhpFormatter\Formatter;
-use Medas\PhpFormatter\Formatters\BaseFormatter;
-use Medas\PhpFormatter\Tokens\ClassAnalyser\ClassAnalyser;
-use Medas\PhpFormatter\Tokens\TokenTree;
+use Medas\PhpClassAnalysis\ClassAnalyser;
+use Medas\PhpFormatter\{Formatter, Formatters\BaseFormatter};
+use Medas\PhpTokenizer\TokenTree;
 
 /**
  * This service normalizes all imports in a file.
@@ -45,7 +44,7 @@ class NormalizeImports extends BaseFormatter
 
     public function format(TokenTree $tree): void
     {
-        $analysis = $this->classAnalyser->analyseTokenCollection($tree);
+        $analysis = $this->classAnalyser->analyseTokenTree($tree);
 
         $referencesAndImports = new ReferencesAndImports();
 

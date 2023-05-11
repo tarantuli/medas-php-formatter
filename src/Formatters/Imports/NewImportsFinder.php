@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Medas\PhpFormatter\Formatters\Imports;
 
 use Medas\Core\Attributes\Service;
-use Medas\PhpFormatter\Tokens\ClassAnalyser\FqnProperties;
+use Medas\PhpClassAnalysis\FqnProperties;
 
 #[Service]
 class NewImportsFinder

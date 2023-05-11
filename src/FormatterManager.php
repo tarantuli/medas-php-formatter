@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Medas\PhpFormatter;
 
 use Medas\Core\Attributes\Service;
-use Medas\PhpFormatter\Tokens\AdditionalTokensDefiner;
+use Medas\PhpTokenizer\AdditionalTokensDefiner;
 
 #[Service]
 class FormatterManager

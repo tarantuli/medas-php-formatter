@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Medas\PhpFormatter\Formatters;
 
 use Medas\Core\Attributes\Service;
-use Medas\PhpFormatter\Tokens\{TokenGroups, TokenTree};
+use Medas\PhpTokenizer\{TokenGroups, TokenTree};
 
 #[Service]
 class KeywordsToLowercase extends BaseFormatter

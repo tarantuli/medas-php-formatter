@@ -5,8 +5,7 @@ declare(strict_types=1);
 namespace Medas\PhpFormatter\Formatters\Replacements;
 
 use Medas\PhpFormatter\Formatters\BaseFormatter;
-use Medas\PhpFormatter\Tokens\Token;
-use Medas\PhpFormatter\Tokens\TokenTree;
+use Medas\PhpTokenizer\{Token, TokenTree};
 
 abstract class BaseTokenReplacer extends BaseFormatter
 {

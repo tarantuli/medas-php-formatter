@@ -6,7 +6,7 @@ namespace Medas\PhpFormatter;
 
 use Medas\Core\Attributes\Service;
 use Medas\PhpFormatter\Exceptions\ReformattedCodeIsInvalidException;
-use Medas\PhpFormatter\Tokens\{BlockDumper, TokenCollection, Tokenizer, TokenTree};
+use Medas\PhpTokenizer\{BlockDumper, TokenCollection, Tokenizer, TokenTree, TreeBuilder};
 
 #[Service]
 class Formatter
@@ -19,6 +19,7 @@ class Formatter
         private readonly BlockPrinter  $blockPrinter,
         private readonly CodeValidator $codeValidator,
         private readonly Tokenizer     $tokenizer,
+        private readonly TreeBuilder   $treeBuilder,
     )
     {
     }
@@ -32,7 +33,7 @@ class Formatter
         $tokens = $this->tokenizer->tokenize($code);
         $this->applyPreparsers($tokens);
 
-        $tree = $this->tokenizer->determineTree($tokens);
+        $tree = $this->treeBuilder->fromCollection($tokens);
         $this->applyFormatters($tree);
 
         if ($this->dumpTree) {

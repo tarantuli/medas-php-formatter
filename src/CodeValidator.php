@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\PhpFormatter;
 
-use Medas\Core\Attributes\ConfigValue;
-use Medas\Core\Attributes\Service;
+use Medas\Core\Attributes\{ConfigValue, Service};
 use Medas\Core\System;
 use Medas\FileSystem\TemporaryFiles;
 use Medas\PhpFormatter\ConfigOptions\PathToPhp;

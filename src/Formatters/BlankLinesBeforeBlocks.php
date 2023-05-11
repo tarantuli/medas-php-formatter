@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Medas\PhpFormatter\Formatters;
 
 use Medas\Core\Attributes\Service;
-use Medas\PhpFormatter\Tokens\StatementTypes\{ControlStatement, ReturnStatement, ThrowStatement};
-use Medas\PhpFormatter\Tokens\TokenTree;
+use Medas\PhpTokenizer\StatementTypes\{ControlStatement, ReturnStatement, ThrowStatement};
+use Medas\PhpTokenizer\TokenTree;
 
 #[Service]
 class BlankLinesBeforeBlocks extends BaseFormatter

@@ -5,9 +5,7 @@ declare(strict_types=1);
 namespace Medas\PhpFormatter\Formatters\Replacements;
 
 use Medas\Core\Attributes\Service;
-use Medas\PhpFormatter\Tokens\StatementTypeFinder;
-use Medas\PhpFormatter\Tokens\StatementTypes\GenericStatement;
-use Medas\PhpFormatter\Tokens\Token;
+use Medas\PhpTokenizer\{StatementTypeFinder, StatementTypes\GenericStatement, Token};
 
 #[Service]
 class UseImplodeInsteadOfJoin extends BaseTokenReplacer

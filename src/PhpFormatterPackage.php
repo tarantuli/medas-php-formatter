@@ -6,6 +6,8 @@ namespace Medas\PhpFormatter;
 
 use Medas\Core\AsSingleton;
 use Medas\FileSystem\FileSystemPackage;
+use Medas\PhpClassAnalysis\PhpClassAnalysisPackage;
+use Medas\PhpTokenizer\PhpTokenizerPackage;
 use Medas\ServiceManager\BasePackage;
 
 class PhpFormatterPackage extends BasePackage
@@ -15,6 +17,8 @@ class PhpFormatterPackage extends BasePackage
     public function dependencies(): array
     {
         return $this->dependenciesByClass([
+            PhpClassAnalysisPackage::class,
+            PhpTokenizerPackage::class,
             FileSystemPackage::class,
         ]);
     }

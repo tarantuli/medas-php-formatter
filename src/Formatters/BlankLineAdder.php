@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Medas\PhpFormatter\Formatters;
 
 use Medas\Core\Attributes\Service;
-use Medas\PhpFormatter\Tokens\Statement;
-use Medas\PhpFormatter\Tokens\StatementTypeFinder;
-use Medas\PhpFormatter\Tokens\StatementTypes\{Comment, StatementType, SwitchBranch};
-use Medas\PhpFormatter\Tokens\TokenTree;
+use Medas\PhpTokenizer\Statement;
+use Medas\PhpTokenizer\StatementTypeFinder;
+use Medas\PhpTokenizer\StatementTypes\{Comment, StatementType, SwitchBranch};
+use Medas\PhpTokenizer\TokenTree;
 
 #[Service]
 class BlankLineAdder

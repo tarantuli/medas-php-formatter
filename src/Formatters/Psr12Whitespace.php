@@ -5,14 +5,11 @@ declare(strict_types=1);
 namespace Medas\PhpFormatter\Formatters;
 
 use Medas\Core\Attributes\Service;
-use Medas\PhpFormatter\Tokens\Contexts\MethodReturnType;
-use Medas\PhpFormatter\Tokens\StatementTypeFinder;
-use Medas\PhpFormatter\Tokens\StatementTypes\{ClassPropertyDeclaration,
-    DeclareStatement,
-    FunctionDeclaration,
-    SwitchBranch};
-use Medas\PhpFormatter\Tokens\TokenGroups;
-use Medas\PhpFormatter\Tokens\TokenTree;
+use Medas\PhpTokenizer\Contexts\MethodReturnType;
+use Medas\PhpTokenizer\StatementTypeFinder;
+use Medas\PhpTokenizer\StatementTypes\{ClassPropertyDeclaration, DeclareStatement, FunctionDeclaration, SwitchBranch};
+use Medas\PhpTokenizer\TokenGroups;
+use Medas\PhpTokenizer\TokenTree;
 
 #[Service]
 class Psr12Whitespace extends BaseFormatter

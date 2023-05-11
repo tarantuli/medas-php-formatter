@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Medas\PhpFormatter\Formatters;
 
 use Medas\Core\Attributes\Service;
-use Medas\PhpFormatter\Tokens\TokenTree;
+use Medas\PhpTokenizer\TokenTree;
 
 #[Service]
 class Psr12ElseifWhile extends BaseFormatter

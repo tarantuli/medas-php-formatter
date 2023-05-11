@@ -5,16 +5,16 @@ declare(strict_types=1);
 namespace Medas\PhpFormatter\Formatters\Imports;
 
 use Medas\Core\Attributes\Service;
-use Medas\PhpFormatter\Tokens\ClassAnalyser\FqnProperties;
-use Medas\PhpFormatter\Tokens\Contexts\GlobalScope;
-use Medas\PhpFormatter\Tokens\Statement;
-use Medas\PhpFormatter\Tokens\StatementTypeFinder;
-use Medas\PhpFormatter\Tokens\StatementTypes\DeclareStatement;
-use Medas\PhpFormatter\Tokens\StatementTypes\NamespaceDeclaration;
-use Medas\PhpFormatter\Tokens\StatementTypes\PhpOpenTag;
-use Medas\PhpFormatter\Tokens\StatementTypes\UseClassStatement;
-use Medas\PhpFormatter\Tokens\Token;
-use Medas\PhpFormatter\Tokens\TokenTree;
+use Medas\PhpClassAnalysis\FqnProperties;
+use Medas\PhpTokenizer\{Contexts\GlobalScope,
+    Statement,
+    StatementTypeFinder,
+    StatementTypes\DeclareStatement,
+    StatementTypes\NamespaceDeclaration,
+    StatementTypes\PhpOpenTag,
+    StatementTypes\UseClassStatement,
+    Token,
+    TokenTree};
 
 #[Service]
 class NewImportsInserter

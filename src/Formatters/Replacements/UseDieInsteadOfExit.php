@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Medas\PhpFormatter\Formatters\Replacements;
 
 use Medas\Core\Attributes\Service;
-use Medas\PhpFormatter\Tokens\Token;
+use Medas\PhpTokenizer\Token;
 
 #[Service]
 class UseDieInsteadOfExit extends BaseTokenReplacer
