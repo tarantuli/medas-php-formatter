@@ -8,7 +8,7 @@ class DocumentSettings
 {
     private LineEndings\LineEnding $lineEnding;
     private Indentations\Indentation $indentation;
-    private ?int $maxLineLength;
+    private int|null $maxLineLength;
 
     public function lineEnding(): LineEndings\LineEnding
     {

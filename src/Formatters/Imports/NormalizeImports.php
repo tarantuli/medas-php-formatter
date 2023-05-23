@@ -54,7 +54,6 @@ class NormalizeImports extends BaseFormatter
 
         // Insert the new import header and update references in the body
         $this->newImportsInserter->insert($tree, $referencesAndImports);
-        $this->referencesUpdater->update($tree, $referencesAndImports);
+        $this->referencesUpdater->update($tree, $analysis, $referencesAndImports);
     }
-
 }

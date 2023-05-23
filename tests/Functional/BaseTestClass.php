@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase;
 
 abstract class BaseTestClass extends TestCase
 {
-    protected function assertRemainsTheSame(string $sourceFile, Settings $settings)
+    protected function assertRemainsTheSame(string $sourceFile, Settings $settings): void
     {
         $this->compare($sourceFile, $sourceFile, $settings, "$sourceFile changed after formatting");
     }
@@ -36,9 +36,8 @@ abstract class BaseTestClass extends TestCase
         return [$formatterManager->format($source, $settings), $expected];
     }
 
-    protected function assertChanges(string $sourceFile, string $targetFile, Settings $settings)
+    protected function assertChanges(string $sourceFile, string $targetFile, Settings $settings): void
     {
         $this->compare($sourceFile, $targetFile, $settings, "$sourceFile => $targetFile");
     }
-
 }
