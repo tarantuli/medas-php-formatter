@@ -66,6 +66,11 @@ class FormatterTest extends BaseTestClass
         $this->assertRemainsTheSame('comments', new Medas());
     }
 
+    public function testNamedArgumetns(): void
+    {
+        $this->assertRemainsTheSame('named-arguments', new Medas());
+    }
+
     public function testBasicPreformatted(): void
     {
         $this->assertRemainsTheSame('basic-preformatted', new Medas());

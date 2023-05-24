@@ -74,6 +74,11 @@ class Psr12Whitespace extends BaseFormatter
                     && $token->isLastToken()) {
                     $token->previous->spaceAfter = false;
                 }
+
+                // No space between strings and ":" in named arguments
+                if ($token->is(T_COLON) && $token->previous->is(T_STRING) && !$token->previous->isTrueFalseNull()) {
+                    $token->previous->spaceAfter = false;
+                }
             }
         }
     }

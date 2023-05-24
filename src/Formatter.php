@@ -75,4 +75,11 @@ class Formatter
     {
         return $this->settings;
     }
+
+    public function dumpTree(): self
+    {
+        $this->dumpTree = true;
+
+        return $this;
+    }
 }
