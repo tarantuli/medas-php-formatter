@@ -14,7 +14,8 @@ use Medas\PhpTokenizer\TokenTree;
 #[Service]
 class Psr12VisibilityMarkers extends BaseFormatter
 {
-    public function __construct(private readonly StatementTypeFinder $typeFinder,
+    public function __construct(
+        private readonly StatementTypeFinder $typeFinder,
     )
     {
     }

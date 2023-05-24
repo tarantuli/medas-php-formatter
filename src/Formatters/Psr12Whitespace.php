@@ -14,8 +14,10 @@ use Medas\PhpTokenizer\TokenTree;
 #[Service]
 class Psr12Whitespace extends BaseFormatter
 {
-    public function __construct(private readonly TokenGroups         $tokenGroups,
-                                private readonly StatementTypeFinder $typeFinder)
+    public function __construct(
+        private readonly TokenGroups         $tokenGroups,
+        private readonly StatementTypeFinder $typeFinder,
+    )
     {
     }
 
