@@ -4,16 +4,21 @@ declare(strict_types=1);
 
 namespace Medas\PhpFormatter\ConfigOptions;
 
-use Medas\Core\AsSingleton;
+use Medas\Core\Attributes\Service;
 use Medas\Core\Interfaces\{ConfigGroup, ConfigOption};
 
+#[Service]
 class PathToPhp implements ConfigOption
 {
-    use AsSingleton;
+    public function __construct(
+        private readonly ValidatorGroup $group,
+    )
+    {
+    }
 
     public function group(): ConfigGroup
     {
-        return ValidatorGroup::instance();
+        return $this->group;
     }
 
     public function name(): string

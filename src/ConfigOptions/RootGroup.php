@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace Medas\PhpFormatter\ConfigOptions;
 
-use Medas\Core\AsSingleton;
+use Medas\Core\Attributes\Service;
 use Medas\Core\Interfaces\ConfigGroup;
 
+#[Service]
 class RootGroup implements ConfigGroup
 {
-    use AsSingleton;
-
     public function parent(): ConfigGroup|null
     {
         return null;

@@ -4,16 +4,21 @@ declare(strict_types=1);
 
 namespace Medas\PhpFormatter\ConfigOptions;
 
-use Medas\Core\AsSingleton;
+use Medas\Core\Attributes\Service;
 use Medas\Core\Interfaces\ConfigGroup;
 
+#[Service]
 class ValidatorGroup implements ConfigGroup
 {
-    use AsSingleton;
+    public function __construct(
+        private readonly RootGroup $group,
+    )
+    {
+    }
 
     public function parent(): ConfigGroup|null
     {
-        return RootGroup::instance();
+        return $this->group;
     }
 
     public function name(): string
