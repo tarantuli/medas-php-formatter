@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Medas\Test\Functional\ClassAnalyser;
+namespace Medas\PhpFormatterTest\Functional\ClassAnalyser;
 
 use Medas\PhpClassAnalysis\ClassAnalyser;
-use Medas\Test\Functional\BaseTestClass;
+use Medas\PhpFormatterTest\Functional\BaseTestClass;
 
 class ClassAnalyserTest extends BaseTestClass
 {

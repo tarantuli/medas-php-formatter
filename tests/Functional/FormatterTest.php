@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Medas\Test\Functional;
+namespace Medas\PhpFormatterTest\Functional;
 
 use Medas\PhpFormatter\Settings\Medas;
 use Medas\PhpFormatter\Settings\MinimalSize;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Medas\Test\Functional;
+namespace Medas\PhpFormatterTest\Functional;
 
 use Medas\PhpFormatter\FormatterManager;
 use Medas\PhpFormatter\Settings\Settings;

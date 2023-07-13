@@ -6,7 +6,7 @@ use Absolute\ClassName;
 use Absolute\Path\To\AnotherInterface;
 use Absolute\ReturnType;
 use Clashing\MyClass as ClaMyClass;
-use Medas\Attributes\Types as Type;
+use N\Attributes\Types as Type;
 use MyNamespace\This\Relative\Path\Is\Too\Deep;
 use My\Clashing\ClassName as ClaClassName;
 use My\Clavicle\ClassName as ClaClassName1;

@@ -5,7 +5,7 @@ namespace MyNamespace;
 use AnotherNamespace\ClassName;
 use GlobalNamespaceClass;
 use Unused\Alias as UnusedAlias;
-use Medas\Attributes\Types as Type;
+use N\Attributes\Types as Type;
 use MyNamespace\ChildPath\ThisCanBeInlined;
 use So\Many\Layers\Namespace as AliasedNamespace;
 use YetAnotherNamespace\ClassName as AliasOfClassName;

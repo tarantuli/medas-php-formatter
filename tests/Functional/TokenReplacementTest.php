@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Medas\Test\Functional;
+namespace Medas\PhpFormatterTest\Functional;
 
 use Medas\PhpFormatter\Formatters\Replacements\UseDieInsteadOfExit;
 use Medas\PhpFormatter\Formatters\Replacements\UseExitInsteadOfDie;

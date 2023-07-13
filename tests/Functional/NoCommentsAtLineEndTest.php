@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Medas\Test\Functional;
+namespace Medas\PhpFormatterTest\Functional;
 
 use Medas\PhpFormatter\Preparsers\NoCommentsAtLineEnd;
 use Medas\PhpFormatter\Settings\Psr12;

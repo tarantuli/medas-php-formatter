@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Medas\Test\Functional\Imports;
+namespace Medas\PhpFormatterTest\Functional\Imports;
 
 use Medas\PhpFormatter\Formatters\Imports\NormalizeImports;
 use Medas\PhpFormatter\Settings\Medas;
-use Medas\Test\Functional\BaseTestClass;
+use Medas\PhpFormatterTest\Functional\BaseTestClass;
 
 class NormalizeImportsTest extends BaseTestClass
 {
