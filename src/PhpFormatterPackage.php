@@ -16,11 +16,11 @@ class PhpFormatterPackage extends BasePackage
 
     public function dependencies(): array
     {
-        return $this->dependenciesByClass([
-            PhpClassAnalysisPackage::class,
-            PhpTokenizerPackage::class,
-            FileSystemPackage::class,
-        ]);
+        return [
+            PhpClassAnalysisPackage::instance(),
+            PhpTokenizerPackage::instance(),
+            FileSystemPackage::instance(),
+        ];
     }
 
     public function sourceDirectory(): string
