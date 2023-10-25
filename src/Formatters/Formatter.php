@@ -12,5 +12,8 @@ interface Formatter
 
     public function additionalFormatters(): array;
 
+    /**
+     * Formatters with higher priority values are called first, lower values are called later.
+     */
     public function priority(): int;
 }

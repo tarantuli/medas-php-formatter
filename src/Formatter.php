@@ -12,7 +12,9 @@ use Medas\PhpTokenizer\{BlockDumper, TokenCollection, Tokenizer, TokenTree, Tree
 class Formatter
 {
     private Settings\Settings $settings;
-    private bool $dumpTree = false;
+
+    private bool $dumpParseTree = false;
+    private bool $dumpResultTree = false;
 
     public function __construct(
         private readonly BlockDumper   $blockDumper,
@@ -34,9 +36,14 @@ class Formatter
         $this->applyPreparsers($tokens);
 
         $tree = $this->treeBuilder->fromCollection($tokens);
+
+        if ($this->dumpParseTree) {
+            $this->blockDumper->dump($tree->block());
+        }
+
         $this->applyFormatters($tree);
 
-        if ($this->dumpTree) {
+        if ($this->dumpResultTree) {
             $this->blockDumper->dump($tree->block());
         }
 
@@ -76,9 +83,16 @@ class Formatter
         return $this->settings;
     }
 
-    public function dumpTree(): self
+    public function dumpParseTree(): self
     {
-        $this->dumpTree = true;
+        $this->dumpParseTree = true;
+
+        return $this;
+    }
+
+    public function dumpResultTree(): self
+    {
+        $this->dumpResultTree = true;
 
         return $this;
     }

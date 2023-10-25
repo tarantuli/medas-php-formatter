@@ -6,6 +6,7 @@ namespace Medas\PhpFormatter\Formatters\Imports;
 
 use Medas\Core\Attributes\Service;
 use Medas\PhpClassAnalysis\FqnProperties;
+use Medas\PhpFormatter\Formatters\Imports\Grouping\ImportGrouper;
 use Medas\PhpTokenizer\{Contexts\GlobalScope,
     Statement,
     StatementTypeFinder,
@@ -17,39 +18,38 @@ use Medas\PhpTokenizer\{Contexts\GlobalScope,
     TokenTree};
 
 #[Service]
-class NewImportsInserter
+readonly class NewImportsInserter
 {
+    private Token $baseToken;
+
     public function __construct(
-        private readonly FqnProperties       $fqnProperties,
-        private readonly StatementTypeFinder $statementTypeFinder,
+        private FqnProperties       $fqnProperties,
+        private ImportGrouper       $importGrouper,
+        private StatementTypeFinder $statementTypeFinder,
     )
     {
+        $this->baseToken = new Token(ord(';'), ';');
+        $this->baseToken->context = GlobalScope::instance();
+        $this->baseToken->inString = false;
+        $this->baseToken->inAttribute = false;
     }
 
     public function insert(TokenTree $tree, ReferencesAndImports $referencesAndImports): void
     {
         $this->removeExistingImportStatements($tree);
-        // Sort the new imports in reverse order
-        krsort($referencesAndImports->imports);
 
         $after = $this->findImportInsertionSpot($tree);
 
-        $baseToken = new Token(ord(';'), ';');
-        $baseToken->context = GlobalScope::instance();
-        $baseToken->inString = false;
-        $baseToken->inAttribute = false;
+        $groupedImports = $this->importGrouper->group($referencesAndImports);
 
-        foreach ($referencesAndImports->imports as $fqn => $alias) {
+        // Sort the new imports in reverse order, so we can insert statements one by one below the insertion spot
+        krsort($groupedImports);
+
+        foreach ($groupedImports as $fqn => $alias) {
             $statement = $tree->block()->appendNewStatement();
-            $statement->appendToken((clone $baseToken)->id(T_USE)->text('use'));
-            $statement->appendToken((clone $baseToken)->id(T_NAME_QUALIFIED)->text(substr($fqn, 1)));
 
-            if ($alias !== $this->fqnProperties->getLastPart($fqn)) {
-                $statement->appendToken((clone $baseToken)->id(T_AS)->text('as'));
-                $statement->appendToken((clone $baseToken)->id(T_STRING)->text($alias));
-            }
+            $this->processGroupedImport($statement, $fqn, $alias);
 
-            $statement->appendToken((clone $baseToken)->id(ord(';'))->text(';'));
             $tree->block()->moveStatementAfter($statement, $after);
         }
     }
@@ -85,5 +85,43 @@ class NewImportsInserter
         }
 
         return null;
+    }
+
+    private function processGroupedImport(Statement $statement, int|string $fqn, mixed $alias): void
+    {
+        $statement->appendToken((clone $this->baseToken)->id(T_USE)->text('use'));
+        $statement->appendToken((clone $this->baseToken)->id(T_NAME_QUALIFIED)->text(substr($fqn, 1)));
+
+        if (is_array($alias)) {
+            $statement->appendToken((clone $this->baseToken)->id(T_NS_SEPARATOR)->text('\\'));
+            $statement->appendToken((clone $this->baseToken)->id(123)->text('{'));
+
+            $isFirst = true;
+            ksort($alias, SORT_STRING | SORT_FLAG_CASE);
+            foreach ($alias as $subPath => $subAlias) {
+                if (!$isFirst) {
+                    $statement->appendToken((clone $this->baseToken)->id(123)->text(','));
+                }
+
+                $statement->appendToken((clone $this->baseToken)->id(T_STRING)->text($subPath));
+
+                if ($this->fqnProperties->getLastPart($subPath) !== $subAlias) {
+                    $statement->appendToken((clone $this->baseToken)->id(T_AS)->text('as'));
+                    $statement->appendToken((clone $this->baseToken)->id(T_STRING)->text($subAlias));
+                }
+
+                $isFirst = false;
+            }
+
+            $statement->appendToken((clone $this->baseToken)->id(123)->text('}'));
+        }
+        else {
+            if ($alias !== $this->fqnProperties->getLastPart($fqn)) {
+                $statement->appendToken((clone $this->baseToken)->id(T_AS)->text('as'));
+                $statement->appendToken((clone $this->baseToken)->id(T_STRING)->text($alias));
+            }
+        }
+
+        $statement->appendToken(clone $this->baseToken);
     }
 }

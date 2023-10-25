@@ -7,16 +7,15 @@ namespace Medas\PhpFormatterTest\Functional\Imports;
 use Medas\PhpFormatter\Settings\Medas;
 use Medas\PhpFormatterTest\Functional\BaseTestClass;
 
-class NormalizeImportsTest extends BaseTestClass
+class GroupImportsTest extends BaseTestClass
 {
-    public function testNormalize(): void
+    public function testGrouping(): void
     {
         $settings = (new Medas());
         $settings->import->maxRelativeDepth = 3;
 
-        $this->assertChanges(
-            'imports/normalize-imports-pre',
-            'imports/normalize-imports-post',
+        $this->assertRemainsTheSame(
+            'imports/group-imports-pre',
             $settings
         );
     }
