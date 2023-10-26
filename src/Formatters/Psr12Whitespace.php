@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Medas\PhpFormatter\Formatters;
 
 use Medas\Core\Attributes\Service;
+use Medas\PhpFormatter\Job;
 use Medas\PhpTokenizer\Contexts\MethodReturnType;
 use Medas\PhpTokenizer\StatementTypeFinder;
 use Medas\PhpTokenizer\StatementTypes\{ClassPropertyDeclaration, DeclareStatement, FunctionDeclaration, SwitchBranch};
@@ -12,19 +13,19 @@ use Medas\PhpTokenizer\TokenGroups;
 use Medas\PhpTokenizer\TokenTree;
 
 #[Service]
-class Psr12Whitespace extends BaseFormatter
+readonly class Psr12Whitespace extends BaseFormatter
 {
     public function __construct(
-        private readonly TokenGroups         $tokenGroups,
-        private readonly StatementTypeFinder $typeFinder,
+        private TokenGroups         $tokenGroups,
+        private StatementTypeFinder $typeFinder,
     )
     {
     }
 
-    public function format(TokenTree $tree): void
+    public function format(Job $job): void
     {
-        $this->addSpaces($tree);
-        $this->removeSpaces($tree);
+        $this->addSpaces($job->tree);
+        $this->removeSpaces($job->tree);
     }
 
     private function addSpaces(TokenTree $tree): void

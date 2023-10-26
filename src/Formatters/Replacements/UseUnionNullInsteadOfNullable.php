@@ -6,15 +6,15 @@ namespace Medas\PhpFormatter\Formatters\Replacements;
 
 use Medas\Core\Attributes\Service;
 use Medas\PhpFormatter\Formatters\BaseFormatter;
-use Medas\PhpTokenizer\TokenTree;
+use Medas\PhpFormatter\Job;
 
 /**
  * Use "type|null" instead of "?type" in property, parameter and return type definitions
  */
 #[Service]
-class UseUnionNullInsteadOfNullable extends BaseFormatter
+readonly class UseUnionNullInsteadOfNullable extends BaseFormatter
 {
-    public function format(TokenTree $tree): void
+    public function format(Job $job): void
     {
         // TODO: Implement format() method.
     }

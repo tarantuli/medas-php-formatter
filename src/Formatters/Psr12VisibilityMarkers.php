@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Medas\PhpFormatter\Formatters;
 
 use Medas\Core\Attributes\Service;
+use Medas\PhpFormatter\Job;
 use Medas\PhpTokenizer\Contexts\MethodDeclaration;
 use Medas\PhpTokenizer\Statement;
 use Medas\PhpTokenizer\StatementTypeFinder;
@@ -12,17 +13,17 @@ use Medas\PhpTokenizer\StatementTypes\FunctionDeclaration;
 use Medas\PhpTokenizer\TokenTree;
 
 #[Service]
-class Psr12VisibilityMarkers extends BaseFormatter
+readonly class Psr12VisibilityMarkers extends BaseFormatter
 {
     public function __construct(
-        private readonly StatementTypeFinder $typeFinder,
+        private StatementTypeFinder $typeFinder,
     )
     {
     }
 
-    public function format(TokenTree $tree): void
+    public function format(Job $job): void
     {
-        $this->sortVisibilityMarkers($tree);
+        $this->sortVisibilityMarkers($job->tree);
     }
 
     private function sortVisibilityMarkers(TokenTree $tree): void

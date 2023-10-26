@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Medas\PhpFormatter\Formatters;
 
 use Medas\Core\Attributes\Service;
+use Medas\PhpFormatter\Job;
 use Medas\PhpTokenizer\StatementTypeFinder;
 use Medas\PhpTokenizer\StatementTypes\{BlockCloser,
     ClassDeclaration,
@@ -19,18 +20,18 @@ use Medas\PhpTokenizer\StatementTypes\{BlockCloser,
 use Medas\PhpTokenizer\TokenTree;
 
 #[Service]
-class Psr12BlankLines extends BaseFormatter
+readonly class Psr12BlankLines extends BaseFormatter
 {
     public function __construct(
-        private readonly BlankLineAdder      $blankLineAdder,
-        private readonly StatementTypeFinder $typeFinder,
+        private BlankLineAdder      $blankLineAdder,
+        private StatementTypeFinder $typeFinder,
     )
     {
     }
 
-    public function format(TokenTree $tree): void
+    public function format(Job $job): void
     {
-        $this->blankLineAdder->afterTypes($tree, [
+        $this->blankLineAdder->afterTypes($job->tree, [
             PhpOpenTag::class,
             DeclareStatement::class,
             NamespaceDeclaration::class,
@@ -39,8 +40,8 @@ class Psr12BlankLines extends BaseFormatter
             UseConstStatement::class,
         ]);
 
-        $this->additionalLines($tree);
-        $this->addSwitchIndentation($tree);
+        $this->additionalLines($job->tree);
+        $this->addSwitchIndentation($job->tree);
     }
 
     private function additionalLines(TokenTree $tree): void

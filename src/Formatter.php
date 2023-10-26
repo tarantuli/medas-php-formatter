@@ -4,53 +4,54 @@ declare(strict_types=1);
 
 namespace Medas\PhpFormatter;
 
-use Medas\Core\Attributes\Service;
+use Medas\Core\Attributes\{ConfigValue, Service};
+use Medas\PhpFormatter\ConfigOptions\{DumpParsedTree, DumpResultTree};
 use Medas\PhpFormatter\Exceptions\ReformattedCodeIsInvalidException;
-use Medas\PhpTokenizer\{BlockDumper, TokenCollection, Tokenizer, TokenTree, TreeBuilder};
+use Medas\PhpTokenizer\{BlockDumper, Tokenizer, TreeBuilder};
 
 #[Service]
-class Formatter
+readonly class Formatter
 {
-    private Settings\Settings $settings;
-
-    private bool $dumpParseTree = false;
-    private bool $dumpResultTree = false;
-
     public function __construct(
-        private readonly BlockDumper   $blockDumper,
-        private readonly BlockPrinter  $blockPrinter,
-        private readonly CodeValidator $codeValidator,
-        private readonly Tokenizer     $tokenizer,
-        private readonly TreeBuilder   $treeBuilder,
+        private BlockDumper   $blockDumper,
+        private BlockPrinter  $blockPrinter,
+        private CodeValidator $codeValidator,
+        private Tokenizer     $tokenizer,
+        private TreeBuilder   $treeBuilder,
+
+        #[ConfigValue(DumpParsedTree::class)]
+        private bool          $dumpParseTree,
+
+        #[ConfigValue(DumpResultTree::class)]
+        private bool          $dumpResultTree,
     )
     {
     }
 
     public function format(string $code, Settings\Settings $settings): string
     {
+        $job = new Job($settings);
         $this->assertCodeIsValid($code);
 
-        $this->settings = $settings;
+        $job->tokens = $this->tokenizer->tokenize($code);
+        $this->applyPreparsers($job);
 
-        $tokens = $this->tokenizer->tokenize($code);
-        $this->applyPreparsers($tokens);
-
-        $tree = $this->treeBuilder->fromCollection($tokens);
+        $job->tree = $this->treeBuilder->fromCollection($job->tokens);
 
         if ($this->dumpParseTree) {
-            $this->blockDumper->dump($tree->block());
+            $this->blockDumper->dump($job->tree->block());
         }
 
-        $this->applyFormatters($tree);
+        $this->applyFormatters($job);
 
         if ($this->dumpResultTree) {
-            $this->blockDumper->dump($tree->block());
+            $this->blockDumper->dump($job->tree->block());
         }
 
         $result = $this->blockPrinter->print(
-            $tree->block(),
-            (string) $this->settings->document->indentation(),
-            (string) $this->settings->document->lineEnding());
+            $job->tree->block(),
+            (string) $job->settings->document->indentation(),
+            (string) $job->settings->document->lineEnding());
 
         $this->assertCodeIsValid($result);
 
@@ -64,36 +65,17 @@ class Formatter
         }
     }
 
-    private function applyPreparsers(TokenCollection $tokens): void
+    private function applyPreparsers(Job $job): void
     {
-        foreach ($this->settings->preparsers() as $preparser) {
-            $preparser->preparse($tokens);
+        foreach ($job->settings->preparsers() as $preparser) {
+            $preparser->preparse($job);
         }
     }
 
-    private function applyFormatters(TokenTree $tree): void
+    private function applyFormatters(Job $job): void
     {
-        foreach ($this->settings->formatters() as $formatter) {
-            $formatter->format($tree);
+        foreach ($job->settings->formatters() as $formatter) {
+            $formatter->format($job);
         }
-    }
-
-    public function settings(): Settings\Settings
-    {
-        return $this->settings;
-    }
-
-    public function dumpParseTree(): self
-    {
-        $this->dumpParseTree = true;
-
-        return $this;
-    }
-
-    public function dumpResultTree(): self
-    {
-        $this->dumpResultTree = true;
-
-        return $this;
     }
 }

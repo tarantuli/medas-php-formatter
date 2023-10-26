@@ -6,7 +6,7 @@ namespace Medas\PhpFormatter\Preparsers;
 
 use Medas\Core\Attributes\Service;
 use Medas\PhpFormatter\Formatters\MoveCommentsAtLineEnd;
-use Medas\PhpTokenizer\TokenCollection;
+use Medas\PhpFormatter\Job;
 
 #[Service]
 class NoCommentsAtLineEnd implements Preparser
@@ -17,9 +17,9 @@ class NoCommentsAtLineEnd implements Preparser
     {
     }
 
-    public function preparse(TokenCollection $tokens): void
+    public function preparse(Job $job): void
     {
-        foreach ($tokens as $token) {
+        foreach ($job->tokens as $token) {
             if (!$token->is(T_COMMENT) || str_contains($token->previous->text, "\n")) {
                 continue;
             }

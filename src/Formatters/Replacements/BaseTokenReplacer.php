@@ -5,13 +5,14 @@ declare(strict_types=1);
 namespace Medas\PhpFormatter\Formatters\Replacements;
 
 use Medas\PhpFormatter\Formatters\BaseFormatter;
-use Medas\PhpTokenizer\{Token, TokenTree};
+use Medas\PhpFormatter\Job;
+use Medas\PhpTokenizer\Token;
 
-abstract class BaseTokenReplacer extends BaseFormatter
+abstract readonly class BaseTokenReplacer extends BaseFormatter
 {
-    public function format(TokenTree $tree): void
+    public function format(Job $job): void
     {
-        foreach ($tree as $token) {
+        foreach ($job->tree as $token) {
             if ($this->doReplace($token)) {
                 $this->update($token);
             }

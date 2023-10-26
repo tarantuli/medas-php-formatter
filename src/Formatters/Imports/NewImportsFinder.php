@@ -8,10 +8,10 @@ use Medas\Core\Attributes\Service;
 use Medas\PhpClassAnalysis\FqnProperties;
 
 #[Service]
-class NewImportsFinder
+readonly class NewImportsFinder
 {
     public function __construct(
-        private readonly FqnProperties $fqnProperties,
+        private FqnProperties $fqnProperties,
     )
     {
     }

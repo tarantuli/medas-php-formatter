@@ -8,10 +8,10 @@ use Medas\Core\Attributes\Service;
 use Medas\PhpTokenizer\{StatementTypeFinder, StatementTypes\GenericStatement, Token};
 
 #[Service]
-class UseImplodeInsteadOfJoin extends BaseTokenReplacer
+readonly class UseImplodeInsteadOfJoin extends BaseTokenReplacer
 {
     public function __construct(
-        private readonly StatementTypeFinder $typeFinder,
+        private StatementTypeFinder $typeFinder,
     )
     {
     }

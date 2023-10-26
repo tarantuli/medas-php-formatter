@@ -8,7 +8,7 @@ use Medas\Core\Attributes\Service;
 use Medas\PhpTokenizer\Token;
 
 #[Service]
-class UseDieInsteadOfExit extends BaseTokenReplacer
+readonly class UseDieInsteadOfExit extends BaseTokenReplacer
 {
     protected function doReplace(Token $token): bool
     {

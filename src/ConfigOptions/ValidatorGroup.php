@@ -8,10 +8,10 @@ use Medas\Core\Attributes\Service;
 use Medas\Core\Interfaces\ConfigGroup;
 
 #[Service]
-class ValidatorGroup implements ConfigGroup
+readonly class ValidatorGroup implements ConfigGroup
 {
     public function __construct(
-        private readonly RootGroup $group,
+        private RootGroup $group,
     )
     {
     }

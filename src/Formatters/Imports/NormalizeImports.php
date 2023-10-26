@@ -6,8 +6,7 @@ namespace Medas\PhpFormatter\Formatters\Imports;
 
 use Medas\Core\Attributes\Service;
 use Medas\PhpClassAnalysis\ClassAnalyser;
-use Medas\PhpFormatter\{Formatter, Formatters\BaseFormatter};
-use Medas\PhpTokenizer\TokenTree;
+use Medas\PhpFormatter\{Formatters\BaseFormatter, Job};
 
 /**
  * This service normalizes all imports in a file.
@@ -24,15 +23,14 @@ use Medas\PhpTokenizer\TokenTree;
  *    the reference is imported instead of inlined.
  */
 #[Service]
-class NormalizeImports extends BaseFormatter
+readonly class NormalizeImports extends BaseFormatter
 {
     public function __construct(
-        private readonly ClassAnalyser       $classAnalyser,
-        private readonly Formatter           $formatter,
-        private readonly NewImportsFinder    $newImportsFinder,
-        private readonly NewImportsInserter  $newImportsInserter,
-        private readonly NewReferencesFinder $newReferencesFinder,
-        private readonly ReferencesUpdater   $referencesUpdater,
+        private ClassAnalyser       $classAnalyser,
+        private NewImportsFinder    $newImportsFinder,
+        private NewImportsInserter  $newImportsInserter,
+        private NewReferencesFinder $newReferencesFinder,
+        private ReferencesUpdater   $referencesUpdater,
     )
     {
     }
@@ -42,18 +40,18 @@ class NormalizeImports extends BaseFormatter
         return 10;
     }
 
-    public function format(TokenTree $tree): void
+    public function format(Job $job): void
     {
-        $analysis = $this->classAnalyser->analyseTokenTree($tree);
+        $analysis = $this->classAnalyser->analyseTokenTree($job->tree);
 
         $referencesAndImports = new ReferencesAndImports();
 
         // Determine new references and new imports
-        $this->newReferencesFinder->determine($analysis, $this->formatter->settings()->import, $referencesAndImports);
+        $this->newReferencesFinder->determine($analysis, $job->settings->import, $referencesAndImports);
         $this->newImportsFinder->determine($referencesAndImports, $analysis->name);
 
         // Insert the new import header and update references in the body
-        $this->newImportsInserter->insert($tree, $referencesAndImports);
-        $this->referencesUpdater->update($tree, $analysis, $referencesAndImports);
+        $this->newImportsInserter->insert($job->tree, $referencesAndImports);
+        $this->referencesUpdater->update($job->tree, $analysis, $referencesAndImports);
     }
 }

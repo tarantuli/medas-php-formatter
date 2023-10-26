@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Medas\PhpFormatter\Preparsers;
 
-use Medas\PhpTokenizer\TokenCollection;
+use Medas\PhpFormatter\Job;
 
 interface Preparser
 {
-    public function preparse(TokenCollection $tokens): void;
+    public function preparse(Job $job): void;
 
     public function additionalFormatters(): array;
 }

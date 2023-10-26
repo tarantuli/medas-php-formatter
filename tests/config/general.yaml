@@ -1,3 +1,5 @@
 php-formatter:
+  dump-parsed-tree: false
+  dump-result-tree: false
   validator:
     path-to-php: $env(PATH_TO_PHP)

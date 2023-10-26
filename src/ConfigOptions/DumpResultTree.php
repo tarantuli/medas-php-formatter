@@ -8,10 +8,10 @@ use Medas\Core\Attributes\Service;
 use Medas\Core\Interfaces\{ConfigGroup, ConfigOption};
 
 #[Service]
-readonly class PathToPhp implements ConfigOption
+readonly class DumpResultTree implements ConfigOption
 {
     public function __construct(
-        private ValidatorGroup $group,
+        private RootGroup $group,
     )
     {
     }
@@ -23,26 +23,21 @@ readonly class PathToPhp implements ConfigOption
 
     public function name(): string
     {
-        return 'path-to-php';
+        return 'dump-result-tree';
     }
 
     public function description(): string
     {
-        return 'The path to the php executable';
-    }
-
-    public function isValid(mixed $value): bool
-    {
-        return is_string($value) && file_exists($value);
+        return 'Whether to dump the processed token tree to output before returning it';
     }
 
     public function hasDefault(): bool
     {
-        return false;
+        return true;
     }
 
-    public function default(): null
+    public function default(): false
     {
-        return null;
+        return false;
     }
 }

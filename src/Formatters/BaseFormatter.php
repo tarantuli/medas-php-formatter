@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\PhpFormatter\Formatters;
 
-abstract class BaseFormatter implements Formatter
+abstract readonly class BaseFormatter implements Formatter
 {
     public function additionalFormatters(): array
     {

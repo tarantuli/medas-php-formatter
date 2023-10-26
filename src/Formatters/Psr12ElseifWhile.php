@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace Medas\PhpFormatter\Formatters;
 
 use Medas\Core\Attributes\Service;
-use Medas\PhpTokenizer\TokenTree;
+use Medas\PhpFormatter\Job;
 
 #[Service]
-class Psr12ElseifWhile extends BaseFormatter
+readonly class Psr12ElseifWhile extends BaseFormatter
 {
-    public function format(TokenTree $tree): void
+    public function format(Job $job): void
     {
-        foreach ($tree->statements() as $statement) {
+        foreach ($job->tree->statements() as $statement) {
             if ($statement->firstToken()->is([T_ELSE, T_ELSEIF])) {
                 $statement->mergeWithPrevious();
             }
