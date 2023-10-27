@@ -2,7 +2,11 @@
 
 function a($b = []): array
 {
-    $c = [1, 2, 3,];
+    $c = [
+        1,
+        2,
+        3,
+    ];
     [$d, $e] = [true, false];
     echo "[square brackets]";
     $c[] = 10;

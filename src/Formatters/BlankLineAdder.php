@@ -46,6 +46,11 @@ class BlankLineAdder
     public function beforeTypes(TokenTree $tree, array $beforeTypes): void
     {
         foreach ($tree->statements() as $statement) {
+            if ($statement->rootStatement) {
+                // Only add a blank line before the root statement, not the others
+                continue;
+            }
+
             $type = $this->statementTypeFinder->for($statement);
 
             foreach ($beforeTypes as $groupType) {

@@ -7,6 +7,7 @@ namespace Medas\PhpFormatter\Formatters\Imports\Grouping;
 use Medas\Core\Attributes\ConfigValue;
 use Medas\Core\Attributes\Service;
 use Medas\PhpFormatter\ConfigOptions\MaxImportGroupChildDepth;
+use Medas\PhpFormatter\ConfigOptions\MinImportGroupPrefixDepth;
 use Medas\PhpFormatter\Formatters\Imports\ReferencesAndImports;
 
 #[Service]
@@ -15,6 +16,8 @@ readonly class ImportGrouper
     public function __construct(
         #[ConfigValue(MaxImportGroupChildDepth::class)]
         private int $maxChildDepth,
+        #[ConfigValue(MinImportGroupPrefixDepth::class)]
+        private int $minPrefixDepth,
     )
     {
     }
@@ -47,7 +50,7 @@ readonly class ImportGrouper
                 }
 
                 ++$instance->count;
-                $instance->maxLevel = max($instance->maxLevel, substr_count($remainder, '\\'));
+                $instance->maxChildDepth = max($instance->maxChildDepth, substr_count($remainder, '\\'));
             }
         }
     }
@@ -55,7 +58,7 @@ readonly class ImportGrouper
     private function determineCandidates(Job $job): void
     {
         foreach ($job->prefixes as $prefix) {
-            if ($prefix->count >= 2 && $prefix->maxLevel <= $this->maxChildDepth) {
+            if ($prefix->count >= 2 && $prefix->maxChildDepth <= $this->maxChildDepth && $prefix->prefixDepth >= $this->minPrefixDepth) {
                 $job->candidates[] = $prefix;
             }
         }

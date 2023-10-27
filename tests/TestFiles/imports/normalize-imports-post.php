@@ -6,8 +6,9 @@ use Absolute\ClassName;
 use Absolute\Path\To\AnotherInterface;
 use Absolute\ReturnType;
 use Clashing\MyClass as ClaMyClass;
-use My\{Clashing\ClassName as ClaClassName, Clavicle\ClassName as ClaClassName1};
 use MyNamespace\This\Relative\Path\Is\Too\Deep;
+use My\Clashing\ClassName as ClaClassName;
+use My\Clavicle\ClassName as ClaClassName1;
 use N\Attributes\Types as Type;
 use So\Many\Layers\Namespace as AliasedNamespace;
 use YetAnotherNamespace\ClassName as AliasOfClassName;
@@ -42,7 +43,12 @@ class MyClass extends ChildNamespace\BaseClass implements Interfaces\MyInterface
 
     public function c(ClassA|ClassB $aClass): ClassC|ClassD|null
     {
-        return [ClaClassName::class, ClaClassName1::class, ClaClassName2::class, ClaMyClass::class,];
+        return [
+            ClaClassName::class,
+            ClaClassName1::class,
+            ClaClassName2::class,
+            ClaMyClass::class,
+        ];
     }
 
     public function d(StringClass $stringClass): StringClass
