@@ -146,12 +146,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:tarantuli/medas-php-class-analysis.git",
-                "reference": "f2733101927d83983598a2b8d91e54255f74cbb5"
+                "reference": "ad1623af7d2f73354771cd90b02e8cda4685430e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-php-class-analysis/zipball/f2733101927d83983598a2b8d91e54255f74cbb5",
-                "reference": "f2733101927d83983598a2b8d91e54255f74cbb5",
+                "url": "https://api.github.com/repos/tarantuli/medas-php-class-analysis/zipball/ad1623af7d2f73354771cd90b02e8cda4685430e",
+                "reference": "ad1623af7d2f73354771cd90b02e8cda4685430e",
                 "shasum": ""
             },
             "require": {
@@ -180,7 +180,7 @@
                 "source": "https://github.com/tarantuli/medas-php-class-analysis/tree/dev",
                 "issues": "https://github.com/tarantuli/medas-php-class-analysis/issues"
             },
-            "time": "2023-10-23T13:48:07+00:00"
+            "time": "2023-10-30T12:13:15+00:00"
         },
         {
             "name": "morphp/medas-php-tokenizer",
@@ -188,12 +188,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:tarantuli/medas-php-tokenizer.git",
-                "reference": "a410ce001cfd7180fa511f86821b573785ea4c64"
+                "reference": "03c068c1d64240d1e48f79a6e5c1d02d9adffb2a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-php-tokenizer/zipball/a410ce001cfd7180fa511f86821b573785ea4c64",
-                "reference": "a410ce001cfd7180fa511f86821b573785ea4c64",
+                "url": "https://api.github.com/repos/tarantuli/medas-php-tokenizer/zipball/03c068c1d64240d1e48f79a6e5c1d02d9adffb2a",
+                "reference": "03c068c1d64240d1e48f79a6e5c1d02d9adffb2a",
                 "shasum": ""
             },
             "require": {
@@ -223,7 +223,7 @@
                 "source": "https://github.com/tarantuli/medas-php-tokenizer/tree/dev",
                 "issues": "https://github.com/tarantuli/medas-php-tokenizer/issues"
             },
-            "time": "2023-10-27T13:33:13+00:00"
+            "time": "2023-10-30T11:50:33+00:00"
         },
         {
             "name": "psr/event-dispatcher",
@@ -2632,16 +2632,16 @@
         },
         {
             "name": "symfony/yaml",
-            "version": "v5.4.23",
+            "version": "v5.4.30",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
-                "reference": "4cd2e3ea301aadd76a4172756296fe552fb45b0b"
+                "reference": "c6980e82a6656f6ebfabfd82f7585794cb122554"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/4cd2e3ea301aadd76a4172756296fe552fb45b0b",
-                "reference": "4cd2e3ea301aadd76a4172756296fe552fb45b0b",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/c6980e82a6656f6ebfabfd82f7585794cb122554",
+                "reference": "c6980e82a6656f6ebfabfd82f7585794cb122554",
                 "shasum": ""
             },
             "require": {
@@ -2687,7 +2687,7 @@
             "description": "Loads and dumps YAML files",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/yaml/tree/v5.4.23"
+                "source": "https://github.com/symfony/yaml/tree/v5.4.30"
             },
             "funding": [
                 {
@@ -2703,7 +2703,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-04-23T19:33:36+00:00"
+            "time": "2023-10-27T18:36:14+00:00"
         },
         {
             "name": "theseer/tokenizer",

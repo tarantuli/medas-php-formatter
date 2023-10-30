@@ -101,7 +101,7 @@ readonly class TrailingCommaSplitter extends BaseFormatter
                 $currentStatement = new Statement($statement->block);
                 $currentStatement->rootStatement = $statement;
                 $statement->block->insertStatementAfter($currentStatement, $statement);
-                $currentStatement->additionalDepth = 1;
+                $currentStatement->additionalDepth++;
             }
 
             if (in_array($text, self::BRACKETS)) {
