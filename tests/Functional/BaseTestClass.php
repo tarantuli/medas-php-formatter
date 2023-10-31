@@ -7,6 +7,7 @@ namespace Medas\PhpFormatterTest\Functional;
 use Medas\PhpFormatter\FormatterManager;
 use Medas\PhpFormatter\Settings\Settings;
 use PHPUnit\Framework\TestCase;
+use SebastianBergmann\Diff\{Differ, Output\UnifiedDiffOutputBuilder};
 
 abstract class BaseTestClass extends TestCase
 {
@@ -20,7 +21,8 @@ abstract class BaseTestClass extends TestCase
         [$result, $expected] = $this->format($sourceFile, $expectedFile, $settings);
 
         if ($result !== $expected) {
-            echo $result, "\n";
+            // Write the diff to output to ease development
+            echo (new Differ(new UnifiedDiffOutputBuilder("--- Expected\n+++ Actual\n")))->diff($expected, $result);
         }
 
         self::assertEquals($expected, $result, $message);

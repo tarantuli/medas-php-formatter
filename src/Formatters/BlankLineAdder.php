@@ -7,7 +7,7 @@ namespace Medas\PhpFormatter\Formatters;
 use Medas\Core\Attributes\Service;
 use Medas\PhpTokenizer\Statement;
 use Medas\PhpTokenizer\StatementTypeFinder;
-use Medas\PhpTokenizer\StatementTypes\{Comment, StatementType, SwitchBranch};
+use Medas\PhpTokenizer\StatementTypes\{AttributeStatement, Comment, StatementType, SwitchBranch};
 use Medas\PhpTokenizer\TokenTree;
 
 #[Service]
@@ -54,7 +54,9 @@ class BlankLineAdder
             $type = $this->statementTypeFinder->for($statement);
 
             foreach ($beforeTypes as $groupType) {
-                if (!$type instanceof $groupType) {
+                $bypassCheck = $groupType === Comment::class && $statement->firstToken()->is(T_ATTRIBUTE);
+
+                if (!$bypassCheck && !$type instanceof $groupType) {
                     // This statement is not of the given types
                     continue;
                 }
@@ -64,12 +66,14 @@ class BlankLineAdder
                     continue;
                 }
 
-                if ($this->statementTypeFinder->for($this->previousStatement) instanceof SwitchBranch) {
+                $previousStatementType = $this->statementTypeFinder->for($this->previousStatement);
+
+                if ($previousStatementType instanceof SwitchBranch) {
                     // There's never a blank line after a switch case/default statement
                     continue;
                 }
 
-                if ($this->statementTypeFinder->for($this->previousStatement) instanceof Comment) {
+                if ($previousStatementType instanceof Comment || $previousStatementType instanceof AttributeStatement) {
                     // There's never a blank line after a comment
                     continue;
                 }

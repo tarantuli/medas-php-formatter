@@ -9,6 +9,7 @@ use Medas\PhpFormatter\Job;
 use Medas\PhpTokenizer\StatementTypeFinder;
 use Medas\PhpTokenizer\StatementTypes\{BlockCloser,
     ClassDeclaration,
+    ClassPropertyDeclaration,
     DeclareStatement,
     FunctionDeclaration,
     NamespaceDeclaration,
@@ -40,8 +41,39 @@ readonly class Psr12BlankLines extends BaseFormatter
             UseConstStatement::class,
         ]);
 
+        $this->afterAttributes($job->tree);
+        $this->afterMostDocComments($job->tree);
         $this->additionalLines($job->tree);
         $this->addSwitchIndentation($job->tree);
+    }
+
+    private function afterAttributes(TokenTree $tree): void
+    {
+        foreach ($tree as $token) {
+            if ($token->text === T_SQUARE_BRACKET_CLOSE && $token->inAttribute) {
+                $token->lineBreakAfter = true;
+            }
+        }
+    }
+
+    private function afterMostDocComments(TokenTree $tree): void
+    {
+        foreach ($tree as $token) {
+            if (!$token->is(T_DOC_COMMENT)) {
+                continue;
+            }
+
+            $isMultiLine = str_contains($token->text, "\n") || str_contains($token->text, "\r");
+            $inClassPropertyDeclaration = $this->typeFinder->for($token->statement) instanceof ClassPropertyDeclaration;
+
+            if ($isMultiLine || $inClassPropertyDeclaration) {
+                if ($token->statement->previous()) {
+                    $token->statement->previous()->blankLineAfter = true;
+                }
+
+                $token->lineBreakAfter = true;
+            }
+        }
     }
 
     private function additionalLines(TokenTree $tree): void

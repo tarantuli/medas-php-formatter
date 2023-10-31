@@ -35,18 +35,29 @@ readonly class TrailingCommaSplitter extends BaseFormatter
     {
         foreach ($job->tree->block() as $statement) {
             foreach ($statement as $commaIndex => $token) {
-                if ($token->next) {
-                    $nextText = $token->next->text;
-
-                    if ($token->is(T_COMMA) && array_key_exists($nextText, self::BRACKETS)) {
-                        $openerIndex = $this->findOpener($statement, $commaIndex, self::BRACKETS[$nextText], $nextText);
-                        if ($openerIndex !== null) {
-                            $this->splitStatementByComma($statement, $openerIndex, $commaIndex + 1);
-
-                            return true;
-                        }
-                    }
+                if (!$token->is(T_COMMA)) {
+                    continue;
                 }
+
+                if (!$token->next) {
+                    continue;
+                }
+
+                $nextText = $token->next->text;
+
+                if (!array_key_exists($nextText, self::BRACKETS)) {
+                    continue;
+                }
+
+                $openerIndex = $this->findOpener($statement, $commaIndex, self::BRACKETS[$nextText], $nextText);
+
+                if ($openerIndex === null) {
+                    continue;
+                }
+
+                $this->splitStatementByComma($statement, $openerIndex, $commaIndex + 1);
+
+                return true;
             }
         }
 

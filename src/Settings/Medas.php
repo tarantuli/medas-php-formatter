@@ -10,12 +10,15 @@ use Medas\PhpFormatter\Formatters\{BlankLinesBeforeBlocks,
     LineSplitting\TrailingCommaSplitter,
     Replacements\UseExitInsteadOfDie};
 use Medas\PhpFormatter\Preparsers\NoCommentsAtLineEnd;
+use Medas\PhpTokenizer\AdditionalTokensDefiner;
 
 class Medas extends Psr12
 {
     public function __construct()
     {
         parent::__construct();
+
+        service(AdditionalTokensDefiner::class)->define();
 
         $this->addPreparser(service(NoCommentsAtLineEnd::class));
 
