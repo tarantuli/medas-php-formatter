@@ -63,7 +63,14 @@ readonly class ImportGrouper
             }
         }
 
-        usort($job->candidates, fn(Prefix $a, Prefix $b) => -1 * ($a->count <=> $b->count));
+        usort($job->candidates, function (Prefix $a, Prefix $b) {
+            // Sort by count (higher count on top), then by prefix length (longer prefixes on top)
+            if ($a->count === $b->count) {
+                return -1 * ($a->length <=> $b->length);
+            }
+
+            return -1 * ($a->count <=> $b->count);
+        });
     }
 
     private function determineStatements(Job $job): void

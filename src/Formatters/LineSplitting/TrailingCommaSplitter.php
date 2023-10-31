@@ -104,7 +104,7 @@ readonly class TrailingCommaSplitter extends BaseFormatter
 
             $text = $token->text;
 
-            if (in_array($text, self::CLOSERS)) {
+            if (!$token->inAttribute && in_array($text, self::CLOSERS)) {
                 ++$depth;
             }
 
@@ -115,7 +115,7 @@ readonly class TrailingCommaSplitter extends BaseFormatter
                 $currentStatement->additionalDepth++;
             }
 
-            if (in_array($text, self::BRACKETS)) {
+            if (!$token->inAttribute && in_array($text, self::BRACKETS)) {
                 --$depth;
             }
 

@@ -54,7 +54,7 @@ class BlankLineAdder
             $type = $this->statementTypeFinder->for($statement);
 
             foreach ($beforeTypes as $groupType) {
-                $bypassCheck = $groupType === Comment::class && $statement->firstToken()->is(T_ATTRIBUTE);
+                $bypassCheck = $groupType === Comment::class && $this->statementStartWithComment($statement);
 
                 if (!$bypassCheck && !$type instanceof $groupType) {
                     // This statement is not of the given types
@@ -83,5 +83,11 @@ class BlankLineAdder
 
             $this->previousStatement = $statement;
         }
+    }
+
+    private function statementStartWithComment(mixed $statement): bool
+    {
+        return $statement->firstToken()->is(T_ATTRIBUTE)
+            || $statement->firstToken()->is(T_DOC_COMMENT);
     }
 }

@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace Medas\PhpFormatter;
 
 use Medas\Core\Attributes\{ConfigValue, Service};
-use Medas\PhpFormatter\ConfigOptions\{DumpParsedTree, DumpResultTree};
-use Medas\PhpFormatter\Exceptions\ReformattedCodeIsInvalidException;
 use Medas\PhpTokenizer\{BlockDumper, Tokenizer, TreeBuilder};
 
 #[Service]
@@ -18,11 +16,9 @@ readonly class Formatter
         private CodeValidator $codeValidator,
         private Tokenizer     $tokenizer,
         private TreeBuilder   $treeBuilder,
-
-        #[ConfigValue(DumpParsedTree::class)]
+        #[ConfigValue(ConfigOptions\DumpParsedTree::class)]
         private bool          $dumpParseTree,
-
-        #[ConfigValue(DumpResultTree::class)]
+        #[ConfigValue(ConfigOptions\DumpResultTree::class)]
         private bool          $dumpResultTree,
     )
     {
@@ -51,7 +47,8 @@ readonly class Formatter
         $result = $this->blockPrinter->print(
             $job->tree->block(),
             (string) $job->settings->document->indentation(),
-            (string) $job->settings->document->lineEnding());
+            (string) $job->settings->document->lineEnding()
+        );
 
         $this->assertCodeIsValid($result);
 
@@ -61,7 +58,7 @@ readonly class Formatter
     private function assertCodeIsValid(string $code): void
     {
         if (!$this->codeValidator->validate($code)) {
-            throw new ReformattedCodeIsInvalidException($code, $this->codeValidator->getErrorMessage());
+            throw new Exceptions\ReformattedCodeIsInvalidException($code, $this->codeValidator->getErrorMessage());
         }
     }
 

@@ -18,4 +18,14 @@ class AttributeTests extends BaseTestClass
             $settings
         );
     }
+
+    public function testComplexPromotedProperties(): void
+    {
+        $settings = new Medas();
+
+        $this->assertRemainsTheSame(
+            'attributes/complex-promoted-properties',
+            $settings
+        );
+    }
 }
