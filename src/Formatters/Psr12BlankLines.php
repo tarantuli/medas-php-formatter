@@ -9,7 +9,6 @@ use Medas\PhpFormatter\Job;
 use Medas\PhpTokenizer\StatementTypeFinder;
 use Medas\PhpTokenizer\StatementTypes\{BlockCloser,
     ClassDeclaration,
-    ClassPropertyDeclaration,
     DeclareStatement,
     FunctionDeclaration,
     NamespaceDeclaration,
@@ -42,7 +41,7 @@ readonly class Psr12BlankLines extends BaseFormatter
         ]);
 
         $this->afterAttributes($job->tree);
-        $this->afterMostDocComments($job->tree);
+        $this->afterMostComments($job->tree);
         $this->additionalLines($job->tree);
         $this->addSwitchIndentation($job->tree);
     }
@@ -56,17 +55,23 @@ readonly class Psr12BlankLines extends BaseFormatter
         }
     }
 
-    private function afterMostDocComments(TokenTree $tree): void
+    private function afterMostComments(TokenTree $tree): void
     {
         foreach ($tree as $token) {
+            if ($token->is(T_COMMENT) && $token->next && $token->statement === $token->next->statement) {
+                if ($token->statement->previous() && !$this->typeFinder->for($token->statement->previous()) instanceof SwitchBranch) {
+                    $token->statement->previous()->blankLineAfter = true;
+                }
+
+                $token->lineBreakAfter = true;
+                continue;
+            }
+
             if (!$token->is(T_DOC_COMMENT)) {
                 continue;
             }
 
-            $isMultiLine = str_contains($token->text, "\n") || str_contains($token->text, "\r");
-            $inClassPropertyDeclaration = $this->typeFinder->for($token->statement) instanceof ClassPropertyDeclaration;
-
-            if ($isMultiLine || $inClassPropertyDeclaration) {
+            if ($this->isAtStartOfStatement($token)) {
                 if ($token->statement->previous()) {
                     $token->statement->previous()->blankLineAfter = true;
                 }
@@ -74,6 +79,19 @@ readonly class Psr12BlankLines extends BaseFormatter
                 $token->lineBreakAfter = true;
             }
         }
+    }
+
+    private function isAtStartOfStatement(mixed $token): bool
+    {
+        for ($index = 0; $index < $token->statement->getIndex($token); ++$index) {
+            $earlierToken = $token->statement->getToken($index);
+
+            if (!$earlierToken->inAttribute && !$earlierToken->is(T_COMMENT) && !$earlierToken->is(T_ATTRIBUTE)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     private function additionalLines(TokenTree $tree): void
@@ -107,6 +125,7 @@ readonly class Psr12BlankLines extends BaseFormatter
 
             if ($statement === $statement->block->lastStatement()) {
                 $statement->blankLineAfter = false;
+                $statement->lastToken()->lineBreakAfter = false;
             }
         }
     }

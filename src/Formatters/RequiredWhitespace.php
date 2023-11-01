@@ -35,6 +35,10 @@ readonly class RequiredWhitespace extends BaseFormatter
                     $token->previous->spaceAfter = false;
                 }
             }
+
+            if ($token->is(T_COMMENT)) {
+                $token->lineBreakAfter = true;
+            }
         }
     }
 

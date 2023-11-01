@@ -46,6 +46,10 @@ class BlockPrinter
         foreach ($statement as $token) {
             echo $token->text;
 
+            if ($this->lineEndingLength === 0 && $token->is([T_OPEN_TAG, T_COMMENT])) {
+                // A line ending is required after some tokens
+                echo "\n";
+            }
             if ($token->lineBreakAfter) {
                 echo $this->lineEnding;
                 $this->printIndentation($statement);
@@ -56,11 +60,6 @@ class BlockPrinter
         }
 
         echo $this->lineEnding;
-
-        // A line ending is required after some tokens
-        if ($this->lineEndingLength === 0 && $statement->lastToken()->is([T_OPEN_TAG, T_COMMENT])) {
-            echo "\n";
-        }
 
         if ($statement->blankLineAfter) {
             echo $this->lineEnding;

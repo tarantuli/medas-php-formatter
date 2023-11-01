@@ -188,12 +188,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:tarantuli/medas-php-tokenizer.git",
-                "reference": "2fa73537285aa028871ee8512df3100c6942c8d6"
+                "reference": "617c2951eddfcdaefaa6c12d32825f3eda7ddee4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-php-tokenizer/zipball/2fa73537285aa028871ee8512df3100c6942c8d6",
-                "reference": "2fa73537285aa028871ee8512df3100c6942c8d6",
+                "url": "https://api.github.com/repos/tarantuli/medas-php-tokenizer/zipball/617c2951eddfcdaefaa6c12d32825f3eda7ddee4",
+                "reference": "617c2951eddfcdaefaa6c12d32825f3eda7ddee4",
                 "shasum": ""
             },
             "require": {
@@ -223,7 +223,7 @@
                 "source": "https://github.com/tarantuli/medas-php-tokenizer/tree/dev",
                 "issues": "https://github.com/tarantuli/medas-php-tokenizer/issues"
             },
-            "time": "2023-10-31T15:13:57+00:00"
+            "time": "2023-11-01T14:32:32+00:00"
         },
         {
             "name": "psr/event-dispatcher",

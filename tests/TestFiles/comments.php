@@ -15,8 +15,27 @@ class A
         return strlen($c) + /** Inline doccomment */ $d;
     }
 
+    #[\AnAttribute]
+    // Single-line comment
+    /*
+     * Multi-line comment
+     */
+    /**
+     * Doccomment
+     */
+    public function startsWithThreeCommentTypes(): void
+    {
+        // Do nothing
+    }
+
     public function doesntStartWithDoccomment(): int
     {
+        /** @var  Interfaces\FullTrackInterface[] $tracks */
+        foreach ($tracks as $track) {
+            /** @noinspection PhpDynamicFieldDeclarationInspection */
+            $track->distance = $this->determineDistance($track, $artist, $title);
+        }
+
         return 1;
     }
 }
