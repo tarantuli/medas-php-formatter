@@ -85,9 +85,8 @@ class BlankLineAdder
         }
     }
 
-    private function statementStartWithComment(mixed $statement): bool
+    private function statementStartWithComment(Statement $statement): bool
     {
-        return $statement->firstToken()->is(T_ATTRIBUTE)
-            || $statement->firstToken()->is(T_DOC_COMMENT);
+        return $statement->firstToken()->is([T_ATTRIBUTE, T_DOC_COMMENT]);
     }
 }

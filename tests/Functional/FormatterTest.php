@@ -20,6 +20,11 @@ class FormatterTest extends BaseTestClass
         $this->assertRemainsTheSame('psr12-ifelse', new Psr12());
     }
 
+    public function testMedasIfElse(): void
+    {
+        $this->assertRemainsTheSame('medas-ifelse', new Medas());
+    }
+
     public function testPlusAndMinus(): void
     {
         $this->assertRemainsTheSame('plus-and-minus', new Medas());
