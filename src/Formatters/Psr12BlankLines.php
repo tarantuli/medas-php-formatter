@@ -48,9 +48,23 @@ readonly class Psr12BlankLines extends BaseFormatter
 
     private function afterAttributes(TokenTree $tree): void
     {
+        $bracketDepth = 0;
         foreach ($tree as $token) {
-            if ($token->text === T_SQUARE_BRACKET_CLOSE && $token->inAttribute) {
-                $token->lineBreakAfter = true;
+            if (!$token->inAttribute) {
+                continue;
+            }
+
+            if ($token->is(T_SQUARE_BRACKET_OPEN)) {
+                ++$bracketDepth;
+            }
+
+            if ($token->is(T_SQUARE_BRACKET_CLOSE)) {
+                if ($bracketDepth === 0) {
+                    $token->lineBreakAfter = true;
+                }
+                else {
+                    --$bracketDepth;
+                }
             }
         }
     }

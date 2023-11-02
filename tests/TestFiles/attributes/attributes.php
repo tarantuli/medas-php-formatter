@@ -16,6 +16,9 @@ class ClassName
     #[\WithValues(10)]
     private bool $true;
 
+    #[\Get([new \Constant('allow'), new \Integer('id')])]
+    private bool $embeddedSquareBrackets;
+
     /**
      * @var string
      */
