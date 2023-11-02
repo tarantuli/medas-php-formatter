@@ -6,5 +6,4 @@ namespace Medas\PhpFormatter\Settings\Indentations;
 
 interface Indentation extends \Stringable
 {
-
 }

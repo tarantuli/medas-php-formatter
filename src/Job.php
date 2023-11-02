@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\PhpFormatter;
 
-use Medas\PhpTokenizer\TokenCollection;
-use Medas\PhpTokenizer\TokenTree;
+use Medas\PhpTokenizer\{TokenCollection, TokenTree};
 
 class Job
 {

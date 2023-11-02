@@ -12,7 +12,8 @@ readonly class FormatterManager
 {
     public function __construct(
         private AdditionalTokensDefiner $additionalTokensDefiner,
-        private Formatter               $formatter)
+        private Formatter $formatter,
+    )
     {
         $this->additionalTokensDefiner->define();
     }

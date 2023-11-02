@@ -4,11 +4,8 @@ declare(strict_types=1);
 
 namespace Medas\PhpFormatter;
 
-use Medas\Core\Attributes\{ConfigValue, Service};
-use Medas\Core\System;
+use Medas\Core\{Attributes\ConfigValue, Attributes\Service, System};
 use Medas\FileSystem\TemporaryFiles;
-use Medas\PhpFormatter\ConfigOptions\PathToPhp;
-use Medas\PhpFormatter\Exceptions\CannotRunCommandLineException;
 
 #[Service]
 class CodeValidator
@@ -16,8 +13,9 @@ class CodeValidator
     private string $errorMessage;
 
     public function __construct(
-        private readonly TemporaryFiles                          $temporaryFiles,
-        #[ConfigValue(PathToPhp::class)] private readonly string $pathToPhp
+        private readonly TemporaryFiles $temporaryFiles,
+        #[ConfigValue(ConfigOptions\PathToPhp::class)]
+        private readonly string         $pathToPhp,
     )
     {
     }
@@ -25,19 +23,12 @@ class CodeValidator
     public function validate(string $code): bool
     {
         if (!System::isFunctionAvailable('exec')) {
-            throw new CannotRunCommandLineException();
+            throw new Exceptions\CannotRunCommandLineException();
         }
 
         $tempFile = $this->temporaryFiles->create($code);
-
-        $command = sprintf(
-            '%s -l -n -d display_errors=1 %s',
-            escapeshellarg($this->pathToPhp),
-            escapeshellarg($tempFile)
-        );
-
+        $command = sprintf('%s -l -n -d display_errors=1 %s', escapeshellarg($this->pathToPhp), escapeshellarg($tempFile));
         exec($command, $results);
-
         $results = implode("\n", array_filter($results));
 
         if (str_contains($results, 'No syntax errors detected in')) {

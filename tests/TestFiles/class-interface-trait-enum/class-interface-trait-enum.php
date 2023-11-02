@@ -6,7 +6,7 @@ namespace Medas\PhpFormatter\Formatters;
 
 use Medas\PhpFormatter\Job;
 
-class Formatter
+class Formatters
 {
     public function priority(): int
     {
@@ -24,7 +24,7 @@ class Formatter
     }
 }
 
-interface Formatter
+interface Formatterss
 {
     public function format(Job $job): void;
 
@@ -44,7 +44,7 @@ trait Foramtter
     }
 }
 
-enum Formatter
+enum Formatterbbb
 {
     case Type;
     case Boring;
