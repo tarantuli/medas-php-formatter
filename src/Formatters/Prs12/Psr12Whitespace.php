@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Medas\PhpFormatter\Formatters;
+namespace Medas\PhpFormatter\Formatters\Prs12;
 
 use Medas\Core\Attributes\Service;
+use Medas\PhpFormatter\Formatters\BaseFormatter;
 use Medas\PhpFormatter\Job;
 use Medas\PhpTokenizer\Contexts\MethodReturnType;
 use Medas\PhpTokenizer\StatementTypeFinder;

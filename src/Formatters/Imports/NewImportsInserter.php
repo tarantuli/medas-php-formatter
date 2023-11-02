@@ -6,7 +6,6 @@ namespace Medas\PhpFormatter\Formatters\Imports;
 
 use Medas\Core\Attributes\Service;
 use Medas\PhpClassAnalysis\FqnProperties;
-use Medas\PhpFormatter\Formatters\Imports\Grouping\ImportGrouper;
 use Medas\PhpTokenizer\{Contexts\GlobalScope,
     Statement,
     StatementTypeFinder,
@@ -23,8 +22,8 @@ readonly class NewImportsInserter
     private Token $baseToken;
 
     public function __construct(
-        private FqnProperties       $fqnProperties,
-        private ImportGrouper       $importGrouper,
+        private FqnProperties          $fqnProperties,
+        private Grouping\ImportGrouper $importGrouper,
         private StatementTypeFinder $statementTypeFinder,
     )
     {
@@ -37,9 +36,7 @@ readonly class NewImportsInserter
     public function insert(TokenTree $tree, ReferencesAndImports $referencesAndImports): void
     {
         $this->removeExistingImportStatements($tree);
-
         $after = $this->findImportInsertionSpot($tree);
-
         $groupedImports = $this->importGrouper->group($referencesAndImports);
 
         // Sort the new imports in reverse order, so we can insert statements one by one below the insertion spot
@@ -47,9 +44,7 @@ readonly class NewImportsInserter
 
         foreach ($groupedImports as $fqn => $alias) {
             $statement = $tree->block()->appendNewStatement();
-
             $this->processGroupedImport($statement, $fqn, $alias);
-
             $tree->block()->moveStatementAfter($statement, $after);
         }
     }
@@ -95,9 +90,9 @@ readonly class NewImportsInserter
         if (is_array($alias)) {
             $statement->appendToken((clone $this->baseToken)->id(T_NS_SEPARATOR)->text('\\'));
             $statement->appendToken((clone $this->baseToken)->id(123)->text('{'));
-
             $isFirst = true;
             ksort($alias, SORT_STRING | SORT_FLAG_CASE);
+
             foreach ($alias as $subPath => $subAlias) {
                 if (!$isFirst) {
                     $statement->appendToken((clone $this->baseToken)->id(123)->text(','));

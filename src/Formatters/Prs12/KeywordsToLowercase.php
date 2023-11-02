@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Medas\PhpFormatter\Formatters;
+namespace Medas\PhpFormatter\Formatters\Prs12;
 
 use Medas\Core\Attributes\Service;
-use Medas\PhpFormatter\Job;
-use Medas\PhpTokenizer\{TokenGroups};
+use Medas\PhpFormatter\{Formatters\BaseFormatter, Job};
+use Medas\PhpTokenizer\TokenGroups;
 
 #[Service]
 readonly class KeywordsToLowercase extends BaseFormatter

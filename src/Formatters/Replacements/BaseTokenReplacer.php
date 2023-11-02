@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\PhpFormatter\Formatters\Replacements;
 
-use Medas\PhpFormatter\Formatters\BaseFormatter;
-use Medas\PhpFormatter\Job;
+use Medas\PhpFormatter\{Formatters\BaseFormatter, Job};
 use Medas\PhpTokenizer\Token;
 
 abstract readonly class BaseTokenReplacer extends BaseFormatter

@@ -12,7 +12,7 @@ use Medas\PhpTokenizer\StatementTypes\{ClassConstDeclaration, ClassPropertyDecla
 readonly class BlankLinesBetweenClassSections extends BaseFormatter
 {
     public function __construct(
-        private BlankLineAdder $blankLineAdder,
+        private Helpers\BlankLineAdder $blankLineAdder,
     )
     {
     }
@@ -24,7 +24,6 @@ readonly class BlankLinesBetweenClassSections extends BaseFormatter
             ClassConstDeclaration::class,
             ClassPropertyDeclaration::class,
         ]);
-
         $this->blankLineAdder->beforeTypes($job->tree, [
             Comment::class,
         ]);

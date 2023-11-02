@@ -6,13 +6,13 @@ namespace Medas\PhpFormatter\Formatters;
 
 use Medas\Core\Attributes\Service;
 use Medas\PhpFormatter\Job;
-use Medas\PhpTokenizer\StatementTypes\{ControlStatement, ReturnStatement, ThrowStatement};
+use Medas\PhpTokenizer\StatementTypes\{ControlStatement, ReturnStatement, SwitchBranch, ThrowStatement};
 
 #[Service]
 readonly class BlankLinesBeforeBlocks extends BaseFormatter
 {
     public function __construct(
-        private BlankLineAdder $blankLineAdder,
+        private Helpers\BlankLineAdder $blankLineAdder,
     )
     {
     }
@@ -21,6 +21,7 @@ readonly class BlankLinesBeforeBlocks extends BaseFormatter
     {
         $this->blankLineAdder->beforeTypes($job->tree, [
             ControlStatement::class,
+            SwitchBranch::class,
             ReturnStatement::class,
             ThrowStatement::class,
         ]);

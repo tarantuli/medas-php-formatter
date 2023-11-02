@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Medas\PhpFormatter\Formatters;
+namespace Medas\PhpFormatter\Formatters\Prs12;
 
 use Medas\Core\Attributes\Service;
-use Medas\PhpFormatter\Job;
-use Medas\PhpTokenizer\Contexts\MethodDeclaration;
-use Medas\PhpTokenizer\Statement;
-use Medas\PhpTokenizer\StatementTypeFinder;
-use Medas\PhpTokenizer\StatementTypes\FunctionDeclaration;
-use Medas\PhpTokenizer\TokenTree;
+use Medas\PhpFormatter\{Formatters\BaseFormatter, Job};
+use Medas\PhpTokenizer\{Contexts\MethodDeclaration,
+    Statement,
+    StatementTypeFinder,
+    StatementTypes\FunctionDeclaration,
+    TokenTree};
 
 #[Service]
 readonly class Psr12VisibilityMarkers extends BaseFormatter

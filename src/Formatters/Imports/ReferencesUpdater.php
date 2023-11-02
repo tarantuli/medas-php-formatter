@@ -6,8 +6,7 @@ namespace Medas\PhpFormatter\Formatters\Imports;
 
 use Medas\Core\Attributes\Service;
 use Medas\PhpClassAnalysis\ClassAnalysis;
-use Medas\PhpTokenizer\TokenGroups;
-use Medas\PhpTokenizer\TokenTree;
+use Medas\PhpTokenizer\{TokenGroups, TokenTree};
 
 #[Service]
 readonly class ReferencesUpdater
@@ -17,6 +16,7 @@ readonly class ReferencesUpdater
     )
     {
     }
+
     public function update(TokenTree $tree, ClassAnalysis $analysis, ReferencesAndImports $referencesAndImports): void
     {
         $tree->doResetLinks();

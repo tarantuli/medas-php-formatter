@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Medas\PhpFormatter\Settings;
 
-use Medas\PhpFormatter\Formatters\{KeywordsToLowercase,
-    Psr12BlankLines,
-    Psr12ElseifWhile,
-    Psr12VisibilityMarkers,
-    Psr12Whitespace};
+use Medas\PhpFormatter\Formatters\{Prs12\KeywordsToLowercase,
+    Prs12\Psr12BlankLines,
+    Prs12\Psr12ElseifWhile,
+    Prs12\Psr12VisibilityMarkers,
+    Prs12\Psr12Whitespace};
 
 class Psr12 extends Settings
 {

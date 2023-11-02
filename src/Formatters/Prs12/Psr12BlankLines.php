@@ -2,28 +2,29 @@
 
 declare(strict_types=1);
 
-namespace Medas\PhpFormatter\Formatters;
+namespace Medas\PhpFormatter\Formatters\Prs12;
 
 use Medas\Core\Attributes\Service;
+use Medas\PhpFormatter\Formatters\{BaseFormatter, Helpers\BlankLineAdder};
 use Medas\PhpFormatter\Job;
-use Medas\PhpTokenizer\StatementTypeFinder;
-use Medas\PhpTokenizer\StatementTypes\{BlockCloser,
-    ClassDeclaration,
-    DeclareStatement,
-    FunctionDeclaration,
-    NamespaceDeclaration,
-    PhpOpenTag,
-    SwitchBranch,
-    UseClassStatement,
-    UseConstStatement,
-    UseFunctionStatement};
-use Medas\PhpTokenizer\TokenTree;
+use Medas\PhpTokenizer\{StatementTypeFinder,
+    StatementTypes\BlockCloser,
+    StatementTypes\ClassDeclaration,
+    StatementTypes\DeclareStatement,
+    StatementTypes\FunctionDeclaration,
+    StatementTypes\NamespaceDeclaration,
+    StatementTypes\PhpOpenTag,
+    StatementTypes\SwitchBranch,
+    StatementTypes\UseClassStatement,
+    StatementTypes\UseConstStatement,
+    StatementTypes\UseFunctionStatement,
+    TokenTree};
 
 #[Service]
 readonly class Psr12BlankLines extends BaseFormatter
 {
     public function __construct(
-        private BlankLineAdder      $blankLineAdder,
+        private BlankLineAdder $blankLineAdder,
         private StatementTypeFinder $typeFinder,
     )
     {
@@ -39,7 +40,6 @@ readonly class Psr12BlankLines extends BaseFormatter
             UseFunctionStatement::class,
             UseConstStatement::class,
         ]);
-
         $this->afterAttributes($job->tree);
         $this->afterMostComments($job->tree);
         $this->additionalLines($job->tree);
@@ -49,6 +49,7 @@ readonly class Psr12BlankLines extends BaseFormatter
     private function afterAttributes(TokenTree $tree): void
     {
         $bracketDepth = 0;
+
         foreach ($tree as $token) {
             if (!$token->inAttribute) {
                 continue;

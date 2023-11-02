@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\PhpFormatter\Settings;
 
-use Medas\PhpFormatter\Formatters\{Formatter, RequiredWhitespace};
+use Medas\PhpFormatter\Formatters\{Formatter, Required\RequiredWhitespace};
 use Medas\PhpFormatter\Preparsers\Preparser;
 
 class Settings

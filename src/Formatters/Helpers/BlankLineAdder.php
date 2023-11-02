@@ -2,28 +2,25 @@
 
 declare(strict_types=1);
 
-namespace Medas\PhpFormatter\Formatters;
+namespace Medas\PhpFormatter\Formatters\Helpers;
 
 use Medas\Core\Attributes\Service;
-use Medas\PhpTokenizer\Statement;
-use Medas\PhpTokenizer\StatementTypeFinder;
-use Medas\PhpTokenizer\StatementTypes\{AttributeStatement, Comment, StatementType, SwitchBranch};
-use Medas\PhpTokenizer\TokenTree;
+use Medas\PhpTokenizer\{Statement, StatementTypeFinder, StatementTypes\AttributeStatement, StatementTypes\Comment, StatementTypes\SwitchBranch, TokenTree};
 
 #[Service]
-class BlankLineAdder
+readonly class BlankLineAdder
 {
-    private Statement|null $previousStatement = null;
-    private StatementType|null $previousType = null;
-
     public function __construct(
-        private readonly StatementTypeFinder $statementTypeFinder,
+        private StatementTypeFinder $statementTypeFinder,
     )
     {
     }
 
     public function afterTypes(TokenTree $tree, array $afterTypes): void
     {
+        $previousType = null;
+        $previousStatement = null;
+
         foreach ($tree->statements() as $statement) {
             $type = $this->statementTypeFinder->for($statement);
 
@@ -31,20 +28,21 @@ class BlankLineAdder
                 if ($type instanceof $groupType) {
                     $statement->blankLineAfter = true;
 
-                    if ($this->previousType instanceof $groupType) {
-                        /** @noinspection PhpFieldImmediatelyRewrittenInspection */
-                        $this->previousStatement->blankLineAfter = false;
+                    if ($previousType instanceof $groupType) {
+                        $previousStatement->blankLineAfter = false;
                     }
                 }
             }
 
-            $this->previousStatement = $statement;
-            $this->previousType = $type;
+            $previousStatement = $statement;
+            $previousType = $type;
         }
     }
 
     public function beforeTypes(TokenTree $tree, array $beforeTypes): void
     {
+        $previousStatement = null;
+
         foreach ($tree->statements() as $statement) {
             if ($statement->rootStatement) {
                 // Only add a blank line before the root statement, not the others
@@ -61,12 +59,12 @@ class BlankLineAdder
                     continue;
                 }
 
-                if ($this->previousStatement->block !== $statement->block) {
+                if ($previousStatement->block !== $statement->block) {
                     // There's never a blank line before the first statement of a block
                     continue;
                 }
 
-                $previousStatementType = $this->statementTypeFinder->for($this->previousStatement);
+                $previousStatementType = $this->statementTypeFinder->for($previousStatement);
 
                 if ($previousStatementType instanceof SwitchBranch) {
                     // There's never a blank line after a switch case/default statement
@@ -78,10 +76,10 @@ class BlankLineAdder
                     continue;
                 }
 
-                $this->previousStatement->blankLineAfter = true;
+                $previousStatement->blankLineAfter = true;
             }
 
-            $this->previousStatement = $statement;
+            $previousStatement = $statement;
         }
     }
 
