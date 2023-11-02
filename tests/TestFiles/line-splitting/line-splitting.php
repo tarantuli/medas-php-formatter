@@ -8,11 +8,11 @@ use Medas\PhpTokenizer\{BlockDumper, Tokenizer, TreeBuilder};
 class Test
 {
     public function __construct(
-        private readonly BlockDumper $blockDumper,
-        private readonly BlockPrinter $blockPrinter,
+        private readonly BlockDumper   $blockDumper,
+        private readonly BlockPrinter  $blockPrinter,
         private readonly CodeValidator $codeValidator,
-        private Tokenizer $tokenizer,
-        readonly TreeBuilder $treeBuilder,
+        private Tokenizer              $tokenizer,
+        readonly TreeBuilder           $treeBuilder,
     )
     {
         $a = ['a', 'b', 'c'];

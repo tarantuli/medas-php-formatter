@@ -57,6 +57,10 @@ class BlockPrinter
             elseif ($token->spaceAfter && !$token->isLastToken()) {
                 echo ' ';
             }
+
+            if ($token->extraSpacesAfter) {
+                echo str_repeat(' ', $token->extraSpacesAfter);
+            }
         }
 
         echo $this->lineEnding;

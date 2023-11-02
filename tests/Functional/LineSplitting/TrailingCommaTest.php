@@ -18,4 +18,14 @@ class TrailingCommaTest extends BaseTestClass
             $settings
         );
     }
+
+    public function testAttributes(): void
+    {
+        $settings = (new Medas());
+
+        $this->assertRemainsTheSame(
+            'line-splitting/line-splitting-with-attributes',
+            $settings
+        );
+    }
 }
