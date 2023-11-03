@@ -120,7 +120,7 @@ readonly class Psr12Whitespace extends BaseFormatter
                 T_DOUBLE_ARROW,
                 T_QUESTION_MARK,
                 T_RETURN,
-            ]
+            ],
         );
     }
 
