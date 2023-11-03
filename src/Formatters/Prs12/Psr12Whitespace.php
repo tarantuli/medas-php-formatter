@@ -139,39 +139,52 @@ readonly class Psr12Whitespace extends BaseFormatter
     {
         $spaceBeforeForbidden = $this->getSpaceBeforeForbidden();
         $spaceAfterForbidden = $this->getSpaceAfterForbidden();
-        $symbolOperators = $this->tokenGroups->symbolOperators();
+        $operatorsAndKeywords = array_merge($this->tokenGroups->keywords(), $this->tokenGroups->symbolOperators());
 
         foreach ($tree as $token) {
             if ($token->is($spaceAfterForbidden)) {
                 $token->spaceAfter = false;
             }
 
-            if ($token->previous) {
-                if ($token->is($spaceBeforeForbidden)) {
-                    $token->previous->spaceAfter = false;
-                }
+            if (!$token->previous) {
+                continue;
+            }
 
-                // No space between inc/dec operators and variables
-                if ($token->is(T_VARIABLE) && $token->previous->is([T_INC, T_DEC])) {
-                    $token->previous->spaceAfter = false;
-                }
+            if ($token->is($spaceBeforeForbidden)) {
+                $token->previous->spaceAfter = false;
+            }
 
-                // No space between pluses and minuses before numbers, that follow an operator
-                if ($token->next) {
-                    if ($token->previous->is($symbolOperators)
-                        && $token->is([T_PLUS, T_MINUS])
-                        && $token->next->is([T_LNUMBER, T_DNUMBER])
-                    ) {
+            // No space between inc/dec operators and variables
+            if ($token->is(T_VARIABLE) && $token->previous->is([T_INC, T_DEC])) {
+                $token->previous->spaceAfter = false;
+            }
+
+            // No space between pluses and minuses followed by opening round brackets
+            if ($token->next) {
+                if ($token->previous->is($operatorsAndKeywords)
+                    && $token->is([T_PLUS, T_MINUS])
+                    && $token->next->is(T_ROUND_BRACKET_OPEN)) {
+                    $token->spaceAfter = false;
+                }
+            }
+
+            // No space between pluses and minuses before numbers, that follow an operator
+            if ($token->next) {
+                if ($token->is([T_PLUS, T_MINUS]) && $token->next->is([T_LNUMBER, T_DNUMBER])) {
+                    if ($token->previous->is(T_ROUND_BRACKET_CLOSE)) {
+                        $token->spaceAfter = true;
+                    }
+                    elseif ($token->previous->is($operatorsAndKeywords)) {
                         $token->spaceAfter = false;
                     }
                 }
+            }
 
-                // No spaces between variables and [
-                if ($token->next) {
-                    if ($token->is([T_VARIABLE, T_ROUND_BRACKET_CLOSE, T_STRING])
-                        && $token->next->is(T_SQUARE_BRACKET_OPEN)) {
-                        $token->spaceAfter = false;
-                    }
+            // No spaces between variables and [
+            if ($token->next) {
+                if ($token->is([T_VARIABLE, T_ROUND_BRACKET_CLOSE, T_STRING])
+                    && $token->next->is(T_SQUARE_BRACKET_OPEN)) {
+                    $token->spaceAfter = false;
                 }
             }
         }

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Medas\PhpFormatterTest\Functional;
 
+use Medas\Console\Diff;
+use Medas\ConsolePrinter\ConsolePrinter;
 use Medas\PhpFormatter\FormatterManager;
 use Medas\PhpFormatter\Settings\Settings;
 use PHPUnit\Framework\TestCase;
@@ -22,7 +24,8 @@ abstract class BaseTestClass extends TestCase
 
         if ($result !== $expected) {
             // Write the diff to output to ease development
-            echo (new Differ(new UnifiedDiffOutputBuilder("--- Expected\n+++ Actual\n")))->diff($expected, $result);
+            $diff = (new Differ(new UnifiedDiffOutputBuilder("--- Expected\n+++ Actual\n")))->diff($expected, $result);
+            service(ConsolePrinter::class)->print(new Diff($diff));
         }
 
         self::assertEquals($expected, $result, $message);
