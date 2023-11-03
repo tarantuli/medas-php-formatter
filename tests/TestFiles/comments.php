@@ -30,7 +30,7 @@ class A
 
     public function doesntStartWithDoccomment(): int
     {
-        /** @var  Interfaces\FullTrackInterface[] $tracks */
+        /** @var  \Interfaces\FullTrackInterface[] $tracks */
         foreach ($tracks as $track) {
             /** @noinspection PhpDynamicFieldDeclarationInspection */
             $track->distance = $this->determineDistance($track, $artist, $title);
