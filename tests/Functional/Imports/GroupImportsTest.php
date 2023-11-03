@@ -15,7 +15,7 @@ class GroupImportsTest extends BaseTestClass
         $settings->import->maxRelativeDepth = 3;
 
         $this->assertRemainsTheSame(
-            'imports/group-imports-pre',
+            'imports/group-imports',
             $settings
         );
     }
