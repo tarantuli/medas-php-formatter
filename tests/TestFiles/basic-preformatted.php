@@ -22,6 +22,8 @@ abstract class ServiceInstantiator
 
     public function callback(int &$a, ?array $b = [], bool &...$questions): ?callable
     {
+        self::$variable = 10;
+
         return fn($a) => strlen($a);
     }
 

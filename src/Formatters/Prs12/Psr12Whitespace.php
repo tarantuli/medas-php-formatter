@@ -92,11 +92,11 @@ readonly class Psr12Whitespace extends BaseFormatter
         return array_merge(
             $this->getSpaceAroundRequired(),
             [
-                T_VARIABLE,
                 T_AMPERSAND,
-                T_QUESTION_MARK,
                 T_ELLIPSIS,
+                T_QUESTION_MARK,
                 T_SQUARE_BRACKET_OPEN,
+                T_VARIABLE,
             ]
         );
     }
@@ -112,13 +112,13 @@ readonly class Psr12Whitespace extends BaseFormatter
             $this->tokenGroups->logicalOperators(),
             $this->tokenGroups->typeOperators(),
             [
-                T_ASSIGNMENT,
-                T_DOUBLE_ARROW,
-                T_COLON,
-                T_QUESTION_MARK,
-                T_CASE,
-                T_DOC_COMMENT,
                 T_AS,
+                T_ASSIGNMENT,
+                T_CASE,
+                T_COLON,
+                T_DOC_COMMENT,
+                T_DOUBLE_ARROW,
+                T_QUESTION_MARK,
                 T_RETURN,
             ]
         );
@@ -194,20 +194,21 @@ readonly class Psr12Whitespace extends BaseFormatter
     {
         return [
             T_ROUND_BRACKET_CLOSE,
-            T_SQUARE_BRACKET_CLOSE,
             T_SEMICOLON,
+            T_SQUARE_BRACKET_CLOSE,
         ];
     }
 
     private function getSpaceAfterForbidden(): array
     {
         return [
+            T_AMPERSAND,
+            T_DOUBLE_COLON,
+            T_ELLIPSIS,
+            T_EXCLAMATION_POINT,
+            T_PIPE,
             T_ROUND_BRACKET_OPEN,
             T_SQUARE_BRACKET_OPEN,
-            T_AMPERSAND,
-            T_ELLIPSIS,
-            T_PIPE,
-            T_EXCLAMATION_POINT,
         ];
     }
 }
