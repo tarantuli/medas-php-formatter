@@ -187,6 +187,13 @@ readonly class Psr12Whitespace extends BaseFormatter
                     $token->spaceAfter = false;
                 }
             }
+
+            // No spaces between ] and [
+            if ($token->next) {
+                if ($token->is(T_SQUARE_BRACKET_CLOSE) && $token->next->is(T_SQUARE_BRACKET_OPEN)) {
+                    $token->spaceAfter = false;
+                }
+            }
         }
     }
 

@@ -5,3 +5,5 @@ foreach ($this->values() as $value) {
 
     return ($value === 1) ? (true) : ('false');
 }
+
+$sets[$set][] = [$x, $y];
