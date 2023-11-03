@@ -8,12 +8,12 @@ use Medas\Core\Attributes\Service;
 use Medas\PhpFormatter\Job;
 
 #[Service]
-readonly class MedasElseifWhile extends BaseFormatter
+readonly class MedasElseifWhileCatch extends BaseFormatter
 {
     public function format(Job $job): void
     {
         foreach ($job->tree as $token) {
-            if ($token->is([T_ELSE, T_ELSEIF])) {
+            if ($token->is([T_ELSE, T_ELSEIF, T_CATCH])) {
                 $token->previous->lineBreakAfter = true;
             }
         }

@@ -9,7 +9,7 @@ use Medas\PhpFormatter\Formatters\{Alignment\AlignArgumentNames,
     BlankLinesBetweenClassSections,
     Imports\NormalizeImports,
     LineSplitting\TrailingCommaSplitter,
-    MedasElseifWhile,
+    MedasElseifWhileCatch,
     Replacements\UseExitInsteadOfDie};
 use Medas\PhpFormatter\Preparsers\NoCommentsAtLineEnd;
 use Medas\PhpTokenizer\AdditionalTokensDefiner;
@@ -29,7 +29,7 @@ class Medas extends Psr12
         $this->addFormatter(service(AlignArgumentNames::class));
         $this->addFormatter(service(BlankLinesBetweenClassSections::class));
         $this->addFormatter(service(BlankLinesBeforeBlocks::class));
-        $this->addFormatter(service(MedasElseifWhile::class));
+        $this->addFormatter(service(MedasElseifWhileCatch::class));
         $this->addFormatter(service(UseExitInsteadOfDie::class));
     }
 }

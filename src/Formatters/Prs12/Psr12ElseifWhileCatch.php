@@ -8,12 +8,12 @@ use Medas\Core\Attributes\Service;
 use Medas\PhpFormatter\{Formatters\BaseFormatter, Job};
 
 #[Service]
-readonly class Psr12ElseifWhile extends BaseFormatter
+readonly class Psr12ElseifWhileCatch extends BaseFormatter
 {
     public function format(Job $job): void
     {
         foreach ($job->tree->statements() as $statement) {
-            if ($statement->firstToken()->is([T_ELSE, T_ELSEIF])) {
+            if ($statement->firstToken()->is([T_ELSE, T_ELSEIF, T_CATCH])) {
                 $statement->mergeWithPrevious();
             }
 

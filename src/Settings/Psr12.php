@@ -6,7 +6,7 @@ namespace Medas\PhpFormatter\Settings;
 
 use Medas\PhpFormatter\Formatters\{Prs12\KeywordsToLowercase,
     Prs12\Psr12BlankLines,
-    Prs12\Psr12ElseifWhile,
+    Prs12\Psr12ElseifWhileCatch,
     Prs12\Psr12VisibilityMarkers,
     Prs12\Psr12Whitespace};
 
@@ -20,7 +20,7 @@ class Psr12 extends Settings
 
         $this->addFormatter(service(KeywordsToLowercase::class));
         $this->addFormatter(service(Psr12VisibilityMarkers::class));
-        $this->addFormatter(service(Psr12ElseifWhile::class));
+        $this->addFormatter(service(Psr12ElseifWhileCatch::class));
         $this->addFormatter(service(Psr12BlankLines::class));
         $this->addFormatter(service(Psr12Whitespace::class));
     }

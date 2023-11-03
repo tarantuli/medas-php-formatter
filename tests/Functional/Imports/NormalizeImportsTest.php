@@ -11,13 +11,21 @@ class NormalizeImportsTest extends BaseTestClass
 {
     public function testNormalize(): void
     {
-        $settings = (new Medas());
+        $settings = new Medas();
         $settings->import->maxRelativeDepth = 3;
 
         $this->assertChanges(
             'imports/normalize-imports-pre',
             'imports/normalize-imports-post',
             $settings
+        );
+    }
+
+    public function testTryCatch(): void
+    {
+        $this->assertRemainsTheSame(
+            'imports/try-catch',
+            new Medas()
         );
     }
 }
