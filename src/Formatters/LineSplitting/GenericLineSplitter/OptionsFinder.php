@@ -11,46 +11,38 @@ use Medas\PhpTokenizer\Statement;
 #[Service]
 readonly class OptionsFinder
 {
-    public function __construct(
-        private ClusterManager $clusterManager,
-    )
-    {
-    }
-
     /** @return Option[] */
     public function find(Statement $statement, array $separators): array
     {
         /** @var Option[][] $options */
         $options = [];
 
-        $cluster = 0;
-        $clusterOpener = 0;
+        $clusterManager = new ClusterManager();
+        $cluster = $clusterManager->currentCluster();
         $depth = 0;
 
         foreach ($statement as $index => $token) {
             if ($token->is(TrailingCommaSplitter::BRACKETS)) {
                 ++$depth;
-                $cluster = $this->clusterManager->getNextCluster($depth);
-
-                $clusterOpener = $index;
+                $cluster = $clusterManager->getNextCluster($depth, $index);
             }
 
             if ($token->is($separators)) {
-                if (!array_key_exists($cluster, $options)) {
-                    $options[$cluster] = new Option($separators, $depth, $cluster, $clusterOpener);
+                if (!array_key_exists($cluster->id, $options)) {
+                    $options[$cluster->id] = new Option($separators, $depth, $cluster->id, $cluster->openerIndex);
                 }
 
-                ++$options[$cluster]->counter;
-                $options[$cluster]->separatorIndices[] = $index;
+                ++$options[$cluster->id]->counter;
+                $options[$cluster->id]->separatorIndices[] = $index;
             }
 
             if ($token->is(TrailingCommaSplitter::CLOSERS) && $depth > 0) {
-                if (isset($options[$cluster])) {
-                    $options[$cluster]->closerIndex = $index;
+                if (isset($options[$cluster->id])) {
+                    $options[$cluster->id]->closerIndex = $index;
                 }
 
                 --$depth;
-                $cluster = $this->clusterManager->getPreviousCluster($depth);
+                $cluster = $clusterManager->getPreviousCluster($depth);
             }
         }
 
@@ -61,7 +53,7 @@ readonly class OptionsFinder
     {
         $return = [];
 
-        array_walk_recursive($array, function ($a) use (&$return) {
+        array_walk_recursive($array, function (Option $a) use (&$return) {
             $return[] = $a;
         });
 

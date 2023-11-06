@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\PhpFormatterTest\Functional;
 
-use Medas\PhpFormatter\Settings\Medas;
-use Medas\PhpFormatter\Settings\MinimalSize;
-use Medas\PhpFormatter\Settings\Psr12;
+use Medas\PhpFormatter\Settings\{Medas, MinimalSize, Psr12};
 
 class FormatterTest extends BaseTestClass
 {
@@ -51,7 +49,6 @@ class FormatterTest extends BaseTestClass
     }
 
     public function testVisibility(): void
-
     {
         $this->assertChanges('psr12-visibility-pre', 'psr12-visibility-post', new Psr12());
     }
@@ -89,5 +86,10 @@ class FormatterTest extends BaseTestClass
     public function testPipes(): void
     {
         $this->assertRemainsTheSame('pipes', new Medas());
+    }
+
+    public function testStatementTypeGrouping(): void
+    {
+        $this->assertRemainsTheSame('group-statement-types', new Medas());
     }
 }

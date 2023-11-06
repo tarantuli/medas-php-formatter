@@ -51,20 +51,22 @@ readonly class OptionAssesser
 
         $lengths[] = $currentLength;
 
-        return array_sum($lengths) / count($lengths) / $this->standard_deviation($lengths);
+        if (count($lengths) < 2) {
+            return 0;
+        }
+
+        return array_sum($lengths) / count($lengths) / $this->standardDeviation($lengths);
     }
 
-    function standard_deviation($aValues)
+    function standardDeviation(array $values): float
     {
-        $fMean = array_sum($aValues) / count($aValues);
-        //print_r($fMean);
-        $fVariance = 0.0;
-        foreach ($aValues as $i)
-        {
-            $fVariance += pow($i - $fMean, 2);
+        $average = array_sum($values) / count($values);
+        $variance = 0.0;
 
+        foreach ($values as $i) {
+            $variance += pow($i - $average, 2);
         }
-        $size = count($aValues) - 1;
-        return (float) sqrt($fVariance)/sqrt($size);
+
+        return sqrt($variance) / sqrt(count($values));
     }
 }

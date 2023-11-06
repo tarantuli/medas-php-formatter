@@ -4,26 +4,34 @@ declare(strict_types=1);
 
 namespace Medas\PhpFormatter\Formatters\LineSplitting\GenericLineSplitter;
 
-use Medas\Core\Attributes\Service;
-
-#[Service]
 class ClusterManager
 {
-    private int $currentCluster = 0;
+    private int $id;
+    private Cluster $currentCluster;
 
-    /** @var int[] */
-    private array $lastClusterPerDepth = [0 => 0];
+    /** @var Cluster[] */
+    private array $lastClusterPerDepth;
 
-    public function getNextCluster(int $depth): int
+    public function __construct()
     {
-        ++$this->currentCluster;
+        $this->id = 0;
+        $this->currentCluster = new Cluster(0, 0);
+        $this->lastClusterPerDepth = [0 => $this->currentCluster];
+    }
 
-        $this->lastClusterPerDepth[$depth] = $this->currentCluster;
+    public function currentCluster(): Cluster
+    {
+        return $this->currentCluster;
+    }
+
+    public function getNextCluster(int $depth, int $index): Cluster
+    {
+        $this->lastClusterPerDepth[$depth] = $this->currentCluster = new Cluster(++$this->id, $index);
 
         return $this->currentCluster;
     }
 
-    public function getPreviousCluster(int $depth): int
+    public function getPreviousCluster(int $depth): Cluster
     {
         return $this->lastClusterPerDepth[$depth];
     }

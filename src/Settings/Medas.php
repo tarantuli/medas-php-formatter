@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace Medas\PhpFormatter\Settings;
 
 use Medas\PhpFormatter\Formatters\{Alignment\AlignArgumentNames,
-    BlankLinesBeforeBlocks,
-    BlankLinesBetweenClassSections,
+    BlankLines\BlankLinesBeforeBlocks,
+    BlankLines\BlankLinesBetweenClassSections,
+    BlankLines\BlankLinesBetweenStatementGroups,
     Imports\NormalizeImports,
     LineSplitting\LongLineSplitter,
     LineSplitting\TrailingCommaSplitter,
@@ -31,6 +32,7 @@ class Medas extends Psr12
         $this->addFormatter(service(AlignArgumentNames::class));
         $this->addFormatter(service(BlankLinesBetweenClassSections::class));
         $this->addFormatter(service(BlankLinesBeforeBlocks::class));
+        $this->addFormatter(service(BlankLinesBetweenStatementGroups::class));
         $this->addFormatter(service(MedasElseifWhileCatch::class));
         $this->addFormatter(service(UseExitInsteadOfDie::class));
     }

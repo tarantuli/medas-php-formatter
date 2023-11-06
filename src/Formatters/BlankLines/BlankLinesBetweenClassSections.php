@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Medas\PhpFormatter\Formatters;
+namespace Medas\PhpFormatter\Formatters\BlankLines;
 
 use Medas\Core\Attributes\Service;
-use Medas\PhpFormatter\Job;
+use Medas\PhpFormatter\{Formatters\BaseFormatter, Formatters\Helpers, Job};
 use Medas\PhpTokenizer\StatementTypes\{ClassConstDeclaration, ClassPropertyDeclaration, Comment, UseTraitStatement};
 
 #[Service]
@@ -24,6 +24,7 @@ readonly class BlankLinesBetweenClassSections extends BaseFormatter
             ClassConstDeclaration::class,
             ClassPropertyDeclaration::class,
         ]);
+
         $this->blankLineAdder->beforeTypes($job->tree, [
             Comment::class,
         ]);

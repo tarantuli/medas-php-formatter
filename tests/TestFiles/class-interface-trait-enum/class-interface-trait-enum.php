@@ -16,6 +16,7 @@ class Formatters
 
             case 2:
                 $b = 'John';
+
                 break;
 
             default:
