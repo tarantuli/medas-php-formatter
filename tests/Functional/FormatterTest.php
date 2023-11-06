@@ -85,4 +85,9 @@ class FormatterTest extends BaseTestClass
     {
         $this->assertChanges('basic-preformatted', 'basic-preformatted-minimal-whitespace', new MinimalSize());
     }
+
+    public function testPipes(): void
+    {
+        $this->assertRemainsTheSame('pipes', new Medas());
+    }
 }

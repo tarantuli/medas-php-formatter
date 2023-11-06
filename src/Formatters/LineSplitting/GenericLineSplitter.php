@@ -24,7 +24,8 @@ readonly class GenericLineSplitter
         $this->groups = [
             new SeparatorGroup([T_COMMA], true),
             new SeparatorGroup([T_BOOLEAN_AND, T_BOOLEAN_OR, T_LOGICAL_AND, T_LOGICAL_OR], false),
-            new SeparatorGroup([T_DOUBLE_ARROW], false),
+            new SeparatorGroup([T_PIPE], false),
+            new SeparatorGroup([T_OBJECT_OPERATOR], false),
         ];
     }
 

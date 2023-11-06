@@ -83,6 +83,18 @@ readonly class Psr12Whitespace extends BaseFormatter
                 if ($token->is(T_COLON) && $token->previous->is(T_STRING) && !$token->previous->isTrueFalseNull()) {
                     $token->previous->spaceAfter = false;
                 }
+
+                // No space around "|" in function declarations and catch statements
+                if ($token->is(T_PIPE)) {
+                    $stripSpaces = $statementType instanceof FunctionDeclaration
+                        || $statementType instanceof ClassPropertyDeclaration
+                        || $token->statement->getToken(1)->is(T_CATCH);
+
+                    if ($stripSpaces) {
+                        $token->previous->spaceAfter = false;
+                        $token->spaceAfter = false;
+                    }
+                }
             }
         }
     }
@@ -94,6 +106,7 @@ readonly class Psr12Whitespace extends BaseFormatter
             [
                 T_AMPERSAND,
                 T_ELLIPSIS,
+                T_PIPE,
                 T_QUESTION_MARK,
                 T_SQUARE_BRACKET_OPEN,
                 T_VARIABLE,
@@ -118,6 +131,7 @@ readonly class Psr12Whitespace extends BaseFormatter
                 T_COLON,
                 T_DOC_COMMENT,
                 T_DOUBLE_ARROW,
+                T_PIPE,
                 T_QUESTION_MARK,
                 T_RETURN,
             ],
@@ -213,7 +227,6 @@ readonly class Psr12Whitespace extends BaseFormatter
             T_DOUBLE_COLON,
             T_ELLIPSIS,
             T_EXCLAMATION_POINT,
-            T_PIPE,
             T_ROUND_BRACKET_OPEN,
             T_SQUARE_BRACKET_OPEN,
         ];

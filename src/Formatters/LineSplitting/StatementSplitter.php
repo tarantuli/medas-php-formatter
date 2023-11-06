@@ -12,9 +12,7 @@ readonly class StatementSplitter
 {
     public function split(Statement $statement, array $separators, bool $splitAfter, int $openerIndex, int|null $closerIndex): void
     {
-        if ($statement->previous()) {
-            $statement->previous()->blankLineAfter = true;
-        }
+        $this->addBlankLineBefore($statement);
 
         if ($closerIndex === null) {
             $closerIndex = $statement->tokenCount() - 1;
@@ -87,5 +85,14 @@ readonly class StatementSplitter
         }
 
         return $currentStatement;
+    }
+
+    private function addBlankLineBefore(Statement $statement): void
+    {
+        $previousStatement = $statement->previous();
+
+        if ($previousStatement && $statement->block === $previousStatement->block) {
+            $previousStatement->blankLineAfter = true;
+        }
     }
 }
