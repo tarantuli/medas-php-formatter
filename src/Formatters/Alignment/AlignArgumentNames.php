@@ -11,6 +11,8 @@ use Medas\PhpTokenizer\{StatementTypeFinder, StatementTypes\FunctionDeclaration}
 #[Service]
 readonly class AlignArgumentNames extends BaseFormatter
 {
+    public const VARIABLE_STARTERS = [T_ELLIPSIS, T_VARIABLE];
+
     public function __construct(
         private StatementTypeFinder $typeFinder,
     )
@@ -34,7 +36,7 @@ readonly class AlignArgumentNames extends BaseFormatter
             $currentLength = 0;
 
             foreach ($statement as $token) {
-                if (!$token->is(T_VARIABLE)) {
+                if (!$token->is(self::VARIABLE_STARTERS)) {
                     if (!$token->inAttribute && !$token->is(T_ATTRIBUTE)) {
                         $currentLength += strlen($token->text) + $token->spaceAfter;
                     }
@@ -63,9 +65,11 @@ readonly class AlignArgumentNames extends BaseFormatter
             }
 
             $prefixLength = 0;
+            $foundVariable = false;
 
             foreach ($statement as $token) {
-                if ($token->is(T_VARIABLE)) {
+                if ($token->is(self::VARIABLE_STARTERS)) {
+                    $foundVariable = true;
                     break;
                 }
 
@@ -74,6 +78,10 @@ readonly class AlignArgumentNames extends BaseFormatter
                 }
 
                 $prefixLength += strlen($token->text) + $token->spaceAfter;
+            }
+
+            if (!$foundVariable) {
+                continue;
             }
 
             $id = spl_object_id($statement->rootStatement);

@@ -7,7 +7,7 @@ namespace Medas\PhpFormatter\ConfigOptions;
 use Medas\Core\{Attributes\Service, Interfaces\ConfigGroup, Interfaces\ConfigOption};
 
 #[Service]
-readonly class MaxImportGroupChildDepth implements ConfigOption
+readonly class MaxLineLength implements ConfigOption
 {
     public function __construct(
         private RootGroup $group,
@@ -22,12 +22,12 @@ readonly class MaxImportGroupChildDepth implements ConfigOption
 
     public function name(): string
     {
-        return 'max-import-group-child-depth';
+        return 'max-line-length';
     }
 
     public function description(): string
     {
-        return 'The maximum amount of levels a grouped import clause may have (e.g. two in "use Namespace\{SubA\B, SubC\D};")';
+        return 'The maximum length of lines; LongLineSplitter will attempt to split lines longer than this over multiple lines';
     }
 
     public function hasDefault(): bool
@@ -37,6 +37,6 @@ readonly class MaxImportGroupChildDepth implements ConfigOption
 
     public function default(): int
     {
-        return 2;
+        return 120;
     }
 }

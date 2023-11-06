@@ -33,7 +33,11 @@ abstract class ServiceInstantiator
         $j = $a ?: false;
     }
 
-    protected function test(RelativePath\RelativeClass $relativeClass, bool $isDefault = false, callable ...$callableArray)
+    protected function test(
+        RelativePath\RelativeClass $relativeClass,
+        bool                       $isDefault = false,
+        callable                   ...$callableArray
+    )
     {
         printf("\e[%sm%s\e[0m", implode(';', $formats), $string);
 
@@ -49,7 +53,11 @@ abstract class ServiceInstantiator
             $value %= null;
         }
 
-        while ($condition === true && $value === 1278934987 && $key === 'a reasonably long string that pushes the length of the line over 120') {
+        while (
+            $condition === true
+            && $value === 1278934987
+            && $key === 'a reasonably long string that pushes the length of the line over 120'
+        ) {
             // Test
         }
 

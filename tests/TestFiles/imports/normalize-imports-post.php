@@ -56,7 +56,13 @@ class MyClass extends ChildNamespace\BaseClass implements Interfaces\MyInterface
         return StringClass::class;
     }
 
-    public function e(int $int, string $string, array $array, object $object, bool $bool): int|string|array|object|bool|null
+    public function e(
+        int    $int,
+        string $string,
+        array  $array,
+        object $object,
+        bool   $bool
+    ): int|string|array|object|bool|null
     {
         return [\ReflectionClass::class, ChildPath\ThisCanBeInlined::class];
     }

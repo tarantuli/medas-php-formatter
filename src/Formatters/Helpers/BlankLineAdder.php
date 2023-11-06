@@ -46,6 +46,7 @@ readonly class BlankLineAdder
         foreach ($tree->statements() as $statement) {
             if ($statement->rootStatement) {
                 // Only add a blank line before the root statement, not the others
+                $previousStatement = $statement;
                 continue;
             }
 

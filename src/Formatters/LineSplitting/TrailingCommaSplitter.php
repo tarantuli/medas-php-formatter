@@ -11,17 +11,23 @@ use Medas\PhpTokenizer\Statement;
 #[Service]
 readonly class TrailingCommaSplitter extends BaseFormatter
 {
-    private const BRACKETS = [
+    public const BRACKETS = [
         T_SQUARE_BRACKET_CLOSE => T_SQUARE_BRACKET_OPEN,
         T_CURLY_BRACKET_CLOSE => T_CURLY_BRACKET_OPEN,
         T_ROUND_BRACKET_CLOSE => T_ROUND_BRACKET_OPEN,
     ];
 
-    private const CLOSERS = [
+    public const CLOSERS = [
         T_SQUARE_BRACKET_CLOSE,
         T_CURLY_BRACKET_CLOSE,
         T_ROUND_BRACKET_CLOSE,
     ];
+
+    public function __construct(
+        private StatementSplitter $splitter,
+    )
+    {
+    }
 
     public function format(Job $job): void
     {
@@ -54,7 +60,7 @@ readonly class TrailingCommaSplitter extends BaseFormatter
                     continue;
                 }
 
-                $this->splitStatementByComma($statement, $openerIndex, $commaIndex + 1);
+                $this->splitter->split($statement, [T_COMMA], true, $openerIndex, $commaIndex + 1);
 
                 return true;
             }
@@ -88,50 +94,5 @@ readonly class TrailingCommaSplitter extends BaseFormatter
         }
 
         return null;
-    }
-
-    private function splitStatementByComma(Statement $statement, int $openerIndex, int $closerIndex): void
-    {
-        $this->extractTrailingTokens($statement, $statement->tokenCount() - 1, $closerIndex);
-
-        $currentStatement = null;
-        $depth = 0;
-
-        for ($i = $closerIndex - 1; $i > $openerIndex; --$i) {
-            $token = $statement->getToken($i);
-            $statement->removeToken($token);
-
-            $text = $token->text;
-
-            if (!$token->inAttribute && in_array($text, self::CLOSERS)) {
-                ++$depth;
-            }
-
-            if ($text === T_COMMA && $depth === 0) {
-                $currentStatement = new Statement($statement->block);
-                $currentStatement->rootStatement = $statement;
-                $statement->block->insertStatementAfter($currentStatement, $statement);
-                $currentStatement->additionalDepth++;
-            }
-
-            if (!$token->inAttribute && in_array($text, self::BRACKETS)) {
-                --$depth;
-            }
-
-            $currentStatement->prependToken($token);
-        }
-    }
-
-    private function extractTrailingTokens(Statement $statement, int $lastIndex, int $closerIndex): void
-    {
-        $finalStatement = new Statement($statement->block);
-        $finalStatement->rootStatement = $statement;
-        $statement->block->insertStatementAfter($finalStatement, $statement);
-
-        for ($i = $lastIndex; $i >= $closerIndex; --$i) {
-            $token = $statement->getToken($i);
-            $statement->removeToken($token);
-            $finalStatement->prependToken($token);
-        }
     }
 }
