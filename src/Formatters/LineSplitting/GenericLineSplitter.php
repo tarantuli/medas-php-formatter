@@ -41,7 +41,7 @@ readonly class GenericLineSplitter
             foreach ($options as $option) {
                 $quality = $this->assesser->assess($statement, $option);
 
-                if ($bestQuality === null || $quality > $bestQuality) {
+                if ($bestQuality === null || $quality > $bestQuality || ($quality === $bestQuality && $option->depth < $bestOption->depth)) {
                     $bestQuality = $quality;
                     $bestOption = $option;
                 }
@@ -54,6 +54,7 @@ readonly class GenericLineSplitter
                 $bestOption->openerIndex,
                 $bestOption->closerIndex
             );
+
             return true;
         }
 

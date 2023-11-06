@@ -12,6 +12,10 @@ readonly class StatementSplitter
 {
     public function split(Statement $statement, array $separators, bool $splitAfter, int $openerIndex, int|null $closerIndex): void
     {
+        if ($statement->previous()) {
+            $statement->previous()->blankLineAfter = true;
+        }
+
         if ($closerIndex === null) {
             $closerIndex = $statement->tokenCount() - 1;
         }

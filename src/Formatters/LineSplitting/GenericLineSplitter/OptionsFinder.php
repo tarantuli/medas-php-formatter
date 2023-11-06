@@ -44,7 +44,7 @@ readonly class OptionsFinder
                 $options[$cluster]->separatorIndices[] = $index;
             }
 
-            if ($token->is(TrailingCommaSplitter::CLOSERS)) {
+            if ($token->is(TrailingCommaSplitter::CLOSERS) && $depth > 0) {
                 if (isset($options[$cluster])) {
                     $options[$cluster]->closerIndex = $index;
                 }

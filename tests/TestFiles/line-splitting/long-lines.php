@@ -52,6 +52,12 @@ class TestClass
             $faas
         ];
 
+        $ignorePattern = sprintf('(%s)%s(%s)%s', str_replace(
+            DIRECTORY_SEPARATOR,
+            $separator,
+            implode('|', $this->sourceDirectories)
+        ), $separator, $pathsToIgnore, $separator);
+
         return sprintf(
             '%s%s',
             $rootPrefixLalalalalalalalalalalalalaal,
