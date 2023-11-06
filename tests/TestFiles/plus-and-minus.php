@@ -41,3 +41,5 @@ return -100;
 -($a);
 -($a + $b);
 $a - ($b);
+
+throw new \ImageNotHighEnoughException(-$chartHeight);

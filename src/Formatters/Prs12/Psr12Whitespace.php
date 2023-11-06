@@ -182,9 +182,9 @@ readonly class Psr12Whitespace extends BaseFormatter
                 }
             }
 
-            // No space between pluses and minuses before numbers, that follow an operator
+            // No space between pluses and minuses before numbers and variables, that follow an operator
             if ($token->next) {
-                if ($token->is([T_PLUS, T_MINUS]) && $token->next->is([T_LNUMBER, T_DNUMBER])) {
+                if ($token->is([T_PLUS, T_MINUS]) && $token->next->is([T_LNUMBER, T_DNUMBER, T_VARIABLE])) {
                     if ($token->previous->is(T_ROUND_BRACKET_CLOSE)) {
                         $token->spaceAfter = true;
                     }
