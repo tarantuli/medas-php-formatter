@@ -61,7 +61,7 @@ readonly class LongLineSplitter extends BaseFormatter
                 $length++;
             }
 
-            if ($token->is(T_DOC_COMMENT)) {
+            if ($token->is([T_DOC_COMMENT, T_COMMENT])) {
                 $length = $statement->block->depth * 4;
             }
 
