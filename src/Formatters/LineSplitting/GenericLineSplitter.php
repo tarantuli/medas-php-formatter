@@ -31,34 +31,39 @@ readonly class GenericLineSplitter
 
     public function split(Statement $statement): bool
     {
+        $options = [];
         foreach ($this->groups as $group) {
-            if (!$options = $this->optionsFinder->find($statement, $group->separators)) {
+            if (!$subOptions = $this->optionsFinder->find($statement, $group->separators, $group->splitAfter)) {
                 continue;
             }
 
-            $bestQuality = null;
-            $bestOption = null;
-
-            foreach ($options as $option) {
-                $quality = $this->assesser->assess($statement, $option);
-
-                if ($bestQuality === null || $quality > $bestQuality || ($quality === $bestQuality && $option->depth < $bestOption->depth)) {
-                    $bestQuality = $quality;
-                    $bestOption = $option;
-                }
-            }
-
-            $this->statementSplitter->split(
-                $statement,
-                $bestOption->separators,
-                $group->splitAfter,
-                $bestOption->openerIndex,
-                $bestOption->closerIndex
-            );
-
-            return true;
+            $options = array_merge($options, $subOptions);
         }
 
-        return false;
+        $bestQuality = null;
+        $bestOption = null;
+
+        foreach ($options as $option) {
+            $quality = $this->assesser->assess($statement, $option);
+
+            if ($bestQuality === null || $quality > $bestQuality || ($quality === $bestQuality && $option->depth < $bestOption->depth)) {
+                $bestQuality = $quality;
+                $bestOption = $option;
+            }
+        }
+
+        if ($bestQuality === null || $bestQuality === 0) {
+            return false;
+        }
+
+        $this->statementSplitter->split(
+            $statement,
+            $bestOption->separators,
+            $bestOption->splitAfter,
+            $bestOption->openerIndex,
+            $bestOption->closerIndex
+        );
+
+        return true;
     }
 }

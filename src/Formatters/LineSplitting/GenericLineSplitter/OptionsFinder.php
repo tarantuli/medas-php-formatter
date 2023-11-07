@@ -12,7 +12,7 @@ use Medas\PhpTokenizer\Statement;
 readonly class OptionsFinder
 {
     /** @return Option[] */
-    public function find(Statement $statement, array $separators): array
+    public function find(Statement $statement, array $separators, bool $splitAfter): array
     {
         /** @var Option[][] $options */
         $options = [];
@@ -34,7 +34,7 @@ readonly class OptionsFinder
                         $openerIndex = $index - 1;
                     }
 
-                    $options[$cluster->id] = new Option($separators, $depth, $cluster->id, $openerIndex);
+                    $options[$cluster->id] = new Option($separators, $splitAfter, $depth, $cluster->id, $openerIndex);
                 }
 
                 ++$options[$cluster->id]->counter;

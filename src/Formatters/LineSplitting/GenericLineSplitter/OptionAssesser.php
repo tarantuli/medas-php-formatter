@@ -25,22 +25,48 @@ readonly class OptionAssesser
                 ++$depth;
             }
 
-            $currentLength += strlen($token->text) + $token->extraSpacesAfter;
+            if ($option->splitAfter) {
+                $currentLength += strlen($token->text) + $token->extraSpacesAfter;
 
-            if ($inPrefix && $index === $option->openerIndex) {
-                $lengths[] = $currentLength;
-                $currentLength = 0;
-                $inPrefix = false;
-            }
-
-            if (!$inPrefix && !$inSuffix) {
-                if (in_array($index, $option->separatorIndices, true)) {
+                if ($inPrefix && $index === $option->openerIndex) {
                     $lengths[] = $currentLength;
                     $currentLength = 0;
+                    $inPrefix = false;
                 }
 
-                if ($index === $option->closerIndex) {
-                    $inSuffix = true;
+                if (!$inPrefix && !$inSuffix) {
+                    if (in_array($index, $option->separatorIndices, true)) {
+                        $lengths[] = $currentLength;
+                        $currentLength = 0;
+                    }
+
+                    if ($index === $option->closerIndex) {
+                        $inSuffix = true;
+                    }
+                }
+            }
+            else {
+                if (!$inPrefix && !$inSuffix) {
+                    if (in_array($index, $option->separatorIndices, true)) {
+                        if ($currentLength) {
+                            $lengths[] = $currentLength;
+                        }
+                        $currentLength = 0;
+                    }
+
+                    if ($index === $option->closerIndex) {
+                        $inSuffix = true;
+                    }
+                }
+
+                $currentLength += strlen($token->text) + $token->extraSpacesAfter;
+
+                if ($inPrefix && $index === $option->openerIndex) {
+                    if ($currentLength) {
+                        $lengths[] = $currentLength;
+                    }
+                    $currentLength = 0;
+                    $inPrefix = false;
                 }
             }
 
@@ -55,7 +81,7 @@ readonly class OptionAssesser
             return 0;
         }
 
-        return array_sum($lengths) / count($lengths) / $this->standardDeviation($lengths);
+        return $this->quality($lengths);
     }
 
     function standardDeviation(array $values): float
@@ -68,5 +94,10 @@ readonly class OptionAssesser
         }
 
         return sqrt($variance) / sqrt(count($values));
+    }
+
+    private function quality(array $lengths): float
+    {
+        return array_sum($lengths) / count($lengths) / $this->standardDeviation($lengths);
     }
 }

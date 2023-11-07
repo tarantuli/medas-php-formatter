@@ -13,6 +13,7 @@ class Option
 
     public function __construct(
         public readonly array $separators,
+        public readonly bool $splitAfter,
         public readonly int   $depth,
         public readonly int   $cluster,
         public readonly int   $openerIndex,
