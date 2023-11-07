@@ -29,7 +29,12 @@ readonly class OptionsFinder
 
             if ($token->is($separators)) {
                 if (!array_key_exists($cluster->id, $options)) {
-                    $options[$cluster->id] = new Option($separators, $depth, $cluster->id, $cluster->openerIndex);
+                    $openerIndex = $cluster->openerIndex;
+                    if ($openerIndex === 0) {
+                        $openerIndex = $index - 1;
+                    }
+
+                    $options[$cluster->id] = new Option($separators, $depth, $cluster->id, $openerIndex);
                 }
 
                 ++$options[$cluster->id]->counter;

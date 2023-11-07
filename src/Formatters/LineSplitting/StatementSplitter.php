@@ -15,7 +15,7 @@ readonly class StatementSplitter
         $this->addBlankLineBefore($statement);
 
         if ($closerIndex === null) {
-            $closerIndex = $statement->tokenCount() - 1;
+            $closerIndex = $statement->tokenCount();
         }
 
         $this->extractTrailingTokens($statement, $statement->tokenCount() - 1, $closerIndex);
@@ -41,7 +41,7 @@ readonly class StatementSplitter
                 $currentStatement->prependToken($token);
             }
 
-            if (($token->is($separators) && $depth === 0)) {
+            if ($token->is($separators) && $depth === 0 && $i > $openerIndex + 1) {
                 $currentStatement = $this->startNewStatement($statement);
             }
 
@@ -61,6 +61,10 @@ readonly class StatementSplitter
 
     private function extractTrailingTokens(Statement $statement, int $lastIndex, int $closerIndex): void
     {
+        if ($lastIndex < $closerIndex) {
+            return;
+        }
+
         $finalStatement = new Statement($statement->block);
         $finalStatement->rootStatement = $statement;
         $statement->block->insertStatementAfter($finalStatement, $statement);

@@ -7,6 +7,7 @@ function a($b = []): array
         2,
         3,
     ];
+
     [$d, $e] = [true, false];
 
     echo "[square brackets]";

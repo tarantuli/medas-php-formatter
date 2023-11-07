@@ -36,6 +36,9 @@ readonly class BlankLinesBetweenStatementGroups extends BaseFormatter
             if (!$statement->previous()) {
                 $previousSubType = null;
             }
+            elseif ($statement->previous()->rootStatement !== null && $statement->rootStatement === null) {
+                $statement->previous()->blankLineAfter = true;
+            }
 
             $isAssignment = false;
 

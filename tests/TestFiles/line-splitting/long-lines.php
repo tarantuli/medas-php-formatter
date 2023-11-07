@@ -36,12 +36,10 @@ class TestClass
         private bool          $dumpResultTree,
     )
     {
-        $directoryIteratorFlags
-            = \FilesystemIterator::KEY_AS_FILENAME
+        $directoryIteratorFlags = \FilesystemIterator::KEY_AS_FILENAME
             | \FilesystemIterator::CURRENT_AS_FILEINFO
             | \FilesystemIterator::SKIP_DOTS
-            | \FilesystemIterator::FOLLOW_SYMLINKS
-        ;
+            | \FilesystemIterator::FOLLOW_SYMLINKS;
     }
 
     public function getClassFromRootAndSubdirectory(
