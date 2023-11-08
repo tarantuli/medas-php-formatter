@@ -93,6 +93,8 @@ abstract class ServiceInstantiator
 
     final public static function create(): static
     {
+        $a = new self();
+
         return new static();
     }
 }

@@ -73,7 +73,7 @@ readonly class AlignArgumentNames extends BaseFormatter
                     break;
                 }
 
-                if ($token->inAttribute) {
+                if ($token->inAttribute || $token->is(T_ATTRIBUTE)) {
                     continue;
                 }
 

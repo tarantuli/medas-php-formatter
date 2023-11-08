@@ -9,6 +9,7 @@ use Medas\PhpFormatter\Formatters\{Alignment\AlignArgumentNames,
     BlankLines\BlankLinesBetweenClassSections,
     BlankLines\BlankLinesBetweenStatementGroups,
     Imports\NormalizeImports,
+    LineSplitting\KeepOriginalObjectOperatorBreaks,
     LineSplitting\LongLineSplitter,
     LineSplitting\TrailingCommaSplitter,
     MedasElseifWhileCatch,
@@ -26,6 +27,7 @@ class Medas extends Psr12
 
         $this->addPreparser(service(NoCommentsAtLineEnd::class));
 
+        $this->addFormatter(service(KeepOriginalObjectOperatorBreaks::class));
         $this->addFormatter(service(NormalizeImports::class));
         $this->addFormatter(service(TrailingCommaSplitter::class));
         $this->addFormatter(service(LongLineSplitter::class));

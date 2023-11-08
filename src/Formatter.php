@@ -27,9 +27,11 @@ readonly class Formatter
     public function format(string $code, Settings\Settings $settings): string
     {
         $job = new Job($settings);
+
         $this->assertCodeIsValid($code);
 
         $job->tokens = $this->tokenizer->tokenize($code);
+
         $this->applyPreparsers($job);
 
         $job->tree = $this->treeBuilder->fromCollection($job->tokens);

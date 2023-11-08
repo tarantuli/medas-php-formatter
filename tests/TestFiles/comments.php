@@ -3,7 +3,7 @@
 // Comment flush left
 class A
 {
-    /** @var Type[]  */
+    /** @var \Type[]  */
     private array $int;
 
     /**
@@ -30,7 +30,7 @@ class A
 
     public function doesntStartWithDoccomment(): int
     {
-        /** @var  \Interfaces\FullTrackInterface[] $tracks */
+        /** @var  \FullTrackInterface[] $tracks */
         foreach ($tracks as $track) {
             /** @noinspection PhpDynamicFieldDeclarationInspection */
             $track->distance = $this->determineDistance($track, $artist, $title);

@@ -24,4 +24,20 @@ class LongLinesTest extends BaseTestClass
             new Medas()
         );
     }
+
+    public function testSplitting3(): void
+    {
+        $this->assertRemainsTheSame(
+            'line-splitting/long-lines3',
+            new Medas()
+        );
+    }
+
+    public function testKeepOriginalOperatorBreaks(): void
+    {
+        $this->assertRemainsTheSame(
+            'line-splitting/keep-original-operator-breaks',
+            new Medas()
+        );
+    }
 }

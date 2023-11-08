@@ -9,7 +9,12 @@ use Medas\PhpFormatter\Formatters\BaseFormatter;
 use Medas\PhpFormatter\Job;
 use Medas\PhpTokenizer\Contexts\MethodReturnType;
 use Medas\PhpTokenizer\StatementTypeFinder;
-use Medas\PhpTokenizer\StatementTypes\{ClassPropertyDeclaration, DeclareStatement, FunctionDeclaration, SwitchBranch};
+use Medas\PhpTokenizer\StatementTypes\{ClassPropertyDeclaration,
+    DeclareStatement,
+    FunctionDeclaration,
+    SwitchBranch,
+    UseTraitStatement
+};
 use Medas\PhpTokenizer\TokenGroups;
 use Medas\PhpTokenizer\TokenTree;
 
@@ -33,6 +38,7 @@ readonly class Psr12Whitespace extends BaseFormatter
     {
         $spaceBeforeRequired = $this->getSpaceBeforeRequired();
         $spaceAfterRequired = $this->getSpaceAfterRequired();
+        $openTernaries = 0;
 
         foreach ($tree as $token) {
             // No spaces in a declare statement
@@ -52,9 +58,13 @@ readonly class Psr12Whitespace extends BaseFormatter
             }
 
             // No space between "?type"
-            if ($token->is(T_QUESTION_MARK) &&
-                ($statementType instanceof ClassPropertyDeclaration || $statementType instanceof FunctionDeclaration)) {
-                $token->spaceAfter = false;
+            if ($token->is(T_QUESTION_MARK)) {
+                if ($statementType instanceof ClassPropertyDeclaration || $statementType instanceof FunctionDeclaration) {
+                    $token->spaceAfter = false;
+                }
+                else {
+                    ++$openTernaries;
+                }
             }
 
             if ($token->previous) {
@@ -80,8 +90,13 @@ readonly class Psr12Whitespace extends BaseFormatter
                 }
 
                 // No space between strings and ":" in named arguments
-                if ($token->is(T_COLON) && $token->previous->is(T_STRING) && !$token->previous->isTrueFalseNull()) {
-                    $token->previous->spaceAfter = false;
+                if ($token->is(T_COLON)) {
+                    if ($openTernaries === 0) {
+                        $token->previous->spaceAfter = false;
+                    }
+                    else {
+                        --$openTernaries;
+                    }
                 }
 
                 // No space around "|" in function declarations and catch statements
@@ -94,6 +109,15 @@ readonly class Psr12Whitespace extends BaseFormatter
                         $token->previous->spaceAfter = false;
                         $token->spaceAfter = false;
                     }
+                }
+
+                if ($token->previous->is(T_FUNCTION) && !$statementType instanceof FunctionDeclaration) {
+                    $token->previous->spaceAfter = true;
+                }
+
+                if ($token->is(T_USE) && !$statementType instanceof UseTraitStatement) {
+                    $token->previous->spaceAfter = true;
+                    $token->spaceAfter = true;
                 }
             }
         }
@@ -142,6 +166,7 @@ readonly class Psr12Whitespace extends BaseFormatter
     {
         return array_merge(
             $this->getSpaceAroundRequired(),
+            $this->tokenGroups->casts(),
             [
                 T_COMMA,
                 T_SEMICOLON,
@@ -154,6 +179,7 @@ readonly class Psr12Whitespace extends BaseFormatter
         $spaceBeforeForbidden = $this->getSpaceBeforeForbidden();
         $spaceAfterForbidden = $this->getSpaceAfterForbidden();
         $operatorsAndKeywords = array_merge($this->tokenGroups->keywords(), $this->tokenGroups->symbolOperators());
+        $operatorsKeywordsAndBrackets = array_merge($operatorsAndKeywords, $this->tokenGroups->brackets());
 
         foreach ($tree as $token) {
             if ($token->is($spaceAfterForbidden)) {
@@ -173,38 +199,36 @@ readonly class Psr12Whitespace extends BaseFormatter
                 $token->previous->spaceAfter = false;
             }
 
-            // No space between pluses and minuses followed by opening round brackets
             if ($token->next) {
+                // No space between pluses and minuses followed by opening round brackets
                 if ($token->previous->is($operatorsAndKeywords)
                     && $token->is([T_PLUS, T_MINUS])
                     && $token->next->is(T_ROUND_BRACKET_OPEN)) {
                     $token->spaceAfter = false;
                 }
-            }
 
-            // No space between pluses and minuses before numbers and variables, that follow an operator
-            if ($token->next) {
+                // No space between pluses and minuses before numbers and variables, that follow an operator or bracket
                 if ($token->is([T_PLUS, T_MINUS]) && $token->next->is([T_LNUMBER, T_DNUMBER, T_VARIABLE])) {
                     if ($token->previous->is(T_ROUND_BRACKET_CLOSE)) {
                         $token->spaceAfter = true;
                     }
-                    elseif ($token->previous->is($operatorsAndKeywords)) {
+                    elseif ($token->previous->is($operatorsKeywordsAndBrackets)) {
                         $token->spaceAfter = false;
                     }
                 }
-            }
 
-            // No spaces between variables and [
-            if ($token->next) {
+                // No spaces between variables and [
                 if ($token->is([T_VARIABLE, T_ROUND_BRACKET_CLOSE, T_STRING])
                     && $token->next->is(T_SQUARE_BRACKET_OPEN)) {
                     $token->spaceAfter = false;
                 }
-            }
 
-            // No spaces between ] and [
-            if ($token->next) {
+                // No spaces between ] and [
                 if ($token->is(T_SQUARE_BRACKET_CLOSE) && $token->next->is(T_SQUARE_BRACKET_OPEN)) {
+                    $token->spaceAfter = false;
+                }
+                // No space between "static" and "()"
+                if ($token->is(T_STATIC) && $token->next->is(T_ROUND_BRACKET_OPEN)) {
                     $token->spaceAfter = false;
                 }
             }
@@ -222,13 +246,14 @@ readonly class Psr12Whitespace extends BaseFormatter
 
     private function getSpaceAfterForbidden(): array
     {
-        return [
-            T_AMPERSAND,
-            T_DOUBLE_COLON,
-            T_ELLIPSIS,
-            T_EXCLAMATION_POINT,
-            T_ROUND_BRACKET_OPEN,
-            T_SQUARE_BRACKET_OPEN,
-        ];
+        return
+            [
+                T_AMPERSAND,
+                T_DOUBLE_COLON,
+                T_ELLIPSIS,
+                T_EXCLAMATION_POINT,
+                T_ROUND_BRACKET_OPEN,
+                T_SQUARE_BRACKET_OPEN,
+            ];
     }
 }

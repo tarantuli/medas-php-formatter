@@ -92,4 +92,23 @@ class FormatterTest extends BaseTestClass
     {
         $this->assertRemainsTheSame('group-statement-types', new Medas());
     }
+
+    public function testLambdaFunctions(): void
+    {
+        $this->assertRemainsTheSame('lambda-functions', new Medas());
+    }
+
+    public function testBugs(): void
+    {
+        $this->assertRemainsTheSame('bugs', new Medas());
+    }
+
+    public function testNoSingleLineControlBodies(): void
+    {
+        $this->assertChanges(
+            'token-replacement/no-single-line-control-bodies-pre',
+            'token-replacement/no-single-line-control-bodies-post',
+            new Medas()
+        );
+    }
 }

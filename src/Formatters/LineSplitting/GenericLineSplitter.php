@@ -5,13 +5,12 @@ declare(strict_types=1);
 namespace Medas\PhpFormatter\Formatters\LineSplitting;
 
 use Medas\Core\Attributes\Service;
-use Medas\PhpFormatter\Formatters\LineSplitting\GenericLineSplitter\SeparatorGroup;
 use Medas\PhpTokenizer\Statement;
 
 #[Service]
 readonly class GenericLineSplitter
 {
-    /** @var SeparatorGroup[] */
+    /** @var GenericLineSplitter\SeparatorGroup[] */
     private array $groups;
 
     public function __construct(
@@ -22,16 +21,18 @@ readonly class GenericLineSplitter
     {
         // Sort the best separators on top
         $this->groups = [
-            new SeparatorGroup([T_COMMA], true),
-            new SeparatorGroup([T_BOOLEAN_AND, T_BOOLEAN_OR, T_LOGICAL_AND, T_LOGICAL_OR], false),
-            new SeparatorGroup([T_PIPE], false),
-            new SeparatorGroup([T_PLUS], false),
+            new GenericLineSplitter\SeparatorGroup([T_COMMA], true),
+            new GenericLineSplitter\SeparatorGroup([T_BOOLEAN_AND, T_BOOLEAN_OR, T_LOGICAL_AND, T_LOGICAL_OR]),
+            new GenericLineSplitter\SeparatorGroup([T_QUESTION_MARK, T_COLON]),
+            new GenericLineSplitter\SeparatorGroup([T_PIPE]),
+            new GenericLineSplitter\SeparatorGroup([T_PLUS, T_MINUS]),
         ];
     }
 
     public function split(Statement $statement): bool
     {
         $options = [];
+
         foreach ($this->groups as $group) {
             if (!$subOptions = $this->optionsFinder->find($statement, $group->separators, $group->splitAfter)) {
                 continue;
@@ -45,8 +46,14 @@ readonly class GenericLineSplitter
 
         foreach ($options as $option) {
             $quality = $this->assesser->assess($statement, $option);
+            if ($quality === null) {
+                continue;
+            }
 
-            if ($bestQuality === null || $quality > $bestQuality || ($quality === $bestQuality && $option->depth < $bestOption->depth)) {
+            if ($bestQuality === null || $quality > $bestQuality || (
+                    $quality === $bestQuality
+                    && $option->depth < $bestOption->depth
+                )) {
                 $bestQuality = $quality;
                 $bestOption = $option;
             }

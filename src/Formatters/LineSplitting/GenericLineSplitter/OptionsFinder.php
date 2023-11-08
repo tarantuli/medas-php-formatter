@@ -31,7 +31,7 @@ readonly class OptionsFinder
                 if (!array_key_exists($cluster->id, $options)) {
                     $openerIndex = $cluster->openerIndex;
                     if ($openerIndex === 0) {
-                        $openerIndex = $index - 1;
+                        $openerIndex = $splitAfter ? $index + 1 : $index - 1;
                     }
 
                     $options[$cluster->id] = new Option($separators, $splitAfter, $depth, $cluster->id, $openerIndex);

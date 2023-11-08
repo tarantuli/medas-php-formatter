@@ -130,6 +130,13 @@ readonly class Psr12BlankLines extends BaseFormatter
             }
 
             if ($type instanceof BlockCloser && !$statement->lastToken()->is(T_CURLY_BRACKET_OPEN)) {
+                $nextStatement = $statement->next();
+
+                if ($nextStatement && $nextStatement->firstToken()->is([T_SEMICOLON, T_COMMA, T_ROUND_BRACKET_CLOSE])) {
+                    // Lambda function body closer
+                    $nextStatement->mergeWithPrevious();
+                }
+
                 $statement->blankLineAfter = true;
             }
 

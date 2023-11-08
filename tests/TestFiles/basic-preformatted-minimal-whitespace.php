@@ -5,4 +5,4 @@ declare(strict_types=1);namespace Medas\ServiceManager;use function A\B;use func
 }while($condition===true);switch($isDefault){case true:// Test
 break;case 1:case 2:// Test
 break;default:// Test
-}$result=match($condition){true=>1,($i>100)=>2,($i<-100)=>mb_strlen(2),($i>=10)=>self::create(),($i<=10)=>$this,default=>throw new \Exception('oops'),};return $result;}final public static function create():static{return new static();}}
+}$result=match($condition){true=>1,($i>100)=>2,($i<-100)=>mb_strlen(2),($i>=10)=>self::create(),($i<=10)=>$this,default=>throw new \Exception('oops'),};return $result;}final public static function create():static{$a=new self();return new static();}}

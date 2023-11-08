@@ -11,13 +11,12 @@ use Medas\PhpTokenizer\Statement;
 #[Service]
 readonly class OptionAssesser
 {
-    public function assess(Statement $statement, Option $option): float
+    public function assess(Statement $statement, Option $option): float|null
     {
         $lengths = [];
         $currentLength = 0;
         $inPrefix = true;
         $inSuffix = false;
-
         $depth = 0;
 
         foreach ($statement as $index => $token) {
@@ -51,6 +50,7 @@ readonly class OptionAssesser
                         if ($currentLength) {
                             $lengths[] = $currentLength;
                         }
+
                         $currentLength = 0;
                     }
 
@@ -65,6 +65,7 @@ readonly class OptionAssesser
                     if ($currentLength) {
                         $lengths[] = $currentLength;
                     }
+
                     $currentLength = 0;
                     $inPrefix = false;
                 }
@@ -78,13 +79,13 @@ readonly class OptionAssesser
         $lengths[] = $currentLength;
 
         if (count($lengths) < 2) {
-            return 0;
+            return null;
         }
 
         return $this->quality($lengths);
     }
 
-    function standardDeviation(array $values): float
+    private function standardDeviation(array $values): float
     {
         $average = array_sum($values) / count($values);
         $variance = 0.0;
