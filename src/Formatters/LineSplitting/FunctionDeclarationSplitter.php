@@ -37,6 +37,7 @@ readonly class FunctionDeclarationSplitter
                 }
                 else {
                     $this->splitter->split($statement, [T_COMMA], true, $openerIndex, $index);
+
                     return true;
                 }
             }

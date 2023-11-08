@@ -1,5 +1,7 @@
 <?php
 
+$lineNumber = $match[1] - 1;
+
 // Incrementers
 $a = $b++ + ++$c;
 $a = ++$b + ++$c;

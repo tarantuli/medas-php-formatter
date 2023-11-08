@@ -16,7 +16,6 @@ readonly class OptionsFinder
     {
         /** @var Option[][] $options */
         $options = [];
-
         $clusterManager = new ClusterManager();
         $cluster = $clusterManager->currentCluster();
         $depth = 0;
@@ -24,12 +23,14 @@ readonly class OptionsFinder
         foreach ($statement as $index => $token) {
             if ($token->is(TrailingCommaSplitter::BRACKETS)) {
                 ++$depth;
+
                 $cluster = $clusterManager->getNextCluster($depth, $index);
             }
 
             if ($token->is($separators)) {
                 if (!array_key_exists($cluster->id, $options)) {
                     $openerIndex = $cluster->openerIndex;
+
                     if ($openerIndex === 0) {
                         $openerIndex = $splitAfter ? $index + 1 : $index - 1;
                     }
@@ -38,6 +39,7 @@ readonly class OptionsFinder
                 }
 
                 ++$options[$cluster->id]->counter;
+
                 $options[$cluster->id]->separatorIndices[] = $index;
             }
 
@@ -47,6 +49,7 @@ readonly class OptionsFinder
                 }
 
                 --$depth;
+
                 $cluster = $clusterManager->getPreviousCluster($depth);
             }
         }

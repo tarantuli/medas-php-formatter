@@ -6,11 +6,14 @@ namespace Medas\PhpFormatter\Formatters\Prs12;
 
 use Medas\Core\Attributes\Service;
 use Medas\PhpFormatter\{Formatters\BaseFormatter, Job};
-use Medas\PhpTokenizer\{Contexts\MethodDeclaration,
+
+use Medas\PhpTokenizer\{
+    Contexts\MethodDeclaration,
     Statement,
     StatementTypeFinder,
     StatementTypes\FunctionDeclaration,
-    TokenTree};
+    TokenTree
+};
 
 #[Service]
 readonly class Psr12VisibilityMarkers extends BaseFormatter
@@ -52,6 +55,7 @@ readonly class Psr12VisibilityMarkers extends BaseFormatter
             $visibility = clone $statement->firstToken();
             $visibility->id = T_PUBLIC;
             $visibility->text = 'public';
+
             $statement->prependToken($visibility);
         }
 

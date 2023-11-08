@@ -20,11 +20,13 @@ class SettingsHasher
         ];
 
         $data['formatters'] = [];
+
         foreach ($settings->formatters() as $formatter) {
             $data['formatters'] = $formatter::class;
         }
 
         $data['preparsers'] = [];
+
         foreach ($settings->preparsers() as $preparser) {
             $data['preparsers'] = $preparser::class;
         }

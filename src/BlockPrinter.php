@@ -21,7 +21,6 @@ class BlockPrinter
         $this->lineEndingLength = strlen($lineEnding);
 
         ob_start();
-
         $this->printBlock($block);
 
         // A new line is required at the end
@@ -50,6 +49,7 @@ class BlockPrinter
                 // A line ending is required after some tokens
                 echo "\n";
             }
+
             if ($token->lineBreakAfter) {
                 echo $this->lineEnding;
                 $this->printIndentation($statement);
@@ -72,9 +72,6 @@ class BlockPrinter
 
     private function printIndentation(Statement $statement): void
     {
-        echo str_repeat(
-            $this->indentation,
-            $statement->block->depth + $statement->additionalDepth
-        );
+        echo str_repeat($this->indentation, $statement->block->depth + $statement->additionalDepth);
     }
 }

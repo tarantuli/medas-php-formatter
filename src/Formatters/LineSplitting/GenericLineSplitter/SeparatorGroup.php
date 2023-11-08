@@ -8,7 +8,7 @@ readonly class SeparatorGroup
 {
     public function __construct(
         public array $separators,
-        public bool $splitAfter = false,
+        public bool  $splitAfter = false,
     )
     {
     }

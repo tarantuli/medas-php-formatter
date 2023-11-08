@@ -10,7 +10,13 @@ use Medas\PhpTokenizer\Statement;
 #[Service]
 readonly class StatementSplitter
 {
-    public function split(Statement $statement, array $separators, bool $splitAfter, int $openerIndex, int|null $closerIndex): void
+    public function split(
+        Statement $statement,
+        array     $separators,
+        bool      $splitAfter,
+        int       $openerIndex,
+        int|null  $closerIndex
+    ): void
     {
         $this->addBlankLineBefore($statement);
 
@@ -25,6 +31,7 @@ readonly class StatementSplitter
 
         for ($i = $closerIndex - 1; $i > $openerIndex; --$i) {
             $token = $statement->getToken($i);
+
             $statement->removeToken($token);
 
             $text = $token->text;
@@ -67,10 +74,12 @@ readonly class StatementSplitter
 
         $finalStatement = new Statement($statement->block);
         $finalStatement->rootStatement = $statement;
+
         $statement->block->insertStatementAfter($finalStatement, $statement);
 
         for ($i = $lastIndex; $i >= $closerIndex; --$i) {
             $token = $statement->getToken($i);
+
             $statement->removeToken($token);
             $finalStatement->prependToken($token);
         }
@@ -80,6 +89,7 @@ readonly class StatementSplitter
     {
         $currentStatement = new Statement($statement->block);
         $currentStatement->rootStatement = $statement;
+
         $statement->block->insertStatementAfter($currentStatement, $statement);
         $currentStatement->additionalDepth++;
 

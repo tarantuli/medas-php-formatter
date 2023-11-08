@@ -6,6 +6,7 @@ namespace Medas\PhpFormatter\Formatters\Prs12;
 
 use Medas\Core\Attributes\Service;
 use Medas\PhpFormatter\Formatters\BaseFormatter;
+use Medas\PhpFormatter\Formatters\Helpers\ReturnTypeTokens;
 use Medas\PhpFormatter\Job;
 use Medas\PhpTokenizer\Contexts\MethodReturnType;
 use Medas\PhpTokenizer\StatementTypeFinder;
@@ -24,6 +25,7 @@ readonly class Psr12Whitespace extends BaseFormatter
     public function __construct(
         private TokenGroups         $tokenGroups,
         private StatementTypeFinder $typeFinder,
+        private ReturnTypeTokens    $returnTypeTokens,
     )
     {
     }
@@ -48,8 +50,8 @@ readonly class Psr12Whitespace extends BaseFormatter
                 continue;
             }
 
-            // One space between ") {"
-            if ($token->is(T_CURLY_BRACKET_OPEN) && $token->previous->is(T_ROUND_BRACKET_CLOSE)) {
+            // One space between ") {" and "): <type> {"
+            if ($token->is(T_CURLY_BRACKET_OPEN) && $this->returnTypeTokens->isReturnTypeToken($token)) {
                 $token->previous->spaceAfter = true;
             }
 
@@ -103,7 +105,8 @@ readonly class Psr12Whitespace extends BaseFormatter
                 if ($token->is(T_PIPE)) {
                     $stripSpaces = $statementType instanceof FunctionDeclaration
                         || $statementType instanceof ClassPropertyDeclaration
-                        || $token->statement->getToken(1)->is(T_CATCH);
+                        || $token->statement->getToken(1)->is(T_CATCH)
+                        || $this->returnTypeTokens->isReturnTypeToken($token->previous);
 
                     if ($stripSpaces) {
                         $token->previous->spaceAfter = false;
@@ -209,7 +212,7 @@ readonly class Psr12Whitespace extends BaseFormatter
 
                 // No space between pluses and minuses before numbers and variables, that follow an operator or bracket
                 if ($token->is([T_PLUS, T_MINUS]) && $token->next->is([T_LNUMBER, T_DNUMBER, T_VARIABLE])) {
-                    if ($token->previous->is(T_ROUND_BRACKET_CLOSE)) {
+                    if ($token->previous->is([T_ROUND_BRACKET_CLOSE, T_SQUARE_BRACKET_CLOSE])) {
                         $token->spaceAfter = true;
                     }
                     elseif ($token->previous->is($operatorsKeywordsAndBrackets)) {

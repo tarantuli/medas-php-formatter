@@ -6,7 +6,9 @@ namespace Medas\PhpFormatter\Formatters\Imports;
 
 use Medas\Core\Attributes\Service;
 use Medas\PhpClassAnalysis\FqnProperties;
-use Medas\PhpTokenizer\{Contexts\GlobalScope,
+
+use Medas\PhpTokenizer\{
+    Contexts\GlobalScope,
     Statement,
     StatementTypeFinder,
     StatementTypes\DeclareStatement,
@@ -14,7 +16,9 @@ use Medas\PhpTokenizer\{Contexts\GlobalScope,
     StatementTypes\PhpOpenTag,
     StatementTypes\UseClassStatement,
     Token,
-    TokenTree};
+    TokenTree
+
+};
 
 #[Service]
 readonly class NewImportsInserter
@@ -24,7 +28,7 @@ readonly class NewImportsInserter
     public function __construct(
         private FqnProperties          $fqnProperties,
         private Grouping\ImportGrouper $importGrouper,
-        private StatementTypeFinder $statementTypeFinder,
+        private StatementTypeFinder    $statementTypeFinder,
     )
     {
         $this->baseToken = new Token(ord(';'), ';');
@@ -36,6 +40,7 @@ readonly class NewImportsInserter
     public function insert(TokenTree $tree, ReferencesAndImports $referencesAndImports): void
     {
         $this->removeExistingImportStatements($tree);
+
         $after = $this->findImportInsertionSpot($tree);
         $groupedImports = $this->importGrouper->group($referencesAndImports);
 
@@ -44,6 +49,7 @@ readonly class NewImportsInserter
 
         foreach ($groupedImports as $fqn => $alias) {
             $statement = $tree->block()->appendNewStatement();
+
             $this->processGroupedImport($statement, $fqn, $alias);
             $tree->block()->moveStatementAfter($statement, $after);
         }
@@ -90,7 +96,9 @@ readonly class NewImportsInserter
         if (is_array($alias)) {
             $statement->appendToken((clone $this->baseToken)->id(T_NS_SEPARATOR)->text('\\'));
             $statement->appendToken((clone $this->baseToken)->id(123)->text('{'));
+
             $isFirst = true;
+
             ksort($alias, SORT_STRING | SORT_FLAG_CASE);
 
             foreach ($alias as $subPath => $subAlias) {

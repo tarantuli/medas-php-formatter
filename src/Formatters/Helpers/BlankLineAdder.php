@@ -5,7 +5,16 @@ declare(strict_types=1);
 namespace Medas\PhpFormatter\Formatters\Helpers;
 
 use Medas\Core\Attributes\Service;
-use Medas\PhpTokenizer\{Statement, StatementTypeFinder, StatementTypes\AttributeStatement, StatementTypes\Comment, StatementTypes\SwitchBranch, TokenTree};
+
+use Medas\PhpTokenizer\{
+    Statement,
+    StatementTypeFinder,
+    StatementTypes\AttributeStatement,
+    StatementTypes\Comment,
+    StatementTypes\SwitchBranch,
+    TokenTree
+
+};
 
 #[Service]
 readonly class BlankLineAdder
@@ -47,6 +56,7 @@ readonly class BlankLineAdder
             if ($statement->rootStatement) {
                 // Only add a blank line before the root statement, not the others
                 $previousStatement = $statement;
+
                 continue;
             }
 

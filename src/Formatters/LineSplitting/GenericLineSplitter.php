@@ -26,6 +26,7 @@ readonly class GenericLineSplitter
             new GenericLineSplitter\SeparatorGroup([T_QUESTION_MARK, T_COLON]),
             new GenericLineSplitter\SeparatorGroup([T_PIPE]),
             new GenericLineSplitter\SeparatorGroup([T_PLUS, T_MINUS]),
+            new GenericLineSplitter\SeparatorGroup([T_ASSIGNMENT]),
         ];
     }
 
@@ -46,6 +47,7 @@ readonly class GenericLineSplitter
 
         foreach ($options as $option) {
             $quality = $this->assesser->assess($statement, $option);
+
             if ($quality === null) {
                 continue;
             }

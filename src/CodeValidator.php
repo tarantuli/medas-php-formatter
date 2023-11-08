@@ -27,8 +27,15 @@ class CodeValidator
         }
 
         $tempFile = $this->temporaryFiles->create($code);
-        $command = sprintf('%s -l -n -d display_errors=1 %s', escapeshellarg($this->pathToPhp), escapeshellarg($tempFile));
+
+        $command = sprintf(
+            '%s -l -n -d display_errors=1 %s',
+            escapeshellarg($this->pathToPhp),
+            escapeshellarg($tempFile)
+        );
+
         exec($command, $results);
+
         $results = implode("\n", array_filter($results));
 
         if (str_contains($results, 'No syntax errors detected in')) {

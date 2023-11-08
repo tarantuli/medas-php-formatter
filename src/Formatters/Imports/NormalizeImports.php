@@ -43,7 +43,6 @@ readonly class NormalizeImports extends BaseFormatter
     public function format(Job $job): void
     {
         $analysis = $this->classAnalyser->analyseTokenTree($job->tree);
-
         $referencesAndImports = new ReferencesAndImports();
 
         // Determine new references and new imports

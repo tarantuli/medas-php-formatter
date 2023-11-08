@@ -7,7 +7,9 @@ namespace Medas\PhpFormatter\Formatters\Prs12;
 use Medas\Core\Attributes\Service;
 use Medas\PhpFormatter\Formatters\{BaseFormatter, Helpers\BlankLineAdder};
 use Medas\PhpFormatter\Job;
-use Medas\PhpTokenizer\{StatementTypeFinder,
+
+use Medas\PhpTokenizer\{
+    StatementTypeFinder,
     StatementTypes\BlockCloser,
     StatementTypes\ClassDeclaration,
     StatementTypes\DeclareStatement,
@@ -18,13 +20,15 @@ use Medas\PhpTokenizer\{StatementTypeFinder,
     StatementTypes\UseClassStatement,
     StatementTypes\UseConstStatement,
     StatementTypes\UseFunctionStatement,
-    TokenTree};
+    TokenTree
+
+};
 
 #[Service]
 readonly class Psr12BlankLines extends BaseFormatter
 {
     public function __construct(
-        private BlankLineAdder $blankLineAdder,
+        private BlankLineAdder      $blankLineAdder,
         private StatementTypeFinder $typeFinder,
     )
     {
@@ -40,6 +44,7 @@ readonly class Psr12BlankLines extends BaseFormatter
             UseFunctionStatement::class,
             UseConstStatement::class,
         ]);
+
         $this->afterAttributes($job->tree);
         $this->afterMostComments($job->tree);
         $this->additionalLines($job->tree);
@@ -74,11 +79,15 @@ readonly class Psr12BlankLines extends BaseFormatter
     {
         foreach ($tree as $token) {
             if ($token->is(T_COMMENT) && $token->next && $token->statement === $token->next->statement) {
-                if ($token->statement->previous() && !$this->typeFinder->for($token->statement->previous()) instanceof SwitchBranch) {
+                if (
+                    $token->statement->previous()
+                    && !$this->typeFinder->for($token->statement->previous()) instanceof SwitchBranch
+                ) {
                     $token->statement->previous()->blankLineAfter = true;
                 }
 
                 $token->lineBreakAfter = true;
+
                 continue;
             }
 

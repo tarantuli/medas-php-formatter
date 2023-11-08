@@ -44,7 +44,9 @@ readonly class AlignArgumentNames extends BaseFormatter
                     continue;
                 }
 
-                $token->previous->extraSpacesAfter += $prefixLengthsPerRootStatement[$id] - $currentLength;
+                if ($token->previous) {
+                    $token->previous->extraSpacesAfter += $prefixLengthsPerRootStatement[$id] - $currentLength;
+                }
 
                 break;
             }
@@ -70,6 +72,7 @@ readonly class AlignArgumentNames extends BaseFormatter
             foreach ($statement as $token) {
                 if ($token->is(self::VARIABLE_STARTERS)) {
                     $foundVariable = true;
+
                     break;
                 }
 

@@ -43,24 +43,26 @@ readonly class ReferencesUpdater
         ReferencesAndImports $referencesAndImports
     ): void
     {
-        if (!preg_match('/@(?:param|var|return)\s+(\S+)/', $token->text, $matches)) {
+        if (!preg_match_all('/@(?:param|var|return)\s+(\S+)/', $token->text, $matches, PREG_SET_ORDER)) {
             return;
         }
 
-        $newLine = $matches[0];
+        foreach ($matches as $match) {
+            $newLine = $match[0];
 
-        foreach (explode('|', $matches[1]) as $tag) {
-            if (str_ends_with($tag, '[]')) {
-                $tag = substr($tag, 0, -2);
+            foreach (explode('|', $match[1]) as $tag) {
+                if (str_ends_with($tag, '[]')) {
+                    $tag = substr($tag, 0, -2);
+                }
+
+                if ($tag === $reference->label) {
+                    $newLine = str_replace($tag, $referencesAndImports->references[$reference->fqn], $newLine);
+                }
             }
 
-            if ($tag === $reference->label) {
-                $newLine = str_replace($tag, $referencesAndImports->references[$reference->fqn], $newLine);
+            if ($match[0] !== $newLine) {
+                $token->text = str_replace($match[0], $newLine, $token->text);
             }
-        }
-
-        if ($matches[0] !== $newLine) {
-            $token->text = str_replace($matches[0], $newLine, $token->text);
         }
     }
 }

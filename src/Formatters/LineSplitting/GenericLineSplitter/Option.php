@@ -7,6 +7,7 @@ namespace Medas\PhpFormatter\Formatters\LineSplitting\GenericLineSplitter;
 class Option
 {
     public int $counter = 0;
+
     /** @var int[] */
     public array $separatorIndices = [];
     public int|null $closerIndex = null;

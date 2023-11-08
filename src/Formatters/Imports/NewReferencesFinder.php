@@ -11,12 +11,17 @@ use Medas\PhpFormatter\Settings\ImportSettings;
 #[Service]
 class NewReferencesFinder
 {
-    public function determine(ClassAnalysis $analysis, ImportSettings $settings, ReferencesAndImports $referencesAndImports): void
+    public function determine(
+        ClassAnalysis        $analysis,
+        ImportSettings       $settings,
+        ReferencesAndImports $referencesAndImports
+    ): void
     {
         foreach ($analysis->uses as $reference) {
             if (!$settings->importGlobalNamespace && $this->isGlobalReference($reference)) {
                 // It's a global reference, and we don't want to import those
                 $referencesAndImports->references[$reference->fqn] = $reference->fqn;
+
                 continue;
             }
 
@@ -28,7 +33,8 @@ class NewReferencesFinder
                 }
                 else {
                     // A relative reference, inline it
-                    $referencesAndImports->references[$reference->fqn] = $this->getRelativeReference($analysis, $reference);
+                    $referencesAndImports->references[$reference->fqn]
+                        = $this->getRelativeReference($analysis, $reference);
                 }
 
                 continue;
@@ -37,6 +43,7 @@ class NewReferencesFinder
             if ($reference->label === $reference->fqn) {
                 // It's an absolute reference, import it
                 $referencesAndImports->references[$reference->fqn] = null;
+
                 continue;
             }
 
@@ -76,5 +83,4 @@ class NewReferencesFinder
 
         return substr($reference->fqn, strlen($analysis->namespace) + 2);
     }
-
 }
