@@ -25,7 +25,6 @@ readonly class GenericLineSplitter
             new GenericLineSplitter\SeparatorGroup([T_BOOLEAN_AND, T_BOOLEAN_OR, T_LOGICAL_AND, T_LOGICAL_OR]),
             new GenericLineSplitter\SeparatorGroup([T_QUESTION_MARK, T_COLON]),
             new GenericLineSplitter\SeparatorGroup([T_PIPE]),
-            new GenericLineSplitter\SeparatorGroup([T_DOUBLE_ARROW]),
             new GenericLineSplitter\SeparatorGroup([T_PLUS, T_MINUS]),
         ];
     }
