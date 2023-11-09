@@ -50,7 +50,7 @@ readonly class BlankLinesBetweenStatementGroups extends BaseFormatter
                 }
             }
 
-            if ($previousSubType !== null && $isAssignment !== $previousSubType) {
+            if ($previousSubType !== null && $isAssignment !== $previousSubType && !$statement->firstToken()->inString) {
                 $statement->previous()->blankLineAfter = true;
             }
 

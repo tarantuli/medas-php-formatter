@@ -58,12 +58,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:tarantuli/medas-core.git",
-                "reference": "17edd1611ca2e9c4717b5de866c9e8f92f8848b6"
+                "reference": "c5a13095250614cbbf01c01f156424ce76f2bde8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-core/zipball/17edd1611ca2e9c4717b5de866c9e8f92f8848b6",
-                "reference": "17edd1611ca2e9c4717b5de866c9e8f92f8848b6",
+                "url": "https://api.github.com/repos/tarantuli/medas-core/zipball/c5a13095250614cbbf01c01f156424ce76f2bde8",
+                "reference": "c5a13095250614cbbf01c01f156424ce76f2bde8",
                 "shasum": ""
             },
             "require": {
@@ -97,7 +97,7 @@
                 "source": "https://github.com/tarantuli/medas-core/tree/dev",
                 "issues": "https://github.com/tarantuli/medas-core/issues"
             },
-            "time": "2023-10-18T11:41:05+00:00"
+            "time": "2023-11-08T13:38:34+00:00"
         },
         {
             "name": "morphp/medas-file-system",
@@ -146,12 +146,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:tarantuli/medas-php-class-analysis.git",
-                "reference": "e2979a2ce4ad45cd35af8349c8b15fba8e354f47"
+                "reference": "d4c53596c520e1fc89305c6ca0118a6e92e27da0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-php-class-analysis/zipball/e2979a2ce4ad45cd35af8349c8b15fba8e354f47",
-                "reference": "e2979a2ce4ad45cd35af8349c8b15fba8e354f47",
+                "url": "https://api.github.com/repos/tarantuli/medas-php-class-analysis/zipball/d4c53596c520e1fc89305c6ca0118a6e92e27da0",
+                "reference": "d4c53596c520e1fc89305c6ca0118a6e92e27da0",
                 "shasum": ""
             },
             "require": {
@@ -180,7 +180,7 @@
                 "source": "https://github.com/tarantuli/medas-php-class-analysis/tree/dev",
                 "issues": "https://github.com/tarantuli/medas-php-class-analysis/issues"
             },
-            "time": "2023-11-08T09:37:09+00:00"
+            "time": "2023-11-08T13:59:42+00:00"
         },
         {
             "name": "morphp/medas-php-tokenizer",

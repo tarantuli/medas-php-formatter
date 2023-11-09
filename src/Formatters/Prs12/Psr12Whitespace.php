@@ -70,7 +70,7 @@ readonly class Psr12Whitespace extends BaseFormatter
             }
 
             if ($token->previous) {
-                if ($token->is($spaceBeforeRequired)) {
+                if ($token->is($spaceBeforeRequired) && !$token->inString) {
                     $token->previous->spaceAfter = true;
                 }
 
@@ -254,6 +254,7 @@ readonly class Psr12Whitespace extends BaseFormatter
                 T_AMPERSAND,
                 T_DOUBLE_COLON,
                 T_ELLIPSIS,
+                T_ENCAPSED_AND_WHITESPACE,
                 T_EXCLAMATION_POINT,
                 T_ROUND_BRACKET_OPEN,
                 T_SQUARE_BRACKET_OPEN,
