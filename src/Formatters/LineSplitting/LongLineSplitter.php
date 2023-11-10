@@ -5,12 +5,9 @@ declare(strict_types=1);
 namespace Medas\PhpFormatter\Formatters\LineSplitting;
 
 use Medas\Core\Attributes\{ConfigValue, Service};
-use Medas\PhpFormatter\{ConfigOptions\MaxLineLength,
-    Formatters\BaseFormatter,
-    Formatters\LineSplitting\GenericLineSplitter\SeparatorGroups\SeparatorSet,
-    Job
-};
-use Medas\PhpTokenizer\{Statement,
+use Medas\PhpFormatter\{ConfigOptions\MaxLineLength, Formatters\BaseFormatter, Job};
+use Medas\PhpTokenizer\{
+    Statement,
     StatementTypeFinder,
     StatementTypes\ControlStatement,
     StatementTypes\FunctionDeclaration
@@ -19,7 +16,7 @@ use Medas\PhpTokenizer\{Statement,
 #[Service]
 readonly class LongLineSplitter extends BaseFormatter
 {
-    /** @var SeparatorSet[] */
+    /** @var GenericLineSplitter\SeparatorGroups\SeparatorSet[] */
     private array $sets;
 
     public function __construct(
@@ -98,10 +95,7 @@ readonly class LongLineSplitter extends BaseFormatter
         }
 
         foreach ($this->sets as $set) {
-            if ($this->genericLineSplitter->split(
-                $statement,
-                $set
-            )) {
+            if ($this->genericLineSplitter->split($statement, $set)) {
                 return true;
             }
         }

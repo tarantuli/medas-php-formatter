@@ -24,9 +24,9 @@ readonly class ReferencesUpdater
         foreach ($tree as $token) {
             foreach ($analysis->uses as $reference) {
                 if ($reference->label === $token->text && !in_array(
-                        $token->previous->id,
-                        $this->tokenGroups->structureTypes()
-                    )) {
+                    $token->previous->id,
+                    $this->tokenGroups->structureTypes()
+                )) {
                     $token->text = $referencesAndImports->references[$reference->fqn];
                 }
 
