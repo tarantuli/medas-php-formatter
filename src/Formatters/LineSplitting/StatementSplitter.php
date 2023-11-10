@@ -85,6 +85,7 @@ readonly class StatementSplitter
 
         $finalStatement = new Statement($statement->block);
         $finalStatement->rootStatement = $statement;
+        $finalStatement->additionalDepth = $statement->additionalDepth;
 
         if ($statement->blankLineAfter) {
             $finalStatement->blankLineAfter();
@@ -107,7 +108,7 @@ readonly class StatementSplitter
         $newStatement->rootStatement = $statement;
 
         $statement->block->insertStatementAfter($newStatement, $statement);
-        $newStatement->additionalDepth++;
+        $newStatement->additionalDepth = $statement->additionalDepth + 1;
 
         if ($statement->blankLineAfter) {
             $newStatement->blankLineAfter();
@@ -123,6 +124,11 @@ readonly class StatementSplitter
 
         if ($this->typeFinder->for($statement) instanceof UseClassStatement && $this->typeFinder->for($previousStatement) instanceof UseClassStatement) {
             // No blank lines between a use statement and a split use statement
+            return;
+        }
+
+        if ($statement->rootStatement === $previousStatement) {
+            // No blank lines between a root statement and its children
             return;
         }
 
