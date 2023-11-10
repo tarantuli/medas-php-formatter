@@ -39,9 +39,12 @@ for ($a = -1; $a < 10; ++$a) {
 // Keywords and parentheses
 return -100;
 1 + 2;
+
 ($a) + 1;
+
 -($a);
 -($a + $b);
+
 $a - ($b);
 
 throw new \ImageNotHighEnoughException(-$chartHeight);

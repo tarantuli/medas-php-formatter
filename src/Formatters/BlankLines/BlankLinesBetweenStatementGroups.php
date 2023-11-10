@@ -71,8 +71,10 @@ readonly class BlankLinesBetweenStatementGroups extends BaseFormatter
         }
     }
 
-    private function subType(Statement $statement): int
+    private function subType(Statement $statement): int|string
     {
+        $foundFirstTrueToken = false;
+        $firstTrueTokenText = null;
         foreach ($statement as $token) {
             if ($token->is($this->tokenGroups->assignmentOperators())) {
                 return 1;
@@ -81,8 +83,17 @@ readonly class BlankLinesBetweenStatementGroups extends BaseFormatter
             if ($token->is($this->constructs)) {
                 return 2;
             }
+
+            if ($token->is(T_DOUBLE_ARROW) && $statement->block->opener->containsType(T_MATCH)) {
+                return 3;
+            }
+
+            if (!$foundFirstTrueToken && !$token->is($this->tokenGroups->comments())) {
+                $foundFirstTrueToken = true;
+                $firstTrueTokenText = $token->text;
+            }
         }
 
-        return 0;
+        return $firstTrueTokenText;
     }
 }

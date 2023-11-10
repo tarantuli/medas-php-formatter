@@ -34,6 +34,8 @@ class GroupStatementTypes
 
     private function a(): true
     {
+        $mimetype->setHeader('Access-Control-Allow-Origin', '*');
+
         $manager->setHeader('Access-Control-Allow-Origin', '*');
         $manager->setHeader('Content-Type', $mimetype);
         $manager->setHeader('Content-Disposition: inline; filename="%s"', $fileName);
