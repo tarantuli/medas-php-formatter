@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use EntityStructureFinder;
 use Medas\Core\Attributes\{ConfigOptions, ConfigValue};
 use Medas\PhpFormatter\{BlockPrinter, CodeValidator};
 use Medas\PhpTokenizer\{BlockDumper, Tokenizer, TreeBuilder};
@@ -69,5 +70,13 @@ class TestClass
             $rootPrefixLalalalalalalalalalalalalaal,
             str_replace(DIRECTORY_SEPARATOR, "\\", $subdirectory)
         );
+    }
+
+    private function findInheritance(EntityStructureFinder\Job $job): void
+    {
+        if ($job->blueprint->storeOriginalClass = $job->metaData->inheritance->storeOriginalClass) {
+            $job->blueprint->storeRequestingOriginalClassStorage
+                = $this->metaDataManager->get($job->metaData->inheritance->sharedParentClass)->entity->store;
+        }
     }
 }

@@ -5,35 +5,25 @@ declare(strict_types=1);
 namespace Medas\PhpFormatter\Formatters\LineSplitting;
 
 use Medas\Core\Attributes\Service;
+use Medas\PhpFormatter\Formatters\LineSplitting\GenericLineSplitter\SeparatorGroups\SeparatorSet;
 use Medas\PhpTokenizer\Statement;
 
 #[Service]
 readonly class GenericLineSplitter
 {
-    /** @var GenericLineSplitter\SeparatorGroup[] */
-    private array $groups;
-
     public function __construct(
         private GenericLineSplitter\OptionsFinder  $optionsFinder,
         private GenericLineSplitter\OptionAssesser $assesser,
         private StatementSplitter                  $statementSplitter,
     )
     {
-        // Sort the best separators on top
-        $this->groups = [
-            new GenericLineSplitter\SeparatorGroup([T_COMMA], true),
-            new GenericLineSplitter\SeparatorGroup([T_BOOLEAN_AND, T_BOOLEAN_OR, T_LOGICAL_AND, T_LOGICAL_OR]),
-            new GenericLineSplitter\SeparatorGroup([T_QUESTION_MARK, T_COLON]),
-            new GenericLineSplitter\SeparatorGroup([T_PIPE]),
-            new GenericLineSplitter\SeparatorGroup([T_PLUS, T_MINUS]),
-        ];
     }
 
-    public function split(Statement $statement): bool
+    public function split(Statement $statement, SeparatorSet $set): bool
     {
         $options = [];
 
-        foreach ($this->groups as $group) {
+        foreach ($set->groups() as $group) {
             if (!$subOptions = $this->optionsFinder->find($statement, $group->separators, $group->splitAfter)) {
                 continue;
             }
