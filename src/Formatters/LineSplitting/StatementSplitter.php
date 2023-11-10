@@ -69,6 +69,7 @@ readonly class StatementSplitter
 
                 if (
                     $currentStatement->tokenCount() === 0
+                    && $currentStatement->next()
                     && $currentStatement->next()->firstToken()->is([T_ATTRIBUTE, T_COMMENT, T_DOC_COMMENT])
                 ) {
                     $currentStatement->blankLineAfter();
