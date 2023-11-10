@@ -86,6 +86,11 @@ readonly class StatementSplitter
         $finalStatement = new Statement($statement->block);
         $finalStatement->rootStatement = $statement;
 
+        if ($statement->blankLineAfter) {
+            $finalStatement->blankLineAfter();
+            $statement->blankLineAfter(false);
+        }
+
         $statement->block->insertStatementAfter($finalStatement, $statement);
 
         for ($i = $lastIndex; $i >= $closerIndex; --$i) {
