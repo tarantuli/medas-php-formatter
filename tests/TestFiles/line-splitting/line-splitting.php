@@ -23,4 +23,14 @@ class Test
             'c',
         ];
     }
+
+    public function getRestProperties(): array
+    {
+        return array_merge(self::getRestProperties(), [
+            'name' => [
+                'getter' => 'getName',
+                'setter' => 'setName',
+            ],
+        ]);
+    }
 }

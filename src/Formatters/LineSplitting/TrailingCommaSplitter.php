@@ -38,7 +38,9 @@ readonly class TrailingCommaSplitter extends BaseFormatter
     private function findSomethingToSplit(Job $job): bool
     {
         foreach ($job->tree->block() as $statement) {
-            foreach ($statement as $commaIndex => $token) {
+            for ($commaIndex = $statement->tokenCount() -1; $commaIndex >= 0; --$commaIndex) {
+                $token = $statement->getToken($commaIndex);
+
                 if (!$token->is(T_COMMA)) {
                     continue;
                 }
