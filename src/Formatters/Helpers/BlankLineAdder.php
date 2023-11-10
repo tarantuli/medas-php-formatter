@@ -35,10 +35,10 @@ readonly class BlankLineAdder
 
             foreach ($afterTypes as $groupType) {
                 if ($type instanceof $groupType) {
-                    $statement->blankLineAfter = true;
+                    $statement->blankLineAfter();
 
                     if ($previousType instanceof $groupType) {
-                        $previousStatement->blankLineAfter = false;
+                        $previousStatement->blankLineAfter(false);
                     }
                 }
             }
@@ -87,7 +87,7 @@ readonly class BlankLineAdder
                     continue;
                 }
 
-                $previousStatement->blankLineAfter = true;
+                $previousStatement->blankLineAfter();
             }
 
             $previousStatement = $statement;

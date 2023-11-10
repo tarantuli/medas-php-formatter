@@ -83,7 +83,7 @@ readonly class Psr12BlankLines extends BaseFormatter
                     $token->statement->previous()
                     && !$this->typeFinder->for($token->statement->previous()) instanceof SwitchBranch
                 ) {
-                    $token->statement->previous()->blankLineAfter = true;
+                    $token->statement->previous()->blankLineAfter();
                 }
 
                 $token->lineBreakAfter = true;
@@ -97,7 +97,7 @@ readonly class Psr12BlankLines extends BaseFormatter
 
             if ($this->isAtStartOfStatement($token)) {
                 if ($token->statement->previous()) {
-                    $token->statement->previous()->blankLineAfter = true;
+                    $token->statement->previous()->blankLineAfter();
                 }
 
                 $token->lineBreakAfter = true;
@@ -134,7 +134,7 @@ readonly class Psr12BlankLines extends BaseFormatter
                 }
                 else {
                     // It's an abstract function declaration
-                    $statement->blankLineAfter = true;
+                    $statement->blankLineAfter();
                 }
             }
 
@@ -146,17 +146,12 @@ readonly class Psr12BlankLines extends BaseFormatter
                     $nextStatement->mergeWithPrevious();
                 }
 
-                $statement->blankLineAfter = true;
+                $statement->blankLineAfter();
             }
 
             // No blank line needed before a case or default branch
             if ($type instanceof SwitchBranch && $previousStatement = $statement->previous()) {
-                $previousStatement->blankLineAfter = false;
-            }
-
-            if ($statement === $statement->block->lastStatement()) {
-                $statement->blankLineAfter = false;
-                $statement->lastToken()->lineBreakAfter = false;
+                $previousStatement->blankLineAfter(false);
             }
         }
     }

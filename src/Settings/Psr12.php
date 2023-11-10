@@ -10,6 +10,7 @@ use Medas\PhpFormatter\Formatters\Prs12\{KeywordsToLowercase,
     Psr12VisibilityMarkers,
     Psr12Whitespace
 };
+use Medas\PhpFormatter\Formatters\BlankLines\NoBlankLinesAtStatementEnd;
 use Medas\PhpFormatter\Formatters\Replacements\NoSingleLineControlBodies;
 
 class Psr12 extends Settings
@@ -25,5 +26,6 @@ class Psr12 extends Settings
         $this->addFormatter(service(Psr12ElseifWhileCatch::class));
         $this->addFormatter(service(Psr12BlankLines::class));
         $this->addFormatter(service(Psr12Whitespace::class));
+        $this->addFormatter(service(NoBlankLinesAtStatementEnd::class));
     }
 }

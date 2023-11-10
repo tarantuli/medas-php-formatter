@@ -94,8 +94,8 @@ readonly class StatementSplitter
         $currentStatement->additionalDepth++;
 
         if ($statement->blankLineAfter) {
-            $currentStatement->blankLineAfter = true;
-            $statement->blankLineAfter = false;
+            $currentStatement->blankLineAfter();
+            $statement->blankLineAfter(false);
         }
 
         return $currentStatement;
@@ -106,7 +106,7 @@ readonly class StatementSplitter
         $previousStatement = $statement->previous();
 
         if ($previousStatement && $statement->block === $previousStatement->block) {
-            $previousStatement->blankLineAfter = true;
+            $previousStatement->blankLineAfter();
         }
     }
 }

@@ -37,7 +37,7 @@ readonly class BlankLinesBetweenStatementGroups extends BaseFormatter
                 $previousSubType = null;
             }
             elseif ($statement->previous()->rootStatement !== null && $statement->rootStatement === null) {
-                $statement->previous()->blankLineAfter = true;
+                $statement->previous()->blankLineAfter();
             }
 
             $isAssignment = false;
@@ -51,7 +51,7 @@ readonly class BlankLinesBetweenStatementGroups extends BaseFormatter
             }
 
             if ($previousSubType !== null && $isAssignment !== $previousSubType && !$statement->firstToken()->inString) {
-                $statement->previous()->blankLineAfter = true;
+                $statement->previous()->blankLineAfter();
             }
 
             $previousSubType = $isAssignment;
