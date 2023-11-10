@@ -11,10 +11,16 @@ use Medas\PhpTokenizer\{Token, TokenGroups, TokenTree};
 #[Service]
 readonly class ReferencesUpdater
 {
+    private array $nonReferencePrefixes;
+
     public function __construct(
         private TokenGroups $tokenGroups,
     )
     {
+        $this->nonReferencePrefixes = array_merge(
+            $this->tokenGroups->structureTypes(),
+            [T_OBJECT_OPERATOR, T_FUNCTION]
+        );
     }
 
     public function update(TokenTree $tree, ClassAnalysis $analysis, ReferencesAndImports $referencesAndImports): void
@@ -24,9 +30,9 @@ readonly class ReferencesUpdater
         foreach ($tree as $token) {
             foreach ($analysis->uses as $reference) {
                 if ($reference->label === $token->text && !in_array(
-                    $token->previous->id,
-                    $this->tokenGroups->structureTypes()
-                )) {
+                        $token->previous->id,
+                        $this->nonReferencePrefixes
+                    )) {
                     $token->text = $referencesAndImports->references[$reference->fqn];
                 }
 

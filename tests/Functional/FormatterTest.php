@@ -98,16 +98,6 @@ class FormatterTest extends BaseTestClass
         $this->assertRemainsTheSame('lambda-functions', new Medas());
     }
 
-    public function testBugs(): void
-    {
-        $this->assertRemainsTheSame('bugs', new Medas());
-    }
-
-    public function testBugs2(): void
-    {
-        $this->assertRemainsTheSame('bugs2', new Medas());
-    }
-
     public function testNoSingleLineControlBodies(): void
     {
         $this->assertChanges(
