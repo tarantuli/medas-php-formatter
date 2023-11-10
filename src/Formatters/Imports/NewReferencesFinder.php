@@ -33,8 +33,10 @@ class NewReferencesFinder
                 }
                 else {
                     // A relative reference, inline it
-                    $referencesAndImports->references[$reference->fqn]
-                        = $this->getRelativeReference($analysis, $reference);
+                    $referencesAndImports->references[$reference->fqn] = $this->getRelativeReference(
+                        $analysis,
+                        $reference
+                    );
                 }
 
                 continue;

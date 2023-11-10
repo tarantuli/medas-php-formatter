@@ -5,13 +5,9 @@ declare(strict_types=1);
 namespace Medas\PhpFormatter\Formatters\LineSplitting;
 
 use Medas\Core\Attributes\{ConfigValue, Service};
-use Medas\PhpFormatter\{ConfigOptions\MaxLineLength,
-    Formatters\BaseFormatter,
-    Formatters\LineSplitting\GenericLineSplitter\SeparatorGroups\PrimarySet,
-    Formatters\LineSplitting\GenericLineSplitter\SeparatorGroups\SecondarySet,
-    Job
-};
-use Medas\PhpTokenizer\{Statement,
+use Medas\PhpFormatter\{ConfigOptions\MaxLineLength, Formatters\BaseFormatter, Job};
+use Medas\PhpTokenizer\{
+    Statement,
     StatementTypeFinder,
     StatementTypes\ControlStatement,
     StatementTypes\FunctionDeclaration
@@ -81,17 +77,26 @@ readonly class LongLineSplitter extends BaseFormatter
         $type = $this->typeFinder->for($statement);
 
         if ($type instanceof ControlStatement) {
-            return $this->genericLineSplitter->split($statement, PrimarySet::instance());
+            return $this->genericLineSplitter->split(
+                $statement,
+                GenericLineSplitter\SeparatorGroups\PrimarySet::instance()
+            );
         }
 
         if ($type instanceof FunctionDeclaration) {
             return $this->functionDeclarationSplitter->split($statement);
         }
 
-        $success = $this->genericLineSplitter->split($statement, PrimarySet::instance());
+        $success = $this->genericLineSplitter->split(
+            $statement,
+            GenericLineSplitter\SeparatorGroups\PrimarySet::instance()
+        );
 
         if (!$success) {
-            $success = $this->genericLineSplitter->split($statement, SecondarySet::instance());
+            $success = $this->genericLineSplitter->split(
+                $statement,
+                GenericLineSplitter\SeparatorGroups\SecondarySet::instance()
+            );
         }
 
         return $success;

@@ -7,7 +7,6 @@ namespace Medas\PhpFormatter\Formatters\Prs12;
 use Medas\Core\Attributes\Service;
 use Medas\PhpFormatter\Formatters\{BaseFormatter, Helpers\BlankLineAdder};
 use Medas\PhpFormatter\Job;
-
 use Medas\PhpTokenizer\{
     StatementTypeFinder,
     StatementTypes\BlockCloser,
@@ -21,7 +20,6 @@ use Medas\PhpTokenizer\{
     StatementTypes\UseConstStatement,
     StatementTypes\UseFunctionStatement,
     TokenTree
-
 };
 
 #[Service]

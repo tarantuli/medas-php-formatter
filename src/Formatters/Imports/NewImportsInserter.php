@@ -6,7 +6,6 @@ namespace Medas\PhpFormatter\Formatters\Imports;
 
 use Medas\Core\Attributes\Service;
 use Medas\PhpClassAnalysis\FqnProperties;
-
 use Medas\PhpTokenizer\{
     Contexts\GlobalScope,
     Statement,
@@ -17,7 +16,6 @@ use Medas\PhpTokenizer\{
     StatementTypes\UseClassStatement,
     Token,
     TokenTree
-
 };
 
 #[Service]

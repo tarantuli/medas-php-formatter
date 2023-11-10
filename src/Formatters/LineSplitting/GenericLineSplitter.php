@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Medas\PhpFormatter\Formatters\LineSplitting;
 
 use Medas\Core\Attributes\Service;
-use Medas\PhpFormatter\Formatters\LineSplitting\GenericLineSplitter\SeparatorGroups\SeparatorSet;
 use Medas\PhpTokenizer\Statement;
 
 #[Service]
@@ -19,7 +18,7 @@ readonly class GenericLineSplitter
     {
     }
 
-    public function split(Statement $statement, SeparatorSet $set): bool
+    public function split(Statement $statement, GenericLineSplitter\SeparatorGroups\SeparatorSet $set): bool
     {
         $options = [];
 
@@ -42,9 +41,9 @@ readonly class GenericLineSplitter
             }
 
             if ($bestQuality === null || $quality > $bestQuality || (
-                    $quality === $bestQuality
-                    && $option->depth < $bestOption->depth
-                )) {
+                $quality === $bestQuality
+                && $option->depth < $bestOption->depth
+            )) {
                 $bestQuality = $quality;
                 $bestOption = $option;
             }

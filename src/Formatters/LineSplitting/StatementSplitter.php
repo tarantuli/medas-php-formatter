@@ -5,9 +5,7 @@ declare(strict_types=1);
 namespace Medas\PhpFormatter\Formatters\LineSplitting;
 
 use Medas\Core\Attributes\Service;
-use Medas\PhpTokenizer\Statement;
-use Medas\PhpTokenizer\StatementTypeFinder;
-use Medas\PhpTokenizer\StatementTypes\UseClassStatement;
+use Medas\PhpTokenizer\{Statement, StatementTypeFinder, StatementTypes\UseClassStatement};
 
 #[Service]
 readonly class StatementSplitter
@@ -17,6 +15,7 @@ readonly class StatementSplitter
     )
     {
     }
+
     public function split(
         Statement $statement,
         array     $separators,
@@ -68,7 +67,10 @@ readonly class StatementSplitter
                     $currentStatement = $this->startNewStatement($statement);
                 }
 
-                if ($currentStatement->tokenCount() === 0 && $currentStatement->next()->firstToken()->is([T_ATTRIBUTE, T_COMMENT, T_DOC_COMMENT])) {
+                if (
+                    $currentStatement->tokenCount() === 0
+                    && $currentStatement->next()->firstToken()->is([T_ATTRIBUTE, T_COMMENT, T_DOC_COMMENT])
+                ) {
                     $currentStatement->blankLineAfter();
                 }
 
@@ -108,6 +110,7 @@ readonly class StatementSplitter
         $newStatement->rootStatement = $statement;
 
         $statement->block->insertStatementAfter($newStatement, $statement);
+
         $newStatement->additionalDepth = $statement->additionalDepth + 1;
 
         if ($statement->blankLineAfter) {
@@ -122,7 +125,10 @@ readonly class StatementSplitter
     {
         $previousStatement = $statement->previous();
 
-        if ($this->typeFinder->for($statement) instanceof UseClassStatement && $this->typeFinder->for($previousStatement) instanceof UseClassStatement) {
+        if (
+            $this->typeFinder->for($statement) instanceof UseClassStatement
+            && $this->typeFinder->for($previousStatement) instanceof UseClassStatement
+        ) {
             // No blank lines between a use statement and a split use statement
             return;
         }

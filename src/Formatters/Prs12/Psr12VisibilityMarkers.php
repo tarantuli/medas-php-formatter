@@ -6,7 +6,6 @@ namespace Medas\PhpFormatter\Formatters\Prs12;
 
 use Medas\Core\Attributes\Service;
 use Medas\PhpFormatter\{Formatters\BaseFormatter, Job};
-
 use Medas\PhpTokenizer\{
     Contexts\MethodDeclaration,
     Statement,

@@ -16,7 +16,6 @@ readonly class TrailingCommaSplitter extends BaseFormatter
         T_CURLY_BRACKET_CLOSE => T_CURLY_BRACKET_OPEN,
         T_ROUND_BRACKET_CLOSE => T_ROUND_BRACKET_OPEN,
     ];
-
     public const CLOSERS = [
         T_SQUARE_BRACKET_CLOSE,
         T_CURLY_BRACKET_CLOSE,

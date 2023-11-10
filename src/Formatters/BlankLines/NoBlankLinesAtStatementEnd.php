@@ -5,8 +5,7 @@ declare(strict_types=1);
 namespace Medas\PhpFormatter\Formatters\BlankLines;
 
 use Medas\Core\Attributes\Service;
-use Medas\PhpFormatter\Formatters\BaseFormatter;
-use Medas\PhpFormatter\Job;
+use Medas\PhpFormatter\{Formatters\BaseFormatter, Job};
 
 #[Service]
 readonly class NoBlankLinesAtStatementEnd extends BaseFormatter
@@ -16,6 +15,7 @@ readonly class NoBlankLinesAtStatementEnd extends BaseFormatter
         foreach ($job->tree->statements() as $statement) {
             if ($statement === $statement->block->lastStatement()) {
                 $statement->blankLineAfter(false);
+
                 $statement->lastToken()->lineBreakAfter = false;
             }
         }

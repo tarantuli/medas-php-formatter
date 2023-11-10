@@ -14,6 +14,7 @@ class CodeValidator
 
     public function __construct(
         private readonly TemporaryFiles $temporaryFiles,
+
         #[ConfigValue(ConfigOptions\PathToPhp::class)]
         private readonly string         $pathToPhp,
     )

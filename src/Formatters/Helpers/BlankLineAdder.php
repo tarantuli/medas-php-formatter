@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Medas\PhpFormatter\Formatters\Helpers;
 
 use Medas\Core\Attributes\Service;
-
 use Medas\PhpTokenizer\{
     Statement,
     StatementTypeFinder,
@@ -13,7 +12,6 @@ use Medas\PhpTokenizer\{
     StatementTypes\Comment,
     StatementTypes\SwitchBranch,
     TokenTree
-
 };
 
 #[Service]

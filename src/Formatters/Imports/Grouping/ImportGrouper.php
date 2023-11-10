@@ -14,6 +14,7 @@ readonly class ImportGrouper
     public function __construct(
         #[ConfigValue(MaxImportGroupChildDepth::class)]
         private int $maxChildDepth,
+
         #[ConfigValue(MinImportGroupPrefixDepth::class)]
         private int $minPrefixDepth,
     )

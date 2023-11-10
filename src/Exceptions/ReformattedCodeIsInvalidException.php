@@ -8,7 +8,6 @@ use Medas\Core\Exceptions\BaseException;
 
 class ReformattedCodeIsInvalidException extends BaseException
 {
-
     public function __construct(string $code, string $errorMessage)
     {
         $logfile = 'invalid-reformatted-code.php';
