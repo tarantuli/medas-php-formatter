@@ -6,10 +6,17 @@ namespace Medas\PhpFormatter\Formatters\LineSplitting;
 
 use Medas\Core\Attributes\Service;
 use Medas\PhpTokenizer\Statement;
+use Medas\PhpTokenizer\StatementTypeFinder;
+use Medas\PhpTokenizer\StatementTypes\UseClassStatement;
 
 #[Service]
 readonly class StatementSplitter
 {
+    public function __construct(
+        private StatementTypeFinder $typeFinder,
+    )
+    {
+    }
     public function split(
         Statement $statement,
         array     $separators,
@@ -62,7 +69,7 @@ readonly class StatementSplitter
                 }
 
                 if ($currentStatement->tokenCount() === 0 && $currentStatement->next()->firstToken()->is([T_ATTRIBUTE, T_COMMENT, T_DOC_COMMENT])) {
-                    $currentStatement->blankLineAfter = true;
+                    $currentStatement->blankLineAfter();
                 }
 
                 $currentStatement->prependToken($token);
@@ -108,6 +115,11 @@ readonly class StatementSplitter
     private function addBlankLineBefore(Statement $statement): void
     {
         $previousStatement = $statement->previous();
+
+        if ($this->typeFinder->for($statement) instanceof UseClassStatement && $this->typeFinder->for($previousStatement) instanceof UseClassStatement) {
+            // No blank lines between a use statement and a split use statement
+            return;
+        }
 
         if ($previousStatement && $statement->block === $previousStatement->block) {
             $previousStatement->blankLineAfter();

@@ -7,7 +7,6 @@ namespace Medas\PdoMysql\Structure;
 use Medas\Core\Attributes\Service;
 use Medas\FileBuilder\PhpClass\MethodDefinition;
 use Medas\PdoStorage\Queries\Query;
-
 use Medas\StorageManager\{
     Interfaces\Storage,
     Migrations\MigrationBuilder as MigrationBuilderInterface,
