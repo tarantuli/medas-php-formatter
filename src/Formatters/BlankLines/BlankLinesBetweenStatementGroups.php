@@ -6,16 +6,33 @@ namespace Medas\PhpFormatter\Formatters\BlankLines;
 
 use Medas\Core\Attributes\Service;
 use Medas\PhpFormatter\{Formatters\BaseFormatter, Job};
-use Medas\PhpTokenizer\{StatementTypeFinder, StatementTypes\GenericStatement, TokenGroups};
+use Medas\PhpTokenizer\{Statement, StatementTypeFinder, StatementTypes\GenericStatement, TokenGroups};
 
 #[Service]
 readonly class BlankLinesBetweenStatementGroups extends BaseFormatter
 {
+    private array $constructs;
+
     public function __construct(
         private StatementTypeFinder $typeFinder,
         private TokenGroups         $tokenGroups,
     )
     {
+        $this->constructs = [
+            T_BREAK,
+            T_CONTINUE,
+            T_ECHO,
+            T_EXIT,
+            T_GLOBAL,
+            T_GOTO,
+            T_INCLUDE,
+            T_INCLUDE_ONCE,
+            T_REQUIRE,
+            T_REQUIRE_ONCE,
+            T_RETURN,
+            T_YIELD,
+            T_YIELD_FROM,
+        ];
     }
 
     public function format(Job $job): void
@@ -40,25 +57,32 @@ readonly class BlankLinesBetweenStatementGroups extends BaseFormatter
                 $statement->previous()->blankLineAfter();
             }
 
-            $isAssignment = false;
-
-            foreach ($statement as $token) {
-                if ($token->is($this->tokenGroups->assignmentOperators())) {
-                    $isAssignment = true;
-
-                    break;
-                }
-            }
+            $subType = $this->subType($statement);
 
             if (
                 $previousSubType !== null
-                && $isAssignment !== $previousSubType
+                && $subType !== $previousSubType
                 && !$statement->firstToken()->inString
             ) {
                 $statement->previous()->blankLineAfter();
             }
 
-            $previousSubType = $isAssignment;
+            $previousSubType = $subType;
         }
+    }
+
+    private function subType(Statement $statement): int
+    {
+        foreach ($statement as $token) {
+            if ($token->is($this->tokenGroups->assignmentOperators())) {
+                return 1;
+            }
+
+            if ($token->is($this->constructs)) {
+                return 2;
+            }
+        }
+
+        return 0;
     }
 }
