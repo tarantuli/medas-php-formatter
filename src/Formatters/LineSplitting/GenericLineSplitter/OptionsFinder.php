@@ -12,7 +12,7 @@ use Medas\PhpTokenizer\Statement;
 readonly class OptionsFinder
 {
     /** @return Option[] */
-    public function find(Statement $statement, array $separators, bool $splitAfter): array
+    public function find(Statement $statement, array $separators, bool $splitAfter, int|null $maxDepth): array
     {
         /** @var Option[][] $options */
         $options = [];
@@ -54,7 +54,18 @@ readonly class OptionsFinder
             }
         }
 
-        return $this->flatten($options);
+        /** @var Option[] $options */
+        $options = $this->flatten($options);
+
+        if ($maxDepth !== null) {
+            foreach ($options as $i => $option) {
+                if ($option->depth > $maxDepth) {
+                    unset($options[$i]);
+                }
+            }
+        }
+
+        return $options;
     }
 
     private function flatten(array $array): array

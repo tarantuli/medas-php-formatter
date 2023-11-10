@@ -7,7 +7,7 @@ namespace Medas\PhpFormatter\Formatters\LineSplitting\GenericLineSplitter\Separa
 use Medas\Core\AsSingleton;
 use Medas\PhpFormatter\Formatters\LineSplitting\GenericLineSplitter\SeparatorGroup;
 
-class PrimarySet implements SeparatorSet
+class FirstSet implements SeparatorSet
 {
     use AsSingleton;
 
@@ -17,10 +17,7 @@ class PrimarySet implements SeparatorSet
     {
         // Sort the best separators on top
         $this->groups = [
-            new SeparatorGroup([T_COMMA], true),
-            new SeparatorGroup([T_BOOLEAN_AND, T_BOOLEAN_OR, T_LOGICAL_AND, T_LOGICAL_OR]),
-            new SeparatorGroup([T_QUESTION_MARK, T_COLON]),
-            new SeparatorGroup([T_PLUS, T_MINUS]),
+            new SeparatorGroup([T_QUESTION_MARK, T_COLON], maxDepth: 0),
         ];
     }
 

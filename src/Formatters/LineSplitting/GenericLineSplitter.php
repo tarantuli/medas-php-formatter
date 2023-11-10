@@ -18,12 +18,15 @@ readonly class GenericLineSplitter
     {
     }
 
-    public function split(Statement $statement, GenericLineSplitter\SeparatorGroups\SeparatorSet $set): bool
+    public function split(
+        Statement $statement,
+        GenericLineSplitter\SeparatorGroups\SeparatorSet $set,
+    ): bool
     {
         $options = [];
 
         foreach ($set->groups() as $group) {
-            if (!$subOptions = $this->optionsFinder->find($statement, $group->separators, $group->splitAfter)) {
+            if (!$subOptions = $this->optionsFinder->find($statement, $group->separators, $group->splitAfter, $group->maxDepth)) {
                 continue;
             }
 

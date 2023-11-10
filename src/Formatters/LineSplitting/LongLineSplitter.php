@@ -28,8 +28,9 @@ readonly class LongLineSplitter extends BaseFormatter
     )
     {
         $this->sets = [
-            GenericLineSplitter\SeparatorGroups\PrimarySet::instance(),
-            GenericLineSplitter\SeparatorGroups\SecondarySet::instance(),
+            GenericLineSplitter\SeparatorGroups\FirstSet::instance(),
+            GenericLineSplitter\SeparatorGroups\SecondSet::instance(),
+            GenericLineSplitter\SeparatorGroups\ThirdSet::instance(),
         ];
     }
 
@@ -86,7 +87,7 @@ readonly class LongLineSplitter extends BaseFormatter
         if ($type instanceof ControlStatement) {
             return $this->genericLineSplitter->split(
                 $statement,
-                GenericLineSplitter\SeparatorGroups\PrimarySet::instance()
+                GenericLineSplitter\SeparatorGroups\SecondSet::instance()
             );
         }
 
