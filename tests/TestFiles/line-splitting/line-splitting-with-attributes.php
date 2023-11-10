@@ -15,8 +15,10 @@ readonly class Formatter9342
         private CodeValidator $codeValidator,
         private Tokenizer     $tokenizer,
         private TreeBuilder   $treeBuilder,
+
         #[ConfigValue(ConfigOptions\DumpParsedTree::class)]
         private bool          $dumpParseTree,
+
         #[ConfigValue(ConfigOptions\DumpResultTree::class)]
         private bool          $dumpResultTree,
     )

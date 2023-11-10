@@ -61,6 +61,10 @@ readonly class StatementSplitter
                     $currentStatement = $this->startNewStatement($statement);
                 }
 
+                if ($currentStatement->tokenCount() === 0 && $currentStatement->next()->firstToken()->is([T_ATTRIBUTE, T_COMMENT, T_DOC_COMMENT])) {
+                    $currentStatement->blankLineAfter = true;
+                }
+
                 $currentStatement->prependToken($token);
             }
         }
@@ -87,18 +91,18 @@ readonly class StatementSplitter
 
     private function startNewStatement(Statement $statement): Statement
     {
-        $currentStatement = new Statement($statement->block);
-        $currentStatement->rootStatement = $statement;
+        $newStatement = new Statement($statement->block);
+        $newStatement->rootStatement = $statement;
 
-        $statement->block->insertStatementAfter($currentStatement, $statement);
-        $currentStatement->additionalDepth++;
+        $statement->block->insertStatementAfter($newStatement, $statement);
+        $newStatement->additionalDepth++;
 
         if ($statement->blankLineAfter) {
-            $currentStatement->blankLineAfter();
+            $newStatement->blankLineAfter();
             $statement->blankLineAfter(false);
         }
 
-        return $currentStatement;
+        return $newStatement;
     }
 
     private function addBlankLineBefore(Statement $statement): void
