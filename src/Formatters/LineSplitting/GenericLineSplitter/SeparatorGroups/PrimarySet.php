@@ -20,7 +20,6 @@ class PrimarySet implements SeparatorSet
             new SeparatorGroup([T_COMMA], true),
             new SeparatorGroup([T_BOOLEAN_AND, T_BOOLEAN_OR, T_LOGICAL_AND, T_LOGICAL_OR]),
             new SeparatorGroup([T_QUESTION_MARK, T_COLON]),
-            new SeparatorGroup([T_PIPE]),
             new SeparatorGroup([T_PLUS, T_MINUS]),
         ];
     }

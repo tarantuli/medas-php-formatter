@@ -5,9 +5,12 @@ declare(strict_types=1);
 namespace Medas\PhpFormatter\Formatters\LineSplitting;
 
 use Medas\Core\Attributes\{ConfigValue, Service};
-use Medas\PhpFormatter\{ConfigOptions\MaxLineLength, Formatters\BaseFormatter, Job};
-use Medas\PhpTokenizer\{
-    Statement,
+use Medas\PhpFormatter\{ConfigOptions\MaxLineLength,
+    Formatters\BaseFormatter,
+    Formatters\LineSplitting\GenericLineSplitter\SeparatorGroups\SeparatorSet,
+    Job
+};
+use Medas\PhpTokenizer\{Statement,
     StatementTypeFinder,
     StatementTypes\ControlStatement,
     StatementTypes\FunctionDeclaration
@@ -16,6 +19,9 @@ use Medas\PhpTokenizer\{
 #[Service]
 readonly class LongLineSplitter extends BaseFormatter
 {
+    /** @var SeparatorSet[] */
+    private array $sets;
+
     public function __construct(
         #[ConfigValue(MaxLineLength::class)]
         private int                         $maxLineLength,
@@ -24,6 +30,10 @@ readonly class LongLineSplitter extends BaseFormatter
         private FunctionDeclarationSplitter $functionDeclarationSplitter,
     )
     {
+        $this->sets = [
+            GenericLineSplitter\SeparatorGroups\PrimarySet::instance(),
+            GenericLineSplitter\SeparatorGroups\SecondarySet::instance(),
+        ];
     }
 
     public function format(Job $job): void
@@ -87,18 +97,15 @@ readonly class LongLineSplitter extends BaseFormatter
             return $this->functionDeclarationSplitter->split($statement);
         }
 
-        $success = $this->genericLineSplitter->split(
-            $statement,
-            GenericLineSplitter\SeparatorGroups\PrimarySet::instance()
-        );
-
-        if (!$success) {
-            $success = $this->genericLineSplitter->split(
+        foreach ($this->sets as $set) {
+            if ($this->genericLineSplitter->split(
                 $statement,
-                GenericLineSplitter\SeparatorGroups\SecondarySet::instance()
-            );
+                $set
+            )) {
+                return true;
+            }
         }
 
-        return $success;
+        return false;
     }
 }

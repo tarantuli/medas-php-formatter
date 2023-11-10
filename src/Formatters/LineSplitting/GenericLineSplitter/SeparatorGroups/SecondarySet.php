@@ -17,6 +17,7 @@ class SecondarySet implements SeparatorSet
     {
         // Sort the best separators on top
         $this->groups = [
+            new SeparatorGroup([T_PIPE]),
             new SeparatorGroup([T_ASSIGNMENT]),
         ];
     }
