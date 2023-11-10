@@ -74,6 +74,10 @@ readonly class StatementSplitter
                     $currentStatement->blankLineAfter();
                 }
 
+                if ($token->is(T_DOC_COMMENT)) {
+                    $token->lineBreakAfter = true;
+                }
+
                 $currentStatement->prependToken($token);
             }
         }

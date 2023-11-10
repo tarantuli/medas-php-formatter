@@ -24,4 +24,11 @@ readonly class Formatter9342
     )
     {
     }
+
+    public function aMethod(
+        /** @var array<int, T> */
+        array $data = [],
+    )
+    {
+    }
 }
