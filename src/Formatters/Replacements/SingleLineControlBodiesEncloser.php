@@ -9,7 +9,7 @@ use Medas\PhpFormatter\{Formatters\BaseFormatter, Job};
 use Medas\PhpTokenizer\{Block, Statement, StatementTypeFinder, StatementTypes\ControlStatement, Token};
 
 #[Service]
-readonly class NoSingleLineControlBodies extends BaseFormatter
+readonly class SingleLineControlBodiesEncloser extends BaseFormatter
 {
     public function __construct(
         private StatementTypeFinder $typeFinder,

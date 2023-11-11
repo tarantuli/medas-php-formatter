@@ -11,7 +11,7 @@ use Medas\PhpFormatter\Formatters\{
     Prs12\Psr12ElseifWhileCatch,
     Prs12\Psr12VisibilityMarkers,
     Prs12\Psr12Whitespace,
-    Replacements\NoSingleLineControlBodies
+    Replacements\SingleLineControlBodiesEncloser
 };
 
 class Psr12 extends Settings
@@ -20,7 +20,7 @@ class Psr12 extends Settings
     {
         parent::__construct();
         $this->document->setMaxLineLength(80);
-        $this->addFormatter(service(NoSingleLineControlBodies::class));
+        $this->addFormatter(service(SingleLineControlBodiesEncloser::class));
         $this->addFormatter(service(KeywordsToLowercase::class));
         $this->addFormatter(service(Psr12VisibilityMarkers::class));
         $this->addFormatter(service(Psr12ElseifWhileCatch::class));

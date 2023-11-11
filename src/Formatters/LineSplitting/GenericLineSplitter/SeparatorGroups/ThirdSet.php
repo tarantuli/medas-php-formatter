@@ -17,8 +17,9 @@ class ThirdSet implements SeparatorSet
     {
         // Sort the best separators on top
         $this->groups = [
-            new SeparatorGroup([T_PIPE]),
-            new SeparatorGroup([T_ASSIGNMENT], maxDepth: 1),
+            new SeparatorGroup('pipe', [T_PIPE]),
+            new SeparatorGroup('arithmetic', [T_PLUS, T_MINUS, T_SLASH]),
+            new SeparatorGroup('assignment', [T_ASSIGNMENT], maxDepth: 1),
         ];
     }
 

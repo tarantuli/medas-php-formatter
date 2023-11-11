@@ -12,7 +12,7 @@ use Medas\PhpTokenizer\Statement;
 readonly class OptionsFinder
 {
     /** @return Option[] */
-    public function find(Statement $statement, array $separators, bool $splitAfter, int|null $maxDepth): array
+    public function find(Statement $statement, SeparatorGroup $group): array
     {
         /** @var Option[][] $options */
         $options = [];
@@ -27,15 +27,15 @@ readonly class OptionsFinder
                 $cluster = $clusterManager->getNextCluster($depth, $index);
             }
 
-            if ($token->is($separators)) {
+            if ($token->is($group->separators)) {
                 if (!array_key_exists($cluster->id, $options)) {
                     $openerIndex = $cluster->openerIndex;
 
                     if ($openerIndex === 0) {
-                        $openerIndex = $splitAfter ? $index + 1 : $index - 1;
+                        $openerIndex = $group->splitAfter ? $index + 1 : $index - 1;
                     }
 
-                    $options[$cluster->id] = new Option($separators, $splitAfter, $depth, $cluster->id, $openerIndex);
+                    $options[$cluster->id] = new Option($group, $depth, $cluster->id, $openerIndex);
                 }
 
                 ++$options[$cluster->id]->counter;
@@ -57,9 +57,9 @@ readonly class OptionsFinder
         /** @var Option[] $options */
         $options = $this->flatten($options);
 
-        if ($maxDepth !== null) {
+        if ($group->maxDepth !== null) {
             foreach ($options as $i => $option) {
-                if ($option->depth > $maxDepth) {
+                if ($option->depth > $group->maxDepth) {
                     unset($options[$i]);
                 }
             }

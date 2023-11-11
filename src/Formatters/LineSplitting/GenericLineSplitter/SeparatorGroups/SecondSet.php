@@ -17,10 +17,9 @@ class SecondSet implements SeparatorSet
     {
         // Sort the best separators on top
         $this->groups = [
-            new SeparatorGroup([T_COMMA], true),
-            new SeparatorGroup([T_BOOLEAN_AND, T_BOOLEAN_OR, T_LOGICAL_AND, T_LOGICAL_OR]),
-            new SeparatorGroup([T_QUESTION_MARK, T_COLON]),
-            new SeparatorGroup([T_PLUS, T_MINUS]),
+            new SeparatorGroup('comma', [T_COMMA], true),
+            new SeparatorGroup('and/or', [T_BOOLEAN_AND, T_BOOLEAN_OR, T_LOGICAL_AND, T_LOGICAL_OR]),
+            new SeparatorGroup('ternary', [T_QUESTION_MARK, T_COLON]),
         ];
     }
 

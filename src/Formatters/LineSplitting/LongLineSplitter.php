@@ -6,8 +6,7 @@ namespace Medas\PhpFormatter\Formatters\LineSplitting;
 
 use Medas\Core\Attributes\{ConfigValue, Service};
 use Medas\PhpFormatter\{ConfigOptions\MaxLineLength, Formatters\BaseFormatter, Job};
-use Medas\PhpTokenizer\{
-    Statement,
+use Medas\PhpTokenizer\{Statement,
     StatementTypeFinder,
     StatementTypes\ControlStatement,
     StatementTypes\FunctionDeclaration
@@ -36,9 +35,10 @@ readonly class LongLineSplitter extends BaseFormatter
 
     public function format(Job $job): void
     {
+        $counter = 0;
         do {
             $foundSomething = $this->findSomethingToSplit($job);
-        } while ($foundSomething);
+        } while ($foundSomething && ++$counter < 20);
     }
 
     private function findSomethingToSplit(Job $job): bool

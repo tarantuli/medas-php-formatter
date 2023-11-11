@@ -13,8 +13,7 @@ class Option
     public int|null $closerIndex = null;
 
     public function __construct(
-        public readonly array $separators,
-        public readonly bool  $splitAfter,
+        public readonly SeparatorGroup $group,
         public readonly int   $depth,
         public readonly int   $cluster,
         public readonly int   $openerIndex,

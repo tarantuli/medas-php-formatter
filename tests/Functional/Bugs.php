@@ -22,4 +22,9 @@ class Bugs extends BaseTestClass
     {
         $this->assertChanges('bugs/bugs3-pre', 'bugs/bugs3-post', new Medas());
     }
+
+    public function testBugs4(): void
+    {
+        $this->assertRemainsTheSame('bugs/bugs4', new Medas());
+    }
 }

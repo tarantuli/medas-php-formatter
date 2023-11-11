@@ -11,7 +11,7 @@ use Medas\PhpTokenizer\Statement;
 #[Service]
 readonly class OptionAssesser
 {
-    public function assess(Statement $statement, Option $option): float|null
+    public function assess(Statement $statement, Option $option): OptionAssessment
     {
         $lengths = [];
         $currentLength = 0;
@@ -24,7 +24,7 @@ readonly class OptionAssesser
                 ++$depth;
             }
 
-            if ($option->splitAfter) {
+            if ($option->group->splitAfter) {
                 $currentLength += strlen($token->text) + $token->extraSpacesAfter;
 
                 if ($inPrefix && $index === $option->openerIndex) {
@@ -78,15 +78,26 @@ readonly class OptionAssesser
 
         $lengths[] = $currentLength;
 
+        return new OptionAssessment($option, $lengths, $this->quality($option, $lengths));
+    }
+
+    private function quality(Option $option, array $lengths): float|null
+    {
         if (count($lengths) < 2) {
             return null;
         }
 
-        return $this->quality($lengths);
+        $depth = $option->depth < 1 ? 1 : $option->depth + 1;
+
+        return array_sum($lengths) / count($lengths) / $this->standardDeviation($lengths) / pow($depth, 2);
     }
 
-    private function standardDeviation(array $values): float
+    private function standardDeviation(array $values): float|null
     {
+        if (count($values) < 2) {
+            return null;
+        }
+
         $average = array_sum($values) / count($values);
         $variance = 0.0;
 
@@ -95,10 +106,5 @@ readonly class OptionAssesser
         }
 
         return sqrt($variance) / sqrt(count($values));
-    }
-
-    private function quality(array $lengths): float
-    {
-        return array_sum($lengths) / count($lengths) / $this->standardDeviation($lengths);
     }
 }

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Medas\PhpFormatter\Formatters\LineSplitting;
 
 use Medas\Core\Attributes\Service;
-use Medas\PhpTokenizer\{Statement, StatementTypeFinder, StatementTypes\UseClassStatement};
+use Medas\PhpTokenizer\{Statement, StatementTypeFinder, StatementTypes\SwitchBranch, StatementTypes\UseClassStatement};
 
 #[Service]
 readonly class StatementSplitter
@@ -128,11 +128,20 @@ readonly class StatementSplitter
 
     private function addBlankLineBefore(Statement $statement): void
     {
-        $previousStatement = $statement->previous();
+        if (!$previousStatement = $statement->previous()) {
+            return;
+        }
+
+        $previousStatementType = $this->typeFinder->for($previousStatement);
+
+        if ($previousStatementType instanceof SwitchBranch) {
+            // No blank line after the start of a case statement
+            return;
+        }
 
         if (
             $this->typeFinder->for($statement) instanceof UseClassStatement
-            && $this->typeFinder->for($previousStatement) instanceof UseClassStatement
+            && $previousStatementType instanceof UseClassStatement
         ) {
             // No blank lines between a use statement and a split use statement
             return;
@@ -143,7 +152,7 @@ readonly class StatementSplitter
             return;
         }
 
-        if ($previousStatement && $statement->block === $previousStatement->block) {
+        if ($statement->block === $previousStatement->block) {
             $previousStatement->blankLineAfter();
         }
     }
