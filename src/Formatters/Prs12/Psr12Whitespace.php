@@ -252,6 +252,7 @@ readonly class Psr12Whitespace extends BaseFormatter
         return
             [
                 T_AMPERSAND,
+                T_CURLY_BRACKET_OPEN,
                 T_DOUBLE_COLON,
                 T_ELLIPSIS,
                 T_ENCAPSED_AND_WHITESPACE,

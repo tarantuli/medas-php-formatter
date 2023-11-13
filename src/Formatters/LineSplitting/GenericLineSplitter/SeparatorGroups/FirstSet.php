@@ -18,6 +18,7 @@ class FirstSet implements SeparatorSet
         // Sort the best separators on top
         $this->groups = [
             new SeparatorGroup('ternary', [T_QUESTION_MARK, T_COLON], maxDepth: 0),
+            new SeparatorGroup('comma', [T_COMMA], splitAfter: true, maxDepth: 1),
         ];
     }
 
