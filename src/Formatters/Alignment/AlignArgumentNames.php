@@ -11,7 +11,7 @@ use Medas\PhpTokenizer\{StatementTypeFinder, StatementTypes\FunctionDeclaration,
 #[Service]
 readonly class AlignArgumentNames extends BaseFormatter
 {
-    public const VARIABLE_STARTERS = [T_ELLIPSIS, T_VARIABLE];
+    public const VARIABLE_STARTERS = [T_AMPERSAND, T_ELLIPSIS, T_VARIABLE];
 
     public function __construct(
         private StatementTypeFinder $typeFinder,

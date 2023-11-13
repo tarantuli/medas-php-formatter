@@ -45,4 +45,20 @@ class GroupStatementTypes
 
         return true;
     }
+
+    public function b(
+        int $span,
+            &$variable1,
+            &...$variable2,
+    )
+    {
+    }
+
+    public function c(
+        int $span,
+            &$variable1,
+            ...$variable2,
+    )
+    {
+    }
 }
