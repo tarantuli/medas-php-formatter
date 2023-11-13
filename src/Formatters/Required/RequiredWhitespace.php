@@ -24,15 +24,15 @@ readonly class RequiredWhitespace extends BaseFormatter
 
         foreach ($job->tree as $token) {
             if ($token->is($spaceAroundRequired) || $token->isTrueFalseNull()) {
-                $token->spaceAfter = true;
+                $token->spaceAfter();
             }
 
             if ($token->previous) {
                 if ($token->spaceAfter && !$token->previous->is($spaceAroundNotNeeded)) {
-                    $token->previous->spaceAfter = true;
+                    $token->previous->spaceAfter();
                 }
                 elseif ($token->is($spaceAroundNotNeeded)) {
-                    $token->previous->spaceAfter = false;
+                    $token->previous->spaceAfter(false);
                 }
             }
 

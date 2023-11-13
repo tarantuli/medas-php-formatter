@@ -48,3 +48,10 @@ return -100;
 $a - ($b);
 
 throw new \ImageNotHighEnoughException(-$chartHeight);
+
+if ($alignment & self::CENTER) {
+    $horiAlignment = self::CENTER;
+}
+elseif ($alignment & self::RIGHT) {
+    $horiAlignment = self::RIGHT;
+}

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Medas\PhpFormatter\Formatters\Prs12;
 
 use Medas\Core\Attributes\Service;
+use Medas\PhpFormatter\Formatters\Alignment\AlignArgumentNames;
 use Medas\PhpFormatter\Formatters\BaseFormatter;
 use Medas\PhpFormatter\Formatters\Helpers\ReturnTypeTokens;
 use Medas\PhpFormatter\Job;
@@ -52,17 +53,17 @@ readonly class Psr12Whitespace extends BaseFormatter
 
             // One space between ") {" and "): <type> {"
             if ($token->is(T_CURLY_BRACKET_OPEN) && $this->returnTypeTokens->isReturnTypeToken($token)) {
-                $token->previous->spaceAfter = true;
+                $token->previous->spaceAfter();
             }
 
             if ($token->is($spaceAfterRequired)) {
-                $token->spaceAfter = true;
+                $token->spaceAfter();
             }
 
             // No space between "?type"
             if ($token->is(T_QUESTION_MARK)) {
                 if ($statementType instanceof ClassPropertyDeclaration || $statementType instanceof FunctionDeclaration) {
-                    $token->spaceAfter = false;
+                    $token->spaceAfter(false);
                 }
                 else {
                     ++$openTernaries;
@@ -71,30 +72,35 @@ readonly class Psr12Whitespace extends BaseFormatter
 
             if ($token->previous) {
                 if ($token->is($spaceBeforeRequired) && !$token->inString) {
-                    $token->previous->spaceAfter = true;
+                    $token->previous->spaceAfter();
+                }
+
+                // No space between & and variable starters
+                if ($token->previous->is(T_AMPERSAND) && $token->is(AlignArgumentNames::VARIABLE_STARTERS)) {
+                    $token->previous->spaceAfter(false);
                 }
 
                 // No space between "):" in return type declarations
                 if ($token->is(T_COLON) && $token->context instanceof MethodReturnType) {
-                    $token->previous->spaceAfter = false;
+                    $token->previous->spaceAfter(false);
                 }
 
                 // No space between "?:"
                 if ($token->is(T_COLON) && $token->previous->is(T_QUESTION_MARK)) {
-                    $token->previous->spaceAfter = false;
+                    $token->previous->spaceAfter(false);
                 }
 
                 // No space before ":" in case/default statements if it's the last token
                 if ($token->is(T_COLON)
                     && $statementType instanceof SwitchBranch
                     && $token->isLastToken()) {
-                    $token->previous->spaceAfter = false;
+                    $token->previous->spaceAfter(false);
                 }
 
                 // No space between strings and ":" in named arguments
                 if ($token->is(T_COLON)) {
                     if ($openTernaries === 0) {
-                        $token->previous->spaceAfter = false;
+                        $token->previous->spaceAfter(false);
                     }
                     else {
                         --$openTernaries;
@@ -109,18 +115,18 @@ readonly class Psr12Whitespace extends BaseFormatter
                         || $this->returnTypeTokens->isReturnTypeToken($token->previous);
 
                     if ($stripSpaces) {
-                        $token->previous->spaceAfter = false;
-                        $token->spaceAfter = false;
+                        $token->previous->spaceAfter(false);
+                        $token->spaceAfter(false);
                     }
                 }
 
                 if ($token->previous->is(T_FUNCTION) && !$statementType instanceof FunctionDeclaration) {
-                    $token->previous->spaceAfter = true;
+                    $token->previous->spaceAfter();
                 }
 
                 if ($token->is(T_USE) && !$statementType instanceof UseTraitStatement) {
-                    $token->previous->spaceAfter = true;
-                    $token->spaceAfter = true;
+                    $token->previous->spaceAfter();
+                    $token->spaceAfter();
                 }
             }
         }
@@ -152,6 +158,7 @@ readonly class Psr12Whitespace extends BaseFormatter
             $this->tokenGroups->logicalOperators(),
             $this->tokenGroups->typeOperators(),
             [
+                T_AMPERSAND,
                 T_AS,
                 T_ASSIGNMENT,
                 T_CASE,
@@ -186,7 +193,7 @@ readonly class Psr12Whitespace extends BaseFormatter
 
         foreach ($tree as $token) {
             if ($token->is($spaceAfterForbidden)) {
-                $token->spaceAfter = false;
+                $token->spaceAfter(false);
             }
 
             if (!$token->previous) {
@@ -194,12 +201,12 @@ readonly class Psr12Whitespace extends BaseFormatter
             }
 
             if ($token->is($spaceBeforeForbidden)) {
-                $token->previous->spaceAfter = false;
+                $token->previous->spaceAfter(false);
             }
 
             // No space between inc/dec operators and variables
             if ($token->is(T_VARIABLE) && $token->previous->is([T_INC, T_DEC])) {
-                $token->previous->spaceAfter = false;
+                $token->previous->spaceAfter(false);
             }
 
             if ($token->next) {
@@ -207,32 +214,32 @@ readonly class Psr12Whitespace extends BaseFormatter
                 if ($token->previous->is($operatorsAndKeywords)
                     && $token->is([T_PLUS, T_MINUS])
                     && $token->next->is(T_ROUND_BRACKET_OPEN)) {
-                    $token->spaceAfter = false;
+                    $token->spaceAfter(false);
                 }
 
                 // No space between pluses and minuses before numbers and variables, that follow an operator or bracket
                 if ($token->is([T_PLUS, T_MINUS]) && $token->next->is([T_LNUMBER, T_DNUMBER, T_VARIABLE])) {
                     if ($token->previous->is([T_ROUND_BRACKET_CLOSE, T_SQUARE_BRACKET_CLOSE])) {
-                        $token->spaceAfter = true;
+                        $token->spaceAfter();
                     }
                     elseif ($token->previous->is($operatorsKeywordsAndBrackets)) {
-                        $token->spaceAfter = false;
+                        $token->spaceAfter(false);
                     }
                 }
 
                 // No spaces between variables and [
                 if ($token->is([T_VARIABLE, T_ROUND_BRACKET_CLOSE, T_STRING])
                     && $token->next->is(T_SQUARE_BRACKET_OPEN)) {
-                    $token->spaceAfter = false;
+                    $token->spaceAfter(false);
                 }
 
                 // No spaces between ] and [
                 if ($token->is(T_SQUARE_BRACKET_CLOSE) && $token->next->is(T_SQUARE_BRACKET_OPEN)) {
-                    $token->spaceAfter = false;
+                    $token->spaceAfter(false);
                 }
                 // No space between "static" and "()"
                 if ($token->is(T_STATIC) && $token->next->is(T_ROUND_BRACKET_OPEN)) {
-                    $token->spaceAfter = false;
+                    $token->spaceAfter(false);
                 }
             }
         }
@@ -251,7 +258,6 @@ readonly class Psr12Whitespace extends BaseFormatter
     {
         return
             [
-                T_AMPERSAND,
                 T_CURLY_BRACKET_OPEN,
                 T_DOUBLE_COLON,
                 T_ELLIPSIS,
