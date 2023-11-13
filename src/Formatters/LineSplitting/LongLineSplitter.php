@@ -5,11 +5,7 @@ declare(strict_types=1);
 namespace Medas\PhpFormatter\Formatters\LineSplitting;
 
 use Medas\Core\Attributes\{ConfigValue, Service};
-use Medas\PhpFormatter\{ConfigOptions\MaxLineLength,
-    Formatters\BaseFormatter,
-    Formatters\LineSplitting\GenericLineSplitter\SeparatorGroups\ControlStatementSet,
-    Job
-};
+use Medas\PhpFormatter\{ConfigOptions\MaxLineLength, Formatters\BaseFormatter, Job};
 use Medas\PhpTokenizer\{
     Statement,
     StatementTypeFinder,
@@ -93,7 +89,10 @@ readonly class LongLineSplitter extends BaseFormatter
         }
 
         if ($type instanceof ControlStatement) {
-            return $this->genericLineSplitter->split($statement, ControlStatementSet::instance());
+            return $this->genericLineSplitter->split(
+                $statement,
+                GenericLineSplitter\SeparatorGroups\ControlStatementSet::instance()
+            );
         }
 
         foreach ($this->sets as $set) {

@@ -58,11 +58,9 @@ readonly class ImportGrouper
     private function determineCandidates(Job $job): void
     {
         foreach ($job->prefixes as $prefix) {
-            if (
-                $prefix->count >= 2
-                && $prefix->maxChildDepth <= $this->maxChildDepth
-                && $prefix->prefixDepth >= $this->minPrefixDepth
-            ) {
+            if ($prefix->count >= 2
+                    && $prefix->maxChildDepth <= $this->maxChildDepth
+                    && $prefix->prefixDepth >= $this->minPrefixDepth) {
                 $job->candidates[] = $prefix;
             }
         }

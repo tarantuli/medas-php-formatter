@@ -77,10 +77,8 @@ readonly class Psr12BlankLines extends BaseFormatter
     {
         foreach ($tree as $token) {
             if ($token->is(T_COMMENT) && $token->next && $token->statement === $token->next->statement) {
-                if (
-                    $token->statement->previous()
-                    && !$this->typeFinder->for($token->statement->previous()) instanceof SwitchBranch
-                ) {
+                if ($token->statement->previous()
+                        && !$this->typeFinder->for($token->statement->previous()) instanceof SwitchBranch) {
                     $token->statement->previous()->blankLineAfter();
                 }
 

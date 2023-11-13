@@ -17,7 +17,11 @@ class ControlStatementSet implements SeparatorSet
     {
         // Sort the best separators on top
         $this->groups = [
-            new SeparatorGroup('and/or', [T_BOOLEAN_AND, T_BOOLEAN_OR, T_LOGICAL_AND, T_LOGICAL_OR], keepPrefixAndSuffix: true),
+            new SeparatorGroup(
+                'and/or',
+                [T_BOOLEAN_AND, T_BOOLEAN_OR, T_LOGICAL_AND, T_LOGICAL_OR],
+                keepPrefixAndSuffix: true
+            ),
         ];
     }
 

@@ -21,8 +21,8 @@ readonly class StatementSplitter
         array     $separators,
         bool      $splitAfter,
         int       $openerIndex,
-        int|null $closerIndex,
-        int      $additionalDepth
+        int|null  $closerIndex,
+        int       $additionalDepth
     ): void
     {
         $this->addBlankLineBefore($statement);
@@ -68,11 +68,9 @@ readonly class StatementSplitter
                     $currentStatement = $this->startNewStatement($statement, $additionalDepth);
                 }
 
-                if (
-                    $currentStatement->tokenCount() === 0
-                    && $currentStatement->next()
-                    && $currentStatement->next()->firstToken()->is([T_ATTRIBUTE, T_COMMENT, T_DOC_COMMENT])
-                ) {
+                if ($currentStatement->tokenCount() === 0
+                        && $currentStatement->next()
+                        && $currentStatement->next()->firstToken()->is([T_ATTRIBUTE, T_COMMENT, T_DOC_COMMENT])) {
                     $currentStatement->blankLineAfter();
                 }
 
@@ -143,10 +141,8 @@ readonly class StatementSplitter
             return;
         }
 
-        if (
-            $this->typeFinder->for($statement) instanceof UseClassStatement
-            && $previousStatementType instanceof UseClassStatement
-        ) {
+        if ($this->typeFinder->for($statement) instanceof UseClassStatement
+                && $previousStatementType instanceof UseClassStatement) {
             // No blank lines between a use statement and a split use statement
             return;
         }
