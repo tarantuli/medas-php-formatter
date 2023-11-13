@@ -5,7 +5,11 @@ declare(strict_types=1);
 namespace Medas\PhpFormatter\Formatters\LineSplitting;
 
 use Medas\Core\Attributes\{ConfigValue, Service};
-use Medas\PhpFormatter\{ConfigOptions\MaxLineLength, Formatters\BaseFormatter, Job};
+use Medas\PhpFormatter\{ConfigOptions\MaxLineLength,
+    Formatters\BaseFormatter,
+    Formatters\LineSplitting\GenericLineSplitter\SeparatorGroups\ControlStatementSet,
+    Job
+};
 use Medas\PhpTokenizer\{
     Statement,
     StatementTypeFinder,
@@ -40,12 +44,12 @@ readonly class LongLineSplitter extends BaseFormatter
 
         do {
             $foundSomething = $this->findSomethingToSplit($job);
-        } while ($foundSomething && ++$counter < 20);
+        } while ($foundSomething && ++$counter < 256);
     }
 
     private function findSomethingToSplit(Job $job): bool
     {
-        foreach ($job->tree->block() as $statement) {
+        foreach ($job->tree->block() as $i => $statement) {
             $length = $this->statementLength($statement);
 
             if ($length <= $this->maxLineLength) {
@@ -66,14 +70,12 @@ readonly class LongLineSplitter extends BaseFormatter
         $previousToken = null;
 
         foreach ($statement as $token) {
-            $length += strlen($token->text);
+            if (!$token->is([T_DOC_COMMENT, T_COMMENT])) {
+                $length += strlen($token->text);
+            }
 
             if ($previousToken && $previousToken->spaceAfter) {
                 $length++;
-            }
-
-            if ($token->is([T_DOC_COMMENT, T_COMMENT])) {
-                $length = $statement->block->depth * 4;
             }
 
             $previousToken = $token;
@@ -86,15 +88,12 @@ readonly class LongLineSplitter extends BaseFormatter
     {
         $type = $this->typeFinder->for($statement);
 
-        if ($type instanceof ControlStatement) {
-            return $this->genericLineSplitter->split(
-                $statement,
-                GenericLineSplitter\SeparatorGroups\SecondSet::instance()
-            );
-        }
-
         if ($type instanceof FunctionDeclaration) {
             return $this->functionDeclarationSplitter->split($statement);
+        }
+
+        if ($type instanceof ControlStatement) {
+            return $this->genericLineSplitter->split($statement, ControlStatementSet::instance());
         }
 
         foreach ($this->sets as $set) {
