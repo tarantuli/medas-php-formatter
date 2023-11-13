@@ -6,7 +6,7 @@ namespace Medas\PhpFormatter\Formatters\Alignment;
 
 use Medas\Core\Attributes\Service;
 use Medas\PhpFormatter\{Formatters\BaseFormatter, Job};
-use Medas\PhpTokenizer\{StatementTypeFinder, StatementTypes\FunctionDeclaration};
+use Medas\PhpTokenizer\{StatementTypeFinder, StatementTypes\FunctionDeclaration, Token};
 
 #[Service]
 readonly class AlignArgumentNames extends BaseFormatter
@@ -46,6 +46,10 @@ readonly class AlignArgumentNames extends BaseFormatter
 
                 if ($token->previous) {
                     $token->previous->extraSpacesAfter += $prefixLengthsPerRootStatement[$id] - $currentLength;
+                }
+                else {
+                    $placeholder=  new Token(1, str_repeat(' ', $prefixLengthsPerRootStatement[$id]));
+                    $token->statement->prependToken($placeholder);
                 }
 
                 break;

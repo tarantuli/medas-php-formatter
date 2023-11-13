@@ -10,7 +10,8 @@ class GroupStatementTypes
         Datasets\AbstractDataset $sourceSet,
         int                      $span,
         bool                     $addTails = true,
-        string                   $name = null
+        string                   $name = null,
+                                 $typeLess = null
     )
     {
         $dataset = new Datasets\MovingAverage($this->settings, $name);
