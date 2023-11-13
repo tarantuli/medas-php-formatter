@@ -40,7 +40,8 @@ readonly class GenericLineSplitter
                 $bestOption->group->separators,
                 $bestOption->group->splitAfter,
                 $bestOption->openerIndex,
-                $bestOption->closerIndex
+                $bestOption->closerIndex,
+                $bestOption->group->keepPrefixAndSuffix ? 2 : 1,
             );
 
         return true;

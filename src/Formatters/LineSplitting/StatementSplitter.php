@@ -21,7 +21,8 @@ readonly class StatementSplitter
         array     $separators,
         bool      $splitAfter,
         int       $openerIndex,
-        int|null  $closerIndex
+        int|null $closerIndex,
+        int      $additionalDepth
     ): void
     {
         $this->addBlankLineBefore($statement);
@@ -48,14 +49,14 @@ readonly class StatementSplitter
 
             if (!$splitAfter) {
                 if ($currentStatement === null) {
-                    $currentStatement = $this->startNewStatement($statement);
+                    $currentStatement = $this->startNewStatement($statement, $additionalDepth);
                 }
 
                 $currentStatement->prependToken($token);
             }
 
             if ($token->is($separators) && $depth === 0 && $i > $openerIndex + 1) {
-                $currentStatement = $this->startNewStatement($statement);
+                $currentStatement = $this->startNewStatement($statement, $additionalDepth);
             }
 
             if (!$token->inAttribute && in_array($text, TrailingCommaSplitter::BRACKETS)) {
@@ -64,7 +65,7 @@ readonly class StatementSplitter
 
             if ($splitAfter) {
                 if ($currentStatement === null) {
-                    $currentStatement = $this->startNewStatement($statement);
+                    $currentStatement = $this->startNewStatement($statement, $additionalDepth);
                 }
 
                 if (
@@ -111,14 +112,14 @@ readonly class StatementSplitter
         }
     }
 
-    private function startNewStatement(Statement $statement): Statement
+    private function startNewStatement(Statement $statement, int $additionalDepth): Statement
     {
         $newStatement = new Statement($statement->block);
         $newStatement->rootStatement = $statement;
 
         $statement->block->insertStatementAfter($newStatement, $statement);
 
-        $newStatement->additionalDepth = $statement->additionalDepth + 1;
+        $newStatement->additionalDepth = $statement->additionalDepth + $additionalDepth;
 
         if ($statement->blankLineAfter) {
             $newStatement->blankLineAfter();
