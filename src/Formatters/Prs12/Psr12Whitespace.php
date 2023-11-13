@@ -5,20 +5,19 @@ declare(strict_types=1);
 namespace Medas\PhpFormatter\Formatters\Prs12;
 
 use Medas\Core\Attributes\Service;
-use Medas\PhpFormatter\Formatters\Alignment\AlignArgumentNames;
-use Medas\PhpFormatter\Formatters\BaseFormatter;
-use Medas\PhpFormatter\Formatters\Helpers\ReturnTypeTokens;
+use Medas\PhpFormatter\Formatters\{Alignment\AlignArgumentNames, BaseFormatter, Helpers\ReturnTypeTokens};
 use Medas\PhpFormatter\Job;
-use Medas\PhpTokenizer\Contexts\MethodReturnType;
-use Medas\PhpTokenizer\StatementTypeFinder;
-use Medas\PhpTokenizer\StatementTypes\{ClassPropertyDeclaration,
-    DeclareStatement,
-    FunctionDeclaration,
-    SwitchBranch,
-    UseTraitStatement
+use Medas\PhpTokenizer\{
+    Contexts\MethodReturnType,
+    StatementTypeFinder,
+    StatementTypes\ClassPropertyDeclaration,
+    StatementTypes\DeclareStatement,
+    StatementTypes\FunctionDeclaration,
+    StatementTypes\SwitchBranch,
+    StatementTypes\UseTraitStatement,
+    TokenGroups,
+    TokenTree
 };
-use Medas\PhpTokenizer\TokenGroups;
-use Medas\PhpTokenizer\TokenTree;
 
 #[Service]
 readonly class Psr12Whitespace extends BaseFormatter
@@ -62,7 +61,8 @@ readonly class Psr12Whitespace extends BaseFormatter
 
             // No space between "?type"
             if ($token->is(T_QUESTION_MARK)) {
-                if ($statementType instanceof ClassPropertyDeclaration || $statementType instanceof FunctionDeclaration) {
+                if ($statementType instanceof ClassPropertyDeclaration
+                        || $statementType instanceof FunctionDeclaration) {
                     $token->spaceAfter(false);
                 }
                 else {
@@ -91,9 +91,7 @@ readonly class Psr12Whitespace extends BaseFormatter
                 }
 
                 // No space before ":" in case/default statements if it's the last token
-                if ($token->is(T_COLON)
-                    && $statementType instanceof SwitchBranch
-                    && $token->isLastToken()) {
+                if ($token->is(T_COLON) && $statementType instanceof SwitchBranch && $token->isLastToken()) {
                     $token->previous->spaceAfter(false);
                 }
 
@@ -143,7 +141,7 @@ readonly class Psr12Whitespace extends BaseFormatter
                 T_QUESTION_MARK,
                 T_SQUARE_BRACKET_OPEN,
                 T_VARIABLE,
-            ]
+            ],
         );
     }
 
@@ -180,7 +178,7 @@ readonly class Psr12Whitespace extends BaseFormatter
             [
                 T_COMMA,
                 T_SEMICOLON,
-            ]
+            ],
         );
     }
 
@@ -212,8 +210,8 @@ readonly class Psr12Whitespace extends BaseFormatter
             if ($token->next) {
                 // No space between pluses and minuses followed by opening round brackets
                 if ($token->previous->is($operatorsAndKeywords)
-                    && $token->is([T_PLUS, T_MINUS])
-                    && $token->next->is(T_ROUND_BRACKET_OPEN)) {
+                        && $token->is([T_PLUS, T_MINUS])
+                        && $token->next->is(T_ROUND_BRACKET_OPEN)) {
                     $token->spaceAfter(false);
                 }
 
@@ -229,7 +227,7 @@ readonly class Psr12Whitespace extends BaseFormatter
 
                 // No spaces between variables and [
                 if ($token->is([T_VARIABLE, T_ROUND_BRACKET_CLOSE, T_STRING])
-                    && $token->next->is(T_SQUARE_BRACKET_OPEN)) {
+                        && $token->next->is(T_SQUARE_BRACKET_OPEN)) {
                     $token->spaceAfter(false);
                 }
 
@@ -237,6 +235,7 @@ readonly class Psr12Whitespace extends BaseFormatter
                 if ($token->is(T_SQUARE_BRACKET_CLOSE) && $token->next->is(T_SQUARE_BRACKET_OPEN)) {
                     $token->spaceAfter(false);
                 }
+
                 // No space between "static" and "()"
                 if ($token->is(T_STATIC) && $token->next->is(T_ROUND_BRACKET_OPEN)) {
                     $token->spaceAfter(false);
@@ -256,16 +255,15 @@ readonly class Psr12Whitespace extends BaseFormatter
 
     private function getSpaceAfterForbidden(): array
     {
-        return
-            [
-                T_CURLY_BRACKET_OPEN,
-                T_DOUBLE_COLON,
-                T_ELLIPSIS,
-                T_ENCAPSED_AND_WHITESPACE,
-                T_EXCLAMATION_POINT,
-                T_OBJECT_OPERATOR,
-                T_ROUND_BRACKET_OPEN,
-                T_SQUARE_BRACKET_OPEN,
-            ];
+        return [
+            T_CURLY_BRACKET_OPEN,
+            T_DOUBLE_COLON,
+            T_ELLIPSIS,
+            T_ENCAPSED_AND_WHITESPACE,
+            T_EXCLAMATION_POINT,
+            T_OBJECT_OPERATOR,
+            T_ROUND_BRACKET_OPEN,
+            T_SQUARE_BRACKET_OPEN,
+        ];
     }
 }

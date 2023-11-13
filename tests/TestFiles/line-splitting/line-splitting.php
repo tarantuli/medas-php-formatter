@@ -58,4 +58,29 @@ class Test
             ],
         ]);
     }
+
+    private function getSpaceAfterRequired(): array
+    {
+        return array_merge(
+            $this->tokenGroups->arithmicOperators(),
+            $this->tokenGroups->assignmentOperators(),
+            $this->tokenGroups->bitwiseOperators(),
+            $this->tokenGroups->comparisonOperators(),
+            $this->tokenGroups->controlKeywords(),
+            $this->tokenGroups->logicalOperators(),
+            $this->tokenGroups->typeOperators(),
+            [
+                T_AMPERSAND,
+                T_AS,
+                T_ASSIGNMENT,
+                T_CASE,
+                T_COLON,
+                T_DOC_COMMENT,
+                T_DOUBLE_ARROW,
+                T_PIPE,
+                T_QUESTION_MARK,
+                T_RETURN,
+            ],
+        );
+    }
 }

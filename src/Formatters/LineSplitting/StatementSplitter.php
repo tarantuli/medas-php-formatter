@@ -152,6 +152,11 @@ readonly class StatementSplitter
             return;
         }
 
+        if ($previousStatement->lastToken()->is(T_COMMA)) {
+            // No blank lines between comma separated listing
+            return;
+        }
+
         if ($statement->block === $previousStatement->block) {
             $previousStatement->blankLineAfter();
         }
