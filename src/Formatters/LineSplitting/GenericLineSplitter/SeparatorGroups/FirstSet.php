@@ -19,6 +19,8 @@ class FirstSet implements SeparatorSet
         $this->groups = [
             new SeparatorGroup('ternary', [T_QUESTION_MARK, T_COLON], maxDepth: 0),
             new SeparatorGroup('comma', [T_COMMA], splitAfter: true, maxDepth: 1),
+            new SeparatorGroup('and/or', [T_BOOLEAN_AND, T_BOOLEAN_OR, T_LOGICAL_AND, T_LOGICAL_OR], maxDepth: 0),
+            new SeparatorGroup('arithmetic', [T_PLUS, T_MINUS], maxDepth: 0),
         ];
     }
 
