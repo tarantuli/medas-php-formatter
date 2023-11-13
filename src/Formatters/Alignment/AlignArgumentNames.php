@@ -48,7 +48,8 @@ readonly class AlignArgumentNames extends BaseFormatter
                     $token->previous->extraSpacesAfter += $prefixLengthsPerRootStatement[$id] - $currentLength;
                 }
                 else {
-                    $placeholder=  new Token(1, str_repeat(' ', $prefixLengthsPerRootStatement[$id]));
+                    $placeholder = new Token(1, str_repeat(' ', $prefixLengthsPerRootStatement[$id]));
+
                     $token->statement->prependToken($placeholder);
                 }
 
