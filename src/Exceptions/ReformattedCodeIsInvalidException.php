@@ -14,6 +14,7 @@ class ReformattedCodeIsInvalidException extends BaseException
 
         if (is_writable($logfile)) {
             file_put_contents($logfile, $code);
+
             parent::__construct($errorMessage, $logfile);
         }
         else {

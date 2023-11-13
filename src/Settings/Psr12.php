@@ -19,6 +19,7 @@ class Psr12 extends Settings
     public function __construct()
     {
         parent::__construct();
+
         $this->document->setMaxLineLength(80);
         $this->addFormatter(service(SingleLineControlBodiesEncloser::class));
         $this->addFormatter(service(KeywordsToLowercase::class));

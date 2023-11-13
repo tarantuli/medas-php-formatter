@@ -49,6 +49,7 @@ readonly class NewImportsInserter
             $statement = $tree->block()->appendNewStatement();
 
             $this->processGroupedImport($statement, $fqn, $alias);
+
             $tree->block()->moveStatementAfter($statement, $after);
         }
     }

@@ -39,6 +39,7 @@ readonly class KeepOriginalObjectOperatorBreaks extends BaseFormatter
 
         while ($aToken = $statement->getToken($index)) {
             $statement->removeToken($aToken);
+
             $newStatement->appendToken($aToken);
         }
     }

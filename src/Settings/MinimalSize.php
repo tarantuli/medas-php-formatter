@@ -9,6 +9,7 @@ class MinimalSize extends Settings
     public function __construct()
     {
         parent::__construct();
+
         $this->document->setLineEnding(new LineEndings\NoLineEnding())
             ->setIndentation(new Indentations\NoIndentation());
     }

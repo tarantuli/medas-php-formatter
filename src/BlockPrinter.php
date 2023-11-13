@@ -21,6 +21,7 @@ class BlockPrinter
         $this->lineEndingLength = strlen($lineEnding);
 
         ob_start();
+
         $this->printBlock($block);
 
         // A new line is required at the end
@@ -52,6 +53,7 @@ class BlockPrinter
 
             if ($token->lineBreakAfter) {
                 echo $this->lineEnding;
+
                 $this->printIndentation($statement);
             }
             elseif ($token->spaceAfter && !$token->isLastToken()) {

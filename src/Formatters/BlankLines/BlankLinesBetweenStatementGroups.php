@@ -59,11 +59,7 @@ readonly class BlankLinesBetweenStatementGroups extends BaseFormatter
 
             $subType = $this->subType($statement);
 
-            if (
-                $previousSubType !== null
-                && $subType !== $previousSubType
-                && !$statement->firstToken()->inString
-            ) {
+            if ($previousSubType !== null && $subType !== $previousSubType && !$statement->firstToken()->inString) {
                 $statement->previous()->blankLineAfter();
             }
 
@@ -75,6 +71,7 @@ readonly class BlankLinesBetweenStatementGroups extends BaseFormatter
     {
         $foundFirstTrueToken = false;
         $firstTrueTokenText = null;
+
         foreach ($statement as $token) {
             if ($token->is($this->tokenGroups->assignmentOperators())) {
                 return 1;

@@ -47,6 +47,7 @@ readonly class SingleLineControlBodiesEncloser extends BaseFormatter
         $closingStatement = new Statement($statement->block);
 
         $closingStatement->appendToken(new Token(1, '}'));
+
         $statement->block->insertStatementAfter($closingStatement, $statement);
     }
 
@@ -73,6 +74,7 @@ readonly class SingleLineControlBodiesEncloser extends BaseFormatter
         foreach ($statement as $token) {
             if ($inBody) {
                 $statement->removeToken($token);
+
                 $bodyStatement->appendToken($token);
             }
 

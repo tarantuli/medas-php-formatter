@@ -14,9 +14,9 @@ class Option
 
     public function __construct(
         public readonly SeparatorGroup $group,
-        public readonly int   $depth,
-        public readonly int   $cluster,
-        public readonly int   $openerIndex,
+        public readonly int            $depth,
+        public readonly int            $cluster,
+        public readonly int            $openerIndex,
     )
     {
     }

@@ -4,12 +4,8 @@ declare(strict_types=1);
 
 namespace Medas\PhpFormatter\Formatters\LineSplitting;
 
-use Medas\Core\Attributes\ConfigValue;
-use Medas\Core\Attributes\Service;
+use Medas\Core\Attributes\{ConfigValue, Service};
 use Medas\PhpFormatter\ConfigOptions\DumpOptionAssessment;
-use Medas\PhpFormatter\Formatters\LineSplitting\GenericLineSplitter\Option;
-use Medas\PhpFormatter\Formatters\LineSplitting\GenericLineSplitter\OptionAssessment;
-use Medas\PhpFormatter\Formatters\LineSplitting\GenericLineSplitter\OptionAssessmentDumper;
 use Medas\PhpTokenizer\Statement;
 
 #[Service]
@@ -21,13 +17,13 @@ readonly class GenericLineSplitter
         private StatementSplitter                  $statementSplitter,
 
         #[ConfigValue(DumpOptionAssessment::class)]
-        private bool $dumpOptionAssessment,
+        private bool                               $dumpOptionAssessment,
     )
     {
     }
 
     public function split(
-        Statement $statement,
+        Statement                                        $statement,
         GenericLineSplitter\SeparatorGroups\SeparatorSet $set,
     ): bool
     {
@@ -60,12 +56,13 @@ readonly class GenericLineSplitter
 
             $options = array_merge($options, $subOptions);
         }
+
         return $options;
     }
 
-    private function selectBestOption(array $options, Statement $statement): Option|null
+    private function selectBestOption(array $options, Statement $statement): GenericLineSplitter\Option|null
     {
-        /** @var OptionAssessment[] $assessments */
+        /** @var GenericLineSplitter\OptionAssessment[] $assessments */
         $assessments = [];
 
         foreach ($options as $option) {
@@ -78,10 +75,15 @@ readonly class GenericLineSplitter
 
         if ($this->dumpOptionAssessment) {
             // Inject it here, so it's not initialized when not needed
-            service(OptionAssessmentDumper::class)->dump($statement, $assessments);
+            service(GenericLineSplitter\OptionAssessmentDumper::class)->dump($statement, $assessments);
         }
 
-        usort($assessments, fn(OptionAssessment $a, OptionAssessment $b) => -1 * ($a->quality <=> $b->quality));
+        usort(
+            $assessments,
+
+            fn(GenericLineSplitter\OptionAssessment $a, GenericLineSplitter\OptionAssessment $b) =>
+                -1 * ($a->quality <=> $b->quality)
+        );
 
         return $assessments[0]->quality === null ? null : $assessments[0]->option;
     }

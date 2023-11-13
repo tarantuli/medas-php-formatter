@@ -16,6 +16,7 @@ readonly class TrailingCommaSplitter extends BaseFormatter
         T_CURLY_BRACKET_CLOSE => T_CURLY_BRACKET_OPEN,
         T_ROUND_BRACKET_CLOSE => T_ROUND_BRACKET_OPEN,
     ];
+
     public const CLOSERS = [
         T_SQUARE_BRACKET_CLOSE,
         T_CURLY_BRACKET_CLOSE,
@@ -38,7 +39,7 @@ readonly class TrailingCommaSplitter extends BaseFormatter
     private function findSomethingToSplit(Job $job): bool
     {
         foreach ($job->tree->block() as $statement) {
-            for ($commaIndex = $statement->tokenCount() -1; $commaIndex >= 0; --$commaIndex) {
+            for ($commaIndex = $statement->tokenCount() - 1; $commaIndex >= 0; --$commaIndex) {
                 $token = $statement->getToken($commaIndex);
 
                 if (!$token->is(T_COMMA)) {

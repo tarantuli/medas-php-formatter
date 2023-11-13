@@ -4,13 +4,9 @@ declare(strict_types=1);
 
 namespace Medas\PhpFormatter\Formatters\LineSplitting\GenericLineSplitter;
 
-use Medas\Console\Formats\Color;
-use Medas\Console\Printer;
-use Medas\Console\Table;
-use Medas\Console\Text;
+use Medas\Console\{Formats\Color, Printer, Table, Text};
 use Medas\Core\Attributes\Service;
-use Medas\PhpTokenizer\BlockDumper;
-use Medas\PhpTokenizer\Statement;
+use Medas\PhpTokenizer\{BlockDumper, Statement};
 
 #[Service]
 readonly class OptionAssessmentDumper

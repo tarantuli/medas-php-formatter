@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Medas\PhpFormatter\Settings;
 
-use Medas\PhpFormatter\Formatters\{Alignment\AlignArgumentNames,
+use Medas\PhpFormatter\Formatters\{
+    Alignment\AlignArgumentNames,
     BlankLines\BlankLinesBeforeBlocks,
     BlankLines\BlankLinesBetweenClassSections,
     BlankLines\BlankLinesBetweenStatementGroups,
@@ -23,7 +24,9 @@ class Medas extends Psr12
     public function __construct()
     {
         parent::__construct();
+
         service(AdditionalTokensDefiner::class)->define();
+
         $this->addPreparser(service(NoCommentsAtLineEnd::class));
 
         // TrailingCommaSplitter should be after BlankLinesBetweenClassSections

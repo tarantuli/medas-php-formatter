@@ -96,6 +96,7 @@ readonly class StatementSplitter
 
         if ($statement->blankLineAfter) {
             $finalStatement->blankLineAfter();
+
             $statement->blankLineAfter(false);
         }
 
@@ -105,6 +106,7 @@ readonly class StatementSplitter
             $token = $statement->getToken($i);
 
             $statement->removeToken($token);
+
             $finalStatement->prependToken($token);
         }
     }
@@ -120,6 +122,7 @@ readonly class StatementSplitter
 
         if ($statement->blankLineAfter) {
             $newStatement->blankLineAfter();
+
             $statement->blankLineAfter(false);
         }
 
