@@ -31,7 +31,7 @@ readonly class OptionsFinder
                 if (!array_key_exists($cluster->id, $options)) {
                     $openerIndex = $cluster->openerIndex;
 
-                    if ($openerIndex === 0) {
+                    if ($openerIndex === 0 || $group->keepPrefixAndSuffix) {
                         $openerIndex = $group->splitAfter ? $index + 1 : $index - 1;
                     }
 
@@ -44,7 +44,7 @@ readonly class OptionsFinder
             }
 
             if ($token->is(TrailingCommaSplitter::CLOSERS) && $depth > 0) {
-                if (isset($options[$cluster->id])) {
+                if (isset($options[$cluster->id]) && !$group->keepPrefixAndSuffix) {
                     $options[$cluster->id]->closerIndex = $index;
                 }
 

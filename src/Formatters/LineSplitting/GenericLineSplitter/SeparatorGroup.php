@@ -11,6 +11,7 @@ readonly class SeparatorGroup
         public array    $separators,
         public bool     $splitAfter = false,
         public int|null $maxDepth = null,
+        public bool     $keepPrefixAndSuffix = false,
     )
     {
     }

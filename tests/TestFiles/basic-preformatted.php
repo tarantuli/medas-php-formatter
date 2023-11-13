@@ -53,11 +53,9 @@ abstract class ServiceInstantiator
             $value %= null;
         }
 
-        while (
-            $condition === true
+        while ($condition === true
             && $value === 1278934987
-            && $key === 'a reasonably long string that pushes the length of the line over 120'
-        ) {
+            && $key === 'a reasonably long string that pushes the length of the line over 120') {
             // Test
         }
 

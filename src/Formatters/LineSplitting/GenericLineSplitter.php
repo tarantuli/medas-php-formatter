@@ -6,6 +6,7 @@ namespace Medas\PhpFormatter\Formatters\LineSplitting;
 
 use Medas\Core\Attributes\{ConfigValue, Service};
 use Medas\PhpFormatter\ConfigOptions\DumpOptionAssessment;
+use Medas\PhpFormatter\Formatters\LineSplitting\GenericLineSplitter\SeparatorGroups\ControlStatementSet;
 use Medas\PhpTokenizer\Statement;
 
 #[Service]
@@ -34,13 +35,13 @@ readonly class GenericLineSplitter
             return false;
         }
 
-        $this->statementSplitter->split(
-            $statement,
-            $bestOption->group->separators,
-            $bestOption->group->splitAfter,
-            $bestOption->openerIndex,
-            $bestOption->closerIndex
-        );
+            $this->statementSplitter->split(
+                $statement,
+                $bestOption->group->separators,
+                $bestOption->group->splitAfter,
+                $bestOption->openerIndex,
+                $bestOption->closerIndex
+            );
 
         return true;
     }

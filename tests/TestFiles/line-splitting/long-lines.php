@@ -7,19 +7,15 @@ use Medas\Core\Attributes\{ConfigOptions, ConfigValue};
 use Medas\PhpFormatter\{BlockPrinter, CodeValidator};
 use Medas\PhpTokenizer\{BlockDumper, Tokenizer, TreeBuilder};
 
-if (
-    $this->context === self::FUNCTION_BODY
+if ($this->context === self::FUNCTION_BODY
     && $type === T_CURLY_BRACKET_CLOSE
-    && $this->currentDepth === $this->endOfFunctionDepth + 1
-) {
+    && $this->currentDepth === $this->endOfFunctionDepth + 1) {
     $this->context = self::CLASS_BODY;
 }
 
-if (
-    $this->context === self::FUNCTION_BODY
+if ($this->context === self::FUNCTION_BODY
     and $type === T_CURLY_BRACKET_CLOSE
-    or $this->currentDepth === $this->endOfFunctionDepth + 1
-) {
+    or $this->currentDepth === $this->endOfFunctionDepth + 1) {
     $this->context = self::CLASS_BODY;
 }
 
