@@ -7,5 +7,6 @@ namespace Medas\PhpFormatter\Settings;
 class ImportSettings
 {
     public bool $importGlobalNamespace = false;
+
     public int|null $maxRelativeDepth = null;
 }

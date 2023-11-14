@@ -13,6 +13,7 @@ class Job
 
     /** @var Prefix[] */
     public array $candidates = [];
+
     public array $statements = [];
 
     public function __construct(

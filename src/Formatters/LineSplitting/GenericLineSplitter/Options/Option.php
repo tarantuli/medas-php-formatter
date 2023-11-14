@@ -12,6 +12,7 @@ class Option
 
     /** @var int[] */
     public array $breakpointIndices = [];
+
     public int|null $closerIndex = null;
 
     public function __construct(

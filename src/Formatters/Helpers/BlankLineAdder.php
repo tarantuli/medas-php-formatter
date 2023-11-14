@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Medas\PhpFormatter\Formatters\Helpers;
 
 use Medas\Core\Attributes\Service;
-use Medas\PhpTokenizer\{Statement,
+use Medas\PhpTokenizer\{
+    Statement,
     StatementTypeFinder,
     StatementTypes\AttributeStatement,
-    StatementTypes\ClassPropertyDeclaration,
     StatementTypes\Comment,
     StatementTypes\SwitchBranch,
     TokenTree

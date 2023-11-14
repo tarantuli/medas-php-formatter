@@ -7,6 +7,7 @@ namespace Medas\PhpFormatter\Formatters\LineSplitting\GenericLineSplitter;
 class ClusterManager
 {
     private int $id;
+
     private Cluster $currentCluster;
 
     /** @var Cluster[] */

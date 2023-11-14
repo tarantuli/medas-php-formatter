@@ -7,8 +7,11 @@ namespace Medas\PhpFormatter\Formatters\Imports\Grouping;
 class Prefix
 {
     public int $count = 0;
+
     public int $length;
+
     public int $maxChildDepth = 0;
+
     public int $prefixDepth;
 
     public function __construct(
