@@ -166,8 +166,9 @@ readonly class Psr12BlankLines extends BaseFormatter
             // Add additional depth levels to each statement equal to the number of open switch blocks
             // decreased by one if this statement itself is a case or default statement
             $statement->additionalDepth += count($switchDepths) - $type instanceof SwitchBranch;
+            $firstNonCommentToken = $statement->firstNonCommentToken();
 
-            if ($statement->firstToken()->is(T_SWITCH)) {
+            if ($firstNonCommentToken && $firstNonCommentToken->is(T_SWITCH)) {
                 $switchDepths[] = $statement->block->depth + 1;
             }
         }

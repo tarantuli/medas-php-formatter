@@ -60,7 +60,12 @@ class FormatterTest extends BaseTestClass
 
     public function testSwitch(): void
     {
-        $this->assertRemainsTheSame('switch-statement', new Psr12());
+        $this->assertRemainsTheSame('switch-statement', new Medas());
+    }
+
+    public function testSwitchPsr12(): void
+    {
+        $this->assertRemainsTheSame('psr12-switch-statement', new Psr12());
     }
 
     public function testComments(): void
