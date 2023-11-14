@@ -20,7 +20,7 @@ class ControlStatementSet implements BreakpointSet
         ]];
     }
 
-    public function groupsOfGroups(): array
+    public function groupsOfDefinitions(): array
     {
         return $this->groups;
     }

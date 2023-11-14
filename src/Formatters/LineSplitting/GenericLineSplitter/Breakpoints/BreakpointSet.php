@@ -7,5 +7,5 @@ namespace Medas\PhpFormatter\Formatters\LineSplitting\GenericLineSplitter\Breakp
 interface BreakpointSet
 {
     /** @return Definition[][] */
-    public function groupsOfGroups(): array;
+    public function groupsOfDefinitions(): array;
 }

@@ -18,7 +18,7 @@ class GenericLineSet implements BreakpointSet
         $this->groups = [
             [
                 new Definition('depth 0 ternary', [T_QUESTION_MARK, T_COLON], maxDepth: 0),
-                new Definition('depth 0 comma', [T_COMMA], splitAfter: true, maxDepth: 0),
+                new Definition('depth 0 comma', [T_COMMA], splitAfter: true, maxDepth: 1),
                 new Definition('depth 0 and/or', [T_BOOLEAN_AND, T_BOOLEAN_OR, T_LOGICAL_AND, T_LOGICAL_OR], maxDepth: 0),
                 new Definition('depth 0 plus/minus', [T_PLUS, T_MINUS], maxDepth: 0),
             ],
@@ -35,7 +35,7 @@ class GenericLineSet implements BreakpointSet
         ];
     }
 
-    public function groupsOfGroups(): array
+    public function groupsOfDefinitions(): array
     {
         return $this->groups;
     }

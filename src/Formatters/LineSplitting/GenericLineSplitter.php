@@ -27,8 +27,8 @@ readonly class GenericLineSplitter
         GenericLineSplitter\Breakpoints\BreakpointSet $set,
     ): bool
     {
-        foreach ($set->groupsOfGroups() as $group) {
-            $options = $this->gatherOptions($group, $statement);
+        foreach ($set->groupsOfDefinitions() as $definitions) {
+            $options = $this->gatherOptions($definitions, $statement);
             $bestOption = $this->selectBestOption($options, $statement);
 
             if ($bestOption === null) {
@@ -50,13 +50,13 @@ readonly class GenericLineSplitter
         return false;
     }
 
-    /** @param GenericLineSplitter\Breakpoints\Definition[] $groups */
-    private function gatherOptions(array $groups, Statement $statement): array
+    /** @param GenericLineSplitter\Breakpoints\Definition[] $definitions */
+    private function gatherOptions(array $definitions, Statement $statement): array
     {
         $options = [];
 
-        foreach ($groups as $group) {
-            if (!$subOptions = $this->optionFinder->find($statement, $group)) {
+        foreach ($definitions as $definition) {
+            if (!$subOptions = $this->optionFinder->find($statement, $definition)) {
                 continue;
             }
 
