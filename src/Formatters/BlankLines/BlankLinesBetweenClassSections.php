@@ -20,9 +20,9 @@ readonly class BlankLinesBetweenClassSections extends BaseFormatter
     public function format(Job $job): void
     {
         $this->blankLineAdder->afterTypes($job->tree, [
-            UseTraitStatement::class,
-            ClassConstDeclaration::class,
-            ClassPropertyDeclaration::class,
+            UseTraitStatement::class => true,
+            ClassConstDeclaration::class => false,
+            ClassPropertyDeclaration::class => false,
         ]);
 
         $this->blankLineAdder->beforeTypes($job->tree, [

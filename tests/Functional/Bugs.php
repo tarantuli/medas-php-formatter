@@ -27,4 +27,9 @@ class Bugs extends BaseTestClass
     {
         $this->assertRemainsTheSame('bugs/bugs4', new Medas());
     }
+
+    public function testEmptyTrait(): void
+    {
+        $this->assertRemainsTheSame('bugs/empty-trait', new Medas());
+    }
 }

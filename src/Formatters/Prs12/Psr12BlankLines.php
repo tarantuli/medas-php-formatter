@@ -35,12 +35,12 @@ readonly class Psr12BlankLines extends BaseFormatter
     public function format(Job $job): void
     {
         $this->blankLineAdder->afterTypes($job->tree, [
-            PhpOpenTag::class,
-            DeclareStatement::class,
-            NamespaceDeclaration::class,
-            UseClassStatement::class,
-            UseFunctionStatement::class,
-            UseConstStatement::class,
+            PhpOpenTag::class => true,
+            DeclareStatement::class => true,
+            NamespaceDeclaration::class => true,
+            UseClassStatement::class => true,
+            UseFunctionStatement::class => true,
+            UseConstStatement::class => true,
         ]);
 
         $this->afterAttributes($job->tree);

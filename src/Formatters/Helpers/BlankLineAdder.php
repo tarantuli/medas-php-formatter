@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Medas\PhpFormatter\Formatters\Helpers;
 
 use Medas\Core\Attributes\Service;
-use Medas\PhpTokenizer\{
-    Statement,
+use Medas\PhpTokenizer\{Statement,
     StatementTypeFinder,
     StatementTypes\AttributeStatement,
+    StatementTypes\ClassPropertyDeclaration,
     StatementTypes\Comment,
     StatementTypes\SwitchBranch,
     TokenTree
@@ -31,11 +31,11 @@ readonly class BlankLineAdder
         foreach ($tree->statements() as $statement) {
             $type = $this->statementTypeFinder->for($statement);
 
-            foreach ($afterTypes as $groupType) {
+            foreach ($afterTypes as $groupType => $notInBetween) {
                 if ($type instanceof $groupType) {
                     $statement->blankLineAfter();
 
-                    if ($previousType instanceof $groupType) {
+                    if ($notInBetween && $previousType instanceof $groupType) {
                         $previousStatement->blankLineAfter(false);
                     }
                 }
