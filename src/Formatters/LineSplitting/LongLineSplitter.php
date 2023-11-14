@@ -16,9 +16,6 @@ use Medas\PhpTokenizer\{
 #[Service]
 readonly class LongLineSplitter extends BaseFormatter
 {
-    /** @var GenericLineSplitter\SeparatorGroups\SeparatorSet[] */
-    private array $sets;
-
     public function __construct(
         #[ConfigValue(MaxLineLength::class)]
         private int                         $maxLineLength,
@@ -27,11 +24,6 @@ readonly class LongLineSplitter extends BaseFormatter
         private FunctionDeclarationSplitter $functionDeclarationSplitter,
     )
     {
-        $this->sets = [
-            GenericLineSplitter\SeparatorGroups\FirstSet::instance(),
-            GenericLineSplitter\SeparatorGroups\SecondSet::instance(),
-            GenericLineSplitter\SeparatorGroups\ThirdSet::instance(),
-        ];
     }
 
     public function format(Job $job): void
@@ -45,7 +37,7 @@ readonly class LongLineSplitter extends BaseFormatter
 
     private function findSomethingToSplit(Job $job): bool
     {
-        foreach ($job->tree->block() as $i => $statement) {
+        foreach ($job->tree->block() as $statement) {
             $length = $this->statementLength($statement);
 
             if ($length <= $this->maxLineLength) {
@@ -91,16 +83,13 @@ readonly class LongLineSplitter extends BaseFormatter
         if ($type instanceof ControlStatement) {
             return $this->genericLineSplitter->split(
                 $statement,
-                GenericLineSplitter\SeparatorGroups\ControlStatementSet::instance()
+                GenericLineSplitter\Breakpoints\ControlStatementSet::instance()
             );
         }
 
-        foreach ($this->sets as $set) {
-            if ($this->genericLineSplitter->split($statement, $set)) {
-                return true;
-            }
-        }
-
-        return false;
+        return $this->genericLineSplitter->split(
+            $statement,
+            GenericLineSplitter\Breakpoints\GenericLineSet::instance()
+        );
     }
 }

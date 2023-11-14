@@ -2,17 +2,21 @@
 
 declare(strict_types=1);
 
-namespace Medas\PhpFormatter\Formatters\LineSplitting\GenericLineSplitter;
+namespace Medas\PhpFormatter\Formatters\LineSplitting\GenericLineSplitter\Options;
 
 use Medas\Core\Attributes\Service;
-use Medas\PhpFormatter\Formatters\LineSplitting\TrailingCommaSplitter;
+use Medas\PhpFormatter\Formatters\LineSplitting\{
+    GenericLineSplitter\Breakpoints,
+    GenericLineSplitter\ClusterManager,
+    TrailingCommaSplitter
+};
 use Medas\PhpTokenizer\Statement;
 
 #[Service]
-readonly class OptionsFinder
+readonly class Finder
 {
     /** @return Option[] */
-    public function find(Statement $statement, SeparatorGroup $group): array
+    public function find(Statement $statement, Breakpoints\Definition $group): array
     {
         /** @var Option[][] $options */
         $options = [];
@@ -40,7 +44,7 @@ readonly class OptionsFinder
 
                 ++$options[$cluster->id]->counter;
 
-                $options[$cluster->id]->separatorIndices[] = $index;
+                $options[$cluster->id]->breakpointIndices[] = $index;
             }
 
             if ($token->is(TrailingCommaSplitter::CLOSERS) && $depth > 0) {

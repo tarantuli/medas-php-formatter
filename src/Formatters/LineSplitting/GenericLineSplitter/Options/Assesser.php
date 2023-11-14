@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Medas\PhpFormatter\Formatters\LineSplitting\GenericLineSplitter;
+namespace Medas\PhpFormatter\Formatters\LineSplitting\GenericLineSplitter\Options;
 
 use Medas\Core\Attributes\Service;
 use Medas\PhpFormatter\Formatters\LineSplitting\TrailingCommaSplitter;
 use Medas\PhpTokenizer\Statement;
 
 #[Service]
-readonly class OptionAssesser
+readonly class Assesser
 {
-    public function assess(Statement $statement, Option $option): OptionAssessment
+    public function assess(Statement $statement, Option $option): Assessment
     {
         $lengths = [];
         $currentLength = 0;
@@ -24,7 +24,7 @@ readonly class OptionAssesser
                 ++$depth;
             }
 
-            if ($option->group->splitAfter) {
+            if ($option->breakpointDefinition->splitAfter) {
                 $currentLength += strlen($token->text) + $token->extraSpacesAfter;
 
                 if ($inPrefix && $index === $option->openerIndex) {
@@ -34,7 +34,7 @@ readonly class OptionAssesser
                 }
 
                 if (!$inPrefix && !$inSuffix) {
-                    if (in_array($index, $option->separatorIndices, true)) {
+                    if (in_array($index, $option->breakpointIndices, true)) {
                         $lengths[] = $currentLength;
                         $currentLength = 0;
                     }
@@ -46,7 +46,7 @@ readonly class OptionAssesser
             }
             else {
                 if (!$inPrefix && !$inSuffix) {
-                    if (in_array($index, $option->separatorIndices, true)) {
+                    if (in_array($index, $option->breakpointIndices, true)) {
                         if ($currentLength) {
                             $lengths[] = $currentLength;
                         }
@@ -78,7 +78,7 @@ readonly class OptionAssesser
 
         $lengths[] = $currentLength;
 
-        return new OptionAssessment($option, $lengths, $this->quality($option, $lengths));
+        return new Assessment($option, $lengths, $this->quality($option, $lengths));
     }
 
     private function quality(Option $option, array $lengths): float|null

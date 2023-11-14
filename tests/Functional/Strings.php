@@ -12,4 +12,9 @@ class Strings extends BaseTestClass
     {
         $this->assertRemainsTheSame('strings/heredoc', new Medas());
     }
+
+    public function testComplex(): void
+    {
+        $this->assertRemainsTheSame('strings/complex', new Medas());
+    }
 }

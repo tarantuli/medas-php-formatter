@@ -12,46 +12,51 @@ use Medas\PhpTokenizer\Statement;
 readonly class GenericLineSplitter
 {
     public function __construct(
-        private GenericLineSplitter\OptionsFinder  $optionsFinder,
-        private GenericLineSplitter\OptionAssesser $assesser,
-        private StatementSplitter                  $statementSplitter,
+        private GenericLineSplitter\Options\Finder   $optionFinder,
+        private GenericLineSplitter\Options\Assesser $assesser,
+        private StatementSplitter                    $statementSplitter,
 
         #[ConfigValue(DumpOptionAssessment::class)]
-        private bool                               $dumpOptionAssessment,
+        private bool                                 $dumpOptionAssessment,
     )
     {
     }
 
     public function split(
-        Statement                                        $statement,
-        GenericLineSplitter\SeparatorGroups\SeparatorSet $set,
+        Statement                                     $statement,
+        GenericLineSplitter\Breakpoints\BreakpointSet $set,
     ): bool
     {
-        $options = $this->gatherOptions($set, $statement);
-        $bestOption = $this->selectBestOption($options, $statement);
+        foreach ($set->groupsOfGroups() as $group) {
+            $options = $this->gatherOptions($group, $statement);
+            $bestOption = $this->selectBestOption($options, $statement);
 
-        if ($bestOption === null) {
-            return false;
+            if ($bestOption === null) {
+                continue;
+            }
+
+            $this->statementSplitter->split(
+                $statement,
+                $bestOption->breakpointDefinition->separators,
+                $bestOption->breakpointDefinition->splitAfter,
+                $bestOption->openerIndex,
+                $bestOption->closerIndex,
+                $bestOption->breakpointDefinition->keepPrefixAndSuffix ? 2 : 1,
+            );
+
+            return true;
         }
 
-        $this->statementSplitter->split(
-            $statement,
-            $bestOption->group->separators,
-            $bestOption->group->splitAfter,
-            $bestOption->openerIndex,
-            $bestOption->closerIndex,
-            $bestOption->group->keepPrefixAndSuffix ? 2 : 1,
-        );
-
-        return true;
+        return false;
     }
 
-    private function gatherOptions(GenericLineSplitter\SeparatorGroups\SeparatorSet $set, Statement $statement): array
+    /** @param GenericLineSplitter\Breakpoints\Definition[] $groups */
+    private function gatherOptions(array $groups, Statement $statement): array
     {
         $options = [];
 
-        foreach ($set->groups() as $group) {
-            if (!$subOptions = $this->optionsFinder->find($statement, $group)) {
+        foreach ($groups as $group) {
+            if (!$subOptions = $this->optionFinder->find($statement, $group)) {
                 continue;
             }
 
@@ -61,9 +66,9 @@ readonly class GenericLineSplitter
         return $options;
     }
 
-    private function selectBestOption(array $options, Statement $statement): GenericLineSplitter\Option|null
+    private function selectBestOption(array $options, Statement $statement): GenericLineSplitter\Options\Option|null
     {
-        /** @var GenericLineSplitter\OptionAssessment[] $assessments */
+        /** @var GenericLineSplitter\Options\Assessment[] $assessments */
         $assessments = [];
 
         foreach ($options as $option) {
@@ -76,12 +81,12 @@ readonly class GenericLineSplitter
 
         if ($this->dumpOptionAssessment) {
             // Inject it here, so it's not initialized when not needed
-            service(GenericLineSplitter\OptionAssessmentDumper::class)->dump($statement, $assessments);
+            service(GenericLineSplitter\Options\AssessmentDumper::class)->dump($statement, $assessments);
         }
 
         usort(
             $assessments,
-            fn(GenericLineSplitter\OptionAssessment $a, GenericLineSplitter\OptionAssessment $b) =>
+            fn(GenericLineSplitter\Options\Assessment $a, GenericLineSplitter\Options\Assessment $b) =>
                 -1 * ($a->quality <=> $b->quality)
         );
 

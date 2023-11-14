@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Medas\PhpFormatter\Formatters\LineSplitting\GenericLineSplitter;
+namespace Medas\PhpFormatter\Formatters\LineSplitting\GenericLineSplitter\Options;
 
 use Medas\Console\{Formats\Color, Printer, Table, Text};
 use Medas\Core\Attributes\Service;
 use Medas\PhpTokenizer\{BlockDumper, Statement};
 
 #[Service]
-readonly class OptionAssessmentDumper
+readonly class AssessmentDumper
 {
     public function __construct(
         private BlockDumper $blockDumper,
@@ -18,14 +18,14 @@ readonly class OptionAssessmentDumper
     {
     }
 
-    /** @param OptionAssessment[] $assessments */
+    /** @param Assessment[] $assessments */
     public function dump(Statement $statement, array $assessments): void
     {
         $table = Table::create(['Group', 'Depth', 'Lengths', 'Quality']);
 
         foreach ($assessments as $assessment) {
             $table->data[] = [
-                $assessment->option->group->name,
+                $assessment->option->breakpointDefinition->name,
                 $assessment->option->depth,
                 $assessment->lengths,
                 (int) floor(1000 * $assessment->quality),
