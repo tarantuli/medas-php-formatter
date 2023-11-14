@@ -2,12 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Medas\PhpFormatterTest\Functional;
+namespace Medas\PhpFormatterTest\Functional\Replacements;
 
 use Medas\PhpFormatter\Formatters\Replacements\UseDieInsteadOfExit;
 use Medas\PhpFormatter\Formatters\Replacements\UseExitInsteadOfDie;
 use Medas\PhpFormatter\Formatters\Replacements\UseImplodeInsteadOfJoin;
 use Medas\PhpFormatter\Settings\Psr12;
+use Medas\PhpFormatterTest\Functional\BaseTestClass;
 
 class TokenReplacementTest extends BaseTestClass
 {
