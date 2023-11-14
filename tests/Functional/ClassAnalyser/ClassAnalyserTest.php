@@ -19,7 +19,7 @@ class ClassAnalyserTest extends BaseTestClass
         self::assertEquals('MyNamespace', $results->namespace);
         self::assertEquals('MyClass', $results->name);
         self::assertEquals('\MyNamespace\MyClass', $results->fqn);
-        self::assertEquals('\MyNamespace\ChildNamespace\BaseClass', $results->extends->fqn);
+        self::assertEquals('\MyNamespace\ChildNamespace\BaseClass', $results->extends['ChildNamespace\BaseClass']->fqn);
         self::assertCount(2, $results->implements);
         self::assertTrue($results->isClass);
         self::assertCount(29, $results->uses);

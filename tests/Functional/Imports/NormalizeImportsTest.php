@@ -28,4 +28,13 @@ class NormalizeImportsTest extends BaseTestClass
             new Medas()
         );
     }
+
+    public function testMultiExtends(): void
+    {
+        $this->assertChanges(
+            'imports/multi-extends-pre',
+            'imports/multi-extends-post',
+            new Medas()
+        );
+    }
 }
