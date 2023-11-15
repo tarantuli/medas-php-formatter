@@ -10,7 +10,6 @@ use Medas\PhpFormatter\Preparsers\Preparser;
 class Settings
 {
     public DocumentSettings $document;
-
     public ImportSettings $import;
 
     /** @var Preparser[] */

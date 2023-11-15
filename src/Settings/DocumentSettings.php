@@ -7,9 +7,7 @@ namespace Medas\PhpFormatter\Settings;
 class DocumentSettings
 {
     private LineEndings\LineEnding $lineEnding;
-
     private Indentations\Indentation $indentation;
-
     private int|null $maxLineLength;
 
     public function lineEnding(): LineEndings\LineEnding

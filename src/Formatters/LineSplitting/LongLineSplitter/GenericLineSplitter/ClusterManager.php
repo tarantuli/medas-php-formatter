@@ -7,7 +7,6 @@ namespace Medas\PhpFormatter\Formatters\LineSplitting\LongLineSplitter\GenericLi
 class ClusterManager
 {
     private int $id;
-
     private Cluster $currentCluster;
 
     /** @var Cluster[] */

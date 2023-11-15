@@ -11,9 +11,7 @@ use Medas\PhpTokenizer\{Block, Statement};
 class BlockPrinter
 {
     private string $indentation;
-
     private string $lineEnding;
-
     private int $lineEndingLength;
 
     public function print(Block $block, string $indentation, string $lineEnding): string

@@ -9,7 +9,6 @@ use Medas\PhpTokenizer\{TokenCollection, TokenTree};
 class Job
 {
     public TokenCollection $tokens;
-
     public TokenTree $tree;
 
     public function __construct(
