@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace Medas\PhpFormatter\Formatters\LineSplitting\LongLineSplitter\GenericLineSplitter\Options;
 
 use Medas\Core\Attributes\Service;
-use Medas\PhpFormatter\Formatters\LineSplitting\{LongLineSplitter\GenericLineSplitter\Breakpoints\Definition,
-    LongLineSplitter\GenericLineSplitter\ClusterManager,
-    TrailingCommaSplitter};
+use Medas\PhpFormatter\Formatters\LineSplitting\LongLineSplitter\GenericLineSplitter\{
+    Breakpoints\Definition,
+    ClusterManager
+};
+use Medas\PhpFormatter\Formatters\LineSplitting\TrailingCommaSplitter;
 use Medas\PhpTokenizer\Statement;
 
 #[Service]

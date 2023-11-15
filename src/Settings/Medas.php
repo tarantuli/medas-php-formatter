@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Medas\PhpFormatter\Settings;
 
-use Medas\PhpFormatter\Formatters\{Alignment\AlignArgumentNames,
+use Medas\PhpFormatter\Formatters\{
+    Alignment\AlignArgumentNames,
     BlankLines\BlankLinesAfterPropertiesWithAttributes,
     BlankLines\BlankLinesBeforeBlocks,
     BlankLines\BlankLinesBetweenClassSections,
@@ -14,7 +15,8 @@ use Medas\PhpFormatter\Formatters\{Alignment\AlignArgumentNames,
     LineSplitting\KeepOriginalObjectOperatorBreaks,
     LineSplitting\LongLineSplitter,
     LineSplitting\TrailingCommaSplitter,
-    Replacements\UseExitInsteadOfDie};
+    Replacements\UseExitInsteadOfDie
+};
 use Medas\PhpFormatter\Preparsers\NoCommentsAtLineEnd;
 use Medas\PhpTokenizer\AdditionalTokensDefiner;
 
@@ -27,7 +29,6 @@ class Medas extends Psr12
         service(AdditionalTokensDefiner::class)->define();
 
         $this->addPreparser(service(NoCommentsAtLineEnd::class));
-
         $this->addFormatter(service(AlignArgumentNames::class));
         $this->addFormatter(service(BlankLinesAfterPropertiesWithAttributes::class));
         $this->addFormatter(service(BlankLinesBeforeBlocks::class));

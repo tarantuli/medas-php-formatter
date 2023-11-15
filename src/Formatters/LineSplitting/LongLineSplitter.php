@@ -5,25 +5,23 @@ declare(strict_types=1);
 namespace Medas\PhpFormatter\Formatters\LineSplitting;
 
 use Medas\Core\Attributes\{ConfigValue, Service};
-use Medas\PhpFormatter\{ConfigOptions\MaxLineLength,
-    Formatters\BaseFormatter,
-    Formatters\LineSplitting\LongLineSplitter\FunctionDeclarationSplitter,
-    Formatters\LineSplitting\LongLineSplitter\GenericLineSplitter,
-    Job};
-use Medas\PhpTokenizer\{Statement,
+use Medas\PhpFormatter\{ConfigOptions\MaxLineLength, Formatters\BaseFormatter, Job};
+use Medas\PhpTokenizer\{
+    Statement,
     StatementTypeFinder,
     StatementTypes\ControlStatement,
-    StatementTypes\FunctionDeclaration};
+    StatementTypes\FunctionDeclaration
+};
 
 #[Service]
 readonly class LongLineSplitter extends BaseFormatter
 {
     public function __construct(
         #[ConfigValue(MaxLineLength::class)]
-        private int                         $maxLineLength,
-        private StatementTypeFinder         $typeFinder,
-        private GenericLineSplitter         $genericLineSplitter,
-        private FunctionDeclarationSplitter $functionDeclarationSplitter,
+        private int                                          $maxLineLength,
+        private StatementTypeFinder                          $typeFinder,
+        private LongLineSplitter\GenericLineSplitter         $genericLineSplitter,
+        private LongLineSplitter\FunctionDeclarationSplitter $functionDeclarationSplitter,
     )
     {
     }
@@ -90,13 +88,13 @@ readonly class LongLineSplitter extends BaseFormatter
         if ($type instanceof ControlStatement) {
             return $this->genericLineSplitter->split(
                 $statement,
-                GenericLineSplitter\Breakpoints\ControlStatementSet::instance()
+                LongLineSplitter\GenericLineSplitter\Breakpoints\ControlStatementSet::instance()
             );
         }
 
         return $this->genericLineSplitter->split(
             $statement,
-            GenericLineSplitter\Breakpoints\GenericLineSet::instance()
+            LongLineSplitter\GenericLineSplitter\Breakpoints\GenericLineSet::instance()
         );
     }
 }

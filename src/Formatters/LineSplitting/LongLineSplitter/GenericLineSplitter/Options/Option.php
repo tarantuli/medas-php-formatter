@@ -17,9 +17,9 @@ class Option
 
     public function __construct(
         public readonly Definition $breakpointDefinition,
-        public readonly int                                                                                                      $depth,
-        public readonly int                                                                                                      $cluster,
-        public readonly int                                                                                                      $openerIndex,
+        public readonly int        $depth,
+        public readonly int        $cluster,
+        public readonly int        $openerIndex,
     )
     {
     }

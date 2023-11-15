@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Medas\PhpFormatter\Formatters\LineSplitting;
 
 use Medas\Core\Attributes\Service;
-use Medas\PhpFormatter\{Formatters\BaseFormatter, Formatters\LineSplitting\Helpers\StatementSplitter, Job};
+use Medas\PhpFormatter\{Formatters\BaseFormatter, Job};
 use Medas\PhpTokenizer\Statement;
 
 #[Service]
@@ -24,7 +24,7 @@ readonly class TrailingCommaSplitter extends BaseFormatter
     ];
 
     public function __construct(
-        private StatementSplitter $splitter,
+        private Helpers\StatementSplitter $splitter,
     )
     {
     }

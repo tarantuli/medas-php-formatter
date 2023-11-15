@@ -7,28 +7,25 @@ namespace Medas\PhpFormatter\Formatters\LineSplitting\LongLineSplitter;
 use Medas\Core\Attributes\{ConfigValue, Service};
 use Medas\PhpFormatter\ConfigOptions\DumpOptionAssessment;
 use Medas\PhpFormatter\Formatters\LineSplitting\Helpers\StatementSplitter;
-use Medas\PhpFormatter\Formatters\LineSplitting\LongLineSplitter;
-use Medas\PhpFormatter\Formatters\LineSplitting\LongLineSplitter\GenericLineSplitter\Breakpoints\Definition;
-use Medas\PhpFormatter\Formatters\LineSplitting\LongLineSplitter\GenericLineSplitter\Options\Assessment;
 use Medas\PhpTokenizer\Statement;
 
 #[Service]
 readonly class GenericLineSplitter
 {
     public function __construct(
-        private LongLineSplitter\GenericLineSplitter\Options\Finder   $optionFinder,
-        private LongLineSplitter\GenericLineSplitter\Options\Assesser $assesser,
-        private StatementSplitter                                     $statementSplitter,
+        private GenericLineSplitter\Options\Finder   $optionFinder,
+        private GenericLineSplitter\Options\Assesser $assesser,
+        private StatementSplitter                    $statementSplitter,
 
         #[ConfigValue(DumpOptionAssessment::class)]
-        private bool                                                  $dumpOptionAssessment,
+        private bool                                 $dumpOptionAssessment,
     )
     {
     }
 
     public function split(
-        Statement                                                      $statement,
-        LongLineSplitter\GenericLineSplitter\Breakpoints\BreakpointSet $set,
+        Statement                                     $statement,
+        GenericLineSplitter\Breakpoints\BreakpointSet $set,
     ): bool
     {
         foreach ($set->groupsOfDefinitions() as $definitions) {
@@ -54,7 +51,7 @@ readonly class GenericLineSplitter
         return false;
     }
 
-    /** @param Definition[] $definitions */
+    /** @param GenericLineSplitter\Breakpoints\Definition[] $definitions */
     private function gatherOptions(array $definitions, Statement $statement): array
     {
         $options = [];
@@ -70,9 +67,9 @@ readonly class GenericLineSplitter
         return $options;
     }
 
-    private function selectBestOption(array $options, Statement $statement): LongLineSplitter\GenericLineSplitter\Options\Option|null
+    private function selectBestOption(array $options, Statement $statement): GenericLineSplitter\Options\Option|null
     {
-        /** @var Assessment[] $assessments */
+        /** @var GenericLineSplitter\Options\Assessment[] $assessments */
         $assessments = [];
 
         foreach ($options as $option) {
@@ -85,12 +82,12 @@ readonly class GenericLineSplitter
 
         if ($this->dumpOptionAssessment) {
             // Inject it here, so it's not initialized when not needed
-            service(LongLineSplitter\GenericLineSplitter\Options\AssessmentDumper::class)->dump($statement, $assessments);
+            service(GenericLineSplitter\Options\AssessmentDumper::class)->dump($statement, $assessments);
         }
 
         usort(
             $assessments,
-            fn(Assessment $a, Assessment $b) =>
+            fn(GenericLineSplitter\Options\Assessment $a, GenericLineSplitter\Options\Assessment $b) =>
                 -1 * ($a->quality <=> $b->quality)
         );
 

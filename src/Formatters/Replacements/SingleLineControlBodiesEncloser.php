@@ -6,7 +6,8 @@ namespace Medas\PhpFormatter\Formatters\Replacements;
 
 use Medas\Core\Attributes\Service;
 use Medas\PhpFormatter\{Formatters\BaseFormatter, Job};
-use Medas\PhpTokenizer\{Block,
+use Medas\PhpTokenizer\{
+    Block,
     Contexts\GlobalScope,
     Statement,
     StatementTypeFinder,
@@ -56,9 +57,10 @@ readonly class SingleLineControlBodiesEncloser extends BaseFormatter
     private function appendClosingStatement(Statement $statement): void
     {
         $closingStatement = new Statement($statement->block);
-
         $token = new Token(1, '}');
-        $token->context = $statement->block->getNextStatement($statement)?->firstToken()->context ?? GlobalScope::instance();
+
+        $token->context
+            = $statement->block->getNextStatement($statement)?->firstToken()->context ?? GlobalScope::instance();
 
         $closingStatement->appendToken($token);
 
