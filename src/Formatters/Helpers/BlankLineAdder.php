@@ -31,11 +31,11 @@ readonly class BlankLineAdder
         foreach ($tree->statements() as $statement) {
             $type = $this->statementTypeFinder->for($statement);
 
-            foreach ($afterTypes as $groupType => $notInBetween) {
+            foreach ($afterTypes as $groupType) {
                 if ($type instanceof $groupType) {
                     $statement->blankLineAfter();
 
-                    if ($notInBetween && $previousType instanceof $groupType) {
+                    if ($previousType instanceof $groupType) {
                         $previousStatement->blankLineAfter(false);
                     }
                 }

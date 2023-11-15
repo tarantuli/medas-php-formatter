@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Medas\PhpFormatter\Settings;
 
-use Medas\PhpFormatter\Formatters\{
-    Alignment\AlignArgumentNames,
+use Medas\PhpFormatter\Formatters\{Alignment\AlignArgumentNames,
+    BlankLines\BlankLinesAfterPropertiesWithAttributes,
     BlankLines\BlankLinesBeforeBlocks,
     BlankLines\BlankLinesBetweenClassSections,
     BlankLines\BlankLinesBetweenStatementGroups,
@@ -14,8 +14,7 @@ use Medas\PhpFormatter\Formatters\{
     LineSplitting\LongLineSplitter,
     LineSplitting\TrailingCommaSplitter,
     MedasElseifWhileCatch,
-    Replacements\UseExitInsteadOfDie
-};
+    Replacements\UseExitInsteadOfDie};
 use Medas\PhpFormatter\Preparsers\NoCommentsAtLineEnd;
 use Medas\PhpTokenizer\AdditionalTokensDefiner;
 
@@ -40,5 +39,6 @@ class Medas extends Psr12
         $this->addFormatter(service(BlankLinesBetweenStatementGroups::class));
         $this->addFormatter(service(MedasElseifWhileCatch::class));
         $this->addFormatter(service(UseExitInsteadOfDie::class));
+        $this->addFormatter(service(BlankLinesAfterPropertiesWithAttributes::class));
     }
 }
