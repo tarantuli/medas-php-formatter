@@ -6,7 +6,7 @@ namespace Medas\PhpFormatterTest\Functional;
 
 use Medas\PhpFormatter\Settings\Medas;
 
-class Strings extends BaseTestClass
+class StringTest extends BaseTestClass
 {
     public function testHeredoc(): void
     {

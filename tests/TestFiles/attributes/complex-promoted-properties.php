@@ -11,15 +11,17 @@ use Medas\PhpTokenizer\{BlockDumper, Tokenizer, TreeBuilder};
 readonly class Formatterx
 {
     public function __construct(
-        private BlockDumper $blockDumper,
-        private BlockPrinter $blockPrinter,
+        private BlockDumper   $blockDumper,
+        private BlockPrinter  $blockPrinter,
         private CodeValidator $codeValidator,
-        private Tokenizer $tokenizer,
-        private TreeBuilder $treeBuilder,
+        private Tokenizer     $tokenizer,
+        private TreeBuilder   $treeBuilder,
+
         #[ConfigValue(ConfigOptions\DumpParsedTree::class)]
-        private bool $dumpParseTree,
+        private bool          $dumpParseTree,
+
         #[ConfigValue(ConfigOptions\DumpResultTree::class)]
-        private bool $dumpResultTree,
+        private bool          $dumpResultTree,
     )
     {
     }

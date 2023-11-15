@@ -22,15 +22,11 @@ readonly class StatementSplitter
         array     $separators,
         bool      $splitAfter,
         int       $openerIndex,
-        int|null  $closerIndex,
+        int  $closerIndex,
         int       $additionalDepth
     ): void
     {
         $this->addBlankLineBefore($statement);
-
-        if ($closerIndex === null) {
-            $closerIndex = $statement->tokenCount();
-        }
 
         $this->extractTrailingTokens($statement, $statement->tokenCount() - 1, $closerIndex);
 

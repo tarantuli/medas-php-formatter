@@ -13,13 +13,12 @@ class Option
     /** @var int[] */
     public array $breakpointIndices = [];
 
-    public int|null $closerIndex = null;
-
     public function __construct(
         public readonly Definition $breakpointDefinition,
         public readonly int        $depth,
         public readonly int        $cluster,
         public readonly int        $openerIndex,
+        public int $closerIndex,
     )
     {
     }

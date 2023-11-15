@@ -7,7 +7,7 @@ namespace Medas\PhpFormatterTest\Functional\Attributes;
 use Medas\PhpFormatter\Settings\Medas;
 use Medas\PhpFormatterTest\Functional\BaseTestClass;
 
-class AttributeTests extends BaseTestClass
+class AttributeTest extends BaseTestClass
 {
     public function testAttributes(): void
     {

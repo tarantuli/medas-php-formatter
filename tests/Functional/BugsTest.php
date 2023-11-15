@@ -6,7 +6,7 @@ namespace Medas\PhpFormatterTest\Functional;
 
 use Medas\PhpFormatter\Settings\Medas;
 
-class Bugs extends BaseTestClass
+class BugsTest extends BaseTestClass
 {
     public function testBugs1(): void
     {
@@ -31,6 +31,11 @@ class Bugs extends BaseTestClass
     public function testBugs5(): void
     {
         $this->assertRemainsTheSame('bugs/bugs5', new Medas());
+    }
+
+    public function testBug6(): void
+    {
+        $this->assertRemainsTheSame('bugs/bug6', new Medas());
     }
 
     public function testEmptyTrait(): void

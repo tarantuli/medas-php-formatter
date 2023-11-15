@@ -23,6 +23,7 @@ readonly class Finder
         $clusterManager = new ClusterManager();
         $cluster = $clusterManager->currentCluster();
         $depth = 0;
+        $tokenCount = $statement->tokenCount();
 
         foreach ($statement as $index => $token) {
             if ($token->is(TrailingCommaSplitter::BRACKETS)) {
@@ -35,11 +36,11 @@ readonly class Finder
                 if (!array_key_exists($cluster->id, $options)) {
                     $openerIndex = $cluster->openerIndex;
 
-                    if ($openerIndex === 0 || $definition->keepPrefixAndSuffix) {
+                    if ($openerIndex < 0 || $definition->keepPrefixAndSuffix) {
                         $openerIndex = $definition->splitAfter ? $index + 1 : $index - 1;
                     }
 
-                    $options[$cluster->id] = new Option($definition, $depth, $cluster->id, $openerIndex);
+                    $options[$cluster->id] = new Option($definition, $depth, $cluster->id, $openerIndex, $tokenCount);
                 }
 
                 ++$options[$cluster->id]->counter;
@@ -66,6 +67,13 @@ readonly class Finder
                 if ($option->depth > $definition->maxDepth) {
                     unset($options[$i]);
                 }
+            }
+        }
+
+        // Remove options that don't do anything
+        foreach ($options as $i => $option) {
+            if ($option->openerIndex + 1 >= $option->closerIndex) {
+                unset($options[$i]);
             }
         }
 
