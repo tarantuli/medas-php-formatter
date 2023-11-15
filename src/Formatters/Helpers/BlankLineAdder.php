@@ -34,7 +34,9 @@ readonly class BlankLineAdder
 
             foreach ($afterTypes as $groupType) {
                 if ($type instanceof $groupType) {
-                    $statement->blankLineAfter();
+                    if ($statement->next()?->rootStatement !== $statement) {
+                        $statement->blankLineAfter();
+                    }
 
                     if ($previousType instanceof $groupType) {
                         if ($statement->lastToken()->is(TrailingCommaSplitter::BRACKETS)) {
