@@ -55,3 +55,5 @@ if ($alignment & self::CENTER) {
 elseif ($alignment & self::RIGHT) {
     $horiAlignment = self::RIGHT;
 }
+
+return substr($string, 0, -strlen($setGlue));
