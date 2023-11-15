@@ -9,6 +9,11 @@ use Medas\PhpTokenizer\Token;
 
 abstract readonly class BaseTokenReplacer extends BaseFormatter
 {
+    public function priority(): int
+    {
+        return 1900;
+    }
+
     public function format(Job $job): void
     {
         foreach ($job->tree as $token) {

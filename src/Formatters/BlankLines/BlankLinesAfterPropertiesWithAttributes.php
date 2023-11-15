@@ -19,6 +19,11 @@ readonly class BlankLinesAfterPropertiesWithAttributes extends BaseFormatter
     {
     }
 
+    public function priority(): int
+    {
+        return 200;
+    }
+
     public function format(Job $job): void
     {
         foreach ($job->tree->block() as $statement) {

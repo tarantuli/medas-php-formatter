@@ -35,6 +35,11 @@ readonly class BlankLinesBetweenStatementGroups extends BaseFormatter
         ];
     }
 
+    public function priority(): int
+    {
+        return 300;
+    }
+
     public function format(Job $job): void
     {
         $previousSubType = null;

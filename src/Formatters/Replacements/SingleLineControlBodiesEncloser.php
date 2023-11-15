@@ -6,7 +6,13 @@ namespace Medas\PhpFormatter\Formatters\Replacements;
 
 use Medas\Core\Attributes\Service;
 use Medas\PhpFormatter\{Formatters\BaseFormatter, Job};
-use Medas\PhpTokenizer\{Block, Statement, StatementTypeFinder, StatementTypes\ControlStatement, Token};
+use Medas\PhpTokenizer\{Block,
+    Contexts\GlobalScope,
+    Statement,
+    StatementTypeFinder,
+    StatementTypes\ControlStatement,
+    Token
+};
 
 #[Service]
 readonly class SingleLineControlBodiesEncloser extends BaseFormatter
@@ -15,6 +21,11 @@ readonly class SingleLineControlBodiesEncloser extends BaseFormatter
         private StatementTypeFinder $typeFinder,
     )
     {
+    }
+
+    public function priority(): int
+    {
+        return 2000;
     }
 
     public function format(Job $job): void
@@ -46,7 +57,10 @@ readonly class SingleLineControlBodiesEncloser extends BaseFormatter
     {
         $closingStatement = new Statement($statement->block);
 
-        $closingStatement->appendToken(new Token(1, '}'));
+        $token = new Token(1, '}');
+        $token->context = $statement->block->getNextStatement($statement)?->firstToken()->context ?? GlobalScope::instance();
+
+        $closingStatement->appendToken($token);
 
         $statement->block->insertStatementAfter($closingStatement, $statement);
     }

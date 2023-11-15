@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Medas\PhpFormatter\Formatters\Helpers;
 
 use Medas\Core\Attributes\Service;
+use Medas\PhpFormatter\Formatters\LineSplitting\TrailingCommaSplitter;
 use Medas\PhpTokenizer\{
     Statement,
     StatementTypeFinder,
@@ -36,7 +37,12 @@ readonly class BlankLineAdder
                     $statement->blankLineAfter();
 
                     if ($previousType instanceof $groupType) {
-                        $previousStatement->blankLineAfter(false);
+                        if ($statement->lastToken()->is(TrailingCommaSplitter::BRACKETS)) {
+                            // Keep a blank line beforea statement that's split on multiple lines
+                        }
+                        else {
+                            $previousStatement->blankLineAfter(false);
+                        }
                     }
                 }
             }

@@ -10,9 +10,4 @@ abstract readonly class BaseFormatter implements Formatter
     {
         return [];
     }
-
-    public function priority(): int
-    {
-        return 0;
-    }
 }

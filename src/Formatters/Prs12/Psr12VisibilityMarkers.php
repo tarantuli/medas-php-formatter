@@ -23,6 +23,11 @@ readonly class Psr12VisibilityMarkers extends BaseFormatter
     {
     }
 
+    public function priority(): int
+    {
+        return 1400;
+    }
+
     public function format(Job $job): void
     {
         $this->sortVisibilityMarkers($job->tree);

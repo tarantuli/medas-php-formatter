@@ -5,13 +5,15 @@ declare(strict_types=1);
 namespace Medas\PhpFormatter\Formatters\LineSplitting;
 
 use Medas\Core\Attributes\{ConfigValue, Service};
-use Medas\PhpFormatter\{ConfigOptions\MaxLineLength, Formatters\BaseFormatter, Job};
-use Medas\PhpTokenizer\{
-    Statement,
+use Medas\PhpFormatter\{ConfigOptions\MaxLineLength,
+    Formatters\BaseFormatter,
+    Formatters\LineSplitting\LongLineSplitter\FunctionDeclarationSplitter,
+    Formatters\LineSplitting\LongLineSplitter\GenericLineSplitter,
+    Job};
+use Medas\PhpTokenizer\{Statement,
     StatementTypeFinder,
     StatementTypes\ControlStatement,
-    StatementTypes\FunctionDeclaration
-};
+    StatementTypes\FunctionDeclaration};
 
 #[Service]
 readonly class LongLineSplitter extends BaseFormatter
@@ -24,6 +26,11 @@ readonly class LongLineSplitter extends BaseFormatter
         private FunctionDeclarationSplitter $functionDeclarationSplitter,
     )
     {
+    }
+
+    public function priority(): int
+    {
+        return 700;
     }
 
     public function format(Job $job): void

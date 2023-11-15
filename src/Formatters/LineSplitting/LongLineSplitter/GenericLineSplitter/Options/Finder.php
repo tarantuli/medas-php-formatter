@@ -2,21 +2,19 @@
 
 declare(strict_types=1);
 
-namespace Medas\PhpFormatter\Formatters\LineSplitting\GenericLineSplitter\Options;
+namespace Medas\PhpFormatter\Formatters\LineSplitting\LongLineSplitter\GenericLineSplitter\Options;
 
 use Medas\Core\Attributes\Service;
-use Medas\PhpFormatter\Formatters\LineSplitting\{
-    GenericLineSplitter\Breakpoints,
-    GenericLineSplitter\ClusterManager,
-    TrailingCommaSplitter
-};
+use Medas\PhpFormatter\Formatters\LineSplitting\{LongLineSplitter\GenericLineSplitter\Breakpoints\Definition,
+    LongLineSplitter\GenericLineSplitter\ClusterManager,
+    TrailingCommaSplitter};
 use Medas\PhpTokenizer\Statement;
 
 #[Service]
 readonly class Finder
 {
     /** @return Option[] */
-    public function find(Statement $statement, Breakpoints\Definition $definition): array
+    public function find(Statement $statement, Definition $definition): array
     {
         /** @var Option[][] $options */
         $options = [];

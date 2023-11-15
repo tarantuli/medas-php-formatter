@@ -16,6 +16,11 @@ use Medas\PhpTokenizer\{Statement, Token};
 #[Service]
 readonly class KeepOriginalObjectOperatorBreaks extends BaseFormatter
 {
+    public function priority(): int
+    {
+        return 900;
+    }
+
     public function format(Job $job): void
     {
         foreach ($job->tokens as $token) {

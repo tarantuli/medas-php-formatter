@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Medas\PhpFormatter\Formatters\LineSplitting\GenericLineSplitter\Options;
+namespace Medas\PhpFormatter\Formatters\LineSplitting\LongLineSplitter\GenericLineSplitter\Options;
 
 use Medas\Core\Attributes\Service;
 use Medas\PhpFormatter\Formatters\LineSplitting\TrailingCommaSplitter;

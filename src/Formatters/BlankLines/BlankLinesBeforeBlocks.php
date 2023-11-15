@@ -17,6 +17,11 @@ readonly class BlankLinesBeforeBlocks extends BaseFormatter
     {
     }
 
+    public function priority(): int
+    {
+        return 400;
+    }
+
     public function format(Job $job): void
     {
         $this->blankLineAdder->beforeTypes($job->tree, [

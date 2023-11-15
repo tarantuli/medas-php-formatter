@@ -30,6 +30,11 @@ readonly class Psr12Whitespace extends BaseFormatter
     {
     }
 
+    public function priority(): int
+    {
+        return 1100;
+    }
+
     public function format(Job $job): void
     {
         $this->addSpaces($job->tree);

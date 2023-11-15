@@ -17,6 +17,11 @@ readonly class RequiredWhitespace extends BaseFormatter
     {
     }
 
+    public function priority(): int
+    {
+        return 1700;
+    }
+
     public function format(Job $job): void
     {
         $spaceAroundRequired = $this->getSpaceAroundRequired();

@@ -17,6 +17,11 @@ readonly class KeywordsToLowercase extends BaseFormatter
     {
     }
 
+    public function priority(): int
+    {
+        return 1500;
+    }
+
     public function format(Job $job): void
     {
         $reservedWords = $this->tokenGroups->texts();

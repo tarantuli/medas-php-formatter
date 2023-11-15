@@ -17,6 +17,11 @@ readonly class BlankLinesBetweenClassSections extends BaseFormatter
     {
     }
 
+    public function priority(): int
+    {
+        return 500;
+    }
+
     public function format(Job $job): void
     {
         $this->blankLineAdder->afterTypes($job->tree, [

@@ -23,6 +23,6 @@ readonly class NoBlankLinesAtStatementEnd extends BaseFormatter
 
     public function priority(): int
     {
-        return -10;
+        return 100;
     }
 }

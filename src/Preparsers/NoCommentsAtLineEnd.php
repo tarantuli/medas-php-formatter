@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Medas\PhpFormatter\Preparsers;
 
 use Medas\Core\Attributes\Service;
-use Medas\PhpFormatter\{Formatters\MoveCommentsAtLineEnd, Job};
+use Medas\PhpFormatter\{Formatters\Replacements\MoveCommentsAtLineEnd, Job};
 
 #[Service]
 class NoCommentsAtLineEnd implements Preparser

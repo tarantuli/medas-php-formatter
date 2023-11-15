@@ -2,14 +2,20 @@
 
 declare(strict_types=1);
 
-namespace Medas\PhpFormatter\Formatters;
+namespace Medas\PhpFormatter\Formatters\BlankLines;
 
 use Medas\Core\Attributes\Service;
+use Medas\PhpFormatter\Formatters\BaseFormatter;
 use Medas\PhpFormatter\Job;
 
 #[Service]
 readonly class MedasElseifWhileCatch extends BaseFormatter
 {
+    public function priority(): int
+    {
+        return 1000;
+    }
+
     public function format(Job $job): void
     {
         foreach ($job->tree as $token) {

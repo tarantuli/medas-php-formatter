@@ -19,6 +19,11 @@ readonly class AlignArgumentNames extends BaseFormatter
     {
     }
 
+    public function priority(): int
+    {
+        return 600;
+    }
+
     public function format(Job $job): void
     {
         $prefixLengthsPerRootStatement = $this->determinePrefixLengthsPerRootStatement($job);

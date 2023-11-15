@@ -13,6 +13,12 @@ use Medas\PhpFormatter\{Formatters\BaseFormatter, Job};
 #[Service]
 readonly class UseUnionNullInsteadOfNullable extends BaseFormatter
 {
+
+    public function priority(): int
+    {
+        return 1000;
+    }
+
     public function format(Job $job): void
     {
         // TODO: Implement format() method.

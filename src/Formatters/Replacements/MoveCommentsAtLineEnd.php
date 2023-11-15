@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Medas\PhpFormatter\Formatters;
+namespace Medas\PhpFormatter\Formatters\Replacements;
 
 use Medas\Core\Attributes\Service;
-use Medas\PhpFormatter\{Job, Preparsers\NoCommentsAtLineEnd};
+use Medas\PhpFormatter\{Formatters\BaseFormatter, Job, Preparsers\NoCommentsAtLineEnd};
 
 /**
  * This formatter processes the tokens marked by the preparser NoCommentsAtLineEnd. That class also registers this
@@ -18,6 +18,11 @@ readonly class MoveCommentsAtLineEnd extends BaseFormatter
         private NoCommentsAtLineEnd $preparser,
     )
     {
+    }
+
+    public function priority(): int
+    {
+        return 1800;
     }
 
     public function format(Job $job): void
