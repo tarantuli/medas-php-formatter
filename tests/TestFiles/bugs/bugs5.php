@@ -28,4 +28,12 @@ class ClassElementsSorter
             'is' => 2,
         ],
     ];
+
+    /**
+     * @var  array[]
+     */
+    private static $INTERFACE_IMPLEMENTATIONS = [
+        \Iterator::class => ['current', 'next', 'key', 'valid', 'rewind'],
+        \Countable::class => ['count']
+    ];
 }
