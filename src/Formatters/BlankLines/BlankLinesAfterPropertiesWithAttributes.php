@@ -25,7 +25,7 @@ readonly class BlankLinesAfterPropertiesWithAttributes extends BaseFormatter
     public function format(Job $job): void
     {
         foreach ($job->tree->block() as $statement) {
-            if (!$statement->firstToken()->is([T_COMMENT, T_DOC_COMMENT, T_ATTRIBUTE])) {
+            if (!$statement->firstToken()->is([T_DOC_COMMENT, T_ATTRIBUTE])) {
                 continue;
             }
 
