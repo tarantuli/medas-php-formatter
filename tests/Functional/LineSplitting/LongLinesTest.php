@@ -48,4 +48,12 @@ class LongLinesTest extends BaseTestClass
             new Medas()
         );
     }
+
+    public function testFatArrows(): void
+    {
+        $this->assertRemainsTheSame(
+            'line-splitting/fat-arrows',
+            new Medas()
+        );
+    }
 }
