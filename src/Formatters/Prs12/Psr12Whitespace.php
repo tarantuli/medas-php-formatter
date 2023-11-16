@@ -7,7 +7,7 @@ namespace Medas\PhpFormatter\Formatters\Prs12;
 use Medas\Core\Attributes\Service;
 use Medas\PhpFormatter\Formatters\{Alignment\AlignArgumentNames, BaseFormatter, Helpers\ReturnTypeTokens};
 use Medas\PhpFormatter\Job;
-use Medas\PhpTokenizer\{
+use Medas\PhpTokenizer\{Contexts\MethodParameters,
     Contexts\MethodReturnType,
     StatementTypeFinder,
     StatementTypes\ClassPropertyDeclaration,
@@ -16,8 +16,7 @@ use Medas\PhpTokenizer\{
     StatementTypes\SwitchBranch,
     StatementTypes\UseTraitStatement,
     TokenGroups,
-    TokenTree
-};
+    TokenTree};
 
 #[Service]
 readonly class Psr12Whitespace extends BaseFormatter
@@ -80,8 +79,9 @@ readonly class Psr12Whitespace extends BaseFormatter
                     $token->previous->spaceAfter();
                 }
 
-                // No space between & and variable starters
-                if ($token->previous->is(T_AMPERSAND) && $token->is(AlignArgumentNames::VARIABLE_STARTERS)) {
+                // No space between & and variable starters in method parameters
+                if ($token->previous->is(T_AMPERSAND) && $token->is(AlignArgumentNames::VARIABLE_STARTERS)
+                && $token->context instanceof MethodParameters) {
                     $token->previous->spaceAfter(false);
                 }
 

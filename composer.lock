@@ -188,12 +188,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:tarantuli/medas-php-tokenizer.git",
-                "reference": "12ff2a03afe4786d3d4397e613cad455aa40b2f6"
+                "reference": "5d94ea92f8abbcaf4aa268a5bd7630cbd6d461f1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-php-tokenizer/zipball/12ff2a03afe4786d3d4397e613cad455aa40b2f6",
-                "reference": "12ff2a03afe4786d3d4397e613cad455aa40b2f6",
+                "url": "https://api.github.com/repos/tarantuli/medas-php-tokenizer/zipball/5d94ea92f8abbcaf4aa268a5bd7630cbd6d461f1",
+                "reference": "5d94ea92f8abbcaf4aa268a5bd7630cbd6d461f1",
                 "shasum": ""
             },
             "require": {
@@ -223,7 +223,7 @@
                 "source": "https://github.com/tarantuli/medas-php-tokenizer/tree/dev",
                 "issues": "https://github.com/tarantuli/medas-php-tokenizer/issues"
             },
-            "time": "2023-11-15T13:46:20+00:00"
+            "time": "2023-11-16T15:43:44+00:00"
         },
         {
             "name": "psr/event-dispatcher",
@@ -2317,7 +2317,7 @@
         },
         {
             "name": "symfony/deprecation-contracts",
-            "version": "v3.3.0",
+            "version": "v3.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/deprecation-contracts.git",
@@ -2364,7 +2364,7 @@
             "description": "A generic function and convention to trigger deprecation notices",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/deprecation-contracts/tree/v3.3.0"
+                "source": "https://github.com/symfony/deprecation-contracts/tree/v3.4.0"
             },
             "funding": [
                 {

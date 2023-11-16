@@ -33,9 +33,14 @@ class BugsTest extends BaseTestClass
         $this->assertRemainsTheSame('bugs/bugs5', new Medas());
     }
 
-    public function testBug6(): void
+    public function testBugs6(): void
     {
-        $this->assertRemainsTheSame('bugs/bug6', new Medas());
+        $this->assertRemainsTheSame('bugs/bugs6', new Medas());
+    }
+
+    public function testBugs7(): void
+    {
+        $this->assertRemainsTheSame('bugs/bugs7', new Medas());
     }
 
     public function testEmptyTrait(): void
