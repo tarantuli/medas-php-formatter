@@ -146,12 +146,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:tarantuli/medas-php-class-analysis.git",
-                "reference": "4b15f30626e540fab83d4e81eb34992571db385b"
+                "reference": "f4c169f2552be86a5f7004758332f65ca5a56658"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-php-class-analysis/zipball/4b15f30626e540fab83d4e81eb34992571db385b",
-                "reference": "4b15f30626e540fab83d4e81eb34992571db385b",
+                "url": "https://api.github.com/repos/tarantuli/medas-php-class-analysis/zipball/f4c169f2552be86a5f7004758332f65ca5a56658",
+                "reference": "f4c169f2552be86a5f7004758332f65ca5a56658",
                 "shasum": ""
             },
             "require": {
@@ -180,7 +180,7 @@
                 "source": "https://github.com/tarantuli/medas-php-class-analysis/tree/dev",
                 "issues": "https://github.com/tarantuli/medas-php-class-analysis/issues"
             },
-            "time": "2023-11-15T13:30:20+00:00"
+            "time": "2023-11-16T16:07:18+00:00"
         },
         {
             "name": "morphp/medas-php-tokenizer",
