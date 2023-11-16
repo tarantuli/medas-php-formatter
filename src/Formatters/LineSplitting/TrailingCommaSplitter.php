@@ -31,7 +31,7 @@ readonly class TrailingCommaSplitter extends BaseFormatter
 
     public function priority(): int
     {
-        return 800;
+        return 725;
     }
 
     public function format(Job $job): void
