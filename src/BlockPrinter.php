@@ -42,6 +42,7 @@ class BlockPrinter
     private function printStatement(Statement $statement): void
     {
         $this->printIndentation($statement);
+        $lastToken = $statement->lastToken();
 
         foreach ($statement as $token) {
             echo $token->text;
@@ -51,7 +52,7 @@ class BlockPrinter
                 echo "\n";
             }
 
-            if ($token->lineBreakAfter) {
+            if ($token->lineBreakAfter && $token !== $lastToken) {
                 echo $this->lineEnding;
 
                 $this->printIndentation($statement);

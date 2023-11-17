@@ -19,7 +19,7 @@ readonly class MedasElseifWhileCatch extends BaseFormatter
     {
         foreach ($job->tree as $token) {
             if ($token->is([T_ELSE, T_ELSEIF, T_CATCH])) {
-                $token->previous->lineBreakAfter = true;
+                $token->previous->lineBreakAfter();
             }
         }
     }

@@ -16,7 +16,7 @@ readonly class NoBlankLinesAtStatementEnd extends BaseFormatter
             if ($statement === $statement->block->lastStatement()) {
                 $statement->blankLineAfter(false);
 
-                $statement->lastToken()->lineBreakAfter = false;
+                $statement->lastToken()->lineBreakAfter(false);
             }
         }
     }

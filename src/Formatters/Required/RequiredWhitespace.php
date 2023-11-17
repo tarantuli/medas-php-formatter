@@ -42,7 +42,7 @@ readonly class RequiredWhitespace extends BaseFormatter
             }
 
             if ($token->is(T_COMMENT)) {
-                $token->lineBreakAfter = true;
+                $token->lineBreakAfter();
             }
         }
     }

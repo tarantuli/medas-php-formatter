@@ -6,6 +6,7 @@ namespace Medas\PhpFormatter\Formatters\Replacements;
 
 use Medas\Core\Attributes\Service;
 use Medas\PhpFormatter\{Formatters\BaseFormatter, Job, Preparsers\NoCommentsAtLineEnd};
+use Medas\PhpTokenizer\Statement;
 
 /**
  * This formatter processes the tokens marked by the preparser NoCommentsAtLineEnd. That class also registers this
@@ -33,8 +34,17 @@ readonly class MoveCommentsAtLineEnd extends BaseFormatter
 
         foreach ($job->tree as $token) {
             if (in_array($token, $this->preparser->tokensToMove(), true)) {
-                $token->statement->removeToken($token);
-                $token->statement->previous()->prependToken($token);
+                $statement = $token->statement;
+
+                $statement->removeToken($token);
+                $previousStatement = $statement->previous();
+
+                if ($previousStatement === null) {
+                    $previousStatement = new Statement($statement->block);
+                    $statement->block->insertStatementBefore($previousStatement, $statement);
+                }
+
+                $previousStatement->prependToken($token);
             }
         }
     }
