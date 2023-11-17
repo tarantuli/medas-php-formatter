@@ -15,7 +15,6 @@ readonly class NoBlankLinesAtStatementEnd extends BaseFormatter
         foreach ($job->tree->statements() as $statement) {
             if ($statement === $statement->block->lastStatement()) {
                 $statement->blankLineAfter(false);
-
                 $statement->lastToken()->lineBreakAfter(false);
             }
         }

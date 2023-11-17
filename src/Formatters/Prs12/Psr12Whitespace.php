@@ -7,7 +7,8 @@ namespace Medas\PhpFormatter\Formatters\Prs12;
 use Medas\Core\Attributes\Service;
 use Medas\PhpFormatter\Formatters\{Alignment\AlignArgumentNames, BaseFormatter, Helpers\ReturnTypeTokens};
 use Medas\PhpFormatter\Job;
-use Medas\PhpTokenizer\{Contexts\MethodParameters,
+use Medas\PhpTokenizer\{
+    Contexts\MethodParameters,
     Contexts\MethodReturnType,
     StatementTypeFinder,
     StatementTypes\ClassPropertyDeclaration,
@@ -16,7 +17,8 @@ use Medas\PhpTokenizer\{Contexts\MethodParameters,
     StatementTypes\SwitchBranch,
     StatementTypes\UseTraitStatement,
     TokenGroups,
-    TokenTree};
+    TokenTree
+};
 
 #[Service]
 readonly class Psr12Whitespace extends BaseFormatter
@@ -81,8 +83,8 @@ readonly class Psr12Whitespace extends BaseFormatter
 
                 // No space between & and variable starters in method parameters
                 if ($token->previous->is(T_AMPERSAND)
-                    && $token->is(AlignArgumentNames::VARIABLE_STARTERS)
-                    && $token->context instanceof MethodParameters) {
+                        && $token->is(AlignArgumentNames::VARIABLE_STARTERS)
+                        && $token->context instanceof MethodParameters) {
                     $token->previous->spaceAfter(false);
                 }
 
@@ -223,7 +225,8 @@ readonly class Psr12Whitespace extends BaseFormatter
 
                 // No space between pluses, minuses and ampersands before numbers and variables,
                 // that follow an operator or bracket
-                if ($token->is([T_PLUS, T_MINUS, T_AMPERSAND]) && $token->next->is([T_LNUMBER, T_DNUMBER, T_VARIABLE, T_STRING])) {
+                if ($token->is([T_PLUS, T_MINUS, T_AMPERSAND])
+                        && $token->next->is([T_LNUMBER, T_DNUMBER, T_VARIABLE, T_STRING])) {
                     if ($token->previous->is([T_ROUND_BRACKET_CLOSE, T_SQUARE_BRACKET_CLOSE])) {
                         $token->spaceAfter();
                     }

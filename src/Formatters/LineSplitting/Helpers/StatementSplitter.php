@@ -22,12 +22,11 @@ readonly class StatementSplitter
         array     $separators,
         bool      $splitAfter,
         int       $openerIndex,
-        int  $closerIndex,
+        int       $closerIndex,
         int       $additionalDepth
     ): void
     {
         $this->addBlankLineBefore($statement);
-
         $this->extractTrailingTokens($statement, $statement->tokenCount() - 1, $closerIndex);
 
         $currentStatement = null;
@@ -35,7 +34,6 @@ readonly class StatementSplitter
 
         for ($i = $closerIndex - 1; $i > $openerIndex; --$i) {
             $token = $statement->getToken($i);
-
             $questionPlusColonCheck = $token->previous && $token->previous->is(T_QUESTION_MARK) && $token->is(T_COLON);
 
             $statement->removeToken($token);

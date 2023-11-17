@@ -6,11 +6,13 @@ namespace Medas\PhpFormatter\Formatters\BlankLines;
 
 use Medas\Core\Attributes\Service;
 use Medas\PhpFormatter\{Formatters\BaseFormatter, Formatters\Helpers, Job};
-use Medas\PhpTokenizer\StatementTypes\{ClassDeclaration,
+use Medas\PhpTokenizer\StatementTypes\{
+    ClassDeclaration,
     ControlStatement,
     ReturnStatement,
     SwitchBranch,
-    ThrowStatement};
+    ThrowStatement
+};
 
 #[Service]
 readonly class BlankLinesBeforeBlocks extends BaseFormatter

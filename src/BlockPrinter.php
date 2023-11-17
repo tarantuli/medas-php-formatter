@@ -42,6 +42,7 @@ class BlockPrinter
     private function printStatement(Statement $statement): void
     {
         $this->printIndentation($statement);
+
         $lastToken = $statement->lastToken();
 
         foreach ($statement as $token) {

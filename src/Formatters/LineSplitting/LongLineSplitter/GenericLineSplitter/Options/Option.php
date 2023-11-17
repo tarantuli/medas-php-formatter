@@ -18,7 +18,7 @@ class Option
         public readonly int        $depth,
         public readonly int        $cluster,
         public readonly int        $openerIndex,
-        public int $closerIndex,
+        public int                 $closerIndex,
     )
     {
     }

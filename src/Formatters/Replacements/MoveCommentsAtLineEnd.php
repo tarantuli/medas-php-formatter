@@ -37,10 +37,12 @@ readonly class MoveCommentsAtLineEnd extends BaseFormatter
                 $statement = $token->statement;
 
                 $statement->removeToken($token);
+
                 $previousStatement = $statement->previous();
 
                 if ($previousStatement === null) {
                     $previousStatement = new Statement($statement->block);
+
                     $statement->block->insertStatementBefore($previousStatement, $statement);
                 }
 
