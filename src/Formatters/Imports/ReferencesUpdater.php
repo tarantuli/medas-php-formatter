@@ -47,7 +47,7 @@ readonly class ReferencesUpdater
         ReferencesAndImports $referencesAndImports
     ): void
     {
-        if (!preg_match_all('/@(?:param|var|return)\s+(\S+)/', $token->text, $matches, PREG_SET_ORDER)) {
+        if (!preg_match_all('/@(?:param|var|return|throws)\s+(\S+)/', $token->text, $matches, PREG_SET_ORDER)) {
             return;
         }
 
