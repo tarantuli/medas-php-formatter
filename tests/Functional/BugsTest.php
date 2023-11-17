@@ -47,4 +47,9 @@ class BugsTest extends BaseTestClass
     {
         $this->assertRemainsTheSame('bugs/empty-trait', new Medas());
     }
+
+    public function testCommentAfterStart(): void
+    {
+        $this->assertRemainsTheSame('bugs/comment-after-start', new Medas());
+    }
 }

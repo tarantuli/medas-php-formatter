@@ -20,7 +20,7 @@ class NoCommentsAtLineEnd implements Preparser
     public function preparse(Job $job): void
     {
         foreach ($job->tokens as $token) {
-            if (!$token->is(T_COMMENT) || str_contains($token->previous->text, "\n")) {
+            if (!$token->is(T_COMMENT) || str_contains($token->previous->text, "\n") || $token->previous->is(T_OPEN_TAG)) {
                 continue;
             }
 
