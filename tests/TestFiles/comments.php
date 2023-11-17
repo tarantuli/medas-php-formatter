@@ -36,6 +36,19 @@ class A
             $track->distance = $this->determineDistance($track, $artist, $title);
         }
 
+        if ($storeName = $property->getStore()) {
+            /**
+             * Double doccomment
+             *
+             * @var  \StoreInterface  $store
+             */
+            /** @noinspection PhpUndefinedMethodInspection */
+            $store = $storeName::get();
+            $columnDefinition = $store->getTable()->getColumn('ID')->getDefinition();
+
+            $this->addConstraintDefinition($variableName, $store->getTableName());
+        }
+
         return 1;
     }
 }

@@ -111,7 +111,7 @@ readonly class Psr12BlankLines extends BaseFormatter
         for ($index = 0; $index < $token->statement->getIndex($token); ++$index) {
             $earlierToken = $token->statement->getToken($index);
 
-            if (!$earlierToken->inAttribute && !$earlierToken->is([T_COMMENT, T_ATTRIBUTE])) {
+            if (!$earlierToken->inAttribute && !$earlierToken->is([T_DOC_COMMENT, T_COMMENT, T_ATTRIBUTE])) {
                 return false;
             }
         }
