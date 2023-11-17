@@ -36,6 +36,8 @@ readonly class StatementSplitter
         for ($i = $closerIndex - 1; $i > $openerIndex; --$i) {
             $token = $statement->getToken($i);
 
+            $questionPlusColonCheck = $token->previous && $token->previous->is(T_QUESTION_MARK) && $token->is(T_COLON);
+
             $statement->removeToken($token);
 
             $text = $token->text;
@@ -52,7 +54,7 @@ readonly class StatementSplitter
                 $currentStatement->prependToken($token);
             }
 
-            if ($token->is($separators) && $depth === 0 && $i > $openerIndex + 1) {
+            if (!$questionPlusColonCheck && $token->is($separators) && $depth === 0 && $i > $openerIndex + 1) {
                 $currentStatement = $this->startNewStatement($statement, $additionalDepth);
             }
 

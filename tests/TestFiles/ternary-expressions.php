@@ -10,6 +10,7 @@ $a = $b ?: false;
 $a = $b ?? $c;
 $a = true ?? $c;
 $a = $b ?? false;
+
 class A
 {
     public ?int $c;
@@ -20,5 +21,11 @@ class A
 
     public function b(): ?string
     {
+    }
+
+    public function getAutoClassesDirectory(): string
+    {
+        return $this->autoClassesDirectory
+            ?: sprintf('%s%sAutoClasses', $this->getTargetBaseDirectory(), DIRECTORY_SEPARATOR);
     }
 }

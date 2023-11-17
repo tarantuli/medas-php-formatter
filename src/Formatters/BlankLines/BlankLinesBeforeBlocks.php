@@ -6,7 +6,11 @@ namespace Medas\PhpFormatter\Formatters\BlankLines;
 
 use Medas\Core\Attributes\Service;
 use Medas\PhpFormatter\{Formatters\BaseFormatter, Formatters\Helpers, Job};
-use Medas\PhpTokenizer\StatementTypes\{ControlStatement, ReturnStatement, SwitchBranch, ThrowStatement};
+use Medas\PhpTokenizer\StatementTypes\{ClassDeclaration,
+    ControlStatement,
+    ReturnStatement,
+    SwitchBranch,
+    ThrowStatement};
 
 #[Service]
 readonly class BlankLinesBeforeBlocks extends BaseFormatter
@@ -25,6 +29,7 @@ readonly class BlankLinesBeforeBlocks extends BaseFormatter
     public function format(Job $job): void
     {
         $this->blankLineAdder->beforeTypes($job->tree, [
+            ClassDeclaration::class,
             ControlStatement::class,
             SwitchBranch::class,
             ReturnStatement::class,

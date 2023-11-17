@@ -32,7 +32,9 @@ readonly class Finder
                 $cluster = $clusterManager->getNextCluster($depth, $index);
             }
 
-            if ($token->is($definition->separators)) {
+            $questionPlusColonCheck = $token->previous && $token->previous->is(T_QUESTION_MARK) && $token->is(T_COLON);
+
+            if (!$questionPlusColonCheck && $token->is($definition->separators)) {
                 if (!array_key_exists($cluster->id, $options)) {
                     $openerIndex = $cluster->openerIndex;
 
