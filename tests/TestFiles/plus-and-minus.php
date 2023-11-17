@@ -49,11 +49,4 @@ $a - ($b);
 
 throw new \ImageNotHighEnoughException(-$chartHeight);
 
-if ($alignment & self::CENTER) {
-    $horiAlignment = self::CENTER;
-}
-elseif ($alignment & self::RIGHT) {
-    $horiAlignment = self::RIGHT;
-}
-
 return substr($string, 0, -strlen($setGlue));

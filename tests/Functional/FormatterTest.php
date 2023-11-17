@@ -96,4 +96,9 @@ class FormatterTest extends BaseTestClass
             new Medas()
         );
     }
+
+    public function testAmpersands(): void
+    {
+        $this->assertRemainsTheSame('ampersands', new Medas());
+    }
 }
