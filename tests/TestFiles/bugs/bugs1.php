@@ -16,7 +16,7 @@ class ClassNameNormalizer
     public array $addFields = [];
 
     public function __construct(
-        #[ConfigValue(\GeneratorRootNamespace::class)]
+        #[ConfigValue(GeneratorRootNamespace::class)]
         private string|null $rootNamespace,
     )
     {

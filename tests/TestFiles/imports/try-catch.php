@@ -10,6 +10,6 @@ try {
 catch (MyException) {
     // Do nothing again
 }
-catch (\Exception $exception) {
+catch (Exception $exception) {
     // Again...
 }

@@ -30,7 +30,7 @@ switch ($a) {
         }
 
     default:
-        throw new \Exception('invalid $a');
+        throw new Exception('invalid $a');
 }
 
 class Askfjlfkj

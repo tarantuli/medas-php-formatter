@@ -47,6 +47,6 @@ return -100;
 
 $a - ($b);
 
-throw new \ImageNotHighEnoughException(-$chartHeight);
+throw new ImageNotHighEnoughException(-$chartHeight);
 
 return substr($string, 0, -strlen($setGlue));

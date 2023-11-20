@@ -30,18 +30,19 @@ readonly class ReferencesUpdater
         foreach ($tree as $token) {
             foreach ($analysis->uses as $reference) {
                 if ($reference->label === $token->text
-                        && !in_array($token->previous->id, $this->nonReferencePrefixes)) {
-                    $token->text = $referencesAndImports->references[$reference->fqn];
+                    && !in_array($token->previous->id, $this->nonReferencePrefixes)) {
+                    $token->text = $this->getNewText($referencesAndImports, $reference, $analysis);
                 }
 
                 if ($token->is(T_DOC_COMMENT)) {
-                    $this->handleDoccomment($token, $reference, $referencesAndImports);
+                    $this->handleDoccomment($analysis, $token, $reference, $referencesAndImports);
                 }
             }
         }
     }
 
     private function handleDoccomment(
+        ClassAnalysis        $analysis,
         Token                $token,
         ClassReference       $reference,
         ReferencesAndImports $referencesAndImports
@@ -60,7 +61,7 @@ readonly class ReferencesUpdater
                 }
 
                 if ($tag === $reference->label) {
-                    $newLine = str_replace($tag, $referencesAndImports->references[$reference->fqn], $newLine);
+                    $newLine = str_replace($tag, $this->getNewText($referencesAndImports, $reference, $analysis), $newLine);
                 }
             }
 
@@ -68,5 +69,16 @@ readonly class ReferencesUpdater
                 $token->text = str_replace($match[0], $newLine, $token->text);
             }
         }
+    }
+
+    private function getNewText(ReferencesAndImports $referencesAndImports, ClassReference $reference, ClassAnalysis $analysis): string
+    {
+        $newText = $referencesAndImports->references[$reference->fqn];
+
+        if (!$analysis->namespace && str_starts_with($newText, '\\')) {
+            $newText = substr($newText, 1);
+        }
+
+        return $newText;
     }
 }

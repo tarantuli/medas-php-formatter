@@ -35,10 +35,10 @@ class TestClass
         private bool          $dumpResultTree,
     )
     {
-        $directoryIteratorFlags = \FilesystemIterator::KEY_AS_FILENAME
-            | \FilesystemIterator::CURRENT_AS_FILEINFO
-            | \FilesystemIterator::SKIP_DOTS
-            | \FilesystemIterator::FOLLOW_SYMLINKS;
+        $directoryIteratorFlags = FilesystemIterator::KEY_AS_FILENAME
+            | FilesystemIterator::CURRENT_AS_FILEINFO
+            | FilesystemIterator::SKIP_DOTS
+            | FilesystemIterator::FOLLOW_SYMLINKS;
     }
 
     public function getClassFromRootAndSubdirectory(
@@ -66,7 +66,7 @@ class TestClass
         return sprintf(
             '%s%s',
             $rootPrefixLalalalalalalalalalalalalaal,
-            str_replace(DIRECTORY_SEPARATOR, "\\", $subdirectory)
+            str_replace(DIRECTORY_SEPARATOR, "", $subdirectory)
         );
     }
 

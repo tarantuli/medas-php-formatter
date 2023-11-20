@@ -3,7 +3,7 @@
 // Comment flush left
 class A
 {
-    /** @var \Type[]  */
+    /** @var Type[]  */
     private array $int;
 
     /**
@@ -15,7 +15,7 @@ class A
         return strlen($c) + /** Inline doccomment */ $d;
     }
 
-    #[\AnAttribute]
+    #[AnAttribute]
     // Single-line comment
     /*
      * Multi-line comment
@@ -30,7 +30,7 @@ class A
 
     public function doesntStartWithDoccomment(): int
     {
-        /** @var  \FullTrackInterface[] $tracks */
+        /** @var  FullTrackInterface[] $tracks */
         foreach ($tracks as $track) {
             /** @noinspection PhpDynamicFieldDeclarationInspection */
             $track->distance = $this->determineDistance($track, $artist, $title);
@@ -40,7 +40,7 @@ class A
             /**
              * Double doccomment
              *
-             * @var  \StoreInterface  $store
+             * @var  StoreInterface  $store
              */
             /** @noinspection PhpUndefinedMethodInspection */
             $store = $storeName::get();

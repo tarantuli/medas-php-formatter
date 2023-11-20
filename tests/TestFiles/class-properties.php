@@ -25,7 +25,7 @@ class EntityWithDefaultValues
     #[Id, Guid]
     public string $id;
 
-    private \DateTime $dateTimeNotNullNoDefault;
-    private \DateTime|null $dateTimeNullNoDefault;
-    private \DateTime|null $dateTimeNullDefaultNull = null;
+    private DateTime $dateTimeNotNullNoDefault;
+    private DateTime|null $dateTimeNullNoDefault;
+    private DateTime|null $dateTimeNullDefaultNull = null;
 }

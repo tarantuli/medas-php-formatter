@@ -33,8 +33,8 @@ class ClassElementsSorter
      * @var  array[]
      */
     private static $INTERFACE_IMPLEMENTATIONS = [
-        \Iterator::class => ['current', 'next', 'key', 'valid', 'rewind'],
-        \Countable::class => ['count']
+        Iterator::class => ['current', 'next', 'key', 'valid', 'rewind'],
+        Countable::class => ['count']
     ];
 
     /**

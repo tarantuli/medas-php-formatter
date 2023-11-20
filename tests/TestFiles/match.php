@@ -11,5 +11,5 @@ $var = match (expression()) {
     $a, $b, $c => 'cheese',
     3 => 'three',
     a($a) || b($b) => 0,
-    default => throw new \Exception('oops'),
+    default => throw new Exception('oops'),
 };

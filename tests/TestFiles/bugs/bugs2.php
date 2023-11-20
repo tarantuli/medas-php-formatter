@@ -40,5 +40,5 @@ interface MigrationBuilder
         MethodDefinition $undoMethod,
     ): bool;
 
-    public function buildActions(Storage $storage, Blueprint $blueprint): \ActionSet;
+    public function buildActions(Storage $storage, Blueprint $blueprint): ActionSet;
 }
