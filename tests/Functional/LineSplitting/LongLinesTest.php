@@ -64,4 +64,12 @@ class LongLinesTest extends BaseTestClass
             new Medas()
         );
     }
+
+    public function testMatches(): void
+    {
+        $this->assertRemainsTheSame(
+            'line-splitting/matches',
+            new Medas()
+        );
+    }
 }

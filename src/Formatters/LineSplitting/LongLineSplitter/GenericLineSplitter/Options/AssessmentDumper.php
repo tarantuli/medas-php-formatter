@@ -21,18 +21,20 @@ readonly class AssessmentDumper
     /** @param Assessment[] $assessments */
     public function dump(Statement $statement, array $assessments): void
     {
-        $table = Table::create(['Group', 'Depth', 'Lengths', 'Quality']);
+        $table = Table::create(['Group', 'Depth', 'Indices', 'Lengths', 'Quality']);
 
         foreach ($assessments as $assessment) {
             $table->data[] = [
                 $assessment->option->breakpointDefinition->name,
                 $assessment->option->depth,
+                implode(', ',$assessment->option->breakpointIndices),
                 $assessment->lengths,
                 (int) floor(1000 * $assessment->quality),
             ];
         }
 
         $this->blockDumper->dumpStatement($statement);
+        $this->printer->printEol();
 
         if ($assessments) {
             $this->printer->print($table);
@@ -40,5 +42,7 @@ readonly class AssessmentDumper
         else {
             $this->printer->printLine(Text::create('no groups', Color::Gray));
         }
+
+        $this->printer->printEol();
     }
 }

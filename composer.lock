@@ -58,12 +58,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:tarantuli/medas-core.git",
-                "reference": "9b0773fb9cec4cfd51ea0f80368020d899e21430"
+                "reference": "242ecf9de84048c734bb411b55814437dc4a9675"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-core/zipball/9b0773fb9cec4cfd51ea0f80368020d899e21430",
-                "reference": "9b0773fb9cec4cfd51ea0f80368020d899e21430",
+                "url": "https://api.github.com/repos/tarantuli/medas-core/zipball/242ecf9de84048c734bb411b55814437dc4a9675",
+                "reference": "242ecf9de84048c734bb411b55814437dc4a9675",
                 "shasum": ""
             },
             "require": {
@@ -97,7 +97,7 @@
                 "source": "https://github.com/tarantuli/medas-core/tree/dev",
                 "issues": "https://github.com/tarantuli/medas-core/issues"
             },
-            "time": "2023-11-20T10:47:35+00:00"
+            "time": "2023-11-20T13:52:22+00:00"
         },
         {
             "name": "morphp/medas-file-system",
@@ -188,12 +188,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:tarantuli/medas-php-tokenizer.git",
-                "reference": "2ac2ba4882cec00dad3c0f1d2c7fa15b6f0fff02"
+                "reference": "6c594c717055348ab82486a4486371afa5e4b6a7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-php-tokenizer/zipball/2ac2ba4882cec00dad3c0f1d2c7fa15b6f0fff02",
-                "reference": "2ac2ba4882cec00dad3c0f1d2c7fa15b6f0fff02",
+                "url": "https://api.github.com/repos/tarantuli/medas-php-tokenizer/zipball/6c594c717055348ab82486a4486371afa5e4b6a7",
+                "reference": "6c594c717055348ab82486a4486371afa5e4b6a7",
                 "shasum": ""
             },
             "require": {
@@ -223,7 +223,7 @@
                 "source": "https://github.com/tarantuli/medas-php-tokenizer/tree/dev",
                 "issues": "https://github.com/tarantuli/medas-php-tokenizer/issues"
             },
-            "time": "2023-11-20T11:20:37+00:00"
+            "time": "2023-11-20T14:46:29+00:00"
         },
         {
             "name": "psr/event-dispatcher",
@@ -458,12 +458,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:tarantuli/medas-config-options.git",
-                "reference": "a073e31b83d550edba08293638de857cca24823f"
+                "reference": "d14aee54197f8ecd3e9373789eccad286cd4bf6d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-config-options/zipball/a073e31b83d550edba08293638de857cca24823f",
-                "reference": "a073e31b83d550edba08293638de857cca24823f",
+                "url": "https://api.github.com/repos/tarantuli/medas-config-options/zipball/d14aee54197f8ecd3e9373789eccad286cd4bf6d",
+                "reference": "d14aee54197f8ecd3e9373789eccad286cd4bf6d",
                 "shasum": ""
             },
             "require": {
@@ -494,7 +494,7 @@
                 "source": "https://github.com/tarantuli/medas-config-options/tree/dev",
                 "issues": "https://github.com/tarantuli/medas-config-options/issues"
             },
-            "time": "2023-11-10T11:09:39+00:00"
+            "time": "2023-11-20T13:36:17+00:00"
         },
         {
             "name": "morphp/medas-console-printer",
