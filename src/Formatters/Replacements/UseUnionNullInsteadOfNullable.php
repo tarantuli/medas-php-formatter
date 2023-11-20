@@ -25,7 +25,7 @@ readonly class UseUnionNullInsteadOfNullable extends BaseFormatter
             if ($token->inTypeDeclaration
                 && $token->next
                 && $token->is(T_QUESTION_MARK)
-                && $token->next->is(T_STRING)) {
+                && $token->next->is([T_STRING, T_ARRAY])) {
                 $this->replaceByUnionNull($token);
             }
         }
