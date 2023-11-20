@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Medas\PhpFormatter\Settings;
 
-use Medas\PhpFormatter\Formatters\{Alignment\AlignArgumentNames,
+use Medas\PhpFormatter\Formatters\{
+    Alignment\AlignArgumentNames,
     BlankLines\BlankLinesAfterPropertiesWithAttributes,
     BlankLines\BlankLinesBeforeBlocks,
     BlankLines\BlankLinesBetweenClassSections,

@@ -23,9 +23,9 @@ readonly class UseUnionNullInsteadOfNullable extends BaseFormatter
     {
         foreach ($job->tokens as $token) {
             if ($token->inTypeDeclaration
-                && $token->next
-                && $token->is(T_QUESTION_MARK)
-                && $token->next->is([T_STRING, T_ARRAY])) {
+                    && $token->next
+                    && $token->is(T_QUESTION_MARK)
+                    && $token->next->is([T_STRING, T_ARRAY])) {
                 $this->replaceByUnionNull($token);
             }
         }
