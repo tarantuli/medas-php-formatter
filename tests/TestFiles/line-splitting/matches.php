@@ -3,12 +3,27 @@
 declare(strict_types=1);
 
 use Medas\EntityManager\Types\Integer;
-use Medas\StorageManager\Structure\Blueprint\Field;
+use Medas\PdoStorage\Exceptions\CantDetermineTypeFromDefinition;
+use Medas\StorageManager\Structure\Blueprint\{Field, Type};
 
 readonly class BinaryHandler
 {
     public function handle(Field $field): string
     {
+        $type = match (true) {
+            $intMatch !== null => Type::Integer,
+
+            $remainder->startsWith('varchar('), $remainder->startsWith('char('), $remainder->endsWith('text')
+                => Type::Text,
+
+            $remainder->startsWith('varbinary('), $remainder->startsWith('binary('), $remainder->endsWith('blob')
+                => Type::Binary,
+
+            $remainder->equals('datetime') => Type::DateTime,
+            $remainder->equals('float') => Type::Float,
+            default => throw new CantDetermineTypeFromDefinition((string) $remainder, $definition),
+        };
+
         /** @noinspection PhpDuplicateMatchArmBodyInspection */
         return match (true) {
             $field->maxLength <= Integer::UNSIGNED_1_BYTE_MAX => $field->minLength === $field->maxLength

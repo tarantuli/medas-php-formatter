@@ -16,7 +16,7 @@ class ControlStatementSet implements BreakpointSet
     {
         // Sort the best breakpoints on top
         $this->groups = [[
-            new Definition('and/or', [T_BOOLEAN_AND, T_BOOLEAN_OR, T_LOGICAL_AND, T_LOGICAL_OR], keepPrefixAndSuffix: true),
+            new Definition('and/or', [T_BOOLEAN_AND, T_BOOLEAN_OR, T_LOGICAL_AND, T_LOGICAL_OR], keepPrefixAndSuffix: true, additionalDepth: 2),
             new Definition('comma', [T_COMMA], splitAfter: true),
         ]];
     }

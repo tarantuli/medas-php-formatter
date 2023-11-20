@@ -35,7 +35,7 @@ class GenericLineSet implements BreakpointSet
                 new Definition('depth 0 assignment', [T_ASSIGNMENT], maxDepth: 0),
             ],
             [
-                new Definition('fat arrow', [T_DOUBLE_ARROW]),
+                new Definition('fat arrow', [T_DOUBLE_ARROW], keepPrefixAndSuffix: true),
             ],
         ];
     }

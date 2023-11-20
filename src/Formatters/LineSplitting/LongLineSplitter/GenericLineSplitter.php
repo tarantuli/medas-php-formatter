@@ -42,7 +42,7 @@ readonly class GenericLineSplitter
                 $bestOption->breakpointDefinition->splitAfter,
                 $bestOption->openerIndex,
                 $bestOption->closerIndex,
-                $bestOption->breakpointDefinition->keepPrefixAndSuffix ? 2 : 1,
+                $bestOption->breakpointDefinition->additionalDepth,
             );
 
             return true;

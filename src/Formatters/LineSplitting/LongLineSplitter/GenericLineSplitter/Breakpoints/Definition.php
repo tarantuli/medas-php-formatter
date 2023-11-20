@@ -12,6 +12,7 @@ readonly class Definition
         public bool     $splitAfter = false,
         public int|null $maxDepth = null,
         public bool     $keepPrefixAndSuffix = false,
+        public int $additionalDepth = 1,
     )
     {
     }

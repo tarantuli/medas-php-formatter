@@ -5,8 +5,7 @@ declare(strict_types=1);
 namespace Medas\PhpFormatter\Formatters\LineSplitting\LongLineSplitter\GenericLineSplitter\Options;
 
 use Medas\Core\Attributes\Service;
-use Medas\PhpFormatter\Formatters\LineSplitting\LongLineSplitter\GenericLineSplitter\{
-    Breakpoints\Definition,
+use Medas\PhpFormatter\Formatters\LineSplitting\LongLineSplitter\GenericLineSplitter\{Breakpoints\Definition,
     ClusterManager
 };
 use Medas\PhpFormatter\Formatters\LineSplitting\TrailingCommaSplitter;
@@ -24,12 +23,29 @@ readonly class Finder
         $cluster = $clusterManager->currentCluster();
         $depth = 0;
         $tokenCount = $statement->tokenCount();
+        $lastToken = $statement->lastToken();
+
+        $isMatchBranch = $statement->containsType(T_DOUBLE_ARROW) && $statement->block->opener->containsType(T_MATCH);
+        $foundDoubleArrow = false;
 
         foreach ($statement as $index => $token) {
+            if ($token === $lastToken) {
+                continue;
+            }
+
             if ($token->is(TrailingCommaSplitter::BRACKETS)) {
                 ++$depth;
 
                 $cluster = $clusterManager->getNextCluster($depth, $index);
+            }
+
+            if ($isMatchBranch && !$foundDoubleArrow) {
+                if ($token->is(T_DOUBLE_ARROW)) {
+                    $foundDoubleArrow = true;
+                }
+                else {
+                    continue;
+                }
             }
 
             $questionPlusColonCheck = $token->previous && $token->previous->is(T_QUESTION_MARK) && $token->is(T_COLON);
