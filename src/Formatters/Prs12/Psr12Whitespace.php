@@ -11,7 +11,6 @@ use Medas\PhpTokenizer\{
     Contexts\MethodParameters,
     Contexts\MethodReturnType,
     StatementTypeFinder,
-    StatementTypes\ClassPropertyDeclaration,
     StatementTypes\DeclareStatement,
     StatementTypes\FunctionDeclaration,
     StatementTypes\SwitchBranch,
@@ -67,8 +66,7 @@ readonly class Psr12Whitespace extends BaseFormatter
 
             // No space between "?type"
             if ($token->is(T_QUESTION_MARK)) {
-                if ($statementType instanceof ClassPropertyDeclaration
-                        || $statementType instanceof FunctionDeclaration) {
+                if ($token->inTypeDeclaration) {
                     $token->spaceAfter(false);
                 }
                 else {
@@ -115,8 +113,7 @@ readonly class Psr12Whitespace extends BaseFormatter
 
                 // No space around "|" in function declarations and catch statements
                 if ($token->is(T_PIPE)) {
-                    $stripSpaces = $statementType instanceof FunctionDeclaration
-                        || $statementType instanceof ClassPropertyDeclaration
+                    $stripSpaces = $token->inTypeDeclaration
                         || $token->statement->getToken(1)->is(T_CATCH)
                         || $this->returnTypeTokens->isReturnTypeToken($token->previous);
 

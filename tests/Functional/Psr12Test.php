@@ -22,4 +22,9 @@ class Psr12Test extends BaseTestClass
     {
         $this->assertRemainsTheSame('psr12/switch-statement', new Psr12());
     }
+
+    public function testWhitespaces(): void
+    {
+        $this->assertRemainsTheSame('psr12/whitespaces', new Psr12());
+    }
 }

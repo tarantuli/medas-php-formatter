@@ -1,0 +1,15 @@
+<?php
+
+declare(strict_types=1);
+
+use Medas\Core\Attributes\Service;
+
+function test(string|null $cheese): Service|null
+{
+    $d = function (int|null $b) {
+        return $b;
+    };
+
+    $e = fn(Service|null $service): Service|null => $service | $service;
+    return $a ? $b : $c;
+}
