@@ -183,6 +183,7 @@ readonly class Psr12Whitespace extends BaseFormatter
             [
                 T_COMMA,
                 T_SEMICOLON,
+                T_THROW,
             ],
         );
     }

@@ -20,7 +20,7 @@ abstract class ServiceInstantiator
 
     public string|null $cheese = null;
 
-    public function callback(int &$a, ?array $b = [], bool &...$questions): ?callable
+    public function callback(int &$a, array|null $b = [], bool &...$questions): callable|null
     {
         self::$variable = 10;
 
