@@ -25,7 +25,7 @@ class FormatterTest extends BaseTestClass
 
     public function testTernaryExpressions(): void
     {
-        $this->assertRemainsTheSame('ternary-expressions', new Medas());
+        $this->assertChanges('ternary-expressions-pre', 'ternary-expressions-post', new Medas());
     }
 
     public function testMethodsAndFunctions(): void

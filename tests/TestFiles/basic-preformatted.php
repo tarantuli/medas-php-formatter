@@ -18,7 +18,7 @@ abstract class ServiceInstantiator
 
     private const CONST_NAME = [1, 2, 3, 4, 5];
 
-    public ?string $cheese = null;
+    public string|null $cheese = null;
 
     public function callback(int &$a, ?array $b = [], bool &...$questions): ?callable
     {
