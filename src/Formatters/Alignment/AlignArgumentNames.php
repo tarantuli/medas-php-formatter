@@ -42,7 +42,7 @@ readonly class AlignArgumentNames extends BaseFormatter
 
             foreach ($statement as $token) {
                 if (!$token->is(self::VARIABLE_STARTERS)) {
-                    if (!$token->inAttribute && !$token->is(T_ATTRIBUTE)) {
+                    if (!$this->skipLength($token)) {
                         $currentLength += strlen($token->text) + $token->spaceAfter;
                     }
 
@@ -86,7 +86,7 @@ readonly class AlignArgumentNames extends BaseFormatter
                     break;
                 }
 
-                if ($token->inAttribute || $token->is(T_ATTRIBUTE)) {
+                if ($this->skipLength($token)) {
                     continue;
                 }
 
@@ -105,5 +105,18 @@ readonly class AlignArgumentNames extends BaseFormatter
         }
 
         return $prefixLengthsPerRootStatement;
+    }
+
+    private function skipLength(Token $token): bool
+    {
+        if ($token->inAttribute || $token->is(T_ATTRIBUTE)) {
+            return true;
+        }
+
+        if ($token->is([T_COMMENT, T_DOC_COMMENT]) && $token->lineBreakAfter) {
+            return true;
+        }
+
+        return false;
     }
 }
