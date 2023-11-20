@@ -41,6 +41,14 @@ class LongLinesTest extends BaseTestClass
         );
     }
 
+    public function testSplitting5(): void
+    {
+        $this->assertRemainsTheSame(
+            'line-splitting/long-lines5',
+            new Medas()
+        );
+    }
+
     public function testKeepOriginalOperatorBreaks(): void
     {
         $this->assertRemainsTheSame(
