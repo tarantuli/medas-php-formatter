@@ -30,7 +30,7 @@ readonly class ReferencesUpdater
         foreach ($tree as $token) {
             foreach ($analysis->uses as $reference) {
                 if ($reference->label === $token->text
-                    && !in_array($token->previous->id, $this->nonReferencePrefixes)) {
+                        && !in_array($token->previous->id, $this->nonReferencePrefixes)) {
                     $token->text = $this->getNewText($referencesAndImports, $reference, $analysis);
                 }
 
@@ -61,7 +61,11 @@ readonly class ReferencesUpdater
                 }
 
                 if ($tag === $reference->label) {
-                    $newLine = str_replace($tag, $this->getNewText($referencesAndImports, $reference, $analysis), $newLine);
+                    $newLine = str_replace(
+                        $tag,
+                        $this->getNewText($referencesAndImports, $reference, $analysis),
+                        $newLine
+                    );
                 }
             }
 
@@ -71,7 +75,11 @@ readonly class ReferencesUpdater
         }
     }
 
-    private function getNewText(ReferencesAndImports $referencesAndImports, ClassReference $reference, ClassAnalysis $analysis): string
+    private function getNewText(
+        ReferencesAndImports $referencesAndImports,
+        ClassReference       $reference,
+        ClassAnalysis        $analysis
+    ): string
     {
         $newText = $referencesAndImports->references[$reference->fqn];
 

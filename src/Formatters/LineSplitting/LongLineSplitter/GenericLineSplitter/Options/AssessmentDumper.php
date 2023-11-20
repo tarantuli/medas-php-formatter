@@ -27,7 +27,7 @@ readonly class AssessmentDumper
             $table->data[] = [
                 $assessment->option->breakpointDefinition->name,
                 $assessment->option->depth,
-                implode(', ',$assessment->option->breakpointIndices),
+                implode(', ', $assessment->option->breakpointIndices),
                 $assessment->lengths,
                 (int) floor(1000 * $assessment->quality),
             ];

@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace Medas\PhpFormatter\Formatters\LineSplitting\LongLineSplitter\GenericLineSplitter\Options;
 
 use Medas\Core\Attributes\Service;
-use Medas\PhpFormatter\Formatters\LineSplitting\LongLineSplitter\GenericLineSplitter\{Breakpoints\Definition,
+use Medas\PhpFormatter\Formatters\LineSplitting\LongLineSplitter\GenericLineSplitter\{
+    Breakpoints\Definition,
     ClusterManager
 };
 use Medas\PhpFormatter\Formatters\LineSplitting\TrailingCommaSplitter;
@@ -24,7 +25,6 @@ readonly class Finder
         $depth = 0;
         $tokenCount = $statement->tokenCount();
         $lastToken = $statement->lastToken();
-
         $isMatchBranch = $statement->containsType(T_DOUBLE_ARROW) && $statement->block->opener->containsType(T_MATCH);
         $foundDoubleArrow = false;
 
