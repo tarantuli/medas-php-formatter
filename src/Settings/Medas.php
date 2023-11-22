@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\PhpFormatter\Settings;
 
-use Medas\PhpFormatter\Formatters\{
-    Alignment\AlignArgumentNames,
+use Medas\PhpFormatter\Formatters\{Alignment\AlignArgumentNames,
     BlankLines\BlankLinesAfterPropertiesWithAttributes,
     BlankLines\BlankLinesBeforeBlocks,
     BlankLines\BlankLinesBetweenClassSections,
@@ -14,10 +13,10 @@ use Medas\PhpFormatter\Formatters\{
     Imports\NormalizeImports,
     LineSplitting\KeepOriginalObjectOperatorBreaks,
     LineSplitting\LongLineSplitter,
+    LineSplitting\SoftLineSplitter,
     LineSplitting\TrailingCommaSplitter,
     Replacements\UseExitInsteadOfDie,
-    Replacements\UseUnionNullInsteadOfNullable
-};
+    Replacements\UseUnionNullInsteadOfNullable};
 use Medas\PhpFormatter\Preparsers\NoCommentsAtLineEnd;
 use Medas\PhpTokenizer\AdditionalTokensDefiner;
 
@@ -39,6 +38,7 @@ class Medas extends Psr12
         $this->addFormatter(service(LongLineSplitter::class));
         $this->addFormatter(service(MedasElseifWhileCatch::class));
         $this->addFormatter(service(NormalizeImports::class));
+        $this->addFormatter(service(SoftLineSplitter::class));
         $this->addFormatter(service(TrailingCommaSplitter::class));
         $this->addFormatter(service(UseExitInsteadOfDie::class));
         $this->addFormatter(service(UseUnionNullInsteadOfNullable::class));

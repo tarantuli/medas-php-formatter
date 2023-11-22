@@ -5,9 +5,12 @@ declare(strict_types=1);
 namespace Medas\PhpFormatter\Formatters\LineSplitting;
 
 use Medas\Core\Attributes\{ConfigValue, Service};
-use Medas\PhpFormatter\{ConfigOptions\MaxLineLength, Formatters\BaseFormatter, Job};
-use Medas\PhpTokenizer\{
-    Statement,
+use Medas\PhpFormatter\{ConfigOptions\MaxLineLength,
+    Formatters\BaseFormatter,
+    Formatters\LineSplitting\Helpers\LengthCounter,
+    Job
+};
+use Medas\PhpTokenizer\{Statement,
     StatementTypeFinder,
     StatementTypes\ClassDeclaration,
     StatementTypes\ControlStatement,
@@ -23,6 +26,7 @@ readonly class LongLineSplitter extends BaseFormatter
         private StatementTypeFinder         $typeFinder,
         private GenericLineSplitter         $genericLineSplitter,
         private FunctionDeclarationSplitter $functionDeclarationSplitter,
+        private LengthCounter $lengthCounter,
     )
     {
     }
@@ -50,7 +54,7 @@ readonly class LongLineSplitter extends BaseFormatter
                 continue;
             }
 
-            $length = $this->statementLength($statement);
+            $length = $this->lengthCounter->count($statement);
 
             if ($length <= $this->maxLineLength) {
                 continue;
@@ -62,31 +66,6 @@ readonly class LongLineSplitter extends BaseFormatter
         }
 
         return false;
-    }
-
-    private function statementLength(Statement $statement): int
-    {
-        $length = $statement->block->depth * 4;
-        $previousToken = null;
-        $foundNonCommentToken = false;
-
-        foreach ($statement as $token) {
-            if (!$token->is([T_COMMENT, T_DOC_COMMENT, T_ATTRIBUTE]) && !$token->inAttribute) {
-                $foundNonCommentToken = true;
-            }
-
-            if ($foundNonCommentToken) {
-                $length += strlen($token->text);
-
-                if ($previousToken && $previousToken->spaceAfter) {
-                    $length++;
-                }
-            }
-
-            $previousToken = $token;
-        }
-
-        return $length;
     }
 
     private function splitStatement(Statement $statement): bool
