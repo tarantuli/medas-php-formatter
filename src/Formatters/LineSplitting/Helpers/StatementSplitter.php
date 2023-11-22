@@ -27,7 +27,6 @@ readonly class StatementSplitter
     ): void
     {
         $this->addBlankLineBefore($statement);
-        $this->extractTrailingTokens($statement, $statement->tokenCount() - 1, $closerIndex);
 
         $currentStatement = null;
         $depth = 0;
@@ -35,7 +34,9 @@ readonly class StatementSplitter
             // Statements that begin and end with brackets are hard to process correctly elsewhere,
             // so start at a depth of -1 here
             $depth = -1;
+            $closerIndex = $statement->tokenCount()- 1;
         }
+        $this->extractTrailingTokens($statement, $statement->tokenCount() - 1, $closerIndex);
 
 
         for ($i = $closerIndex - 1; $i > $openerIndex; --$i) {
@@ -54,8 +55,13 @@ readonly class StatementSplitter
                 $currentStatement->prependToken($token);
             }
 
+
             if (!$questionPlusColonCheck && $token->is($separators) && $depth === 0 && $i > $openerIndex + 1) {
                 $currentStatement = $this->startNewStatement($statement, $additionalDepth);
+            }
+
+            if (!$token->inAttribute && in_array($text, TrailingCommaSplitter::CLOSERS)) {
+                ++$depth;
             }
 
             if (!$token->inAttribute && in_array($text, TrailingCommaSplitter::BRACKETS)) {
@@ -78,10 +84,6 @@ readonly class StatementSplitter
                 }
 
                 $currentStatement->prependToken($token);
-            }
-
-            if (!$token->inAttribute && in_array($text, TrailingCommaSplitter::CLOSERS)) {
-                ++$depth;
             }
         }
     }

@@ -17,6 +17,7 @@ class GenericLineSet implements BreakpointSet
         // Sort the best breakpoints on top
         $this->groups = [
             [
+                new Definition('depth 0 comma', [T_COMMA], splitAfter: true, maxDepth: 0, additionalDepth: 0),
                 new Definition('depth 0 ternary', [T_QUESTION_MARK, T_COLON], maxDepth: 0),
             ],
             [

@@ -126,7 +126,8 @@ class AutoProviderClass extends AbstractClassBuilder
                 'custom class fqcn' => $this->entity->getCustomClassBuilder()->getFullyQualifiedClassName(),
                 'table name' => $this->entity->getEntityTableName(),
                 'parent class' => $parentProvider,
-                'creating parent' => $this->entity->getExtends() ? "\\" . AbstractEntityProvider::class : 'parent']
+                'creating parent' => $this->entity->getExtends() ? "\\" . AbstractEntityProvider::class : 'parent'
+            ]
         );
     }
 }
