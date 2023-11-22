@@ -146,12 +146,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:tarantuli/medas-php-class-analysis.git",
-                "reference": "19ac6a80867e78758a6336b9cffdadd78b830413"
+                "reference": "68da4ea11d95557ce4620a6c93a45d6a394d4a72"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-php-class-analysis/zipball/19ac6a80867e78758a6336b9cffdadd78b830413",
-                "reference": "19ac6a80867e78758a6336b9cffdadd78b830413",
+                "url": "https://api.github.com/repos/tarantuli/medas-php-class-analysis/zipball/68da4ea11d95557ce4620a6c93a45d6a394d4a72",
+                "reference": "68da4ea11d95557ce4620a6c93a45d6a394d4a72",
                 "shasum": ""
             },
             "require": {
@@ -180,7 +180,7 @@
                 "source": "https://github.com/tarantuli/medas-php-class-analysis/tree/dev",
                 "issues": "https://github.com/tarantuli/medas-php-class-analysis/issues"
             },
-            "time": "2023-11-16T16:10:27+00:00"
+            "time": "2023-11-22T14:28:35+00:00"
         },
         {
             "name": "morphp/medas-php-tokenizer",
@@ -188,12 +188,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:tarantuli/medas-php-tokenizer.git",
-                "reference": "6c594c717055348ab82486a4486371afa5e4b6a7"
+                "reference": "6eede518e68ba00dfd9804e9d3e26d3b2c5ee10b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-php-tokenizer/zipball/6c594c717055348ab82486a4486371afa5e4b6a7",
-                "reference": "6c594c717055348ab82486a4486371afa5e4b6a7",
+                "url": "https://api.github.com/repos/tarantuli/medas-php-tokenizer/zipball/6eede518e68ba00dfd9804e9d3e26d3b2c5ee10b",
+                "reference": "6eede518e68ba00dfd9804e9d3e26d3b2c5ee10b",
                 "shasum": ""
             },
             "require": {
@@ -223,7 +223,7 @@
                 "source": "https://github.com/tarantuli/medas-php-tokenizer/tree/dev",
                 "issues": "https://github.com/tarantuli/medas-php-tokenizer/issues"
             },
-            "time": "2023-11-20T14:46:29+00:00"
+            "time": "2023-11-22T14:05:54+00:00"
         },
         {
             "name": "psr/event-dispatcher",

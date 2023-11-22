@@ -182,6 +182,7 @@ readonly class Psr12Whitespace extends BaseFormatter
             $this->tokenGroups->casts(),
             [
                 T_COMMA,
+                T_NEW,
                 T_SEMICOLON,
                 T_THROW,
             ],

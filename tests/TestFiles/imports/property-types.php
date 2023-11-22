@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\PhpFormatter;
 
+use Medas\Core\Interfaces\{FileEntity, HasId};
 use Medas\PhpTokenizer\{TokenCollection, TokenTree};
 
 class JobBla
@@ -15,5 +16,7 @@ class JobBla
         public readonly Settings\Settings $settings,
     )
     {
+        /** @var FileEntity&HasId $file */
+        $file = new ($type->entity)();
     }
 }
