@@ -31,6 +31,12 @@ readonly class StatementSplitter
 
         $currentStatement = null;
         $depth = 0;
+        if ($statement->firstToken()->is(TrailingCommaSplitter::BRACKETS) && $statement->lastToken()->is(TrailingCommaSplitter::CLOSERS)) {
+            // Statements that begin and end with brackets are hard to process correctly elsewhere,
+            // so start at a depth of -1 here
+            $depth = -1;
+        }
+
 
         for ($i = $closerIndex - 1; $i > $openerIndex; --$i) {
             $token = $statement->getToken($i);
@@ -39,10 +45,6 @@ readonly class StatementSplitter
             $statement->removeToken($token);
 
             $text = $token->text;
-
-            if (!$token->inAttribute && in_array($text, TrailingCommaSplitter::CLOSERS)) {
-                ++$depth;
-            }
 
             if (!$splitAfter) {
                 if ($currentStatement === null) {
@@ -76,6 +78,10 @@ readonly class StatementSplitter
                 }
 
                 $currentStatement->prependToken($token);
+            }
+
+            if (!$token->inAttribute && in_array($text, TrailingCommaSplitter::CLOSERS)) {
+                ++$depth;
             }
         }
     }
