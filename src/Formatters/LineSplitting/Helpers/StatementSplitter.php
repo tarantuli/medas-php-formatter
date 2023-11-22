@@ -30,14 +30,23 @@ readonly class StatementSplitter
 
         $currentStatement = null;
         $depth = 0;
-        if ($statement->firstToken()->is(TrailingCommaSplitter::BRACKETS) && $statement->lastToken()->is(TrailingCommaSplitter::CLOSERS)) {
+
+        if ($statement->firstToken()->is(TrailingCommaSplitter::BRACKETS)
+                && $statement->lastToken()->is(TrailingCommaSplitter::CLOSERS)) {
             // Statements that begin and end with brackets are hard to process correctly elsewhere,
             // so start at a depth of -1 here
             $depth = -1;
-            $closerIndex = $statement->tokenCount()- 1;
+            $closerIndex = $statement->tokenCount() - 1;
         }
-        $this->extractTrailingTokens($statement, $statement->tokenCount() - 1, $closerIndex);
 
+        if ($statement->lastToken()->is(TrailingCommaSplitter::BRACKETS) && $statement->lastToken()->previous->lineBreakAfter
+         && $closerIndex === $statement->tokenCount()) {
+            // The last token is an opening bracket, and there's a line break before it:
+            // put this bracket in the extracted trailing tokens to maintain depth
+            $closerIndex--;
+        }
+
+        $this->extractTrailingTokens($statement, $statement->tokenCount() - 1, $closerIndex);
 
         for ($i = $closerIndex - 1; $i > $openerIndex; --$i) {
             $token = $statement->getToken($i);
@@ -54,7 +63,6 @@ readonly class StatementSplitter
 
                 $currentStatement->prependToken($token);
             }
-
 
             if (!$questionPlusColonCheck && $token->is($separators) && $depth === 0 && $i > $openerIndex + 1) {
                 $currentStatement = $this->startNewStatement($statement, $additionalDepth);

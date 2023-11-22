@@ -45,9 +45,8 @@ readonly class NewImportsInserter
         // Sort the new imports in reverse order, so we can insert statements one by one below the insertion spot
         uksort($groupedImports, function (string $a, string $b) {
             // Replace backslases by spaces, so longer parts sort later (otherwise, backslash sorts after text)
-            return  -1 * (str_replace('\\', ' ', $a) <=> str_replace('\\', ' ', $b));
+            return -1 * (str_replace('\\', ' ', $a) <=> str_replace('\\', ' ', $b));
         });
-
 
         foreach ($groupedImports as $fqn => $alias) {
             $statement = $tree->block()->appendNewStatement();

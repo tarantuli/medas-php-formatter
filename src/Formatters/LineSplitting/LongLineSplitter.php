@@ -9,6 +9,7 @@ use Medas\PhpFormatter\{ConfigOptions\MaxLineLength, Formatters\BaseFormatter, J
 use Medas\PhpTokenizer\{
     Statement,
     StatementTypeFinder,
+    StatementTypes\ClassDeclaration,
     StatementTypes\ControlStatement,
     StatementTypes\FunctionDeclaration
 };
@@ -80,6 +81,13 @@ readonly class LongLineSplitter extends BaseFormatter
     private function splitStatement(Statement $statement): bool
     {
         $type = $this->typeFinder->for($statement);
+
+        if ($type instanceof ClassDeclaration) {
+            return $this->genericLineSplitter->split(
+                $statement,
+                LongLineSplitter\GenericLineSplitter\Breakpoints\ClassDeclarationSet::instance()
+            );
+        }
 
         if ($type instanceof FunctionDeclaration) {
             return $this->functionDeclarationSplitter->split($statement);

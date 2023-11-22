@@ -6,6 +6,8 @@ use EntityStructureFinder;
 use Medas\Core\Attributes\{ConfigOptions, ConfigValue};
 use Medas\PhpFormatter\{BlockPrinter, CodeValidator};
 use Medas\PhpTokenizer\{BlockDumper, Tokenizer, TreeBuilder};
+use Shared\Databases\MySql\Interfaces\HasMySqlColumnDefinitionInterface;
+use Shared\Types\{AbstractBase, Interfaces\EntityTypeInterface};
 
 if ($this->context === self::FUNCTION_BODY
         && $type === T_CURLY_BRACKET_CLOSE
@@ -19,7 +21,9 @@ if ($this->context === self::FUNCTION_BODY
     $this->context = self::CLASS_BODY;
 }
 
-class TestClass
+abstract class AbstractLalalalaEntityType
+    extends AbstractBase
+    implements EntityTypeInterface, HasMySqlColumnDefinitionInterface
 {
     public function __construct(
         private BlockDumper   $blockDumper,

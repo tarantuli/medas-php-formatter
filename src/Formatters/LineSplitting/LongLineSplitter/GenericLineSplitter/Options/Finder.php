@@ -53,6 +53,7 @@ readonly class Finder
             if (!$questionPlusColonCheck && $token->is($definition->separators)) {
                 if (!array_key_exists($cluster->id, $options)) {
                     $openerIndex = $cluster->openerIndex;
+
                     if ($definition->keepPrefixAndSuffix) {
                         $openerIndex = $definition->splitAfter ? $index + 1 : $index - 1;
                     }
