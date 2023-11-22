@@ -6,7 +6,8 @@ namespace Medas\PhpFormatter\Formatters\LineSplitting;
 
 use Medas\Core\Attributes\{ConfigValue, Service};
 use Medas\PhpFormatter\{ConfigOptions\MaxLineLength, Formatters\BaseFormatter, Job};
-use Medas\PhpTokenizer\{Statement,
+use Medas\PhpTokenizer\{
+    Statement,
     StatementTypeFinder,
     StatementTypes\ClassDeclaration,
     StatementTypes\ControlStatement,
