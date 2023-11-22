@@ -9,7 +9,11 @@ use Medas\PhpFormatter\{ConfigOptions\SoftMaxLineLength,
     Formatters\BaseFormatter,
     Formatters\LineSplitting\Helpers\LengthCounter,
     Job};
-use Medas\PhpTokenizer\{Statement};
+use Medas\PhpTokenizer\{Statement,
+    StatementTypeFinder,
+    StatementTypes\ClassDeclaration,
+    StatementTypes\FunctionDeclaration
+};
 
 #[Service]
 readonly class SoftLineSplitter extends BaseFormatter
@@ -19,6 +23,7 @@ readonly class SoftLineSplitter extends BaseFormatter
         private int                 $softMaxLineLength,
         private GenericLineSplitter $genericLineSplitter,
         private LengthCounter       $lengthCounter,
+        private StatementTypeFinder $typeFinder,
     )
     {
     }
@@ -49,6 +54,12 @@ readonly class SoftLineSplitter extends BaseFormatter
             $length = $this->lengthCounter->count($statement);
 
             if ($length <= $this->softMaxLineLength) {
+                continue;
+            }
+
+            $type = $this->typeFinder->for($statement);
+
+            if ($type instanceof ClassDeclaration || $type instanceof FunctionDeclaration) {
                 continue;
             }
 
