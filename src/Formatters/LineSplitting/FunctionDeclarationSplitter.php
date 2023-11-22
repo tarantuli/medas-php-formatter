@@ -2,17 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Medas\PhpFormatter\Formatters\LineSplitting\LongLineSplitter;
+namespace Medas\PhpFormatter\Formatters\LineSplitting;
 
 use Medas\Core\Attributes\Service;
-use Medas\PhpFormatter\Formatters\LineSplitting\Helpers\StatementSplitter;
 use Medas\PhpTokenizer\Statement;
 
 #[Service]
 readonly class FunctionDeclarationSplitter
 {
     public function __construct(
-        private StatementSplitter $splitter,
+        private Helpers\StatementSplitter $splitter,
     )
     {
     }

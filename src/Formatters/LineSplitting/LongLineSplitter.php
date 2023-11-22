@@ -19,10 +19,10 @@ readonly class LongLineSplitter extends BaseFormatter
 {
     public function __construct(
         #[ConfigValue(MaxLineLength::class)]
-        private int                                          $maxLineLength,
-        private StatementTypeFinder                          $typeFinder,
-        private LongLineSplitter\GenericLineSplitter         $genericLineSplitter,
-        private LongLineSplitter\FunctionDeclarationSplitter $functionDeclarationSplitter,
+        private int                         $maxLineLength,
+        private StatementTypeFinder         $typeFinder,
+        private GenericLineSplitter         $genericLineSplitter,
+        private FunctionDeclarationSplitter $functionDeclarationSplitter,
     )
     {
     }
@@ -44,6 +44,12 @@ readonly class LongLineSplitter extends BaseFormatter
     private function findSomethingToSplit(Job $job): bool
     {
         foreach ($job->tree->block() as $statement) {
+            if ($statement === $statement->next()?->rootStatement) {
+                // This statement has already been split, and this is the prefix;
+                // Don't split it any further
+                continue;
+            }
+
             $length = $this->statementLength($statement);
 
             if ($length <= $this->maxLineLength) {
@@ -85,7 +91,7 @@ readonly class LongLineSplitter extends BaseFormatter
         if ($type instanceof ClassDeclaration) {
             return $this->genericLineSplitter->split(
                 $statement,
-                LongLineSplitter\GenericLineSplitter\Breakpoints\ClassDeclarationSet::instance()
+                GenericLineSplitter\Breakpoints\ClassDeclarationSet::instance()
             );
         }
 
@@ -96,13 +102,13 @@ readonly class LongLineSplitter extends BaseFormatter
         if ($type instanceof ControlStatement) {
             return $this->genericLineSplitter->split(
                 $statement,
-                LongLineSplitter\GenericLineSplitter\Breakpoints\ControlStatementSet::instance()
+                GenericLineSplitter\Breakpoints\ControlStatementSet::instance()
             );
         }
 
         return $this->genericLineSplitter->split(
             $statement,
-            LongLineSplitter\GenericLineSplitter\Breakpoints\GenericLineSet::instance()
+            GenericLineSplitter\Breakpoints\GenericLineSet::instance()
         );
     }
 }

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Medas\PhpFormatter\Formatters\LineSplitting\LongLineSplitter\GenericLineSplitter\Breakpoints;
+namespace Medas\PhpFormatter\Formatters\LineSplitting\GenericLineSplitter\Breakpoints;
 
 interface BreakpointSet
 {

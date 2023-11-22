@@ -129,5 +129,22 @@ class AutoProviderClass extends AbstractClassBuilder
                 'creating parent' => $this->entity->getExtends() ? "\\" . AbstractEntityProvider::class : 'parent'
             ]
         );
+
+        echo $this->linePrefix,
+            str_repeat(' ', 6 + 2 + $this->paramsTypeMaxLength + 2 + $this->paramsNameMaxLength + 2);
+
+        return Str::replaceVariables('<?php namespace {{namespace}};
+
+            			/**
+            			* {{description}}
+            			*/
+            			class {{name}} extends \{{auto class fqcn}}
+            			{
+            			}', [
+            'description' => $this->entity->getDescription() ?: '(summary missing)',
+            'namespace' => $this->getNamespace(),
+            'name' => $this->getName(),
+            'auto class fqcn' => $this->entity->getAutoClassBuilder()->getFullyQualifiedClassName(),
+        ]);
     }
 }

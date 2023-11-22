@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Medas\PhpFormatter\Formatters\LineSplitting\LongLineSplitter\GenericLineSplitter\Options;
+namespace Medas\PhpFormatter\Formatters\LineSplitting\GenericLineSplitter\Options;
 
 readonly class Assessment
 {

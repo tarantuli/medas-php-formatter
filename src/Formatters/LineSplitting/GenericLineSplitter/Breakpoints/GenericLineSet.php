@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Medas\PhpFormatter\Formatters\LineSplitting\LongLineSplitter\GenericLineSplitter\Breakpoints;
+namespace Medas\PhpFormatter\Formatters\LineSplitting\GenericLineSplitter\Breakpoints;
 
 use Medas\Core\AsSingleton;
 
@@ -17,7 +17,6 @@ class GenericLineSet implements BreakpointSet
         // Sort the best breakpoints on top
         $this->groups = [
             [
-                new Definition('depth 0 comma', [T_COMMA], splitAfter: true, maxDepth: 0, additionalDepth: 0),
                 new Definition('depth 0 ternary', [T_QUESTION_MARK, T_COLON], maxDepth: 0),
             ],
             [

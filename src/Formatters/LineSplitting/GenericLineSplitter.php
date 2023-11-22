@@ -2,11 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Medas\PhpFormatter\Formatters\LineSplitting\LongLineSplitter;
+namespace Medas\PhpFormatter\Formatters\LineSplitting;
 
 use Medas\Core\Attributes\{ConfigValue, Service};
 use Medas\PhpFormatter\ConfigOptions\DumpOptionAssessment;
-use Medas\PhpFormatter\Formatters\LineSplitting\Helpers\StatementSplitter;
 use Medas\PhpTokenizer\Statement;
 
 #[Service]
@@ -15,7 +14,7 @@ readonly class GenericLineSplitter
     public function __construct(
         private GenericLineSplitter\Options\Finder   $optionFinder,
         private GenericLineSplitter\Options\Assesser $assesser,
-        private StatementSplitter                    $statementSplitter,
+        private Helpers\StatementSplitter            $statementSplitter,
 
         #[ConfigValue(DumpOptionAssessment::class)]
         private bool                                 $dumpOptionAssessment,

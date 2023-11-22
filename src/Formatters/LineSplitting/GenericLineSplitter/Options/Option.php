@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Medas\PhpFormatter\Formatters\LineSplitting\LongLineSplitter\GenericLineSplitter\Options;
+namespace Medas\PhpFormatter\Formatters\LineSplitting\GenericLineSplitter\Options;
 
-use Medas\PhpFormatter\Formatters\LineSplitting\LongLineSplitter\GenericLineSplitter\Breakpoints\Definition;
+use Medas\PhpFormatter\Formatters\LineSplitting\GenericLineSplitter\Breakpoints\Definition;
 
 class Option
 {
