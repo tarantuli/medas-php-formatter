@@ -77,4 +77,9 @@ class BugsTest extends BaseTestClass
     {
         $this->assertRemainsTheSame('bugs/shorter-strings-sort-earlier', new Medas());
     }
+
+    public function testNonBlockCurlyBraces(): void
+    {
+        $this->assertRemainsTheSame('bugs/non-block-curly-braces', new Medas());
+    }
 }
