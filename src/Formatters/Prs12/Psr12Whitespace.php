@@ -5,7 +5,11 @@ declare(strict_types=1);
 namespace Medas\PhpFormatter\Formatters\Prs12;
 
 use Medas\Core\Attributes\Service;
-use Medas\PhpFormatter\Formatters\{Alignment\AlignArgumentNames, BaseFormatter, Helpers\ReturnTypeTokens};
+use Medas\PhpFormatter\Formatters\{
+    Alignment\AlignArgumentNames,
+    BaseFormatter,
+    Helpers\ReturnTypeTokens
+};
 use Medas\PhpFormatter\Job;
 use Medas\PhpTokenizer\{
     Contexts\MethodParameters,
@@ -193,8 +197,16 @@ readonly class Psr12Whitespace extends BaseFormatter
     {
         $spaceBeforeForbidden = $this->getSpaceBeforeForbidden();
         $spaceAfterForbidden = $this->getSpaceAfterForbidden();
-        $operatorsAndKeywords = array_merge($this->tokenGroups->keywords(), $this->tokenGroups->symbolOperators());
-        $operatorsKeywordsAndBrackets = array_merge($operatorsAndKeywords, $this->tokenGroups->brackets());
+
+        $operatorsAndKeywords = array_merge(
+            $this->tokenGroups->keywords(),
+            $this->tokenGroups->symbolOperators()
+        );
+
+        $operatorsKeywordsAndBrackets = array_merge(
+            $operatorsAndKeywords,
+            $this->tokenGroups->brackets()
+        );
 
         foreach ($tree as $token) {
             if ($token->is($spaceAfterForbidden)) {

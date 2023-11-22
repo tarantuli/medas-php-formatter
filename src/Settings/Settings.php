@@ -38,7 +38,10 @@ class Settings
         }
 
         // Sort by priority, higher values first
-        usort($this->formatters, fn(Formatter $a, Formatter $b) => -($a->priority() <=> $b->priority()));
+        usort(
+            $this->formatters,
+            fn(Formatter $a, Formatter $b) => -($a->priority() <=> $b->priority())
+        );
 
         return $this;
     }

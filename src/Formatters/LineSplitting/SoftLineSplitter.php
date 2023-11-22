@@ -5,11 +5,9 @@ declare(strict_types=1);
 namespace Medas\PhpFormatter\Formatters\LineSplitting;
 
 use Medas\Core\Attributes\{ConfigValue, Service};
-use Medas\PhpFormatter\{ConfigOptions\SoftMaxLineLength,
-    Formatters\BaseFormatter,
-    Formatters\LineSplitting\Helpers\LengthCounter,
-    Job};
-use Medas\PhpTokenizer\{Statement,
+use Medas\PhpFormatter\{ConfigOptions\SoftMaxLineLength, Formatters\BaseFormatter, Job};
+use Medas\PhpTokenizer\{
+    Statement,
     StatementTypeFinder,
     StatementTypes\ClassDeclaration,
     StatementTypes\FunctionDeclaration
@@ -20,10 +18,10 @@ readonly class SoftLineSplitter extends BaseFormatter
 {
     public function __construct(
         #[ConfigValue(SoftMaxLineLength::class)]
-        private int                 $softMaxLineLength,
-        private GenericLineSplitter $genericLineSplitter,
-        private LengthCounter       $lengthCounter,
-        private StatementTypeFinder $typeFinder,
+        private int                   $softMaxLineLength,
+        private GenericLineSplitter   $genericLineSplitter,
+        private Helpers\LengthCounter $lengthCounter,
+        private StatementTypeFinder   $typeFinder,
     )
     {
     }

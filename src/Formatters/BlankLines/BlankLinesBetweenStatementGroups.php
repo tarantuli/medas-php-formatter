@@ -6,7 +6,12 @@ namespace Medas\PhpFormatter\Formatters\BlankLines;
 
 use Medas\Core\Attributes\Service;
 use Medas\PhpFormatter\{Formatters\BaseFormatter, Job};
-use Medas\PhpTokenizer\{Statement, StatementTypeFinder, StatementTypes\GenericStatement, TokenGroups};
+use Medas\PhpTokenizer\{
+    Statement,
+    StatementTypeFinder,
+    StatementTypes\GenericStatement,
+    TokenGroups
+};
 
 #[Service]
 readonly class BlankLinesBetweenStatementGroups extends BaseFormatter

@@ -5,12 +5,9 @@ declare(strict_types=1);
 namespace Medas\PhpFormatter\Formatters\LineSplitting;
 
 use Medas\Core\Attributes\{ConfigValue, Service};
-use Medas\PhpFormatter\{ConfigOptions\MaxLineLength,
-    Formatters\BaseFormatter,
-    Formatters\LineSplitting\Helpers\LengthCounter,
-    Job
-};
-use Medas\PhpTokenizer\{Statement,
+use Medas\PhpFormatter\{ConfigOptions\MaxLineLength, Formatters\BaseFormatter, Job};
+use Medas\PhpTokenizer\{
+    Statement,
     StatementTypeFinder,
     StatementTypes\ClassDeclaration,
     StatementTypes\ControlStatement,
@@ -26,7 +23,7 @@ readonly class LongLineSplitter extends BaseFormatter
         private StatementTypeFinder         $typeFinder,
         private GenericLineSplitter         $genericLineSplitter,
         private FunctionDeclarationSplitter $functionDeclarationSplitter,
-        private LengthCounter $lengthCounter,
+        private Helpers\LengthCounter       $lengthCounter,
     )
     {
     }

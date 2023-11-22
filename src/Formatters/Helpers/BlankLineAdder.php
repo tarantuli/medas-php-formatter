@@ -69,7 +69,8 @@ readonly class BlankLineAdder
             $type = $this->statementTypeFinder->for($statement);
 
             foreach ($beforeTypes as $groupType) {
-                $bypassCheck = $groupType === Comment::class && $this->statementStartWithComment($statement);
+                $bypassCheck = $groupType === Comment::class
+                    && $this->statementStartWithComment($statement);
 
                 if (!$bypassCheck && !$type instanceof $groupType) {
                     // This statement is not of the given types

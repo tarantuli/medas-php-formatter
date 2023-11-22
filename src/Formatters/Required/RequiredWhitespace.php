@@ -54,6 +54,10 @@ readonly class RequiredWhitespace extends BaseFormatter
 
     private function getSpaceAroundNotNeeded(): array
     {
-        return array_merge($this->tokenGroups->symbolOperators(), $this->tokenGroups->brackets(), [T_PIPE]);
+        return array_merge(
+            $this->tokenGroups->symbolOperators(),
+            $this->tokenGroups->brackets(),
+            [T_PIPE]
+        );
     }
 }

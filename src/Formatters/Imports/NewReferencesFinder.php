@@ -58,7 +58,13 @@ class NewReferencesFinder
             else {
                 // The first part is an alias, the rest is relative to this
                 $alias = substr($reference->label, 0, strpos($reference->label, '\\'));
-                $aliasedPath = substr($reference->fqn, 0, -(strlen($reference->label) - strlen($alias)));
+
+                $aliasedPath = substr(
+                    $reference->fqn,
+                    0,
+                    -(strlen($reference->label) - strlen($alias))
+                );
+
                 $referencesAndImports->references[$reference->fqn] = $reference->label;
                 $referencesAndImports->imports[$aliasedPath] = $alias;
             }
@@ -67,7 +73,8 @@ class NewReferencesFinder
 
     private function isGlobalReference(ClassReference $reference): bool
     {
-        return str_starts_with($reference->fqn, '\\') && !str_contains(substr($reference->fqn, 1), '\\');
+        return str_starts_with($reference->fqn, '\\')
+            && !str_contains(substr($reference->fqn, 1), '\\');
     }
 
     private function getRelativeDepth(ClassAnalysis $analysis, ClassReference $reference): int|null

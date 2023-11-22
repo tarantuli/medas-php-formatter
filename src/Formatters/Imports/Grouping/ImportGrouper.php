@@ -50,7 +50,10 @@ readonly class ImportGrouper
 
                 ++$instance->count;
 
-                $instance->maxChildDepth = max($instance->maxChildDepth, substr_count($remainder, '\\'));
+                $instance->maxChildDepth = max(
+                    $instance->maxChildDepth,
+                    substr_count($remainder, '\\')
+                );
             }
         }
     }

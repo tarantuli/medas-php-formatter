@@ -6,7 +6,12 @@ namespace Medas\PhpFormatter\Formatters\LineSplitting\Helpers;
 
 use Medas\Core\Attributes\Service;
 use Medas\PhpFormatter\Formatters\LineSplitting\TrailingCommaSplitter;
-use Medas\PhpTokenizer\{Statement, StatementTypeFinder, StatementTypes\SwitchBranch, StatementTypes\UseClassStatement};
+use Medas\PhpTokenizer\{
+    Statement,
+    StatementTypeFinder,
+    StatementTypes\SwitchBranch,
+    StatementTypes\UseClassStatement
+};
 
 #[Service]
 readonly class StatementSplitter
@@ -50,7 +55,10 @@ readonly class StatementSplitter
 
         for ($i = $closerIndex - 1; $i > $openerIndex; --$i) {
             $token = $statement->getToken($i);
-            $questionPlusColonCheck = $token->previous && $token->previous->is(T_QUESTION_MARK) && $token->is(T_COLON);
+
+            $questionPlusColonCheck = $token->previous
+                && $token->previous->is(T_QUESTION_MARK)
+                && $token->is(T_COLON);
 
             $statement->removeToken($token);
 

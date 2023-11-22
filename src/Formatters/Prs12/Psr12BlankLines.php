@@ -165,7 +165,10 @@ readonly class Psr12BlankLines extends BaseFormatter
             $type = $this->typeFinder->for($statement);
 
             if ($statement->firstToken()->is(T_CURLY_BRACKET_CLOSE)) {
-                $switchDepths = array_filter($switchDepths, fn($depth) => $depth !== $statement->block->depth + 1);
+                $switchDepths = array_filter(
+                    $switchDepths,
+                    fn($depth) => $depth !== $statement->block->depth + 1
+                );
             }
 
             // Add additional depth levels to each statement equal to the number of open switch blocks

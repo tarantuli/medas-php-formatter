@@ -81,7 +81,10 @@ readonly class GenericLineSplitter
 
         if ($this->dumpOptionAssessment) {
             // Inject it here, so it's not initialized when not needed
-            service(GenericLineSplitter\Options\AssessmentDumper::class)->dump($statement, $assessments);
+            service(GenericLineSplitter\Options\AssessmentDumper::class)->dump(
+                $statement,
+                $assessments
+            );
         }
 
         usort(

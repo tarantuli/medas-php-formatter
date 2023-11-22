@@ -26,7 +26,10 @@ class ClusterManager
 
     public function getNextCluster(int $depth, int $index): Cluster
     {
-        $this->lastClusterPerDepth[$depth] = $this->currentCluster = new Cluster(++$this->id, $index);
+        $this->lastClusterPerDepth[$depth] = $this->currentCluster = new Cluster(
+            ++$this->id,
+            $index
+        );
 
         return $this->currentCluster;
     }

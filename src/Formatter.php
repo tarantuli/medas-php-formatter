@@ -62,7 +62,10 @@ readonly class Formatter
     private function assertCodeIsValid(string $code): void
     {
         if (!$this->codeValidator->validate($code)) {
-            throw new Exceptions\ReformattedCodeIsInvalidException($code, $this->codeValidator->getErrorMessage());
+            throw new Exceptions\ReformattedCodeIsInvalidException(
+                $code,
+                $this->codeValidator->getErrorMessage()
+            );
         }
     }
 

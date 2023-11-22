@@ -61,13 +61,25 @@ readonly class TrailingCommaSplitter extends BaseFormatter
                     continue;
                 }
 
-                $openerIndex = $this->findOpener($statement, $commaIndex, self::BRACKETS[$nextText], $nextText);
+                $openerIndex = $this->findOpener(
+                    $statement,
+                    $commaIndex,
+                    self::BRACKETS[$nextText],
+                    $nextText
+                );
 
                 if ($openerIndex === null) {
                     continue;
                 }
 
-                $this->splitter->split($statement, [T_COMMA], true, $openerIndex, $commaIndex + 1, 1);
+                $this->splitter->split(
+                    $statement,
+                    [T_COMMA],
+                    true,
+                    $openerIndex,
+                    $commaIndex + 1,
+                    1
+                );
 
                 return true;
             }

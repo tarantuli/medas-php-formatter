@@ -46,7 +46,12 @@ readonly class NormalizeImports extends BaseFormatter
         $referencesAndImports = new ReferencesAndImports();
 
         // Determine new references and new imports
-        $this->newReferencesFinder->determine($analysis, $job->settings->import, $referencesAndImports);
+        $this->newReferencesFinder->determine(
+            $analysis,
+            $job->settings->import,
+            $referencesAndImports
+        );
+
         $this->newImportsFinder->determine($referencesAndImports, $analysis->name);
 
         // Insert the new import header and update references in the body

@@ -16,7 +16,12 @@ class ClassDeclarationSet implements BreakpointSet
     {
         // Sort the best breakpoints on top
         $this->groups = [[
-            new Definition('implements/extends', [T_IMPLEMENTS, T_EXTENDS], keepPrefixAndSuffix: true, additionalDepth: 1),
+            new Definition(
+                'implements/extends',
+                [T_IMPLEMENTS, T_EXTENDS],
+                keepPrefixAndSuffix: true,
+                additionalDepth: 1
+            ),
         ]];
     }
 

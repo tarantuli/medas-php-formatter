@@ -6,7 +6,12 @@ namespace Medas\PhpFormatter\Formatters\BlankLines;
 
 use Medas\Core\Attributes\Service;
 use Medas\PhpFormatter\{Formatters\BaseFormatter, Formatters\Helpers, Job};
-use Medas\PhpTokenizer\StatementTypes\{ClassConstDeclaration, ClassPropertyDeclaration, Comment, UseTraitStatement};
+use Medas\PhpTokenizer\StatementTypes\{
+    ClassConstDeclaration,
+    ClassPropertyDeclaration,
+    Comment,
+    UseTraitStatement
+};
 
 #[Service]
 readonly class BlankLinesBetweenClassSections extends BaseFormatter
