@@ -6,7 +6,12 @@ namespace Medas\PhpFormatter\Formatters\LineSplitting\Helpers;
 
 use Medas\Core\Attributes\Service;
 use Medas\PhpFormatter\Formatters\LineSplitting\TrailingCommaSplitter;
-use Medas\PhpTokenizer\{Statement, StatementTypeFinder, StatementTypes\SwitchBranch, StatementTypes\UseClassStatement};
+use Medas\PhpTokenizer\{
+    Statement,
+    StatementTypeFinder,
+    StatementTypes\SwitchBranch,
+    StatementTypes\UseClassStatement
+};
 
 #[Service]
 readonly class StatementSplitter
@@ -30,7 +35,6 @@ readonly class StatementSplitter
         $this->addBlankLineBefore($statement);
 
         $currentStatement = null;
-
         $depth = $this->determineInitialDepth($statement);
 
         if ($statement->firstToken()->is(TrailingCommaSplitter::BRACKETS)
@@ -184,14 +188,12 @@ readonly class StatementSplitter
     {
         $openers = 0;
         $closers = 0;
-
         $lastToken = $statement->lastToken();
 
         foreach ($statement as $token) {
             if ($token !== $lastToken && $token->is(TrailingCommaSplitter::BRACKETS)) {
                 ++$openers;
             }
-
             elseif ($token->is(TrailingCommaSplitter::CLOSERS)) {
                 ++$closers;
             }
