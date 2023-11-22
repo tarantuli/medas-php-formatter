@@ -6,8 +6,7 @@ namespace Medas\PhpFormatter\Formatters\LineSplitting;
 
 use Medas\Core\Attributes\{ConfigValue, Service};
 use Medas\PhpFormatter\{ConfigOptions\MaxLineLength, Formatters\BaseFormatter, Job};
-use Medas\PhpTokenizer\{
-    Statement,
+use Medas\PhpTokenizer\{Statement,
     StatementTypeFinder,
     StatementTypes\ClassDeclaration,
     StatementTypes\ControlStatement,
@@ -68,14 +67,19 @@ readonly class LongLineSplitter extends BaseFormatter
     {
         $length = $statement->block->depth * 4;
         $previousToken = null;
+        $foundNonCommentToken = false;
 
         foreach ($statement as $token) {
-            if (!$token->is([T_DOC_COMMENT, T_COMMENT])) {
-                $length += strlen($token->text);
+            if (!$token->is([T_COMMENT, T_DOC_COMMENT, T_ATTRIBUTE]) && !$token->inAttribute) {
+                $foundNonCommentToken = true;
             }
 
-            if ($previousToken && $previousToken->spaceAfter) {
-                $length++;
+            if ($foundNonCommentToken) {
+                $length += strlen($token->text);
+
+                if ($previousToken && $previousToken->spaceAfter) {
+                    $length++;
+                }
             }
 
             $previousToken = $token;

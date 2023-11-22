@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use EntityStructureFinder;
+use Medas\BasicRequestHandler\Contexts\Context;
 use Medas\Core\Attributes\{ConfigOptions, ConfigValue};
 use Medas\PhpFormatter\{BlockPrinter, CodeValidator};
 use Medas\PhpTokenizer\{BlockDumper, Tokenizer, TreeBuilder};
@@ -72,6 +73,15 @@ abstract class AbstractLalalalaEntityType
             $rootPrefixLalalalalalalalalalalalalaal,
             str_replace(DIRECTORY_SEPARATOR, "", $subdirectory)
         );
+    }
+
+    protected function formatValue(
+        /** @noinspection PhpUnusedParameterInspection */
+        string  $property,
+        mixed   $value,
+        Context $context
+    ): mixed
+    {
     }
 
     private function findInheritance(EntityStructureFinder\Job $job): void
