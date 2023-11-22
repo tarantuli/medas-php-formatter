@@ -72,4 +72,9 @@ class BugsTest extends BaseTestClass
     {
         $this->assertRemainsTheSame('bugs/comment-after-start', new Medas());
     }
+
+    public function testShorterStringsSortEarlier(): void
+    {
+        $this->assertRemainsTheSame('bugs/shorter-strings-sort-earlier', new Medas());
+    }
 }
