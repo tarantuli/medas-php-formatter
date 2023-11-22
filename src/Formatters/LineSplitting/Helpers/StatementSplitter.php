@@ -6,12 +6,7 @@ namespace Medas\PhpFormatter\Formatters\LineSplitting\Helpers;
 
 use Medas\Core\Attributes\Service;
 use Medas\PhpFormatter\Formatters\LineSplitting\TrailingCommaSplitter;
-use Medas\PhpTokenizer\{
-    Statement,
-    StatementTypeFinder,
-    StatementTypes\SwitchBranch,
-    StatementTypes\UseClassStatement
-};
+use Medas\PhpTokenizer\{Statement, StatementTypeFinder, StatementTypes\SwitchBranch, StatementTypes\UseClassStatement};
 
 #[Service]
 readonly class StatementSplitter
@@ -31,10 +26,12 @@ readonly class StatementSplitter
         int       $additionalDepth
     ): void
     {
+        //funcdump($statement, $separators, $splitAfter, $openerIndex, $closerIndex, $additionalDepth);
         $this->addBlankLineBefore($statement);
 
         $currentStatement = null;
-        $depth = 0;
+
+        $depth = $this->determineInitialDepth($statement);
 
         if ($statement->firstToken()->is(TrailingCommaSplitter::BRACKETS)
                 && $statement->lastToken()->is(TrailingCommaSplitter::CLOSERS)) {
@@ -181,5 +178,25 @@ readonly class StatementSplitter
         if ($statement->block === $previousStatement->block) {
             $previousStatement->blankLineAfter();
         }
+    }
+
+    private function determineInitialDepth(Statement $statement): int
+    {
+        $openers = 0;
+        $closers = 0;
+
+        $lastToken = $statement->lastToken();
+
+        foreach ($statement as $token) {
+            if ($token !== $lastToken && $token->is(TrailingCommaSplitter::BRACKETS)) {
+                ++$openers;
+            }
+
+            elseif ($token->is(TrailingCommaSplitter::CLOSERS)) {
+                ++$closers;
+            }
+        }
+
+        return $openers > $closers ? $openers - $closers : 0;
     }
 }

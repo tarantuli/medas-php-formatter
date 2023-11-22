@@ -20,7 +20,9 @@ class ClassNameNormalizer
         private string|null $rootNamespace,
     )
     {
-        $metaData = $this->cacheManager->get()->get([static::class, $className], function () use ($className) {
+        $metaData = $this->cacheManager->get()->get(
+            [static::class, $className],
+            function () use ($className) {
             return $this->compiler->compile($className);
         });
 

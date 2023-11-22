@@ -54,7 +54,23 @@ abstract class AbstractLalalalaEntityType
     {
         $a = [
             $kaas,
-            [$baas, $baas, $baas, $baas, $baas, $baas, $baas, $baas, $baas, $baas, $baas, $baas, $baas, $baas, $baas],
+            [
+                $baas,
+                $baas,
+                $baas,
+                $baas,
+                $baas,
+                $baas,
+                $baas,
+                $baas,
+                $baas,
+                $baas,
+                $baas,
+                $baas,
+                $baas,
+                $baas,
+                $baas
+            ],
             $caas,
             [$daas, $daas, $daas, $daas, $daas, $daas, $daas, $daas, $daas],
             $faas

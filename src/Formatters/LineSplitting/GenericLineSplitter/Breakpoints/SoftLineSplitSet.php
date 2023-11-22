@@ -31,6 +31,9 @@ class SoftLineSplitSet implements BreakpointSet
             [
                 new Definition('depth 0 slash', [T_SLASH], maxDepth: 0),
             ],
+            [
+                new Definition('depth 1 comma', [T_COMMA], splitAfter: true, maxDepth: 1),
+            ],
         ];
     }
 
