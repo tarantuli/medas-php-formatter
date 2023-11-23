@@ -13,7 +13,6 @@ readonly class BlankLinesAfterPropertiesWithAttributes extends BaseFormatter
 {
     public function __construct(
         private StatementTypeFinder $typeFinder,
-        private TokenGroups         $tokenGroups,
     )
     {
     }
@@ -26,7 +25,9 @@ readonly class BlankLinesAfterPropertiesWithAttributes extends BaseFormatter
     public function format(Job $job): void
     {
         foreach ($job->tree->block() as $statement) {
-            if (!$statement->firstToken()->is($this->tokenGroups->comments())) {
+            // Don't put a blank line after a property that starts with a basic comment;
+            // These are most likely group dividers
+            if (!$statement->firstToken()->is([T_DOC_COMMENT, T_ATTRIBUTE])) {
                 continue;
             }
 
