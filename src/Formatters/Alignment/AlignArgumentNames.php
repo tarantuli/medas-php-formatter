@@ -21,7 +21,7 @@ readonly class AlignArgumentNames extends BaseFormatter
 
     public function priority(): int
     {
-        return 600;
+        return 400;
     }
 
     public function format(Job $job): void

@@ -25,7 +25,7 @@ readonly class BlankLinesBeforeBlocks extends BaseFormatter
 
     public function priority(): int
     {
-        return 400;
+        return 300;
     }
 
     public function format(Job $job): void

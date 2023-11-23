@@ -19,7 +19,7 @@ readonly class KeywordsToLowercase extends BaseFormatter
 
     public function priority(): int
     {
-        return 1500;
+        return 1600;
     }
 
     public function format(Job $job): void

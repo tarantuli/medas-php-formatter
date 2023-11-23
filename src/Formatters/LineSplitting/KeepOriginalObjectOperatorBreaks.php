@@ -18,7 +18,7 @@ readonly class KeepOriginalObjectOperatorBreaks extends BaseFormatter
 {
     public function priority(): int
     {
-        return 900;
+        return 1000;
     }
 
     public function format(Job $job): void

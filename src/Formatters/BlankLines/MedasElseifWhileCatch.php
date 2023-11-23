@@ -12,7 +12,7 @@ readonly class MedasElseifWhileCatch extends BaseFormatter
 {
     public function priority(): int
     {
-        return 1000;
+        return 1100;
     }
 
     public function format(Job $job): void

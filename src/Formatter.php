@@ -30,7 +30,12 @@ readonly class Formatter
     {
         $job = new Job($settings);
 
-        $this->assertCodeIsValid($code);
+        if (!$this->codeValidator->validate($code)) {
+            throw new Exceptions\ReformattedCodeIsInvalidException(
+                $code,
+                $this->codeValidator->getErrorMessage()
+            );
+        }
 
         $job->tokens = $this->tokenizer->tokenize($code);
 
@@ -54,19 +59,14 @@ readonly class Formatter
             (string) $job->settings->document->lineEnding()
         );
 
-        $this->assertCodeIsValid($result);
-
-        return $result;
-    }
-
-    private function assertCodeIsValid(string $code): void
-    {
-        if (!$this->codeValidator->validate($code)) {
+        if (!$this->codeValidator->validate($result)) {
             throw new Exceptions\ReformattedCodeIsInvalidException(
                 $code,
                 $this->codeValidator->getErrorMessage()
             );
         }
+
+        return $result;
     }
 
     private function applyPreparsers(Job $job): void

@@ -36,7 +36,7 @@ readonly class Psr12Whitespace extends BaseFormatter
 
     public function priority(): int
     {
-        return 1100;
+        return 1200;
     }
 
     public function format(Job $job): void

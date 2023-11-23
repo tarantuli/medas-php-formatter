@@ -24,7 +24,7 @@ readonly class BlankLinesBetweenClassSections extends BaseFormatter
 
     public function priority(): int
     {
-        return 775;
+        return 900;
     }
 
     public function format(Job $job): void

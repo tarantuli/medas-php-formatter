@@ -19,7 +19,7 @@ readonly class RequiredWhitespace extends BaseFormatter
 
     public function priority(): int
     {
-        return 1700;
+        return 1800;
     }
 
     public function format(Job $job): void

@@ -30,7 +30,7 @@ readonly class LongLineSplitter extends BaseFormatter
 
     public function priority(): int
     {
-        return 700;
+        return 600;
     }
 
     public function format(Job $job): void

@@ -25,7 +25,7 @@ readonly class Psr12VisibilityMarkers extends BaseFormatter
 
     public function priority(): int
     {
-        return 1400;
+        return 1500;
     }
 
     public function format(Job $job): void

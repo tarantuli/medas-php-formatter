@@ -12,7 +12,7 @@ readonly class Psr12ElseifWhileCatch extends BaseFormatter
 {
     public function priority(): int
     {
-        return 1300;
+        return 1400;
     }
 
     public function format(Job $job): void

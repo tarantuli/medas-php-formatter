@@ -37,7 +37,7 @@ readonly class NormalizeImports extends BaseFormatter
 
     public function priority(): int
     {
-        return 1600;
+        return 1700;
     }
 
     public function format(Job $job): void

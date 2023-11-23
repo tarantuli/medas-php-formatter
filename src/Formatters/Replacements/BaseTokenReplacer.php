@@ -11,7 +11,7 @@ abstract readonly class BaseTokenReplacer extends BaseFormatter
 {
     public function priority(): int
     {
-        return 1900;
+        return 2000;
     }
 
     public function format(Job $job): void

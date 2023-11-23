@@ -23,7 +23,7 @@ readonly class MoveCommentsAtLineEnd extends BaseFormatter
 
     public function priority(): int
     {
-        return 1800;
+        return 1900;
     }
 
     public function format(Job $job): void

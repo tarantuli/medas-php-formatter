@@ -42,7 +42,7 @@ readonly class BlankLinesBetweenStatementGroups extends BaseFormatter
 
     public function priority(): int
     {
-        return 300;
+        return 200;
     }
 
     public function format(Job $job): void

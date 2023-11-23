@@ -16,7 +16,7 @@ readonly class UseUnionNullInsteadOfNullable extends BaseFormatter
 {
     public function priority(): int
     {
-        return 2100;
+        return 2200;
     }
 
     public function format(Job $job): void

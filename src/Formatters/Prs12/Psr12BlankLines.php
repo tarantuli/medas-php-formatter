@@ -34,7 +34,7 @@ readonly class Psr12BlankLines extends BaseFormatter
 
     public function priority(): int
     {
-        return 1200;
+        return 1300;
     }
 
     public function format(Job $job): void

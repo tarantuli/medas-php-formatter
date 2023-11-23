@@ -26,7 +26,7 @@ readonly class SingleLineControlBodiesEncloser extends BaseFormatter
 
     public function priority(): int
     {
-        return 2000;
+        return 2100;
     }
 
     public function format(Job $job): void

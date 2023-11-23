@@ -19,7 +19,7 @@ readonly class BlankLinesAfterPropertiesWithAttributes extends BaseFormatter
 
     public function priority(): int
     {
-        return 750;
+        return 800;
     }
 
     public function format(Job $job): void

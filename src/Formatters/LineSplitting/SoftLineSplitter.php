@@ -28,7 +28,7 @@ readonly class SoftLineSplitter extends BaseFormatter
 
     public function priority(): int
     {
-        return 690;
+        return 500;
     }
 
     public function format(Job $job): void
