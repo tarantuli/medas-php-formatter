@@ -5,11 +5,8 @@ declare(strict_types=1);
 namespace Medas\PhpFormatter\Formatters\LineSplitting\GenericLineSplitter\Options;
 
 use Medas\Core\Attributes\Service;
-use Medas\PhpFormatter\Formatters\LineSplitting\GenericLineSplitter\{
-    Breakpoints\Definition,
-    ClusterManager
-};
-use Medas\PhpFormatter\Formatters\LineSplitting\TrailingCommaSplitter;
+use Medas\PhpFormatter\Formatters\LineSplitting\GenericLineSplitter\Breakpoints\Definition;
+use Medas\PhpFormatter\Formatters\Tokens;
 use Medas\PhpTokenizer\Statement;
 
 #[Service]
@@ -36,7 +33,7 @@ readonly class Finder
                 continue;
             }
 
-            if ($token->is(TrailingCommaSplitter::BRACKETS)) {
+            if ($token->is(Tokens::OPENING_BRACKETS)) {
                 ++$depth;
 
                 $cluster = $clusterManager->getNextCluster($depth, $index);
@@ -53,9 +50,11 @@ readonly class Finder
 
             $questionPlusColonCheck = $token->is(T_COLON)
                 && $token->previous
-                                && $token->previous->is(T_QUESTION_MARK);
+                && $token->previous->is(T_QUESTION_MARK);
 
-            $argumentNameCheck = $token->is(T_COLON) && $token->previous && $token->previous->is(T_STRING);
+            $argumentNameCheck = $token->is(T_COLON)
+                && $token->previous
+                && $token->previous->is(T_STRING);
 
             if (!$questionPlusColonCheck && !$argumentNameCheck && $token->is($definition->separators)) {
                 if (!array_key_exists($cluster->id, $options)) {
@@ -83,7 +82,7 @@ readonly class Finder
                 $options[$cluster->id]->breakpointIndices[] = $index;
             }
 
-            if ($token->is(TrailingCommaSplitter::CLOSERS) && $depth > 0) {
+            if ($token->is(Tokens::CLOSING_BRACKETS) && $depth > 0) {
                 if (isset($options[$cluster->id]) && !$definition->keepPrefixAndSuffix) {
                     $options[$cluster->id]->closerIndex = $index;
                 }
@@ -94,9 +93,15 @@ readonly class Finder
             }
         }
 
+        return $this->cleanUpOptions($options, $definition);
+    }
+
+    private function cleanUpOptions(array $options, Definition $definition): array
+    {
         /** @var Option[] $options */
         $options = $this->flatten($options);
 
+        // Remove options that are too deeply nested
         if ($definition->maxDepth !== null) {
             foreach ($options as $i => $option) {
                 if ($option->depth > $definition->maxDepth) {

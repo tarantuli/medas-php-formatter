@@ -19,6 +19,7 @@ use Medas\PhpTokenizer\{
     StatementTypes\UseClassStatement,
     StatementTypes\UseConstStatement,
     StatementTypes\UseFunctionStatement,
+    TokenGroups,
     TokenTree
 };
 
@@ -28,6 +29,7 @@ readonly class Psr12BlankLines extends BaseFormatter
     public function __construct(
         private BlankLineAdder      $blankLineAdder,
         private StatementTypeFinder $typeFinder,
+        private TokenGroups         $tokenGroups,
     )
     {
     }
@@ -111,7 +113,7 @@ readonly class Psr12BlankLines extends BaseFormatter
         for ($index = 0; $index < $token->statement->getIndex($token); ++$index) {
             $earlierToken = $token->statement->getToken($index);
 
-            if (!$earlierToken->inAttribute && !$earlierToken->is([T_DOC_COMMENT, T_COMMENT, T_ATTRIBUTE])) {
+            if (!$earlierToken->inAttribute && !$earlierToken->is($this->tokenGroups->comments())) {
                 return false;
             }
         }

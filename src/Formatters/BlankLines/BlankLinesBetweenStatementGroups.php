@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Medas\PhpFormatter\Formatters\BlankLines;
 
 use Medas\Core\Attributes\Service;
-use Medas\PhpFormatter\{Formatters\BaseFormatter, Job};
+use Medas\PhpFormatter\{Formatters\BaseFormatter, Formatters\Tokens, Job};
 use Medas\PhpTokenizer\{
     Statement,
     StatementTypeFinder,
@@ -16,28 +16,11 @@ use Medas\PhpTokenizer\{
 #[Service]
 readonly class BlankLinesBetweenStatementGroups extends BaseFormatter
 {
-    private array $constructs;
-
     public function __construct(
         private StatementTypeFinder $typeFinder,
         private TokenGroups         $tokenGroups,
     )
     {
-        $this->constructs = [
-            T_BREAK,
-            T_CONTINUE,
-            T_ECHO,
-            T_EXIT,
-            T_GLOBAL,
-            T_GOTO,
-            T_INCLUDE,
-            T_INCLUDE_ONCE,
-            T_REQUIRE,
-            T_REQUIRE_ONCE,
-            T_RETURN,
-            T_YIELD,
-            T_YIELD_FROM,
-        ];
     }
 
     public function priority(): int
@@ -87,7 +70,7 @@ readonly class BlankLinesBetweenStatementGroups extends BaseFormatter
                 return 1;
             }
 
-            if ($token->is($this->constructs)) {
+            if ($token->is(Tokens::CONSTRUCTS)) {
                 return 2;
             }
 

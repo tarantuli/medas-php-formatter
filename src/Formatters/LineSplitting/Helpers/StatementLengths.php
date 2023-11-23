@@ -5,19 +5,25 @@ declare(strict_types=1);
 namespace Medas\PhpFormatter\Formatters\LineSplitting\Helpers;
 
 use Medas\Core\Attributes\Service;
-use Medas\PhpTokenizer\Statement;
+use Medas\PhpTokenizer\{Statement, TokenGroups};
 
 #[Service]
-readonly class LengthCounter
+readonly class StatementLengths
 {
-    public function count(Statement $statement): int
+    public function __construct(
+        private TokenGroups $tokenGroups,
+    )
+    {
+    }
+
+    public function measure(Statement $statement): int
     {
         $length = $statement->block->depth * 4;
         $previousToken = null;
         $foundNonCommentToken = false;
 
         foreach ($statement as $token) {
-            if (!$token->is([T_COMMENT, T_DOC_COMMENT, T_ATTRIBUTE]) && !$token->inAttribute) {
+            if (!$token->is($this->tokenGroups->comments()) && !$token->inAttribute) {
                 $foundNonCommentToken = true;
             }
 

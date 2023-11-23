@@ -6,13 +6,14 @@ namespace Medas\PhpFormatter\Formatters\BlankLines;
 
 use Medas\Core\Attributes\Service;
 use Medas\PhpFormatter\{Formatters\BaseFormatter, Job};
-use Medas\PhpTokenizer\{StatementTypeFinder, StatementTypes\ClassPropertyDeclaration};
+use Medas\PhpTokenizer\{StatementTypeFinder, StatementTypes\ClassPropertyDeclaration, TokenGroups};
 
 #[Service]
 readonly class BlankLinesAfterPropertiesWithAttributes extends BaseFormatter
 {
     public function __construct(
         private StatementTypeFinder $typeFinder,
+        private TokenGroups         $tokenGroups,
     )
     {
     }
@@ -25,7 +26,7 @@ readonly class BlankLinesAfterPropertiesWithAttributes extends BaseFormatter
     public function format(Job $job): void
     {
         foreach ($job->tree->block() as $statement) {
-            if (!$statement->firstToken()->is([T_DOC_COMMENT, T_ATTRIBUTE])) {
+            if (!$statement->firstToken()->is($this->tokenGroups->comments())) {
                 continue;
             }
 

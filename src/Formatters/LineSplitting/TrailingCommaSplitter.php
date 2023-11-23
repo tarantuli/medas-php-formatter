@@ -5,24 +5,12 @@ declare(strict_types=1);
 namespace Medas\PhpFormatter\Formatters\LineSplitting;
 
 use Medas\Core\Attributes\Service;
-use Medas\PhpFormatter\{Formatters\BaseFormatter, Job};
+use Medas\PhpFormatter\{Formatters\BaseFormatter, Formatters\Tokens, Job};
 use Medas\PhpTokenizer\Statement;
 
 #[Service]
 readonly class TrailingCommaSplitter extends BaseFormatter
 {
-    public const BRACKETS = [
-        T_SQUARE_BRACKET_CLOSE => T_SQUARE_BRACKET_OPEN,
-        T_CURLY_BRACKET_CLOSE => T_CURLY_BRACKET_OPEN,
-        T_ROUND_BRACKET_CLOSE => T_ROUND_BRACKET_OPEN,
-    ];
-
-    public const CLOSERS = [
-        T_SQUARE_BRACKET_CLOSE,
-        T_CURLY_BRACKET_CLOSE,
-        T_ROUND_BRACKET_CLOSE,
-    ];
-
     public function __construct(
         private Helpers\StatementSplitter $splitter,
     )
@@ -57,14 +45,14 @@ readonly class TrailingCommaSplitter extends BaseFormatter
 
                 $nextText = $token->next->text;
 
-                if (!array_key_exists($nextText, self::BRACKETS)) {
+                if (!array_key_exists($nextText, Tokens::OPENING_BRACKETS)) {
                     continue;
                 }
 
                 $openerIndex = $this->findOpener(
                     $statement,
                     $commaIndex,
-                    self::BRACKETS[$nextText],
+                    Tokens::OPENING_BRACKETS[$nextText],
                     $nextText
                 );
 

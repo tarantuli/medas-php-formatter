@@ -34,9 +34,13 @@ readonly class UseUnionNullInsteadOfNullable extends BaseFormatter
     private function replaceByUnionNull(Token $token): void
     {
         $statement = $token->statement;
+
+        // Pipe token
         $pipeToken = new Token(124, '|');
         $pipeToken->context = $token->context;
         $pipeToken->inTypeDeclaration = true;
+
+        // Null token
         $nullToken = new Token(T_STRING, 'null');
         $nullToken->context = $token->context;
         $nullToken->inTypeDeclaration = true;

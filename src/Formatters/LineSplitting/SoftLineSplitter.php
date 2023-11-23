@@ -18,10 +18,10 @@ readonly class SoftLineSplitter extends BaseFormatter
 {
     public function __construct(
         #[ConfigValue(SoftMaxLineLength::class)]
-        private int                   $softMaxLineLength,
-        private GenericLineSplitter   $genericLineSplitter,
-        private Helpers\LengthCounter $lengthCounter,
-        private StatementTypeFinder   $typeFinder,
+        private int                      $softMaxLineLength,
+        private GenericLineSplitter      $genericLineSplitter,
+        private Helpers\StatementLengths $lengthCounter,
+        private StatementTypeFinder      $typeFinder,
     )
     {
     }
@@ -49,7 +49,7 @@ readonly class SoftLineSplitter extends BaseFormatter
                 continue;
             }
 
-            $length = $this->lengthCounter->count($statement);
+            $length = $this->lengthCounter->measure($statement);
 
             if ($length <= $this->softMaxLineLength) {
                 continue;

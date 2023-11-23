@@ -35,7 +35,7 @@ class GenericLineSet implements BreakpointSet
             ],
             [
                 new Definition('pipe', [T_PIPE]),
-                new Definition('arithmetic', [T_PLUS, T_MINUS, T_SLASH]),
+                new Definition('arithmetic', [T_PLUS, T_MINUS, T_ASTERISK, T_SLASH]),
                 new Definition('depth 0 assignment', [T_ASSIGNMENT], maxDepth: 0),
             ],
             [

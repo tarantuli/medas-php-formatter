@@ -5,19 +5,15 @@ declare(strict_types=1);
 namespace Medas\PhpFormatter\Formatters\LineSplitting\Helpers;
 
 use Medas\Core\Attributes\Service;
-use Medas\PhpFormatter\Formatters\LineSplitting\TrailingCommaSplitter;
-use Medas\PhpTokenizer\{
-    Statement,
-    StatementTypeFinder,
-    StatementTypes\SwitchBranch,
-    StatementTypes\UseClassStatement
-};
+use Medas\PhpFormatter\Formatters\Tokens;
+use Medas\PhpTokenizer\{Statement, TokenGroups};
 
 #[Service]
 readonly class StatementSplitter
 {
     public function __construct(
-        private StatementTypeFinder $typeFinder,
+        private StatementSplitter\BlankLineInserter $blankLineInserter,
+        private TokenGroups                         $tokenGroups,
     )
     {
     }
@@ -31,18 +27,18 @@ readonly class StatementSplitter
         int       $additionalDepth
     ): void
     {
-        $this->addBlankLineBefore($statement);
+        $this->blankLineInserter->addBlankLineBefore($statement);
 
         $currentStatement = null;
         $depth = $this->determineInitialDepth($statement);
 
-        if ($statement->lastToken()->is(TrailingCommaSplitter::CLOSERS)) {
+        if ($statement->lastToken()->is(Tokens::CLOSING_BRACKETS)) {
             // Statements that end with closing brackets are hard to process correctly elsewhere,
             // so skip the last token here
             $closerIndex = $statement->tokenCount() - 1;
         }
 
-        if ($statement->lastToken()->is(TrailingCommaSplitter::BRACKETS)
+        if ($statement->lastToken()->is(Tokens::OPENING_BRACKETS)
                 && $statement->lastToken()->previous->lineBreakAfter
                 && $closerIndex === $statement->tokenCount()) {
             // The last token is an opening bracket, and there's a line break before it:
@@ -75,11 +71,11 @@ readonly class StatementSplitter
                 $currentStatement = $this->startNewStatement($statement, $additionalDepth);
             }
 
-            if (!$token->inAttribute && in_array($text, TrailingCommaSplitter::CLOSERS)) {
+            if (!$token->inAttribute && in_array($text, Tokens::CLOSING_BRACKETS)) {
                 ++$depth;
             }
 
-            if (!$token->inAttribute && in_array($text, TrailingCommaSplitter::BRACKETS)) {
+            if (!$token->inAttribute && in_array($text, Tokens::OPENING_BRACKETS)) {
                 --$depth;
             }
 
@@ -90,7 +86,7 @@ readonly class StatementSplitter
 
                 if ($currentStatement->tokenCount() === 0
                         && $currentStatement->next()
-                        && $currentStatement->next()->firstToken()->is([T_ATTRIBUTE, T_COMMENT, T_DOC_COMMENT])) {
+                        && $currentStatement->next()->firstToken()->is($this->tokenGroups->comments())) {
                     $currentStatement->blankLineAfter();
                 }
 
@@ -148,40 +144,6 @@ readonly class StatementSplitter
         return $newStatement;
     }
 
-    private function addBlankLineBefore(Statement $statement): void
-    {
-        if (!$previousStatement = $statement->previous()) {
-            return;
-        }
-
-        $previousStatementType = $this->typeFinder->for($previousStatement);
-
-        if ($previousStatementType instanceof SwitchBranch) {
-            // No blank line after the start of a case statement
-            return;
-        }
-
-        if ($this->typeFinder->for($statement) instanceof UseClassStatement
-                && $previousStatementType instanceof UseClassStatement) {
-            // No blank lines between a use statement and a split use statement
-            return;
-        }
-
-        if ($statement->rootStatement === $previousStatement) {
-            // No blank lines between a root statement and its children
-            return;
-        }
-
-        if ($previousStatement->lastToken()->is(T_COMMA)) {
-            // No blank lines between comma separated listing
-            return;
-        }
-
-        if ($statement->block === $previousStatement->block) {
-            $previousStatement->blankLineAfter();
-        }
-    }
-
     private function determineInitialDepth(Statement $statement): int
     {
         $openers = 0;
@@ -189,10 +151,10 @@ readonly class StatementSplitter
         $lastToken = $statement->lastToken();
 
         foreach ($statement as $token) {
-            if ($token !== $lastToken && $token->is(TrailingCommaSplitter::BRACKETS)) {
+            if ($token !== $lastToken && $token->is(Tokens::OPENING_BRACKETS)) {
                 ++$openers;
             }
-            elseif ($token->is(TrailingCommaSplitter::CLOSERS)) {
+            elseif ($token->is(Tokens::CLOSING_BRACKETS)) {
                 ++$closers;
             }
         }

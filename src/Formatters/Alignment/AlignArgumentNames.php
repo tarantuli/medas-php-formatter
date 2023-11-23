@@ -5,14 +5,12 @@ declare(strict_types=1);
 namespace Medas\PhpFormatter\Formatters\Alignment;
 
 use Medas\Core\Attributes\Service;
-use Medas\PhpFormatter\{Formatters\BaseFormatter, Job};
+use Medas\PhpFormatter\{Formatters\BaseFormatter, Formatters\Tokens, Job};
 use Medas\PhpTokenizer\{StatementTypeFinder, StatementTypes\FunctionDeclaration, Token};
 
 #[Service]
 readonly class AlignArgumentNames extends BaseFormatter
 {
-    public const VARIABLE_STARTERS = [T_AMPERSAND, T_ELLIPSIS, T_VARIABLE];
-
     public function __construct(
         private StatementTypeFinder $typeFinder,
     )
@@ -41,7 +39,7 @@ readonly class AlignArgumentNames extends BaseFormatter
             $currentLength = 0;
 
             foreach ($statement as $token) {
-                if (!$token->is(self::VARIABLE_STARTERS)) {
+                if (!$token->is(Tokens::VARIABLE_STARTERS)) {
                     if (!$this->skipLength($token)) {
                         $currentLength += strlen($token->text) + $token->spaceAfter;
                     }
@@ -84,7 +82,7 @@ readonly class AlignArgumentNames extends BaseFormatter
             $foundVariable = false;
 
             foreach ($statement as $token) {
-                if ($token->is(self::VARIABLE_STARTERS)) {
+                if ($token->is(Tokens::VARIABLE_STARTERS)) {
                     $foundVariable = true;
 
                     break;

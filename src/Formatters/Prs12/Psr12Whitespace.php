@@ -5,11 +5,7 @@ declare(strict_types=1);
 namespace Medas\PhpFormatter\Formatters\Prs12;
 
 use Medas\Core\Attributes\Service;
-use Medas\PhpFormatter\Formatters\{
-    Alignment\AlignArgumentNames,
-    BaseFormatter,
-    Helpers\ReturnTypeTokens
-};
+use Medas\PhpFormatter\Formatters\{BaseFormatter, Helpers\ReturnTypeTokens, Tokens};
 use Medas\PhpFormatter\Job;
 use Medas\PhpTokenizer\{
     Contexts\MethodParameters,
@@ -85,7 +81,7 @@ readonly class Psr12Whitespace extends BaseFormatter
 
                 // No space between & and variable starters in method parameters
                 if ($token->previous->is(T_AMPERSAND)
-                        && $token->is(AlignArgumentNames::VARIABLE_STARTERS)
+                        && $token->is(Tokens::VARIABLE_STARTERS)
                         && $token->context instanceof MethodParameters) {
                     $token->previous->spaceAfter(false);
                 }
@@ -139,21 +135,6 @@ readonly class Psr12Whitespace extends BaseFormatter
         }
     }
 
-    private function getSpaceBeforeRequired(): array
-    {
-        return array_merge(
-            $this->getSpaceAroundRequired(),
-            [
-                T_AMPERSAND,
-                T_ELLIPSIS,
-                T_PIPE,
-                T_QUESTION_MARK,
-                T_SQUARE_BRACKET_OPEN,
-                T_VARIABLE,
-            ],
-        );
-    }
-
     private function getSpaceAroundRequired(): array
     {
         return array_merge(
@@ -175,6 +156,21 @@ readonly class Psr12Whitespace extends BaseFormatter
                 T_PIPE,
                 T_QUESTION_MARK,
                 T_RETURN,
+            ],
+        );
+    }
+
+    private function getSpaceBeforeRequired(): array
+    {
+        return array_merge(
+            $this->getSpaceAroundRequired(),
+            [
+                T_AMPERSAND,
+                T_ELLIPSIS,
+                T_PIPE,
+                T_QUESTION_MARK,
+                T_SQUARE_BRACKET_OPEN,
+                T_VARIABLE,
             ],
         );
     }

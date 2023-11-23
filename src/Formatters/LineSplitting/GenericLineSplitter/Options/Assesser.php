@@ -5,13 +5,26 @@ declare(strict_types=1);
 namespace Medas\PhpFormatter\Formatters\LineSplitting\GenericLineSplitter\Options;
 
 use Medas\Core\Attributes\Service;
-use Medas\PhpFormatter\Formatters\LineSplitting\TrailingCommaSplitter;
+use Medas\PhpFormatter\Formatters\{Helpers\Math, Tokens};
 use Medas\PhpTokenizer\Statement;
 
 #[Service]
 readonly class Assesser
 {
+    public function __construct(
+        private Math $math,
+    )
+    {
+    }
+
     public function assess(Statement $statement, Option $option): Assessment
+    {
+        $lengths = $this->gatherLengths($statement, $option);
+
+        return new Assessment($option, $lengths, $this->quality($option, $lengths));
+    }
+
+    private function gatherLengths(Statement $statement, Option $option): array
     {
         $lengths = [];
         $currentLength = 0;
@@ -20,7 +33,7 @@ readonly class Assesser
         $depth = 0;
 
         foreach ($statement as $index => $token) {
-            if ($token->is(TrailingCommaSplitter::BRACKETS)) {
+            if ($token->is(Tokens::OPENING_BRACKETS)) {
                 ++$depth;
             }
 
@@ -71,14 +84,14 @@ readonly class Assesser
                 }
             }
 
-            if ($token->is(TrailingCommaSplitter::CLOSERS)) {
+            if ($token->is(Tokens::CLOSING_BRACKETS)) {
                 --$depth;
             }
         }
 
         $lengths[] = $currentLength;
 
-        return new Assessment($option, $lengths, $this->quality($option, $lengths));
+        return $lengths;
     }
 
     private function quality(Option $option, array $lengths): float|null
@@ -91,23 +104,7 @@ readonly class Assesser
 
         return array_sum($lengths)
             / count($lengths)
-            / $this->standardDeviation($lengths)
+            / $this->math->standardDeviation($lengths)
             / pow($depth, 2);
-    }
-
-    private function standardDeviation(array $values): float|null
-    {
-        if (count($values) < 2) {
-            return null;
-        }
-
-        $average = array_sum($values) / count($values);
-        $variance = 0.0;
-
-        foreach ($values as $i) {
-            $variance += pow($i - $average, 2);
-        }
-
-        return sqrt($variance) / sqrt(count($values));
     }
 }

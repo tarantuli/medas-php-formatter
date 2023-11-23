@@ -23,7 +23,7 @@ readonly class LongLineSplitter extends BaseFormatter
         private StatementTypeFinder         $typeFinder,
         private GenericLineSplitter         $genericLineSplitter,
         private FunctionDeclarationSplitter $functionDeclarationSplitter,
-        private Helpers\LengthCounter       $lengthCounter,
+        private Helpers\StatementLengths    $lengthCounter,
     )
     {
     }
@@ -51,7 +51,7 @@ readonly class LongLineSplitter extends BaseFormatter
                 continue;
             }
 
-            $length = $this->lengthCounter->count($statement);
+            $length = $this->lengthCounter->measure($statement);
 
             if ($length <= $this->maxLineLength) {
                 continue;

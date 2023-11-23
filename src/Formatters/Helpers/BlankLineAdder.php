@@ -5,13 +5,14 @@ declare(strict_types=1);
 namespace Medas\PhpFormatter\Formatters\Helpers;
 
 use Medas\Core\Attributes\Service;
-use Medas\PhpFormatter\Formatters\LineSplitting\TrailingCommaSplitter;
+use Medas\PhpFormatter\Formatters\Tokens;
 use Medas\PhpTokenizer\{
     Statement,
     StatementTypeFinder,
     StatementTypes\AttributeStatement,
     StatementTypes\Comment,
     StatementTypes\SwitchBranch,
+    TokenGroups,
     TokenTree
 };
 
@@ -20,6 +21,7 @@ readonly class BlankLineAdder
 {
     public function __construct(
         private StatementTypeFinder $statementTypeFinder,
+        private TokenGroups         $tokenGroups,
     )
     {
     }
@@ -39,7 +41,7 @@ readonly class BlankLineAdder
                     }
 
                     if ($previousType instanceof $groupType) {
-                        if ($statement->lastToken()->is(TrailingCommaSplitter::BRACKETS)) {
+                        if ($statement->lastToken()->is(Tokens::OPENING_BRACKETS)) {
                             // Keep a blank line beforea statement that's split on multiple lines
                         }
                         else {
@@ -103,6 +105,6 @@ readonly class BlankLineAdder
 
     private function statementStartWithComment(Statement $statement): bool
     {
-        return $statement->firstToken()->is([T_ATTRIBUTE, T_DOC_COMMENT, T_COMMENT]);
+        return $statement->firstToken()->is($this->tokenGroups->comments());
     }
 }

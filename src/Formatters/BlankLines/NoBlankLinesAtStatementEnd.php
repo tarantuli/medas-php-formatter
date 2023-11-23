@@ -10,6 +10,11 @@ use Medas\PhpFormatter\{Formatters\BaseFormatter, Job};
 #[Service]
 readonly class NoBlankLinesAtStatementEnd extends BaseFormatter
 {
+    public function priority(): int
+    {
+        return 100;
+    }
+
     public function format(Job $job): void
     {
         foreach ($job->tree->statements() as $statement) {
@@ -18,10 +23,5 @@ readonly class NoBlankLinesAtStatementEnd extends BaseFormatter
                 $statement->lastToken()->lineBreakAfter(false);
             }
         }
-    }
-
-    public function priority(): int
-    {
-        return 100;
     }
 }

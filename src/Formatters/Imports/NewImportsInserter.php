@@ -51,7 +51,7 @@ readonly class NewImportsInserter
         foreach ($groupedImports as $fqn => $alias) {
             $statement = $tree->block()->appendNewStatement();
 
-            $this->processGroupedImport($statement, $fqn, $alias);
+            $this->addImportToStatement($statement, $fqn, $alias);
 
             $tree->block()->moveStatementAfter($statement, $after);
         }
@@ -90,43 +90,50 @@ readonly class NewImportsInserter
         return null;
     }
 
-    private function processGroupedImport(Statement $statement, int|string $fqn, mixed $alias): void
+    private function addImportToStatement(Statement $statement, int|string $fqn, array|string $alias): void
     {
         $statement->appendToken((clone $this->baseToken)->id(T_USE)->text('use'));
         $statement->appendToken((clone $this->baseToken)->id(T_NAME_QUALIFIED)->text(substr($fqn, 1)));
 
         if (is_array($alias)) {
-            $statement->appendToken((clone $this->baseToken)->id(T_NS_SEPARATOR)->text('\\'));
-            $statement->appendToken((clone $this->baseToken)->id(123)->text('{'));
-
-            $isFirst = true;
-
-            ksort($alias, SORT_STRING | SORT_FLAG_CASE);
-
-            foreach ($alias as $subPath => $subAlias) {
-                if (!$isFirst) {
-                    $statement->appendToken((clone $this->baseToken)->id(123)->text(','));
-                }
-
-                $statement->appendToken((clone $this->baseToken)->id(T_STRING)->text($subPath));
-
-                if ($this->fqnProperties->getLastPart($subPath) !== $subAlias) {
-                    $statement->appendToken((clone $this->baseToken)->id(T_AS)->text('as'));
-                    $statement->appendToken((clone $this->baseToken)->id(T_STRING)->text($subAlias));
-                }
-
-                $isFirst = false;
-            }
-
-            $statement->appendToken((clone $this->baseToken)->id(123)->text('}'));
+            $this->appendGroupedAliases($statement, $alias);
         }
-        else {
-            if ($alias !== $this->fqnProperties->getLastPart($fqn)) {
-                $statement->appendToken((clone $this->baseToken)->id(T_AS)->text('as'));
-                $statement->appendToken((clone $this->baseToken)->id(T_STRING)->text($alias));
-            }
+        elseif ($alias !== $this->fqnProperties->getLastPart($fqn)) {
+            $this->appendAlias($statement, $alias);
         }
 
         $statement->appendToken(clone $this->baseToken);
+    }
+
+    private function appendGroupedAliases(Statement $statement, array $aliases): void
+    {
+        $statement->appendToken((clone $this->baseToken)->id(T_NS_SEPARATOR)->text('\\'));
+        $statement->appendToken((clone $this->baseToken)->id(123)->text('{'));
+
+        $isFirst = true;
+
+        ksort($aliases, SORT_STRING | SORT_FLAG_CASE);
+
+        foreach ($aliases as $subPath => $alias) {
+            if (!$isFirst) {
+                $statement->appendToken((clone $this->baseToken)->id(123)->text(','));
+            }
+
+            $statement->appendToken((clone $this->baseToken)->id(T_STRING)->text($subPath));
+
+            if ($this->fqnProperties->getLastPart($subPath) !== $alias) {
+                $this->appendAlias($statement, $alias);
+            }
+
+            $isFirst = false;
+        }
+
+        $statement->appendToken((clone $this->baseToken)->id(123)->text('}'));
+    }
+
+    private function appendAlias(Statement $statement, string $alias): void
+    {
+        $statement->appendToken((clone $this->baseToken)->id(T_AS)->text('as'));
+        $statement->appendToken((clone $this->baseToken)->id(T_STRING)->text($alias));
     }
 }
