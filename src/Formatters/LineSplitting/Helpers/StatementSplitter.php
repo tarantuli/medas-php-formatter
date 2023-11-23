@@ -31,16 +31,14 @@ readonly class StatementSplitter
         int       $additionalDepth
     ): void
     {
-        //funcdump($statement, $separators, $splitAfter, $openerIndex, $closerIndex, $additionalDepth);
         $this->addBlankLineBefore($statement);
 
         $currentStatement = null;
         $depth = $this->determineInitialDepth($statement);
 
-        if ($statement->firstToken()->is(TrailingCommaSplitter::BRACKETS)
-                && $statement->lastToken()->is(TrailingCommaSplitter::CLOSERS)) {
-            // Statements that begin and end with brackets are hard to process correctly elsewhere,
-            // so start at a depth of -1 here
+        if ($statement->lastToken()->is(TrailingCommaSplitter::CLOSERS)) {
+            // Statements that end with closing brackets are hard to process correctly elsewhere,
+            // so skip the last token here
             $closerIndex = $statement->tokenCount() - 1;
         }
 
