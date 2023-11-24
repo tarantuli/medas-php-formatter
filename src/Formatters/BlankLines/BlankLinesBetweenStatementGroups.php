@@ -16,11 +16,16 @@ use Medas\PhpTokenizer\{
 #[Service]
 readonly class BlankLinesBetweenStatementGroups extends BaseFormatter
 {
+    private array $assignmentOperators;
+    private array $commentTokens;
+
     public function __construct(
         private StatementTypeFinder $typeFinder,
         private TokenGroups         $tokenGroups,
     )
     {
+        $this->assignmentOperators = $this->tokenGroups->assignmentOperators();
+        $this->commentTokens = $this->tokenGroups->comments();
     }
 
     public function priority(): int
@@ -66,7 +71,7 @@ readonly class BlankLinesBetweenStatementGroups extends BaseFormatter
         $firstTrueTokenText = null;
 
         foreach ($statement as $token) {
-            if ($token->is($this->tokenGroups->assignmentOperators())) {
+            if ($token->is($this->assignmentOperators)) {
                 return 1;
             }
 
@@ -78,7 +83,7 @@ readonly class BlankLinesBetweenStatementGroups extends BaseFormatter
                 return 3;
             }
 
-            if (!$foundFirstTrueToken && !$token->is($this->tokenGroups->comments())) {
+            if (!$foundFirstTrueToken && !$token->is($this->commentTokens)) {
                 $foundFirstTrueToken = true;
                 $firstTrueTokenText = $token->text;
             }

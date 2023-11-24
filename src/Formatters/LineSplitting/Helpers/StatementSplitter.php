@@ -11,11 +11,14 @@ use Medas\PhpTokenizer\{Statement, TokenGroups};
 #[Service]
 readonly class StatementSplitter
 {
+    private array $commentTokens;
+
     public function __construct(
         private StatementSplitter\BlankLineInserter $blankLineInserter,
         private TokenGroups                         $tokenGroups,
     )
     {
+        $this->commentTokens = $this->tokenGroups->comments();
     }
 
     public function split(
@@ -86,7 +89,7 @@ readonly class StatementSplitter
 
                 if ($currentStatement->tokenCount() === 0
                         && $currentStatement->next()
-                        && $currentStatement->next()->firstToken()->is($this->tokenGroups->comments())) {
+                        && $currentStatement->next()->firstToken()->is($this->commentTokens)) {
                     $currentStatement->blankLineAfter();
                 }
 

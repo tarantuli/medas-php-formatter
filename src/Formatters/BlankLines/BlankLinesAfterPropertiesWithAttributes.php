@@ -6,7 +6,7 @@ namespace Medas\PhpFormatter\Formatters\BlankLines;
 
 use Medas\Core\Attributes\Service;
 use Medas\PhpFormatter\{Formatters\BaseFormatter, Job};
-use Medas\PhpTokenizer\{StatementTypeFinder, StatementTypes\ClassPropertyDeclaration, TokenGroups};
+use Medas\PhpTokenizer\{StatementTypeFinder, StatementTypes\ClassPropertyDeclaration};
 
 #[Service]
 readonly class BlankLinesAfterPropertiesWithAttributes extends BaseFormatter

@@ -10,10 +10,13 @@ use Medas\PhpTokenizer\{Statement, TokenGroups};
 #[Service]
 readonly class StatementLengths
 {
+    private array $commentTokens;
+
     public function __construct(
         private TokenGroups $tokenGroups,
     )
     {
+        $this->commentTokens = $this->tokenGroups->comments();
     }
 
     public function measure(Statement $statement): int
@@ -23,7 +26,7 @@ readonly class StatementLengths
         $foundNonCommentToken = false;
 
         foreach ($statement as $token) {
-            if (!$token->is($this->tokenGroups->comments()) && !$token->inAttribute) {
+            if (!$token->is($this->commentTokens) && !$token->inAttribute) {
                 $foundNonCommentToken = true;
             }
 

@@ -19,11 +19,14 @@ use Medas\PhpTokenizer\{
 #[Service]
 readonly class BlankLineAdder
 {
+    private array $commentTokens;
+
     public function __construct(
         private StatementTypeFinder $statementTypeFinder,
         private TokenGroups         $tokenGroups,
     )
     {
+        $this->commentTokens = $this->tokenGroups->comments();
     }
 
     public function afterTypes(TokenTree $tree, array $afterTypes): void
@@ -105,6 +108,6 @@ readonly class BlankLineAdder
 
     private function statementStartWithComment(Statement $statement): bool
     {
-        return $statement->firstToken()->is($this->tokenGroups->comments());
+        return $statement->firstToken()->is($this->commentTokens);
     }
 }
