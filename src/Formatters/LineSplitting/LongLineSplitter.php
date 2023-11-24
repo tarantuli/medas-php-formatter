@@ -45,9 +45,15 @@ readonly class LongLineSplitter extends BaseFormatter
     private function findSomethingToSplit(Job $job): bool
     {
         foreach ($job->tree->block() as $statement) {
+            if (isset($job->checkedByLongLineSplitter[spl_object_id($statement)])) {
+                continue;
+            }
+
             if ($statement === $statement->next()?->rootStatement) {
                 // This statement has already been split, and this is the prefix;
                 // Don't split it any further
+                $job->checkedByLongLineSplitter[spl_object_id($statement)] = true;
+
                 continue;
             }
 

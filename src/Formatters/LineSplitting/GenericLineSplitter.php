@@ -90,7 +90,8 @@ readonly class GenericLineSplitter
         usort(
             $assessments,
             fn(GenericLineSplitter\Options\Assessment $a, GenericLineSplitter\Options\Assessment $b) =>
-                -1 * ($a->quality <=> $b->quality)
+                -1 * ($a->quality <=> $b->quality
+            )
         );
 
         return $assessments[0]->quality === null ? null : $assessments[0]->option;

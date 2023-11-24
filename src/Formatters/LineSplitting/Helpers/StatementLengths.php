@@ -26,7 +26,7 @@ readonly class StatementLengths
         $foundNonCommentToken = false;
 
         foreach ($statement as $token) {
-            if (!$token->is($this->commentTokens) && !$token->inAttribute) {
+            if (!$token->inAttribute && !$token->is($this->commentTokens)) {
                 $foundNonCommentToken = true;
             }
 

@@ -43,6 +43,10 @@ readonly class SoftLineSplitter extends BaseFormatter
     private function findSomethingToSplit(Job $job): bool
     {
         foreach ($job->tree->block() as $statement) {
+            if (isset($job->checkedBySoftLineSplitter[spl_object_id($statement)])) {
+                continue;
+            }
+
             if ($statement === $statement->next()?->rootStatement) {
                 // This statement has already been split, and this is the prefix;
                 // Don't split it any further
@@ -52,6 +56,8 @@ readonly class SoftLineSplitter extends BaseFormatter
             $length = $this->lengthCounter->measure($statement);
 
             if ($length <= $this->softMaxLineLength) {
+                $job->checkedBySoftLineSplitter[spl_object_id($statement)] = true;
+
                 continue;
             }
 
