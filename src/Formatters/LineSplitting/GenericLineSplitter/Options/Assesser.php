@@ -102,9 +102,15 @@ readonly class Assesser
 
         $depth = $option->depth < 1 ? 1 : $option->depth + 1;
 
+        $standardDeviation = $this->math->standardDeviation($lengths);
+
+        if ($standardDeviation < 1e-6) {
+            return null;
+        }
+
         return array_sum($lengths)
             / count($lengths)
-            / $this->math->standardDeviation($lengths)
+            / $standardDeviation
             / pow($depth, 2);
     }
 }
