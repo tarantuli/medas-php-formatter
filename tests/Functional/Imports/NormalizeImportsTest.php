@@ -25,16 +25,11 @@ class NormalizeImportsTest extends BaseTestClass
     {
         $this->assertRemainsTheSame(
             'imports/try-catch',
-            new Medas()
         );
     }
 
     public function testMultiExtends(): void
     {
-        $this->assertChanges(
-            'imports/multi-extends-pre',
-            'imports/multi-extends-post',
-            new Medas()
-        );
+        $this->assertChanges('imports/multi-extends-pre', 'imports/multi-extends-post');
     }
 }

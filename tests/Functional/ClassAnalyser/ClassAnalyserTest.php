@@ -13,13 +13,17 @@ class ClassAnalyserTest extends BaseTestClass
     {
         $analyser = service(ClassAnalyser::class);
         $code = file_get_contents(__DIR__ . '/../../TestFiles/imports/normalize-imports-pre.php');
-
         $results = $analyser->analyse($code);
 
         self::assertEquals('MyNamespace', $results->namespace);
         self::assertEquals('MyClass', $results->name);
         self::assertEquals('\MyNamespace\MyClass', $results->fqn);
-        self::assertEquals('\MyNamespace\ChildNamespace\BaseClass', $results->extends['ChildNamespace\BaseClass']->fqn);
+
+        self::assertEquals(
+            '\MyNamespace\ChildNamespace\BaseClass',
+            $results->extends['ChildNamespace\BaseClass']->fqn
+        );
+
         self::assertCount(2, $results->implements);
         self::assertTrue($results->isClass);
         self::assertCount(29, $results->uses);

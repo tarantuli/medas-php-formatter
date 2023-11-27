@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\PhpFormatterTest\Functional\Replacements;
 
-use Medas\PhpFormatter\Preparsers\NoCommentsAtLineEnd;
-use Medas\PhpFormatter\Settings\Psr12;
+use Medas\PhpFormatter\{Preparsers\NoCommentsAtLineEnd, Settings\Psr12};
 use Medas\PhpFormatterTest\Functional\BaseTestClass;
 
 class NoCommentsAtLineEndTest extends BaseTestClass

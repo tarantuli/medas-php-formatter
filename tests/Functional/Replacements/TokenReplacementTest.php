@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace Medas\PhpFormatterTest\Functional\Replacements;
 
-use Medas\PhpFormatter\Formatters\Replacements\UseDieInsteadOfExit;
-use Medas\PhpFormatter\Formatters\Replacements\UseExitInsteadOfDie;
-use Medas\PhpFormatter\Formatters\Replacements\UseImplodeInsteadOfJoin;
-use Medas\PhpFormatter\Formatters\Replacements\UseUnionNullInsteadOfNullable;
-use Medas\PhpFormatter\Settings\Medas;
+use Medas\PhpFormatter\Formatters\Replacements\{
+    UseDieInsteadOfExit,
+    UseExitInsteadOfDie,
+    UseImplodeInsteadOfJoin,
+    UseUnionNullInsteadOfNullable
+};
 use Medas\PhpFormatter\Settings\Psr12;
 use Medas\PhpFormatterTest\Functional\BaseTestClass;
 

@@ -10,6 +10,10 @@ class MinimalSizeTest extends BaseTestClass
 {
     public function testRequiredWhitespace(): void
     {
-        $this->assertChanges('basic-preformatted', 'basic-preformatted-minimal-whitespace', new MinimalSize());
+        $this->assertChanges(
+            'basic-preformatted',
+            'basic-preformatted-minimal-whitespace',
+            new MinimalSize()
+        );
     }
 }

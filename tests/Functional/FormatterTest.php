@@ -4,101 +4,98 @@ declare(strict_types=1);
 
 namespace Medas\PhpFormatterTest\Functional;
 
-use Medas\PhpFormatter\Settings\{Medas};
-
 class FormatterTest extends BaseTestClass
 {
     public function testEmptyMethodBody(): void
     {
-        $this->assertRemainsTheSame('empty-method-body', new Medas());
+        $this->assertRemainsTheSame('empty-method-body');
     }
 
     public function testMedasIfElse(): void
     {
-        $this->assertRemainsTheSame('if-else', new Medas());
+        $this->assertRemainsTheSame('if-else');
     }
 
     public function testPlusAndMinus(): void
     {
-        $this->assertRemainsTheSame('plus-and-minus', new Medas());
+        $this->assertRemainsTheSame('plus-and-minus');
     }
 
     public function testTernaryExpressions(): void
     {
-        $this->assertChanges('ternary-expressions-pre', 'ternary-expressions-post', new Medas());
+        $this->assertChanges('ternary-expressions-pre', 'ternary-expressions-post');
     }
 
     public function testMethodsAndFunctions(): void
     {
-        $this->assertRemainsTheSame('methods-and-functions', new Medas());
+        $this->assertRemainsTheSame('methods-and-functions');
     }
 
     public function testParentheses(): void
     {
-        $this->assertRemainsTheSame('parentheses', new Medas());
+        $this->assertRemainsTheSame('parentheses');
     }
 
     public function testSquareBrackets(): void
     {
-        $this->assertRemainsTheSame('square-brackets', new Medas());
+        $this->assertRemainsTheSame('square-brackets');
     }
 
     public function testMatch(): void
     {
-        $this->assertRemainsTheSame('match', new Medas());
+        $this->assertRemainsTheSame('match');
     }
 
     public function testSwitch(): void
     {
-        $this->assertRemainsTheSame('switch-statement', new Medas());
+        $this->assertRemainsTheSame('switch-statement');
     }
 
     public function testComments(): void
     {
-        $this->assertRemainsTheSame('comments', new Medas());
+        $this->assertRemainsTheSame('comments');
     }
 
     public function testNamedArguments(): void
     {
-        $this->assertRemainsTheSame('named-arguments', new Medas());
+        $this->assertRemainsTheSame('named-arguments');
     }
 
     public function testBasicPreformatted(): void
     {
-        $this->assertRemainsTheSame('basic-preformatted', new Medas());
+        $this->assertRemainsTheSame('basic-preformatted');
     }
 
     public function testPipes(): void
     {
-        $this->assertRemainsTheSame('pipes', new Medas());
+        $this->assertRemainsTheSame('pipes');
     }
 
     public function testStatementTypeGrouping(): void
     {
-        $this->assertRemainsTheSame('group-statement-types', new Medas());
+        $this->assertRemainsTheSame('group-statement-types');
     }
 
     public function testLambdaFunctions(): void
     {
-        $this->assertRemainsTheSame('lambda-functions', new Medas());
+        $this->assertRemainsTheSame('lambda-functions');
     }
 
     public function testClassProperties(): void
     {
-        $this->assertRemainsTheSame('class-properties', new Medas());
+        $this->assertRemainsTheSame('class-properties');
     }
 
     public function testNoSingleLineControlBodies(): void
     {
         $this->assertChanges(
             'token-replacement/no-single-line-control-bodies-pre',
-            'token-replacement/no-single-line-control-bodies-post',
-            new Medas()
+            'token-replacement/no-single-line-control-bodies-post'
         );
     }
 
     public function testAmpersands(): void
     {
-        $this->assertRemainsTheSame('ampersands', new Medas());
+        $this->assertRemainsTheSame('ampersands');
     }
 }
