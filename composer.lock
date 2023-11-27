@@ -105,12 +105,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:tarantuli/medas-file-system.git",
-                "reference": "62e3e81358025fef2847a6b2502cd8db16523692"
+                "reference": "d41892ed3c1afb1ef0ef2edc8631cd5a33f5abdc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-file-system/zipball/62e3e81358025fef2847a6b2502cd8db16523692",
-                "reference": "62e3e81358025fef2847a6b2502cd8db16523692",
+                "url": "https://api.github.com/repos/tarantuli/medas-file-system/zipball/d41892ed3c1afb1ef0ef2edc8631cd5a33f5abdc",
+                "reference": "d41892ed3c1afb1ef0ef2edc8631cd5a33f5abdc",
                 "shasum": ""
             },
             "require": {
@@ -138,7 +138,7 @@
                 "source": "https://github.com/tarantuli/medas-file-system/tree/dev",
                 "issues": "https://github.com/tarantuli/medas-file-system/issues"
             },
-            "time": "2023-07-12T12:36:02+00:00"
+            "time": "2023-11-27T13:13:43+00:00"
         },
         {
             "name": "morphp/medas-php-class-analysis",

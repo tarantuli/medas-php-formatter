@@ -55,17 +55,17 @@ readonly class Psr12Whitespace extends BaseFormatter
                 continue;
             }
 
+            if ($token->is($spaceAfterRequired)) {
+                $token->spaceAfter();
+            }
+
             // One space between ") {" and "): <type> {"
             if ($token->is(T_CURLY_BRACKET_OPEN) && $this->returnTypeTokens->isReturnTypeToken($token)) {
                 $token->previous->spaceAfter();
             }
 
-            if ($token->is($spaceAfterRequired)) {
-                $token->spaceAfter();
-            }
-
             // No space between "?type"
-            if ($token->is(T_QUESTION_MARK)) {
+            elseif ($token->is(T_QUESTION_MARK)) {
                 if ($token->inTypeDeclaration) {
                     $token->spaceAfter(false);
                 }
@@ -85,24 +85,23 @@ readonly class Psr12Whitespace extends BaseFormatter
                         && $token->context instanceof MethodParameters) {
                     $token->previous->spaceAfter(false);
                 }
+                elseif ($token->is(T_COLON)) {
+                    // No space between "):" in return type declarations
+                    if ($token->context instanceof MethodReturnType) {
+                        $token->previous->spaceAfter(false);
+                    }
 
-                // No space between "):" in return type declarations
-                if ($token->is(T_COLON) && $token->context instanceof MethodReturnType) {
-                    $token->previous->spaceAfter(false);
-                }
+                    // No space between "?:"
+                    elseif ($token->previous->is(T_QUESTION_MARK)) {
+                        $token->previous->spaceAfter(false);
+                    }
 
-                // No space between "?:"
-                if ($token->is(T_COLON) && $token->previous->is(T_QUESTION_MARK)) {
-                    $token->previous->spaceAfter(false);
-                }
+                    // No space before ":" in case/default statements if it's the last token
+                    elseif ($statementType instanceof SwitchBranch && $token->isLastToken()) {
+                        $token->previous->spaceAfter(false);
+                    }
 
-                // No space before ":" in case/default statements if it's the last token
-                if ($token->is(T_COLON) && $statementType instanceof SwitchBranch && $token->isLastToken()) {
-                    $token->previous->spaceAfter(false);
-                }
-
-                // No space between strings and ":" in named arguments
-                if ($token->is(T_COLON)) {
+                    // No space between strings and ":" in named arguments
                     if ($openTernaries === 0) {
                         $token->previous->spaceAfter(false);
                     }
@@ -112,7 +111,7 @@ readonly class Psr12Whitespace extends BaseFormatter
                 }
 
                 // No space around "|" in function declarations and catch statements
-                if ($token->is(T_PIPE)) {
+                elseif ($token->is(T_PIPE)) {
                     $stripSpaces = $token->inTypeDeclaration
                         || $token->statement->getToken(1)->is(T_CATCH)
                         || $this->returnTypeTokens->isReturnTypeToken($token->previous);
@@ -122,12 +121,10 @@ readonly class Psr12Whitespace extends BaseFormatter
                         $token->spaceAfter(false);
                     }
                 }
-
-                if ($token->previous->is(T_FUNCTION) && !$statementType instanceof FunctionDeclaration) {
+                elseif ($token->previous->is(T_FUNCTION) && !$statementType instanceof FunctionDeclaration) {
                     $token->previous->spaceAfter();
                 }
-
-                if ($token->is(T_USE) && !$statementType instanceof UseTraitStatement) {
+                elseif ($token->is(T_USE) && !$statementType instanceof UseTraitStatement) {
                     $token->previous->spaceAfter();
                     $token->spaceAfter();
                 }
