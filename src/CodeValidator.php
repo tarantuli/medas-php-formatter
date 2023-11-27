@@ -24,7 +24,7 @@ class CodeValidator
     public function validate(string $code): bool
     {
         if (!System::isFunctionAvailable('exec')) {
-            throw new Exceptions\CannotRunCommandLineException();
+            throw new Exceptions\CannotRunCommandLine();
         }
 
         $tempFile = $this->temporaryFiles->create($code);

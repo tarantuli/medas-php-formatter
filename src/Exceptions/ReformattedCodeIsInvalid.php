@@ -6,7 +6,7 @@ namespace Medas\PhpFormatter\Exceptions;
 
 use Medas\Core\Exceptions\BaseException;
 
-class ReformattedCodeIsInvalidException extends BaseException
+class ReformattedCodeIsInvalid extends BaseException
 {
     public function __construct(string $code, string $errorMessage)
     {

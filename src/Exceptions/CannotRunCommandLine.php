@@ -6,7 +6,7 @@ namespace Medas\PhpFormatter\Exceptions;
 
 use Medas\Core\Exceptions\BaseException;
 
-class CannotRunCommandLineException extends BaseException
+class CannotRunCommandLine extends BaseException
 {
     public function pattern(): string
     {

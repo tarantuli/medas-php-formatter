@@ -18,10 +18,16 @@ readonly class Formatter
         private TreeBuilder   $treeBuilder,
 
         #[ConfigValue(ConfigOptions\DumpParsedTree::class)]
-        private bool          $dumpParseTree,
+        private bool          $dumpParsedTree,
 
         #[ConfigValue(ConfigOptions\DumpResultTree::class)]
         private bool          $dumpResultTree,
+
+        #[ConfigValue(ConfigOptions\ValidateSourceCode::class)]
+        private bool          $validateSourceCode,
+
+        #[ConfigValue(ConfigOptions\ValidateReformattedCode::class)]
+        private bool          $validateReformattedCode,
     )
     {
     }
@@ -30,8 +36,8 @@ readonly class Formatter
     {
         $job = new Job($settings);
 
-        if (!$this->codeValidator->validate($code)) {
-            throw new Exceptions\ReformattedCodeIsInvalidException(
+        if ($this->validateSourceCode && !$this->codeValidator->validate($code)) {
+            throw new Exceptions\SourceCodeIsInvalid(
                 $code,
                 $this->codeValidator->getErrorMessage()
             );
@@ -43,7 +49,7 @@ readonly class Formatter
 
         $job->tree = $this->treeBuilder->fromCollection($job->tokens);
 
-        if ($this->dumpParseTree) {
+        if ($this->dumpParsedTree) {
             $this->blockDumper->dump($job->tree->block());
         }
 
@@ -53,20 +59,20 @@ readonly class Formatter
             $this->blockDumper->dump($job->tree->block());
         }
 
-        $result = $this->blockPrinter->print(
+        $reformattedCode = $this->blockPrinter->print(
             $job->tree->block(),
             (string) $job->settings->document->indentation(),
             (string) $job->settings->document->lineEnding()
         );
 
-        if (!$this->codeValidator->validate($result)) {
-            throw new Exceptions\ReformattedCodeIsInvalidException(
+        if ($this->validateReformattedCode && !$this->codeValidator->validate($reformattedCode)) {
+            throw new Exceptions\ReformattedCodeIsInvalid(
                 $code,
                 $this->codeValidator->getErrorMessage()
             );
         }
 
-        return $result;
+        return $reformattedCode;
     }
 
     private function applyPreparsers(Job $job): void
