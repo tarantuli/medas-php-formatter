@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Medas\PhpFormatter\Formatters\LineSplitting\GenericLineSplitter\Breakpoints;
+namespace Medas\PhpFormatter\Formatters\LineSplitting\GenericLineSplitter;
 
-readonly class Definition
+readonly class BreakpointDefinition
 {
     public function __construct(
         public string   $name,

@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Medas\PhpFormatter\Settings;
 
-use Medas\PhpFormatter\Formatters\{Formatter, Required\RequiredWhitespace};
+use Medas\PhpFormatter\Formatters\Formatter;
+use Medas\PhpFormatter\Formatters\LineSplitting\GenericLineSplitter\BreakpointSet;
+use Medas\PhpFormatter\Formatters\Required\RequiredWhitespace;
 use Medas\PhpFormatter\Preparsers\Preparser;
 use Medas\PhpTokenizer\AdditionalTokensDefiner;
 
@@ -12,6 +14,12 @@ class Settings
 {
     public DocumentSettings $document;
     public ImportSettings $import;
+
+    // Breakpoint sets
+    public BreakpointSet $classDeclarationSet;
+    public BreakpointSet $controlStatementSet;
+    public BreakpointSet $genericLineSet;
+    public BreakpointSet $softLineSet;
 
     /** @var Preparser[] */
     private array $preparsers = [];
@@ -40,12 +48,6 @@ class Settings
             $this->addFormatter($additionalFormatter);
         }
 
-        // Sort by priority, higher values first
-        usort(
-            $this->formatters,
-            fn(Formatter $a, Formatter $b) => -($a->priority() <=> $b->priority())
-        );
-
         return $this;
     }
 
@@ -67,6 +69,12 @@ class Settings
 
     public function formatters(): array
     {
+        // Sort by priority, higher values first
+        usort(
+            $this->formatters,
+            fn(Formatter $a, Formatter $b) => -($a->priority() <=> $b->priority())
+        );
+
         return $this->formatters;
     }
 }

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Medas\PhpFormatter\Formatters\LineSplitting\GenericLineSplitter\Options;
 
 use Medas\Core\Attributes\Service;
-use Medas\PhpFormatter\Formatters\LineSplitting\GenericLineSplitter\Breakpoints\Definition;
+use Medas\PhpFormatter\Formatters\LineSplitting\GenericLineSplitter\BreakpointDefinition;
 use Medas\PhpFormatter\Formatters\Tokens;
 use Medas\PhpTokenizer\Statement;
 
@@ -13,7 +13,7 @@ use Medas\PhpTokenizer\Statement;
 readonly class Finder
 {
     /** @return Option[] */
-    public function find(Statement $statement, Definition $definition): array
+    public function find(Statement $statement, BreakpointDefinition $definition): array
     {
         /** @var Option[][] $options */
         $options = [];
@@ -96,7 +96,7 @@ readonly class Finder
         return $this->cleanUpOptions($options, $definition);
     }
 
-    private function cleanUpOptions(array $options, Definition $definition): array
+    private function cleanUpOptions(array $options, BreakpointDefinition $definition): array
     {
         /** @var Option[] $options */
         $options = $this->flatten($options);

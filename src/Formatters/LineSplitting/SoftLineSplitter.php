@@ -33,11 +33,7 @@ readonly class SoftLineSplitter extends BaseFormatter
 
     public function format(Job $job): void
     {
-        $counter = 0;
-
-        do {
-            $foundSomething = $this->findSomethingToSplit($job);
-        } while ($foundSomething && ++$counter < 256);
+        whileTrue(fn() => $this->findSomethingToSplit($job));
     }
 
     private function findSomethingToSplit(Job $job): bool
@@ -67,7 +63,7 @@ readonly class SoftLineSplitter extends BaseFormatter
                 continue;
             }
 
-            if ($this->splitStatement($statement)) {
+            if ($this->splitStatement($job, $statement)) {
                 return true;
             }
         }
@@ -75,11 +71,8 @@ readonly class SoftLineSplitter extends BaseFormatter
         return false;
     }
 
-    private function splitStatement(Statement $statement): bool
+    private function splitStatement(Job $job, Statement $statement): bool
     {
-        return $this->genericLineSplitter->split(
-            $statement,
-            GenericLineSplitter\Breakpoints\SoftLineSplitSet::instance()
-        );
+        return $this->genericLineSplitter->split($statement, $job->settings->softLineSet);
     }
 }

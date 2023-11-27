@@ -24,9 +24,7 @@ readonly class TrailingCommaSplitter extends BaseFormatter
 
     public function format(Job $job): void
     {
-        do {
-            $foundSomething = $this->findSomethingToSplit($job);
-        } while ($foundSomething);
+        whileTrue(fn() => $this->findSomethingToSplit($job));
     }
 
     private function findSomethingToSplit(Job $job): bool

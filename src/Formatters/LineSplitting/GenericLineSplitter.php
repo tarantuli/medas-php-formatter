@@ -23,8 +23,8 @@ readonly class GenericLineSplitter
     }
 
     public function split(
-        Statement                                     $statement,
-        GenericLineSplitter\Breakpoints\BreakpointSet $set,
+        Statement                         $statement,
+        GenericLineSplitter\BreakpointSet $set,
     ): bool
     {
         foreach ($set->groupsOfDefinitions() as $definitions) {
@@ -50,7 +50,7 @@ readonly class GenericLineSplitter
         return false;
     }
 
-    /** @param GenericLineSplitter\Breakpoints\Definition[] $definitions */
+    /** @param GenericLineSplitter\BreakpointDefinition[] $definitions */
     private function gatherOptions(array $definitions, Statement $statement): array
     {
         $options = [];

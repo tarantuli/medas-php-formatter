@@ -2,9 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Medas\PhpFormatter\Formatters\LineSplitting\GenericLineSplitter\Breakpoints;
+namespace Medas\PhpFormatter\Formatters\LineSplitting\GenericLineSplitter\Sets;
 
 use Medas\Core\AsSingleton;
+use Medas\PhpFormatter\Formatters\LineSplitting\GenericLineSplitter\{
+    BreakpointDefinition,
+    BreakpointSet
+};
 
 class ClassDeclarationSet implements BreakpointSet
 {
@@ -16,7 +20,7 @@ class ClassDeclarationSet implements BreakpointSet
     {
         // Sort the best breakpoints on top
         $this->groups = [[
-            new Definition(
+            new BreakpointDefinition(
                 'implements/extends',
                 [T_IMPLEMENTS, T_EXTENDS],
                 keepPrefixAndSuffix: true,

@@ -35,11 +35,7 @@ readonly class LongLineSplitter extends BaseFormatter
 
     public function format(Job $job): void
     {
-        $counter = 0;
-
-        do {
-            $foundSomething = $this->findSomethingToSplit($job);
-        } while ($foundSomething && ++$counter < 256);
+        whileTrue(fn() => $this->findSomethingToSplit($job));
     }
 
     private function findSomethingToSplit(Job $job): bool
@@ -63,7 +59,7 @@ readonly class LongLineSplitter extends BaseFormatter
                 continue;
             }
 
-            if ($this->splitStatement($statement)) {
+            if ($this->splitStatement($job, $statement)) {
                 return true;
             }
         }
@@ -71,14 +67,14 @@ readonly class LongLineSplitter extends BaseFormatter
         return false;
     }
 
-    private function splitStatement(Statement $statement): bool
+    private function splitStatement(Job $job, Statement $statement): bool
     {
         $type = $this->typeFinder->for($statement);
 
         if ($type instanceof ClassDeclaration) {
             return $this->genericLineSplitter->split(
                 $statement,
-                GenericLineSplitter\Breakpoints\ClassDeclarationSet::instance()
+                $job->settings->classDeclarationSet
             );
         }
 
@@ -89,13 +85,10 @@ readonly class LongLineSplitter extends BaseFormatter
         if ($type instanceof ControlStatement) {
             return $this->genericLineSplitter->split(
                 $statement,
-                GenericLineSplitter\Breakpoints\ControlStatementSet::instance()
+                $job->settings->controlStatementSet
             );
         }
 
-        return $this->genericLineSplitter->split(
-            $statement,
-            GenericLineSplitter\Breakpoints\GenericLineSet::instance()
-        );
+        return $this->genericLineSplitter->split($statement, $job->settings->genericLineSet);
     }
 }
