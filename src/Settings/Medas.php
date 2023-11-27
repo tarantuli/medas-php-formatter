@@ -20,15 +20,12 @@ use Medas\PhpFormatter\Formatters\{
     Replacements\UseUnionNullInsteadOfNullable
 };
 use Medas\PhpFormatter\Preparsers\NoCommentsAtLineEnd;
-use Medas\PhpTokenizer\AdditionalTokensDefiner;
 
 class Medas extends Psr12
 {
     public function __construct()
     {
         parent::__construct();
-
-        service(AdditionalTokensDefiner::class)->define();
 
         $this->addPreparser(service(NoCommentsAtLineEnd::class));
         $this->addFormatter(service(AlignArgumentNames::class));

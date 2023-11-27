@@ -6,6 +6,7 @@ namespace Medas\PhpFormatter\Settings;
 
 use Medas\PhpFormatter\Formatters\{Formatter, Required\RequiredWhitespace};
 use Medas\PhpFormatter\Preparsers\Preparser;
+use Medas\PhpTokenizer\AdditionalTokensDefiner;
 
 class Settings
 {
@@ -20,6 +21,8 @@ class Settings
 
     public function __construct()
     {
+        service(AdditionalTokensDefiner::class)->define();
+
         $this->document = new DocumentSettings();
         $this->import = new ImportSettings();
 

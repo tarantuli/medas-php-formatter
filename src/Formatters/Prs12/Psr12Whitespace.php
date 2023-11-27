@@ -22,12 +22,33 @@ use Medas\PhpTokenizer\{
 #[Service]
 readonly class Psr12Whitespace extends BaseFormatter
 {
+    private array $spaceBeforeRequired;
+    private array $spaceAfterRequired;
+    private array $spaceBeforeForbidden;
+    private array $spaceAfterForbidden;
+    private array $operatorsAndKeywords;
+    private array $operatorsKeywordsAndBrackets;
+
     public function __construct(
         private TokenGroups         $tokenGroups,
         private StatementTypeFinder $typeFinder,
         private ReturnTypeTokens    $returnTypeTokens,
     )
     {
+        $this->spaceBeforeRequired = $this->getSpaceBeforeRequired();
+        $this->spaceAfterRequired = $this->getSpaceAfterRequired();
+        $this->spaceBeforeForbidden = $this->getSpaceBeforeForbidden();
+        $this->spaceAfterForbidden = $this->getSpaceAfterForbidden();
+
+        $this->operatorsAndKeywords = array_merge(
+            $this->tokenGroups->keywords(),
+            $this->tokenGroups->symbolOperators()
+        );
+
+        $this->operatorsKeywordsAndBrackets = array_merge(
+            $this->operatorsAndKeywords,
+            $this->tokenGroups->brackets()
+        );
     }
 
     public function priority(): int
@@ -43,8 +64,6 @@ readonly class Psr12Whitespace extends BaseFormatter
 
     private function addSpaces(TokenTree $tree): void
     {
-        $spaceBeforeRequired = $this->getSpaceBeforeRequired();
-        $spaceAfterRequired = $this->getSpaceAfterRequired();
         $openTernaries = 0;
 
         foreach ($tree as $token) {
@@ -55,7 +74,7 @@ readonly class Psr12Whitespace extends BaseFormatter
                 continue;
             }
 
-            if ($token->is($spaceAfterRequired)) {
+            if ($token->is($this->spaceAfterRequired)) {
                 $token->spaceAfter();
             }
 
@@ -75,7 +94,7 @@ readonly class Psr12Whitespace extends BaseFormatter
             }
 
             if ($token->previous) {
-                if ($token->is($spaceBeforeRequired) && !$token->inString) {
+                if ($token->is($this->spaceBeforeRequired) && !$token->inString) {
                     $token->previous->spaceAfter();
                 }
 
@@ -188,21 +207,8 @@ readonly class Psr12Whitespace extends BaseFormatter
 
     private function removeSpaces(TokenTree $tree): void
     {
-        $spaceBeforeForbidden = $this->getSpaceBeforeForbidden();
-        $spaceAfterForbidden = $this->getSpaceAfterForbidden();
-
-        $operatorsAndKeywords = array_merge(
-            $this->tokenGroups->keywords(),
-            $this->tokenGroups->symbolOperators()
-        );
-
-        $operatorsKeywordsAndBrackets = array_merge(
-            $operatorsAndKeywords,
-            $this->tokenGroups->brackets()
-        );
-
         foreach ($tree as $token) {
-            if ($token->is($spaceAfterForbidden)) {
+            if ($token->is($this->spaceAfterForbidden)) {
                 $token->spaceAfter(false);
             }
 
@@ -210,7 +216,7 @@ readonly class Psr12Whitespace extends BaseFormatter
                 continue;
             }
 
-            if ($token->is($spaceBeforeForbidden)) {
+            if ($token->is($this->spaceBeforeForbidden)) {
                 $token->previous->spaceAfter(false);
             }
 
@@ -221,7 +227,7 @@ readonly class Psr12Whitespace extends BaseFormatter
 
             if ($token->next) {
                 // No space between pluses and minuses followed by opening round brackets
-                if ($token->previous->is($operatorsAndKeywords)
+                if ($token->previous->is($this->operatorsAndKeywords)
                         && $token->is([T_PLUS, T_MINUS])
                         && $token->next->is(T_ROUND_BRACKET_OPEN)) {
                     $token->spaceAfter(false);
@@ -229,29 +235,29 @@ readonly class Psr12Whitespace extends BaseFormatter
 
                 // No space between pluses, minuses and ampersands before numbers and variables,
                 // that follow an operator or bracket
-                if ($token->is([T_PLUS, T_MINUS, T_AMPERSAND])
+                elseif ($token->is([T_PLUS, T_MINUS, T_AMPERSAND])
                         && $token->next->is([T_LNUMBER, T_DNUMBER, T_VARIABLE, T_STRING])) {
                     if ($token->previous->is([T_ROUND_BRACKET_CLOSE, T_SQUARE_BRACKET_CLOSE])) {
                         $token->spaceAfter();
                     }
-                    elseif ($token->previous->is($operatorsKeywordsAndBrackets)) {
+                    elseif ($token->previous->is($this->operatorsKeywordsAndBrackets)) {
                         $token->spaceAfter(false);
                     }
                 }
 
                 // No spaces between variables and [
-                if ($token->is([T_VARIABLE, T_ROUND_BRACKET_CLOSE, T_STRING])
+                elseif ($token->is([T_VARIABLE, T_ROUND_BRACKET_CLOSE, T_STRING])
                         && $token->next->is(T_SQUARE_BRACKET_OPEN)) {
                     $token->spaceAfter(false);
                 }
 
                 // No spaces between ] and [
-                if ($token->is(T_SQUARE_BRACKET_CLOSE) && $token->next->is(T_SQUARE_BRACKET_OPEN)) {
+                elseif ($token->is(T_SQUARE_BRACKET_CLOSE) && $token->next->is(T_SQUARE_BRACKET_OPEN)) {
                     $token->spaceAfter(false);
                 }
 
                 // No space between "static" and "()"
-                if ($token->is(T_STATIC) && $token->next->is(T_ROUND_BRACKET_OPEN)) {
+                elseif ($token->is(T_STATIC) && $token->next->is(T_ROUND_BRACKET_OPEN)) {
                     $token->spaceAfter(false);
                 }
             }
