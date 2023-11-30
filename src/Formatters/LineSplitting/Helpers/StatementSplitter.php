@@ -82,6 +82,10 @@ readonly class StatementSplitter
                 --$depth;
             }
 
+            if ($token->inAttribute && $token->is(T_SQUARE_BRACKET_CLOSE)) {
+                $token->lineBreakAfter();
+            }
+
             if ($splitAfter) {
                 if ($currentStatement === null) {
                     $currentStatement = $this->startNewStatement($statement, $additionalDepth);

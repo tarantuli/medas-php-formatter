@@ -93,6 +93,11 @@ readonly class Psr12Whitespace extends BaseFormatter
                 }
             }
 
+            // A space after attributes
+            elseif ($token->inAttribute && $token->is(T_SQUARE_BRACKET_CLOSE)) {
+                $token->spaceAfter();
+            }
+
             if ($token->previous) {
                 if ($token->is($this->spaceBeforeRequired) && !$token->inString) {
                     $token->previous->spaceAfter();

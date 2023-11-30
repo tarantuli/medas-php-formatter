@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5b59a4a83ee0a0b36619bb9a0fdcbcda",
+    "content-hash": "637511db77b7c55e28fcd709bf5b9663",
     "packages": [
         {
             "name": "morphp/medas-console",
@@ -58,12 +58,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:tarantuli/medas-core.git",
-                "reference": "e7215b2ff14dcff3fc8496f3c7a3d3ac8ea9c86f"
+                "reference": "9a6535591c234d0940e9ab4d467fa07c0b393a55"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-core/zipball/e7215b2ff14dcff3fc8496f3c7a3d3ac8ea9c86f",
-                "reference": "e7215b2ff14dcff3fc8496f3c7a3d3ac8ea9c86f",
+                "url": "https://api.github.com/repos/tarantuli/medas-core/zipball/9a6535591c234d0940e9ab4d467fa07c0b393a55",
+                "reference": "9a6535591c234d0940e9ab4d467fa07c0b393a55",
                 "shasum": ""
             },
             "require": {
@@ -97,7 +97,7 @@
                 "source": "https://github.com/tarantuli/medas-core/tree/dev",
                 "issues": "https://github.com/tarantuli/medas-core/issues"
             },
-            "time": "2023-11-27T15:25:43+00:00"
+            "time": "2023-11-29T13:44:56+00:00"
         },
         {
             "name": "morphp/medas-file-system",
@@ -188,12 +188,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:tarantuli/medas-php-tokenizer.git",
-                "reference": "de7447aa192734b02a15f08fac5e2f66d6203988"
+                "reference": "11761a76a757fa10076002a5cd74d1799507b1f2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-php-tokenizer/zipball/de7447aa192734b02a15f08fac5e2f66d6203988",
-                "reference": "de7447aa192734b02a15f08fac5e2f66d6203988",
+                "url": "https://api.github.com/repos/tarantuli/medas-php-tokenizer/zipball/11761a76a757fa10076002a5cd74d1799507b1f2",
+                "reference": "11761a76a757fa10076002a5cd74d1799507b1f2",
                 "shasum": ""
             },
             "require": {
@@ -223,7 +223,7 @@
                 "source": "https://github.com/tarantuli/medas-php-tokenizer/tree/dev",
                 "issues": "https://github.com/tarantuli/medas-php-tokenizer/issues"
             },
-            "time": "2023-11-27T13:41:37+00:00"
+            "time": "2023-11-30T13:01:42+00:00"
         },
         {
             "name": "psr/event-dispatcher",
@@ -2843,6 +2843,7 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
+        "morphp/medas-console": 20,
         "morphp/medas-core": 20,
         "morphp/medas-file-system": 20,
         "morphp/medas-php-class-analysis": 20,

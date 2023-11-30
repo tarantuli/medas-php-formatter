@@ -17,4 +17,9 @@ class AttributeTest extends BaseTestClass
     {
         $this->assertRemainsTheSame('attributes/complex-promoted-properties');
     }
+
+    public function testBugs1(): void
+    {
+        $this->assertRemainsTheSame('attributes/bugs1');
+    }
 }

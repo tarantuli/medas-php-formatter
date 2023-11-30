@@ -71,7 +71,9 @@ readonly class Psr12BlankLines extends BaseFormatter
 
             if ($token->is(T_SQUARE_BRACKET_CLOSE)) {
                 if ($bracketDepth === 0) {
-                    $token->lineBreakAfter();
+                    if ($token->statement->firstNonCommentToken()->is(T_ATTRIBUTE)) {
+                        $token->lineBreakAfter();
+                    }
                 }
                 else {
                     --$bracketDepth;
