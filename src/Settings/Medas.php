@@ -6,6 +6,7 @@ namespace Medas\PhpFormatter\Settings;
 
 use Medas\PhpFormatter\Formatters\Alignment\AlignArgumentNames;
 use Medas\PhpFormatter\Formatters\BlankLines\{
+    BlankLineBetweenObjectCreationAndManipulation,
     BlankLinesAfterPropertiesWithAttributes,
     BlankLinesBeforeBlocks,
     BlankLinesBetweenClassSections,
@@ -34,6 +35,7 @@ class Medas extends Psr12
 
         $this->addPreparser(service(NoCommentsAtLineEnd::class));
         $this->addFormatter(service(AlignArgumentNames::class));
+        $this->addFormatter(service(BlankLineBetweenObjectCreationAndManipulation::class));
         $this->addFormatter(service(BlankLinesAfterPropertiesWithAttributes::class));
         $this->addFormatter(service(BlankLinesBeforeBlocks::class));
         $this->addFormatter(service(BlankLinesBetweenClassSections::class));
