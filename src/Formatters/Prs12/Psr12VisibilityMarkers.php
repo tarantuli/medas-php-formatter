@@ -57,6 +57,7 @@ readonly class Psr12VisibilityMarkers extends BaseFormatter
         if (!$visibility) {
             // Ensure that there is a visibility marker, defaulting to "public"
             $visibility = clone $statement->firstToken();
+
             $visibility->id = T_PUBLIC;
             $visibility->text = 'public';
 

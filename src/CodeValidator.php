@@ -16,7 +16,7 @@ class CodeValidator
         private readonly TemporaryFiles $temporaryFiles,
 
         #[ConfigValue(ConfigOptions\PathToPhp::class)]
-        private readonly string         $pathToPhp,
+        private readonly string|null    $pathToPhp,
     )
     {
     }
@@ -25,6 +25,10 @@ class CodeValidator
     {
         if (!System::isFunctionAvailable('exec')) {
             throw new Exceptions\CannotRunCommandLine();
+        }
+
+        if ($this->pathToPhp === null) {
+            throw new Exceptions\PathToPhpIsNotSet();
         }
 
         $tempFile = $this->temporaryFiles->create($code);

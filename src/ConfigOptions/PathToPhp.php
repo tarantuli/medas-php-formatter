@@ -37,7 +37,7 @@ readonly class PathToPhp implements ConfigOption
 
     public function hasDefault(): bool
     {
-        return false;
+        return true;
     }
 
     public function default(): null

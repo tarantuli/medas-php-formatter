@@ -35,6 +35,7 @@ readonly class KeepOriginalObjectOperatorBreaks extends BaseFormatter
         $statement = $token->statement;
         $rootStatement = $statement->rootStatement ?? $statement;
         $newStatement = new Statement($statement->block);
+
         $newStatement->rootStatement = $rootStatement;
         $newStatement->additionalDepth = $rootStatement->additionalDepth + 1;
 

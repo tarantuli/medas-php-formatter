@@ -113,6 +113,7 @@ readonly class StatementSplitter
         }
 
         $finalStatement = new Statement($statement->block);
+
         $finalStatement->rootStatement = $statement;
         $finalStatement->additionalDepth = $statement->additionalDepth;
 
@@ -136,6 +137,7 @@ readonly class StatementSplitter
     private function startNewStatement(Statement $statement, int $additionalDepth): Statement
     {
         $newStatement = new Statement($statement->block);
+
         $newStatement->rootStatement = $statement;
 
         $statement->block->insertStatementAfter($newStatement, $statement);
