@@ -11,6 +11,7 @@ use Medas\PhpTokenizer\TokenGroups;
 readonly class ElementsFinder
 {
     public const CURLY_BRACES = ['{', '}'];
+
     private array $structureTypes;
 
     public function __construct(
@@ -45,6 +46,8 @@ readonly class ElementsFinder
                     // Class statement
                     $job->classOpeningBraceAtParenthesisDepth = $job->currentParenthesisDepth;
                     $job->leadingCode .= $token->text;
+
+                    ++$job->declarationCount;
                 }
                 elseif ($job->inTrailingCode) {
                     // We're in trailing code

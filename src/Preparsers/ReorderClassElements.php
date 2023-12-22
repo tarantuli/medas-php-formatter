@@ -25,6 +25,12 @@ readonly class ReorderClassElements implements Preparser
         $reorderingJob = new ReorderClassElements\ReorderingJob(Token::tokenize($job->code, TOKEN_PARSE));
 
         $this->elementsFinder->find($reorderingJob);
+
+        if ($reorderingJob->declarationCount !== 1) {
+            // We cannot order a script containing multiple class declarations (yet)
+            return;
+        }
+
         $this->elementsAnalyzer->analyze($reorderingJob);
         $this->elementSorter->sort($reorderingJob);
 

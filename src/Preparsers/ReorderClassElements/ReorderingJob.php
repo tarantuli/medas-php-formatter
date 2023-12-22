@@ -6,6 +6,7 @@ namespace Medas\PhpFormatter\Preparsers\ReorderClassElements;
 
 class ReorderingJob
 {
+    public int $declarationCount = 0;
     public int $elementIndex = 0;
     public int $currentSection = 0;
     public int $currentBraceDepth = 0;

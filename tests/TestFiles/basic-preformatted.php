@@ -18,6 +18,13 @@ abstract class ServiceInstantiator
 
     private const CONST_NAME = [1, 2, 3, 4, 5];
 
+    final public static function create(): static
+    {
+        $a = new self();
+
+        return new static();
+    }
+
     public string|null $cheese = null;
 
     public function callback(int &$a, array|null $b = [], bool &...$questions): callable|null
@@ -87,12 +94,5 @@ abstract class ServiceInstantiator
         };
 
         return $result;
-    }
-
-    final public static function create(): static
-    {
-        $a = new self();
-
-        return new static();
     }
 }

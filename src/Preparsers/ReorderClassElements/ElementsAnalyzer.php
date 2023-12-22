@@ -22,9 +22,33 @@ readonly class ElementsAnalyzer
     private function analyzeElement(Element $element): void
     {
         $tokens = token_get_all('<?php ' . $element->text);
+        $inDefinition = true;
+        $inAttribute = false;
+        $attributeDepth = 0;
 
         foreach ($tokens as $index => $token) {
             if (!is_array($token)) {
+                switch ($token) {
+                    case T_SQUARE_BRACKET_OPEN:
+                        if ($inAttribute) {
+                            ++$attributeDepth;
+                        }
+
+                        break;
+
+                    case T_SQUARE_BRACKET_CLOSE:
+                        if ($inAttribute) {
+                            if ($attributeDepth === 0) {
+                                $inAttribute = false;
+                            }
+                            else {
+                                --$attributeDepth;
+                            }
+                        }
+
+                        break;
+                }
+
                 continue;
             }
 
@@ -35,55 +59,81 @@ readonly class ElementsAnalyzer
             }
 
             switch ($type) {
+                case T_ATTRIBUTE:
+                    if ($inDefinition) {
+                        $inAttribute = true;
+                    }
+
+                    break;
+
                 case T_USE:
-                    $element->isUse = Properties::IS_USE_STATEMENT;
+                    if ($inDefinition) {
+                        $element->isUse = Properties::IS_USE_STATEMENT;
+                    }
 
                     break;
 
                 case T_ABSTRACT:
-                    $element->isAbstract = Properties::IS_ABSTRACT;
+                    if ($inDefinition) {
+                        $element->isAbstract = Properties::IS_ABSTRACT;
+                    }
 
                     break;
 
                 case T_CONST:
-                    $element->isConst = Properties::IS_CONST;
+                    if ($inDefinition) {
+                        $element->isConst = Properties::IS_CONST;
+                    }
 
                     break;
 
                 case T_STATIC:
-                    $element->isStatic = Properties::IS_STATIC;
+                    if ($inDefinition) {
+                        $element->isStatic = Properties::IS_STATIC;
+                    }
 
                     break;
 
                 case T_PUBLIC:
-                    $element->accessModifier = Properties::IS_PUBLIC;
+                    if ($inDefinition) {
+                        $element->accessModifier = Properties::IS_PUBLIC;
+                    }
 
                     break;
 
                 case T_PROTECTED:
-                    $element->accessModifier = Properties::IS_PROTECTED;
+                    if ($inDefinition) {
+                        $element->accessModifier = Properties::IS_PROTECTED;
+                    }
 
                     break;
 
                 case T_PRIVATE:
-                    $element->accessModifier = Properties::IS_PRIVATE;
+                    if ($inDefinition) {
+                        $element->accessModifier = Properties::IS_PRIVATE;
+                    }
 
                     break;
 
                 case T_FUNCTION:
-                    $element->isMethod = Properties::IS_METHOD;
+                    if ($inDefinition) {
+                        $element->isMethod = Properties::IS_METHOD;
+                    }
 
                     break;
 
                 case T_STRING:
-                    if ($element->name === null) {
-                        $element->name = $content;
+                    if (!$inAttribute) {
+                        if ($inDefinition) {
+                            $element->name = $content;
+                        }
+
+                        $inDefinition = false;
                     }
 
                     break;
 
                 default:
-                    // Everything else is irrelevant
                     $this->checkForReference($element, $tokens, $index, $type, $content);
 
                     break;

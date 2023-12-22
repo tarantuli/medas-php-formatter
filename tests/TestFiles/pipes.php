@@ -35,4 +35,5 @@ class A
     private int|float $john;
 
     // Lalala
+    private string $cantHaveFloatingComments;
 }

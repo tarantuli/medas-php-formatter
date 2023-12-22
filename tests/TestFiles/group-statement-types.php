@@ -33,19 +33,6 @@ class GroupStatementTypes
         $this->datasets[$dataset->getName()] = $dataset;
     }
 
-    private function a(): true
-    {
-        $mimetype->setHeader('Access-Control-Allow-Origin', '*');
-
-        $manager->setHeader('Access-Control-Allow-Origin', '*');
-        $manager->setHeader('Content-Type', $mimetype);
-        $manager->setHeader('Content-Disposition: inline; filename="%s"', $fileName);
-
-        echo $file->content();
-
-        return true;
-    }
-
     public function b(
         int $span,
             &$variable1,
@@ -60,5 +47,18 @@ class GroupStatementTypes
             ...$variable2,
     )
     {
+    }
+
+    private function a(): true
+    {
+        $mimetype->setHeader('Access-Control-Allow-Origin', '*');
+
+        $manager->setHeader('Access-Control-Allow-Origin', '*');
+        $manager->setHeader('Content-Type', $mimetype);
+        $manager->setHeader('Content-Disposition: inline; filename="%s"', $fileName);
+
+        echo $file->content();
+
+        return true;
     }
 }
