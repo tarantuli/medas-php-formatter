@@ -22,9 +22,8 @@ readonly class ElementsAnalyzer
     private function analyzeElement(Element $element): void
     {
         $tokens = token_get_all('<?php ' . $element->text);
-        $name = '';
 
-        foreach ($tokens as $token) {
+        foreach ($tokens as $index => $token) {
             if (!is_array($token)) {
                 continue;
             }
@@ -72,36 +71,39 @@ readonly class ElementsAnalyzer
                     break;
 
                 case T_FUNCTION:
-                    $element->isFunction = Properties::IS_FUNCTION;
+                    $element->isMethod = Properties::IS_METHOD;
 
                     break;
 
-                case T_VARIABLE:
                 case T_STRING:
-                    $name = $content;
+                    if ($element->name === null) {
+                        $element->name = $content;
+                    }
 
                     break;
 
                 default:
                     // Everything else is irrelevant
+                    $this->checkForReference($element, $tokens, $index, $type, $content);
+
                     break;
             }
         }
 
-        if (str_starts_with($name, '__')) {
-            if ($name === '__construct') {
+        if ($element->name !== null && str_starts_with($element->name, '__')) {
+            if ($element->name === '__construct') {
                 $element->isMagicMethod = Properties::IS_CONSTRUCTOR;
             }
-            elseif ($name === '__destruct') {
+            elseif ($element->name === '__destruct') {
                 $element->isMagicMethod = Properties::IS_DESTRUCTOR;
             }
-            elseif ($name === '__toString') {
+            elseif ($element->name === '__toString') {
                 $element->isMagicMethod = Properties::IS__TO_STRING;
             }
-            elseif ($name === '__get') {
+            elseif ($element->name === '__get') {
                 $element->isMagicMethod = Properties::IS___GET;
             }
-            elseif ($name === '__set') {
+            elseif ($element->name === '__set') {
                 $element->isMagicMethod = Properties::IS___SET;
             }
             else {
@@ -117,9 +119,41 @@ readonly class ElementsAnalyzer
             $element->isAbstract,
             $element->isConst,
             $element->isStatic,
-            $element->isFunction,
+            $element->isMethod,
             $element->isMagicMethod,
             $element->accessModifier,
         ]);
+    }
+
+    private function checkForReference(
+        Element    $element,
+        array      $tokens,
+        int        $index,
+        int|string $type,
+        string     $content
+    ): void
+    {
+        if ($type !== T_VARIABLE || $content !== '$this') {
+            return;
+        }
+
+        if (!isset($tokens[$index + 3])) {
+            return;
+        }
+
+        if ($tokens[$index + 1][0] !== T_OBJECT_OPERATOR) {
+            return;
+        }
+
+        if ($tokens[$index + 2][0] !== T_STRING) {
+            return;
+        }
+
+        if ($tokens[$index + 3][0] !== T_ROUND_BRACKET_OPEN) {
+            return;
+        }
+
+        $calledName = $tokens[$index + 2][1];
+        $element->methodReferences[] = $calledName;
     }
 }

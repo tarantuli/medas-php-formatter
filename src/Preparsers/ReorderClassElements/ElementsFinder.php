@@ -10,6 +10,7 @@ use Medas\PhpTokenizer\TokenGroups;
 #[Service]
 readonly class ElementsFinder
 {
+    public const CURLY_BRACES = ['{', '}'];
     private array $structureTypes;
 
     public function __construct(
@@ -26,7 +27,7 @@ readonly class ElementsFinder
                 $job->inString = !$job->inString;
             }
 
-            if ($job->inString && in_array($token->id, ['{', '}'])) {
+            if ($job->inString && in_array($token->id, self::CURLY_BRACES)) {
                 $token->id = T_STRING;
             }
 

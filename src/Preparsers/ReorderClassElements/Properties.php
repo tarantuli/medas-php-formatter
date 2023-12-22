@@ -22,9 +22,9 @@ class Properties
     public const IS_STATIC = 0;
     public const IS_NOT_STATIC = 1;
 
-    // isFunction
-    public const IS_NOT_FUNCTION = 0;
-    public const IS_FUNCTION = 1;
+    // isMethod
+    public const IS_NOT_METHOD = 0;
+    public const IS_METHOD = 1;
 
     // isMagicMethod
     public const IS_CONSTRUCTOR = 0;

@@ -26,6 +26,9 @@ class ReorderingJob
     /** @var Element[] */
     public array $elements = [];
 
+    /** @var Element[] */
+    public array $unsortedElements = [];
+
     public string $trailingCode = '';
 
     public function __construct(

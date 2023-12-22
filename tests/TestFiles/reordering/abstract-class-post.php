@@ -42,14 +42,14 @@ abstract class AbstractClass
     {
     }
 
-    public function __serialize(): array
-    {
-        return [];
-    }
-
     public function __toString(): string
     {
         return $this->privateProperty;
+    }
+
+    public function __serialize(): array
+    {
+        return [];
     }
 
     public function __unserialize(array $data): void
