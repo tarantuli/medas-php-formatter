@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Medas\PhpFormatter\Preparsers;
+namespace Medas\PhpFormatter\Preformatters;
 
 use Medas\Core\Attributes\Service;
 use Medas\PhpFormatter\Formatters\Replacements\MoveCommentsAtLineEnd;
 use Medas\PhpFormatter\Job;
 
 #[Service]
-class NoCommentsAtLineEnd implements Preparser
+class NoCommentsAtLineEnd implements Preformatter
 {
     private array $tokensToMove = [];
 
@@ -17,7 +17,7 @@ class NoCommentsAtLineEnd implements Preparser
     {
     }
 
-    public function preparse(Job $job): void
+    public function preformat(Job $job): void
     {
         foreach ($job->tokens as $token) {
             if (!$token->is(T_COMMENT)

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\PhpFormatterTest\Functional\Replacements;
 
-use Medas\PhpFormatter\{Preparsers\NoCommentsAtLineEnd, Settings\Psr12};
+use Medas\PhpFormatter\{Preformatters\NoCommentsAtLineEnd, Settings\Psr12};
 use Medas\PhpFormatterTest\Functional\BaseTestClass;
 
 class NoCommentsAtLineEndTest extends BaseTestClass
@@ -14,7 +14,7 @@ class NoCommentsAtLineEndTest extends BaseTestClass
         $this->assertChanges(
             'token-replacement/no-comments-at-line-end-pre',
             'token-replacement/no-comments-at-line-end-post',
-            (new Psr12())->addPreparser(service(NoCommentsAtLineEnd::class))
+            (new Psr12())->addPreformatter(service(NoCommentsAtLineEnd::class))
         );
     }
 }

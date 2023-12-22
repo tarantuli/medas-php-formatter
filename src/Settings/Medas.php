@@ -25,7 +25,8 @@ use Medas\PhpFormatter\Formatters\LineSplitting\LongLineSplitter;
 use Medas\PhpFormatter\Formatters\LineSplitting\SoftLineSplitter;
 use Medas\PhpFormatter\Formatters\LineSplitting\TrailingCommaSplitter;
 use Medas\PhpFormatter\Formatters\Replacements\{UseExitInsteadOfDie, UseUnionNullInsteadOfNullable};
-use Medas\PhpFormatter\Preparsers\NoCommentsAtLineEnd;
+use Medas\PhpFormatter\Preformatters\NoCommentsAtLineEnd;
+use Medas\PhpFormatter\Preparsers\ReorderClassElements;
 
 class Medas extends Psr12
 {
@@ -33,7 +34,8 @@ class Medas extends Psr12
     {
         parent::__construct();
 
-        $this->addPreparser(service(NoCommentsAtLineEnd::class));
+        $this->addPreformatter(service(NoCommentsAtLineEnd::class));
+        $this->addPreparser(service(ReorderClassElements::class));
         $this->addFormatter(service(AlignArgumentNames::class));
         $this->addFormatter(service(BlankLineBetweenObjectCreationAndManipulation::class));
         $this->addFormatter(service(BlankLinesAfterPropertiesWithAttributes::class));

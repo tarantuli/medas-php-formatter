@@ -34,18 +34,20 @@ readonly class Formatter
 
     public function format(string $code, Settings\Settings $settings): string
     {
-        $job = new Job($settings);
+        $job = new Job($code, $settings);
 
-        if ($this->validateSourceCode && !$this->codeValidator->validate($code)) {
+        if ($this->validateSourceCode && !$this->codeValidator->validate($job->code)) {
             throw new Exceptions\SourceCodeIsInvalid(
-                $code,
+                $job->code,
                 $this->codeValidator->getErrorMessage()
             );
         }
 
-        $job->tokens = $this->tokenizer->tokenize($code);
-
         $this->applyPreparsers($job);
+
+        $job->tokens = $this->tokenizer->tokenize($job->code);
+
+        $this->applyPreformatters($job);
 
         $job->tree = $this->treeBuilder->fromCollection($job->tokens);
 
@@ -67,7 +69,7 @@ readonly class Formatter
 
         if ($this->validateReformattedCode && !$this->codeValidator->validate($reformattedCode)) {
             throw new Exceptions\ReformattedCodeIsInvalid(
-                $code,
+                $reformattedCode,
                 $this->codeValidator->getErrorMessage()
             );
         }
@@ -79,6 +81,13 @@ readonly class Formatter
     {
         foreach ($job->settings->preparsers() as $preparser) {
             $preparser->preparse($job);
+        }
+    }
+
+    private function applyPreformatters(Job $job): void
+    {
+        foreach ($job->settings->preformatters() as $preformatter) {
+            $preformatter->preformat($job);
         }
     }
 

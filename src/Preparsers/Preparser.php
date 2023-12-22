@@ -9,6 +9,4 @@ use Medas\PhpFormatter\Job;
 interface Preparser
 {
     public function preparse(Job $job): void;
-
-    public function additionalFormatters(): array;
 }

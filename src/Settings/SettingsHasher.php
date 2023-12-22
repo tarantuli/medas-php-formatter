@@ -25,10 +25,10 @@ class SettingsHasher
             $data['formatters'] = $formatter::class;
         }
 
-        $data['preparsers'] = [];
+        $data['preformatters'] = [];
 
-        foreach ($settings->preparsers() as $preparser) {
-            $data['preparsers'] = $preparser::class;
+        foreach ($settings->preformatters() as $preformatter) {
+            $data['preformatters'] = $preformatter::class;
         }
 
         return sha1(json_encode($data));

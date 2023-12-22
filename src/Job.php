@@ -14,6 +14,7 @@ class Job
     public array $checkedBySoftLineSplitter = [];
 
     public function __construct(
+        public string                     $code,
         public readonly Settings\Settings $settings,
     )
     {

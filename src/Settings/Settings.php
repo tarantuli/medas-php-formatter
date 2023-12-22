@@ -7,6 +7,7 @@ namespace Medas\PhpFormatter\Settings;
 use Medas\PhpFormatter\Formatters\Formatter;
 use Medas\PhpFormatter\Formatters\LineSplitting\GenericLineSplitter\BreakpointSet;
 use Medas\PhpFormatter\Formatters\Required\RequiredWhitespace;
+use Medas\PhpFormatter\Preformatters\Preformatter;
 use Medas\PhpFormatter\Preparsers\Preparser;
 use Medas\PhpTokenizer\AdditionalTokensDefiner;
 
@@ -24,6 +25,9 @@ class Settings
     /** @var Preparser[] */
     private array $preparsers = [];
 
+    /** @var Preformatter[] */
+    private array $preformatters = [];
+
     /** @var Formatter[] */
     private array $formatters = [];
 
@@ -40,6 +44,34 @@ class Settings
         $this->addFormatter(service(RequiredWhitespace::class));
     }
 
+    public function addPreparser(Preparser $preparser): self
+    {
+        $this->preparsers[] = $preparser;
+
+        return $this;
+    }
+
+    public function preparsers(): array
+    {
+        return $this->preparsers;
+    }
+
+    public function addPreformatter(Preformatter $preformatter): self
+    {
+        $this->preformatters[] = $preformatter;
+
+        foreach ($preformatter->additionalFormatters() as $additionalFormatter) {
+            $this->addFormatter($additionalFormatter);
+        }
+
+        return $this;
+    }
+
+    public function preformatters(): array
+    {
+        return $this->preformatters;
+    }
+
     public function addFormatter(Formatter $formatter): self
     {
         $this->formatters[] = $formatter;
@@ -49,22 +81,6 @@ class Settings
         }
 
         return $this;
-    }
-
-    public function addPreparser(Preparser $preparser): self
-    {
-        $this->preparsers[] = $preparser;
-
-        foreach ($preparser->additionalFormatters() as $additionalFormatter) {
-            $this->addFormatter($additionalFormatter);
-        }
-
-        return $this;
-    }
-
-    public function preparsers(): array
-    {
-        return $this->preparsers;
     }
 
     public function formatters(): array
