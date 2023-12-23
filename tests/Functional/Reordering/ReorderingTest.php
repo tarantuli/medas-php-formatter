@@ -15,4 +15,9 @@ class ReorderingTest extends BaseTestClass
             'reordering/abstract-class-post',
         );
     }
+
+    public function testBug1(): void
+    {
+        $this->assertRemainsTheSame('reordering/bug1');
+    }
 }

@@ -35,5 +35,6 @@ readonly class ReorderClassElements implements Preparser
         $this->elementSorter->sort($reorderingJob);
 
         $job->code = $this->sortedCodeCompiler->compile($reorderingJob);
+        //funcdump($job->code);
     }
 }
