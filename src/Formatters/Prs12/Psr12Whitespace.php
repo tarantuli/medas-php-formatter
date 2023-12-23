@@ -51,6 +51,83 @@ readonly class Psr12Whitespace extends BaseFormatter
         );
     }
 
+    private function getSpaceBeforeRequired(): array
+    {
+        return array_merge(
+            $this->getSpaceAroundRequired(),
+            [
+                T_AMPERSAND,
+                T_ELLIPSIS,
+                T_PIPE,
+                T_QUESTION_MARK,
+                T_SQUARE_BRACKET_OPEN,
+                T_VARIABLE,
+            ],
+        );
+    }
+
+    private function getSpaceAfterRequired(): array
+    {
+        return array_merge(
+            $this->getSpaceAroundRequired(),
+            $this->tokenGroups->casts(),
+            [
+                T_COMMA,
+                T_NEW,
+                T_SEMICOLON,
+                T_THROW,
+            ],
+        );
+    }
+
+    private function getSpaceAroundRequired(): array
+    {
+        return array_merge(
+            $this->tokenGroups->arithmicOperators(),
+            $this->tokenGroups->assignmentOperators(),
+            $this->tokenGroups->bitwiseOperators(),
+            $this->tokenGroups->comparisonOperators(),
+            $this->tokenGroups->controlKeywords(),
+            $this->tokenGroups->logicalOperators(),
+            $this->tokenGroups->typeOperators(),
+            [
+                T_AMPERSAND,
+                T_AS,
+                T_ASSIGNMENT,
+                T_CASE,
+                T_COLON,
+                T_DOC_COMMENT,
+                T_DOUBLE_ARROW,
+                T_PIPE,
+                T_QUESTION_MARK,
+                T_RETURN,
+            ],
+        );
+    }
+
+    private function getSpaceBeforeForbidden(): array
+    {
+        return [
+            T_ROUND_BRACKET_CLOSE,
+            T_SEMICOLON,
+            T_SQUARE_BRACKET_CLOSE,
+        ];
+    }
+
+    private function getSpaceAfterForbidden(): array
+    {
+        return [
+            T_CURLY_BRACKET_OPEN,
+            T_DOUBLE_COLON,
+            T_ELLIPSIS,
+            T_ENCAPSED_AND_WHITESPACE,
+            T_EXCLAMATION_POINT,
+            T_OBJECT_OPERATOR,
+            T_ROUND_BRACKET_OPEN,
+            T_SQUARE_BRACKET_OPEN,
+        ];
+    }
+
     public function priority(): int
     {
         return 1200;
@@ -156,60 +233,6 @@ readonly class Psr12Whitespace extends BaseFormatter
         }
     }
 
-    private function getSpaceAroundRequired(): array
-    {
-        return array_merge(
-            $this->tokenGroups->arithmicOperators(),
-            $this->tokenGroups->assignmentOperators(),
-            $this->tokenGroups->bitwiseOperators(),
-            $this->tokenGroups->comparisonOperators(),
-            $this->tokenGroups->controlKeywords(),
-            $this->tokenGroups->logicalOperators(),
-            $this->tokenGroups->typeOperators(),
-            [
-                T_AMPERSAND,
-                T_AS,
-                T_ASSIGNMENT,
-                T_CASE,
-                T_COLON,
-                T_DOC_COMMENT,
-                T_DOUBLE_ARROW,
-                T_PIPE,
-                T_QUESTION_MARK,
-                T_RETURN,
-            ],
-        );
-    }
-
-    private function getSpaceBeforeRequired(): array
-    {
-        return array_merge(
-            $this->getSpaceAroundRequired(),
-            [
-                T_AMPERSAND,
-                T_ELLIPSIS,
-                T_PIPE,
-                T_QUESTION_MARK,
-                T_SQUARE_BRACKET_OPEN,
-                T_VARIABLE,
-            ],
-        );
-    }
-
-    private function getSpaceAfterRequired(): array
-    {
-        return array_merge(
-            $this->getSpaceAroundRequired(),
-            $this->tokenGroups->casts(),
-            [
-                T_COMMA,
-                T_NEW,
-                T_SEMICOLON,
-                T_THROW,
-            ],
-        );
-    }
-
     private function removeSpaces(TokenTree $tree): void
     {
         foreach ($tree as $token) {
@@ -267,28 +290,5 @@ readonly class Psr12Whitespace extends BaseFormatter
                 }
             }
         }
-    }
-
-    private function getSpaceBeforeForbidden(): array
-    {
-        return [
-            T_ROUND_BRACKET_CLOSE,
-            T_SEMICOLON,
-            T_SQUARE_BRACKET_CLOSE,
-        ];
-    }
-
-    private function getSpaceAfterForbidden(): array
-    {
-        return [
-            T_CURLY_BRACKET_OPEN,
-            T_DOUBLE_COLON,
-            T_ELLIPSIS,
-            T_ENCAPSED_AND_WHITESPACE,
-            T_EXCLAMATION_POINT,
-            T_OBJECT_OPERATOR,
-            T_ROUND_BRACKET_OPEN,
-            T_SQUARE_BRACKET_OPEN,
-        ];
     }
 }

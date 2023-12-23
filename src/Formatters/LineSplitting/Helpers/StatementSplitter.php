@@ -106,6 +106,24 @@ readonly class StatementSplitter
         }
     }
 
+    private function determineInitialDepth(Statement $statement): int
+    {
+        $openers = 0;
+        $closers = 0;
+        $lastToken = $statement->lastToken();
+
+        foreach ($statement as $token) {
+            if ($token !== $lastToken && $token->is(Tokens::OPENING_BRACKETS)) {
+                ++$openers;
+            }
+            elseif ($token->is(Tokens::CLOSING_BRACKETS)) {
+                ++$closers;
+            }
+        }
+
+        return $openers > $closers ? $openers - $closers : 0;
+    }
+
     private function extractTrailingTokens(Statement $statement, int $lastIndex, int $closerIndex): void
     {
         if ($lastIndex < $closerIndex) {
@@ -151,23 +169,5 @@ readonly class StatementSplitter
         }
 
         return $newStatement;
-    }
-
-    private function determineInitialDepth(Statement $statement): int
-    {
-        $openers = 0;
-        $closers = 0;
-        $lastToken = $statement->lastToken();
-
-        foreach ($statement as $token) {
-            if ($token !== $lastToken && $token->is(Tokens::OPENING_BRACKETS)) {
-                ++$openers;
-            }
-            elseif ($token->is(Tokens::CLOSING_BRACKETS)) {
-                ++$closers;
-            }
-        }
-
-        return $openers > $closers ? $openers - $closers : 0;
     }
 }

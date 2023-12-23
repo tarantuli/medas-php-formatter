@@ -162,19 +162,6 @@ readonly class ElementsAnalyzer
         }
     }
 
-    private function determineKey(Element $element): void
-    {
-        $element->sortingKey = implode('', [
-            $element->isUse,
-            $element->isAbstract,
-            $element->isConst,
-            $element->isStatic,
-            $element->isMethod,
-            $element->isMagicMethod,
-            $element->accessModifier,
-        ]);
-    }
-
     private function checkForReference(
         Element    $element,
         array      $tokens,
@@ -205,5 +192,18 @@ readonly class ElementsAnalyzer
 
         $calledName = $tokens[$index + 2][1];
         $element->methodReferences[] = $calledName;
+    }
+
+    private function determineKey(Element $element): void
+    {
+        $element->sortingKey = implode('', [
+            $element->isUse,
+            $element->isAbstract,
+            $element->isConst,
+            $element->isStatic,
+            $element->isMethod,
+            $element->isMagicMethod,
+            $element->accessModifier,
+        ]);
     }
 }

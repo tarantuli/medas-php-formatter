@@ -77,11 +77,6 @@ readonly class SingleLineControlBodiesEncloser extends BaseFormatter
         return $bodyStatement;
     }
 
-    private function appendBlockOpener(Statement $statement): void
-    {
-        $statement->appendToken(new Token(1, '{'));
-    }
-
     private function transferTokens(Statement $statement, Statement $bodyStatement): void
     {
         $depth = 0;
@@ -106,5 +101,10 @@ readonly class SingleLineControlBodiesEncloser extends BaseFormatter
                 }
             }
         }
+    }
+
+    private function appendBlockOpener(Statement $statement): void
+    {
+        $statement->appendToken(new Token(1, '{'));
     }
 }

@@ -9,6 +9,10 @@ use Medas\PhpTokenizer\Token;
 
 abstract readonly class BaseTokenReplacer extends BaseFormatter
 {
+    abstract protected function doReplace(Token $token): bool;
+
+    abstract protected function update(Token $token): void;
+
     public function priority(): int
     {
         return 2000;
@@ -22,8 +26,4 @@ abstract readonly class BaseTokenReplacer extends BaseFormatter
             }
         }
     }
-
-    abstract protected function doReplace(Token $token): bool;
-
-    abstract protected function update(Token $token): void;
 }
