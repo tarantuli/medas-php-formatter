@@ -203,7 +203,7 @@ readonly class ElementsAnalyzer
             $element->isStatic,
             $element->isMethod,
             $element->isMagicMethod,
-            $element->accessModifier,
+            $element->isMethod === Properties::IS_METHOD ? $element->accessModifier : 1,
         ]);
     }
 }

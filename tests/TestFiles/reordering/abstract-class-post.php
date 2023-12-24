@@ -14,9 +14,9 @@ abstract class AbstractClass
 
     abstract protected function abstractProtectedFunction();
 
-    public const PUBLIC_CONST = 1;
     protected const PROTECTED_CONST = 1;
     private const PRIVATE_CONST = 1;
+    public const PUBLIC_CONST = 1;
 
     public static function publicStaticFunction(): void
     {
@@ -30,9 +30,9 @@ abstract class AbstractClass
     {
     }
 
+    private string $privateProperty;
     public string $publicProperty;
     protected string $protectedProperty;
-    private string $privateProperty;
 
     public function __construct()
     {
