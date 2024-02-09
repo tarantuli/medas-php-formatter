@@ -7,7 +7,7 @@ namespace Medas\PhpFormatter;
 use Medas\Core\Attributes\{ConfigValue, HasMarkdownDocumentation, Service};
 use Medas\PhpTokenizer\{BlockDumper, Tokenizer, TreeBuilder};
 
-#[Service]
+#[Service, HasMarkdownDocumentation]
 readonly class Formatter
 {
     public function __construct(
@@ -32,7 +32,6 @@ readonly class Formatter
     {
     }
 
-    #[HasMarkdownDocumentation]
     public function format(string $code, Settings\Settings $settings): string
     {
         $job = new Job($code, $settings);
