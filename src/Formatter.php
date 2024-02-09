@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\PhpFormatter;
 
-use Medas\Core\Attributes\{ConfigValue, Service};
+use Medas\Core\Attributes\{ConfigValue, HasMarkdownDocumentation, Service};
 use Medas\PhpTokenizer\{BlockDumper, Tokenizer, TreeBuilder};
 
 #[Service]
@@ -32,6 +32,7 @@ readonly class Formatter
     {
     }
 
+    #[HasMarkdownDocumentation]
     public function format(string $code, Settings\Settings $settings): string
     {
         $job = new Job($code, $settings);
