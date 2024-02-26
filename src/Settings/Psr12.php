@@ -21,12 +21,13 @@ class Psr12 extends Settings
         parent::__construct();
 
         $this->document->setMaxLineLength(80);
-        $this->addFormatter(service(KeywordsToLowercase::class));
-        $this->addFormatter(service(NoBlankLinesAtStatementEnd::class));
-        $this->addFormatter(service(Psr12BlankLines::class));
-        $this->addFormatter(service(Psr12ElseifWhileCatch::class));
-        $this->addFormatter(service(Psr12VisibilityMarkers::class));
-        $this->addFormatter(service(Psr12Whitespace::class));
-        $this->addFormatter(service(SingleLineControlBodiesEncloser::class));
+
+        $this->formatters[] = service(KeywordsToLowercase::class);
+        $this->formatters[] = service(NoBlankLinesAtStatementEnd::class);
+        $this->formatters[] = service(Psr12BlankLines::class);
+        $this->formatters[] = service(Psr12ElseifWhileCatch::class);
+        $this->formatters[] = service(Psr12VisibilityMarkers::class);
+        $this->formatters[] = service(Psr12Whitespace::class);
+        $this->formatters[] = service(SingleLineControlBodiesEncloser::class);
     }
 }

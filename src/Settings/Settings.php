@@ -23,13 +23,13 @@ class Settings
     public BreakpointSet $softLineSet;
 
     /** @var Preparser[] */
-    private array $preparsers = [];
+    public array $preparsers = [];
 
     /** @var Preformatter[] */
-    private array $preformatters = [];
+    public array $preformatters = [];
 
     /** @var Formatter[] */
-    private array $formatters = [];
+    public array $formatters = [];
 
     public function __construct()
     {
@@ -41,56 +41,6 @@ class Settings
         $this->document->setLineEnding(new LineEndings\LineFeed())
             ->setIndentation(new Indentations\Spaces(4));
 
-        $this->addFormatter(service(RequiredWhitespace::class));
-    }
-
-    public function addPreparser(Preparser $preparser): self
-    {
-        $this->preparsers[] = $preparser;
-
-        return $this;
-    }
-
-    public function preparsers(): array
-    {
-        return $this->preparsers;
-    }
-
-    public function addPreformatter(Preformatter $preformatter): self
-    {
-        $this->preformatters[] = $preformatter;
-
-        foreach ($preformatter->additionalFormatters() as $additionalFormatter) {
-            $this->addFormatter($additionalFormatter);
-        }
-
-        return $this;
-    }
-
-    public function preformatters(): array
-    {
-        return $this->preformatters;
-    }
-
-    public function addFormatter(Formatter $formatter): self
-    {
-        $this->formatters[] = $formatter;
-
-        foreach ($formatter->additionalFormatters() as $additionalFormatter) {
-            $this->addFormatter($additionalFormatter);
-        }
-
-        return $this;
-    }
-
-    public function formatters(): array
-    {
-        // Sort by priority, higher values first
-        usort(
-            $this->formatters,
-            fn(Formatter $a, Formatter $b) => -($a->priority() <=> $b->priority())
-        );
-
-        return $this->formatters;
+        $this->formatters[] = service(RequiredWhitespace::class);
     }
 }

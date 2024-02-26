@@ -12,6 +12,7 @@ class NormalizeImportsTest extends BaseTestClass
     public function testNormalize(): void
     {
         $settings = new Medas();
+
         $settings->import->maxRelativeDepth = 3;
 
         $this->assertChanges(

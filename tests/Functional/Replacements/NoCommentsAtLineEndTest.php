@@ -11,10 +11,14 @@ class NoCommentsAtLineEndTest extends BaseTestClass
 {
     public function testMoveCommentsToLineBefore(): void
     {
+        $settings = new Psr12();
+
+        $settings->preformatters[] = service(NoCommentsAtLineEnd::class);
+
         $this->assertChanges(
             'token-replacement/no-comments-at-line-end-pre',
             'token-replacement/no-comments-at-line-end-post',
-            (new Psr12())->addPreformatter(service(NoCommentsAtLineEnd::class))
+            $settings
         );
     }
 }

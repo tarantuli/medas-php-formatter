@@ -12,6 +12,7 @@ class GroupImportsTest extends BaseTestClass
     public function testGrouping(): void
     {
         $settings = new Medas();
+
         $settings->import->maxRelativeDepth = 3;
 
         $this->assertRemainsTheSame('imports/group-imports', $settings);

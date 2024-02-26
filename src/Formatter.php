@@ -11,23 +11,24 @@ use Medas\PhpTokenizer\{BlockDumper, Tokenizer, TreeBuilder};
 readonly class Formatter
 {
     public function __construct(
-        private BlockDumper   $blockDumper,
-        private BlockPrinter  $blockPrinter,
-        private CodeValidator $codeValidator,
-        private Tokenizer     $tokenizer,
-        private TreeBuilder   $treeBuilder,
+        private BlockDumper              $blockDumper,
+        private BlockPrinter             $blockPrinter,
+        private CodeValidator            $codeValidator,
+        private Settings\SettingsHandler $settingsHandler,
+        private Tokenizer                $tokenizer,
+        private TreeBuilder              $treeBuilder,
 
         #[ConfigValue(ConfigOptions\DumpParsedTree::class)]
-        private bool          $dumpParsedTree,
+        private bool                     $dumpParsedTree,
 
         #[ConfigValue(ConfigOptions\DumpResultTree::class)]
-        private bool          $dumpResultTree,
+        private bool                     $dumpResultTree,
 
         #[ConfigValue(ConfigOptions\ValidateSourceCode::class)]
-        private bool          $validateSourceCode,
+        private bool                     $validateSourceCode,
 
         #[ConfigValue(ConfigOptions\ValidateReformattedCode::class)]
-        private bool          $validateReformattedCode,
+        private bool                     $validateReformattedCode,
     )
     {
     }
@@ -79,21 +80,21 @@ readonly class Formatter
 
     private function applyPreparsers(Job $job): void
     {
-        foreach ($job->settings->preparsers() as $preparser) {
+        foreach ($job->settings->preparsers as $preparser) {
             $preparser->preparse($job);
         }
     }
 
     private function applyPreformatters(Job $job): void
     {
-        foreach ($job->settings->preformatters() as $preformatter) {
+        foreach ($job->settings->preformatters as $preformatter) {
             $preformatter->preformat($job);
         }
     }
 
     private function applyFormatters(Job $job): void
     {
-        foreach ($job->settings->formatters() as $formatter) {
+        foreach ($this->settingsHandler->formatters($job->settings) as $formatter) {
             $formatter->format($job);
         }
     }

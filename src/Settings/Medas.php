@@ -34,22 +34,22 @@ class Medas extends Psr12
     {
         parent::__construct();
 
-        $this->addPreformatter(service(NoCommentsAtLineEnd::class));
-        $this->addPreparser(service(ReorderClassElements::class));
-        $this->addFormatter(service(AlignArgumentNames::class));
-        $this->addFormatter(service(BlankLineBetweenObjectCreationAndManipulation::class));
-        $this->addFormatter(service(BlankLinesAfterPropertiesWithAttributes::class));
-        $this->addFormatter(service(BlankLinesBeforeBlocks::class));
-        $this->addFormatter(service(BlankLinesBetweenClassSections::class));
-        $this->addFormatter(service(BlankLinesBetweenStatementGroups::class));
-        $this->addFormatter(service(KeepOriginalObjectOperatorBreaks::class));
-        $this->addFormatter(service(LongLineSplitter::class));
-        $this->addFormatter(service(MedasElseifWhileCatch::class));
-        $this->addFormatter(service(NormalizeImports::class));
-        $this->addFormatter(service(SoftLineSplitter::class));
-        $this->addFormatter(service(TrailingCommaSplitter::class));
-        $this->addFormatter(service(UseExitInsteadOfDie::class));
-        $this->addFormatter(service(UseUnionNullInsteadOfNullable::class));
+        $this->preformatters[] = service(NoCommentsAtLineEnd::class);
+        $this->preparsers[] = service(ReorderClassElements::class);
+        $this->formatters[] = service(AlignArgumentNames::class);
+        $this->formatters[] = service(BlankLineBetweenObjectCreationAndManipulation::class);
+        $this->formatters[] = service(BlankLinesAfterPropertiesWithAttributes::class);
+        $this->formatters[] = service(BlankLinesBeforeBlocks::class);
+        $this->formatters[] = service(BlankLinesBetweenClassSections::class);
+        $this->formatters[] = service(BlankLinesBetweenStatementGroups::class);
+        $this->formatters[] = service(KeepOriginalObjectOperatorBreaks::class);
+        $this->formatters[] = service(LongLineSplitter::class);
+        $this->formatters[] = service(MedasElseifWhileCatch::class);
+        $this->formatters[] = service(NormalizeImports::class);
+        $this->formatters[] = service(SoftLineSplitter::class);
+        $this->formatters[] = service(TrailingCommaSplitter::class);
+        $this->formatters[] = service(UseExitInsteadOfDie::class);
+        $this->formatters[] = service(UseUnionNullInsteadOfNullable::class);
 
         // Breakpoint sets
         $this->classDeclarationSet = ClassDeclarationSet::instance();
