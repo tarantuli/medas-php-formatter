@@ -6,7 +6,7 @@ namespace Medas\PhpFormatterTest\Functional;
 
 use Medas\Console\Diff;
 use Medas\ConsolePrinter\ConsolePrinter;
-use Medas\PhpFormatter\{FormatterManager, Settings\Medas, Settings\Settings};
+use Medas\PhpFormatter\{Formatter, Settings\Medas, Settings\Settings};
 use PHPUnit\Framework\TestCase;
 use SebastianBergmann\Diff\{Differ, Output\UnifiedDiffOutputBuilder};
 
@@ -40,7 +40,7 @@ abstract class BaseTestClass extends TestCase
 
     protected function format(string $sourceFile, string $expectedFile, Settings $settings): array
     {
-        $formatterManager = service(FormatterManager::class);
+        $formatter = service(Formatter::class);
 
         $source = str_replace(
             "\r\n",
@@ -54,7 +54,7 @@ abstract class BaseTestClass extends TestCase
             file_get_contents(__DIR__ . '/../TestFiles/' . $expectedFile . '.php')
         );
 
-        return [$formatterManager->format($source, $settings), $expected];
+        return [$formatter->format($source, $settings), $expected];
     }
 
     protected function assertChanges(string $sourceFile, string $targetFile, Settings $settings = null): void

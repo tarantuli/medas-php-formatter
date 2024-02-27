@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace Medas\PhpFormatter;
 
 use Medas\Core\Attributes\{ConfigValue, HasMarkdownDocumentation, Service};
-use Medas\PhpTokenizer\{BlockDumper, Tokenizer, TreeBuilder};
+use Medas\PhpTokenizer\{AdditionalTokensDefiner, BlockDumper, Tokenizer, TreeBuilder};
 
 #[Service, HasMarkdownDocumentation]
 readonly class Formatter
 {
     public function __construct(
+        AdditionalTokensDefiner          $additionalTokensDefiner,
         private BlockDumper              $blockDumper,
         private BlockPrinter             $blockPrinter,
         private CodeValidator            $codeValidator,
@@ -31,6 +32,7 @@ readonly class Formatter
         private bool                     $validateReformattedCode,
     )
     {
+        $additionalTokensDefiner->define();
     }
 
     public function format(string $code, Settings\Settings $settings): string

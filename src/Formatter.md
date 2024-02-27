@@ -1,10 +1,10 @@
 # Usage example
 
 ```php
-$formatterManager = service(FormatterManager::class);
+$formatter = service(Formatter::class);
 $settings = new Medas();
 
 $code = '<?php ...';
 
-$formattedCode = $formatterManager->format($code, $settings);
+$formattedCode = $formatter->format($code, $settings);
 ```
