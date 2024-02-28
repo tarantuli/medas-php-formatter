@@ -46,8 +46,11 @@ class GenericLineSet implements BreakpointSet
             ],
             [
                 new BreakpointDefinition('pipe', [T_PIPE]),
-                new BreakpointDefinition('arithmetic', [T_PLUS, T_MINUS, T_ASTERISK, T_SLASH]),
+                new BreakpointDefinition('arithmetic', [T_PLUS, T_MINUS, T_ASTERISK]),
                 new BreakpointDefinition('depth 0 assignment', [T_ASSIGNMENT], maxDepth: 0),
+            ],
+            [
+                new BreakpointDefinition('arithmetic slash', [T_SLASH]),
             ],
             [
                 new BreakpointDefinition('fat arrow', [T_DOUBLE_ARROW], keepPrefixAndSuffix: true),
