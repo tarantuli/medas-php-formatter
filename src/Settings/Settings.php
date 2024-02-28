@@ -9,7 +9,6 @@ use Medas\PhpFormatter\Formatters\LineSplitting\GenericLineSplitter\BreakpointSe
 use Medas\PhpFormatter\Formatters\Required\RequiredWhitespace;
 use Medas\PhpFormatter\Preformatters\Preformatter;
 use Medas\PhpFormatter\Preparsers\Preparser;
-use Medas\PhpTokenizer\AdditionalTokensDefiner;
 
 class Settings
 {
@@ -33,8 +32,6 @@ class Settings
 
     public function __construct()
     {
-        service(AdditionalTokensDefiner::class)->define();
-
         $this->document = new DocumentSettings();
         $this->import = new ImportSettings();
 

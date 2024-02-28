@@ -10,7 +10,7 @@ use Medas\Core\{Attributes\Service, Interfaces\ConfigGroup};
 readonly class ValidatorGroup implements ConfigGroup
 {
     public function __construct(
-        private RootGroup $group,
+        private PhpFormatterConfigGroup $group,
     )
     {
     }

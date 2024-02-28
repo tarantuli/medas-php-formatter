@@ -7,7 +7,7 @@ namespace Medas\PhpFormatter\ConfigOptions;
 use Medas\Core\{Attributes\Service, Interfaces\ConfigGroup};
 
 #[Service]
-class RootGroup implements ConfigGroup
+class PhpFormatterConfigGroup implements ConfigGroup
 {
     public function parent(): ConfigGroup|null
     {

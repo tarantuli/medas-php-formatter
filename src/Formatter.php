@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Medas\PhpFormatter;
 
-use Medas\Core\Attributes\{ConfigValue, HasMarkdownDocumentation, Service};
+use Medas\Core\Attributes\{ConfigValue, Entrypoint, HasMarkdownDocumentation, Service};
 use Medas\PhpTokenizer\{AdditionalTokensDefiner, BlockDumper, Tokenizer, TreeBuilder};
 
-#[Service, HasMarkdownDocumentation]
+#[Service, HasMarkdownDocumentation, Entrypoint]
 readonly class Formatter
 {
     public function __construct(

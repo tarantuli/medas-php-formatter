@@ -34,8 +34,13 @@ class Medas extends Psr12
     {
         parent::__construct();
 
+        // Preformatters
         $this->preformatters[] = service(NoCommentsAtLineEnd::class);
+
+        // Preparsers
         $this->preparsers[] = service(ReorderClassElements::class);
+
+        // Formatters
         $this->formatters[] = service(AlignArgumentNames::class);
         $this->formatters[] = service(BlankLineBetweenObjectCreationAndManipulation::class);
         $this->formatters[] = service(BlankLinesAfterPropertiesWithAttributes::class);
