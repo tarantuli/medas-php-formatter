@@ -8,20 +8,18 @@ use Medas\Core\{Attributes\ConfigValue, Attributes\Service, System};
 use Medas\FileSystem\TemporaryFiles;
 
 #[Service]
-class CodeValidator
+readonly class CodeValidator
 {
-    private string $errorMessage;
-
     public function __construct(
-        private readonly TemporaryFiles $temporaryFiles,
+        private TemporaryFiles $temporaryFiles,
 
         #[ConfigValue(ConfigOptions\PathToPhp::class)]
-        private readonly string|null    $pathToPhp,
+        private string|null    $pathToPhp,
     )
     {
     }
 
-    public function validate(string $code): bool
+    public function validate(string $code): CodeValidator\ValidatorResult
     {
         if (!System::isFunctionAvailable('exec')) {
             throw new Exceptions\CannotRunCommandLine();
@@ -44,12 +42,13 @@ class CodeValidator
         $results = implode("\n", array_filter($results));
 
         if (str_contains($results, 'No syntax errors detected in')) {
-            return true;
+            return new CodeValidator\ValidatorResult(true);
         }
 
-        $this->errorMessage = $this->replaceFilenameBySourceLine($results, $tempFile, $code);
-
-        return false;
+        return new CodeValidator\ValidatorResult(
+            false,
+            $this->replaceFilenameBySourceLine($results, $tempFile, $code)
+        );
     }
 
     private function replaceFilenameBySourceLine(string $message, string $tempFile, string $code): string
@@ -66,10 +65,5 @@ class CodeValidator
         }
 
         return $message;
-    }
-
-    public function getErrorMessage(): string
-    {
-        return $this->errorMessage;
     }
 }

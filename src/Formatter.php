@@ -39,11 +39,12 @@ readonly class Formatter
     {
         $job = new Job($code, $settings);
 
-        if ($this->validateSourceCode && !$this->codeValidator->validate($job->code)) {
-            throw new Exceptions\SourceCodeIsInvalid(
-                $job->code,
-                $this->codeValidator->getErrorMessage()
-            );
+        if ($this->validateSourceCode) {
+            $result = $this->codeValidator->validate($job->code);
+
+            if (!$result->isValid) {
+                throw new Exceptions\SourceCodeIsInvalid($job->code, $result->errorMessage);
+            }
         }
 
         $this->applyPreparsers($job);
@@ -70,11 +71,15 @@ readonly class Formatter
             (string) $job->settings->document->lineEnding()
         );
 
-        if ($this->validateReformattedCode && !$this->codeValidator->validate($reformattedCode)) {
-            throw new Exceptions\ReformattedCodeIsInvalid(
-                $reformattedCode,
-                $this->codeValidator->getErrorMessage()
-            );
+        if ($this->validateReformattedCode) {
+            $result = $this->codeValidator->validate($reformattedCode);
+
+            if (!$result->isValid) {
+                throw new Exceptions\ReformattedCodeIsInvalid(
+                    $reformattedCode,
+                    $result->errorMessage
+                );
+            }
         }
 
         return $reformattedCode;
