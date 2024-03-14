@@ -1,6 +1,9 @@
 {
     "name": "morphp/medas-php-formatter",
     "description": "Medas PHP formatter",
+    "keywords": [
+        "backend"
+    ],
     "authors": [
         {
             "name": "Patrick Morpey",
