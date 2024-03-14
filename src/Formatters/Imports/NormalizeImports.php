@@ -12,14 +12,16 @@ use Medas\PhpFormatter\{Formatters\BaseFormatter, Job};
  * This service normalizes all imports in a file.
  *
  * Basic rules:
- * If an import is aliased, that alias is used whenever possible.
- * If a reference is absolute, it's imported.
- * If a reference is relative, it's inlined.
  *
- * Settings dependant rules:
- * If a class is in the global namespace, and settings->importSettings->importGlobalNamespace is false,
+ * - If an import is aliased, that alias is used whenever possible.
+ * - If a reference is absolute, it's imported.
+ * - If a reference is relative, it's inlined.
+ *
+ * Settings dependent rules:
+
+ * - If a class is in the global namespace, and settings->importSettings->importGlobalNamespace is false,
  *    the reference is inlined instead of imported.
- * If a reference is relative, but deeper than settings->importSettings->maxRelativeDepth,
+ * - If a reference is relative, but deeper than settings->importSettings->maxRelativeDepth,
  *    the reference is imported instead of inlined.
  */
 #[Service]
