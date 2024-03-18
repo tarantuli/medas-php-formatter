@@ -61,6 +61,11 @@ class BugsTest extends BaseTestClass
         $this->assertRemainsTheSame('bugs/bugs11');
     }
 
+    public function testBugs12(): void
+    {
+        $this->assertChanges('bugs/bugs12-pre', 'bugs/bugs12-post');
+    }
+
     public function testEmptyTrait(): void
     {
         $this->assertRemainsTheSame('bugs/empty-trait');
