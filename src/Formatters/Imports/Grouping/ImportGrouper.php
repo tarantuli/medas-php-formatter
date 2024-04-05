@@ -63,7 +63,8 @@ readonly class ImportGrouper
         foreach ($job->prefixes as $prefix) {
             if ($prefix->count >= 2
                     && $prefix->maxChildDepth <= $this->maxChildDepth
-                    && $prefix->prefixDepth >= $this->minPrefixDepth) {
+                    && $prefix->prefixDepth >= $this->minPrefixDepth
+                    && !array_key_exists($prefix->prefix, $job->referencesAndImports->imports)) {
                 $job->candidates[] = $prefix;
             }
         }
