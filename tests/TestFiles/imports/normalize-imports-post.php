@@ -5,14 +5,14 @@ namespace MyNamespace;
 use Absolute\ClassName;
 use Absolute\Path\To\AnotherInterface;
 use Absolute\ReturnType;
-use Clashing\MyClass as ClaMyClass;
-use My\Clashing\ClassName as ClaClassName;
-use My\Clavicle\ClassName as ClaClassName1;
+use Clashing\MyClass as ClashMyClass;
+use My\Clashbash\ClassName as ClashClassName1;
+use My\Clashing\ClassName as ClashClassName;
 use MyNamespace\This\Relative\Path\Is\Too\Deep;
 use N\Attributes\Types as Type;
 use So\Many\Layers\Namespace as AliasedNamespace;
 use YetAnotherNamespace\ClassName as AliasOfClassName;
-use Your\Clashing\ClassName as ClaClassName2;
+use Your\Clashing\ClassName as ClashClassName2;
 
 class MyClass extends ChildNamespace\BaseClass implements Interfaces\MyInterface, AnotherInterface
 {
@@ -44,10 +44,10 @@ class MyClass extends ChildNamespace\BaseClass implements Interfaces\MyInterface
     public function c(ClassA|ClassB $aClass): ClassC|ClassD|null
     {
         return [
-            ClaClassName::class,
-            ClaClassName1::class,
-            ClaClassName2::class,
-            ClaMyClass::class,
+            ClashClassName::class,
+            ClashClassName1::class,
+            ClashClassName2::class,
+            ClashMyClass::class,
         ];
     }
 

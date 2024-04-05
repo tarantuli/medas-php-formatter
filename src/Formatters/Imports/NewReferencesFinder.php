@@ -26,8 +26,10 @@ class NewReferencesFinder
             }
 
             if (null !== $depth = $this->getRelativeDepth($analysis, $reference)) {
+                $isAlias = $this->isAlias($reference, $analysis);
+
                 // It's a relative reference
-                if ($settings->maxRelativeDepth >= 1 && $depth > $settings->maxRelativeDepth) {
+                if ($isAlias || ($settings->maxRelativeDepth >= 1 && $depth > $settings->maxRelativeDepth)) {
                     // Too deep, import it
                     $referencesAndImports->references[$reference->fqn] = null;
                 }
@@ -82,6 +84,17 @@ class NewReferencesFinder
         $relative = $this->getRelativeReference($analysis, $reference);
 
         return $relative === null ? null : substr_count($relative, '\\') + 1;
+    }
+
+    private function isAlias(ClassReference $reference, ClassAnalysis $analysis): bool
+    {
+        $isRelativePath = '/^\\\\'
+            . str_replace('\\', '\\\\', $analysis->namespace)
+            . '\\\\([\w\\\\]+\\\\)?'
+            . str_replace('\\', '\\\\', $reference->label)
+            . '$/';
+
+        return !preg_match($isRelativePath, $reference->fqn);
     }
 
     private function getRelativeReference(ClassAnalysis $analysis, ClassReference $reference): string|null

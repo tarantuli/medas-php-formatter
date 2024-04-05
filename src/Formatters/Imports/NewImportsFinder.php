@@ -30,7 +30,7 @@ readonly class NewImportsFinder
             if (in_array($alias, $referencesAndImports->references) || $alias === $className) {
                 // It's already a label for another FQN or the class name itself, prepend the next to last part
                 $nextToLastPart = $this->fqnProperties->getNextToLastPart($fqn);
-                $alias = $baseAlias = substr($nextToLastPart, 0, 3) . $lastPart;
+                $alias = $baseAlias = substr($nextToLastPart, 0, 5) . $lastPart;
                 $counter = 0;
 
                 while (in_array($alias, $referencesAndImports->references) || $alias === $className) {

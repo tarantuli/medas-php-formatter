@@ -41,7 +41,7 @@ class MyClass extends ChildNamespace\BaseClass implements Interfaces\MyInterface
     {
         return [
             \My\Clashing\ClassName::class,
-            \My\Clavicle\ClassName::class,
+            \My\Clashbash\ClassName::class,
             \Your\Clashing\ClassName::class,
             \Clashing\MyClass::class,
         ];
