@@ -156,12 +156,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:tarantuli/medas-php-class-analysis.git",
-                "reference": "c334318363bb39d2b4ddd0055bc40a35a61d0513"
+                "reference": "04fc37cc76c9f35445a80a904062c7bdbe5c0434"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-php-class-analysis/zipball/c334318363bb39d2b4ddd0055bc40a35a61d0513",
-                "reference": "c334318363bb39d2b4ddd0055bc40a35a61d0513",
+                "url": "https://api.github.com/repos/tarantuli/medas-php-class-analysis/zipball/04fc37cc76c9f35445a80a904062c7bdbe5c0434",
+                "reference": "04fc37cc76c9f35445a80a904062c7bdbe5c0434",
                 "shasum": ""
             },
             "require": {
@@ -193,7 +193,7 @@
                 "source": "https://github.com/tarantuli/medas-php-class-analysis/tree/dev",
                 "issues": "https://github.com/tarantuli/medas-php-class-analysis/issues"
             },
-            "time": "2024-03-14T19:53:21+00:00"
+            "time": "2024-04-15T11:09:03+00:00"
         },
         {
             "name": "morphp/medas-php-tokenizer",
@@ -615,12 +615,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:tarantuli/medas-service-manager.git",
-                "reference": "4423beeb068a2360b6ddd9ff7d59858952aa6bbb"
+                "reference": "d07122a490c499befd8381c2696e6a8991a867a0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-service-manager/zipball/4423beeb068a2360b6ddd9ff7d59858952aa6bbb",
-                "reference": "4423beeb068a2360b6ddd9ff7d59858952aa6bbb",
+                "url": "https://api.github.com/repos/tarantuli/medas-service-manager/zipball/d07122a490c499befd8381c2696e6a8991a867a0",
+                "reference": "d07122a490c499befd8381c2696e6a8991a867a0",
                 "shasum": ""
             },
             "require": {
@@ -657,7 +657,7 @@
                 "source": "https://github.com/tarantuli/medas-service-manager/tree/dev",
                 "issues": "https://github.com/tarantuli/medas-service-manager/issues"
             },
-            "time": "2024-03-22T13:25:20+00:00"
+            "time": "2024-04-10T07:09:49+00:00"
         },
         {
             "name": "myclabs/deep-copy",
