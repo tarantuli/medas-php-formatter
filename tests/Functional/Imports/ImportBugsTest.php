@@ -17,4 +17,9 @@ class ImportBugsTest extends BaseTestClass
     {
         $this->assertRemainsTheSame('imports/bug-relative-alias-2');
     }
+
+    public function testBugOrGroupedCatches(): void
+    {
+        $this->assertRemainsTheSame('imports/or-grouped-catches');
+    }
 }
