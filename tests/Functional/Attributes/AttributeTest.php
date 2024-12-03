@@ -22,4 +22,9 @@ class AttributeTest extends BaseTestClass
     {
         $this->assertRemainsTheSame('attributes/bugs1');
     }
+
+    public function testBugs2(): void
+    {
+        $this->assertRemainsTheSame('attributes/bugs2');
+    }
 }

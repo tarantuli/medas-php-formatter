@@ -8,6 +8,7 @@ use Medas\Core\Attributes\Service;
 use Medas\PhpFormatter\Formatters\{BaseFormatter, Helpers\BlankLineAdder};
 use Medas\PhpFormatter\Job;
 use Medas\PhpTokenizer\{
+    Contexts\MethodParameters,
     StatementTypeFinder,
     StatementTypes\BlockCloser,
     StatementTypes\ClassDeclaration,
@@ -71,7 +72,10 @@ readonly class Psr12BlankLines extends BaseFormatter
 
             if ($token->is(T_SQUARE_BRACKET_CLOSE)) {
                 if ($bracketDepth === 0) {
-                    if ($token->statement->firstNonCommentToken()->is(T_ATTRIBUTE)) {
+                    if ($token->context instanceof MethodParameters) {
+                        // Do nothing
+                    }
+                    else {
                         $token->lineBreakAfter();
                     }
                 }

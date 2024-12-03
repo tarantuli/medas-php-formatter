@@ -22,6 +22,10 @@ readonly class FunctionDeclarationSplitter
         $depth = 0;
 
         foreach ($statement as $index => $token) {
+            if ($token->inAttribute) {
+                continue;
+            }
+
             if ($token->is(T_ROUND_BRACKET_OPEN)) {
                 if ($openerIndex === null) {
                     $openerIndex = $index;
