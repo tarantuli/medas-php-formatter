@@ -9,7 +9,7 @@ use Medas\HttpRequestHandler\{Authorization\PublicResource, ResponseTypes\Respon
 use Medas\Routing\{Methods\Post, Parameters\Constant, Route};
 
 #[Route([new Constant('phono-scripts'), new Constant('public')])]
-readonly class ConvertInput
+readonly class ConvertInputx
 {
     #[Post, PublicResource]
     public function post(): Response

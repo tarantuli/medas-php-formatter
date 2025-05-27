@@ -6,7 +6,7 @@ namespace Medas\ConfigOptions\Collection;
 
 use Medas\Core\Interfaces\{ConfigGroup, ConfigOption};
 
-class OptionCollection
+class OptionCollectionx
 {
     public function __construct(
         /** @var ConfigGroup[][] */

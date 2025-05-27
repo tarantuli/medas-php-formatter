@@ -8,7 +8,7 @@ use Medas\StorageManager\ConfigOptions\TypeDefaults\DefaultMaxIntegerValue;
 use Medas\StorageManager\Interfaces\{RecordSet, Storage};
 use Medas\StorageManager\Structure\{Blueprint, TypeHandlerFinder};
 
-class ActionSet
+class ActionSetx
 {
     public RecordSet\Base|null $lastRecordSet = null;
     public mixed $lastInsertId = null;
@@ -19,7 +19,7 @@ foreach ($diff as $key => $value) {
     $currentValue = $current->$key;
 }
 
-readonly class EntityStructureFinder
+readonly class EntityStructureFinderx
 {
     public function __construct(
         private TypeHandlerFinder $typeHandlerFinder,
@@ -31,7 +31,7 @@ readonly class EntityStructureFinder
     }
 }
 
-interface MigrationBuilder
+interface MigrationBuilderx
 {
     public function build(
         Storage          $storage,

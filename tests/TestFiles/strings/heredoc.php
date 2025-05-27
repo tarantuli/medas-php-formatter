@@ -16,7 +16,7 @@ use Medas\StorageManager\{
 };
 
 #[Service]
-readonly class MigrationBuilder implements MigrationBuilderInterface
+readonly class MigrationBuilderx implements MigrationBuilderInterface
 {
     public function build(
         Storage          $storage,

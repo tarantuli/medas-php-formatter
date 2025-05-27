@@ -4,7 +4,7 @@ namespace Shared\Beautifiers\Html;
 
 use tidy;
 
-class DocToFragment
+class DocToFragmentx
 {
     public function go(): string
     {

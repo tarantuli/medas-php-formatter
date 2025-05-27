@@ -2,6 +2,6 @@
 
 namespace Shared\Collections\Interfaces;
 
-interface CollectionInterface extends \Iterator, \ArrayAccess, \Countable
+interface CollectionInterfacex extends \Iterator, \ArrayAccess, \Countable
 {
 }

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\ThisShouldBeNonsense\Functional;
 
-trait AllTests
+trait AllTestsx
 {
     use DefaultValuesTest;
     use ConsoleCommandsTest;

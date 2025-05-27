@@ -12,7 +12,7 @@ use Medas\FrameworkDocumentation\PackageDocGenerator\Job;
 use Medas\PhpClassAnalysis\ClassAnalysis;
 
 #[Service]
-readonly class ParameterProcessor
+readonly class ParameterProcessorx
 {
     private StringMaker $stringMaker;
 

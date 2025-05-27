@@ -2,7 +2,7 @@
 
 namespace Shared\Beautifiers\Html;
 
-class DocToFragment
+class DocToFragmentx
 {
     public function go(): string
     {

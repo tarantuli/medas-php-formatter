@@ -6,7 +6,7 @@ use Medas\EntityManager\Types\Integer;
 use Medas\PdoStorage\Exceptions\CantDetermineTypeFromDefinition;
 use Medas\StorageManager\Structure\Blueprint\{Field, Type};
 
-readonly class BinaryHandler
+readonly class BinaryHandlerx
 {
     public function handle(Field $field): string
     {

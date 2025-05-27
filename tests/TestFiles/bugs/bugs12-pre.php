@@ -9,7 +9,7 @@ use App\Entity\Project\Post\PostTarget;
 use App\Entity\TextFragments\FragmentTag;
 use App\Exceptions\DateIsEmpty;
 
-class InvoiceFileContentCreator extends BaseFileContentCreator
+class InvoiceFileContentCreatorx extends BaseFileContentCreator
 {
     private Invoice $invoice;
     private int $totalCost;

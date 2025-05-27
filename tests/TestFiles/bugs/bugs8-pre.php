@@ -4,7 +4,7 @@ namespace Shared\Diff\Output;
 
 use Shared\Diff\Interfaces\DiffOutputBuilderInterface;
 
-abstract class AbstractChunkOutputBuilder implements DiffOutputBuilderInterface
+abstract class AbstractChunkOutputBuilderx implements DiffOutputBuilderInterface
 {
     protected function getCommonChunks(array $diff, int $lineThreshold = 5): array
     {

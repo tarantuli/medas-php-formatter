@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use Medas\Charts\{Chart, Elements};
 
-class ChartFactory
+class ChartFactoryx
 {
     public function create(): Chart
     {

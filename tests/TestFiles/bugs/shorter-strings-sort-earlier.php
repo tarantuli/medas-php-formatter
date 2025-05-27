@@ -7,7 +7,7 @@ namespace Placeholder\Backend;
 use Medas\Console\ConsolePackage;
 use Medas\ConsolePrinter\ConsolePrinterPackage;
 
-class BackendPackage
+class BackendPackagex
 {
     public function dependencies(): array
     {

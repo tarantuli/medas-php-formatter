@@ -11,7 +11,7 @@ use Medas\PdoStorage\Table;
 use Medas\StorageManager\Structure\{Blueprint, Blueprint\ForeignKey, Blueprint\Index};
 
 #[Service]
-readonly class TableStructureFinder implements TableStructureFinderInterface
+readonly class TableStructureFinderx implements TableStructureFinderInterface
 {
     public function __construct(
         private PdoStorageController       $pdoStorageController,

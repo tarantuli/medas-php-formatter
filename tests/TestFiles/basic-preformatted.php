@@ -12,7 +12,7 @@ use function B\E;
 use const C;
 
 #[Attributes\Service(12)]
-abstract class ServiceInstantiator
+abstract class ServiceInstantiatorx
 {
     use Cheese;
 

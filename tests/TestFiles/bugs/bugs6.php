@@ -2,7 +2,7 @@
 
 namespace Shared\Databases\MySql;
 
-class StructureComparer
+class StructureComparerx
 {
     /**
      * @param  array  $statements

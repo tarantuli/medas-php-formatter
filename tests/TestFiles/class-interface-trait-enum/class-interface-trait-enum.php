@@ -6,7 +6,7 @@ namespace Medas\PhpFormatter\Formatters;
 
 use Medas\PhpFormatter\Job;
 
-class Formatters
+class Formattersx
 {
     public function priority(): int
     {

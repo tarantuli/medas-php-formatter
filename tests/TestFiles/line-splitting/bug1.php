@@ -6,7 +6,7 @@ use Medas\Console\{Commands\ConsoleCommand, Formats\Color, Text};
 use Medas\EntityManager\MetaData\Property;
 use Shared\DataControl\Str;
 
-class AutoProviderClass extends AbstractClassBuilder
+class AutoProviderClassx extends AbstractClassBuilder
 {
     /**
      * @return  string

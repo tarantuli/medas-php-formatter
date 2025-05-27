@@ -10,7 +10,7 @@ use My\ConfigValue;
 /**
  * @extends GenericCollection<Record>
  */
-class ClassNameNormalizer
+class ClassNameNormalizerx
 {
     /** @var Blueprint\Field[] */
     public array $addFields = [];
