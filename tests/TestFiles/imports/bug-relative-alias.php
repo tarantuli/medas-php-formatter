@@ -9,12 +9,12 @@ use Medas\Core\{
     CorePackage,
     Interfaces\Cache,
     Interfaces\CacheManager,
-    Interfaces\ServiceManager as ServiceManagerInterface
+    Interfaces\ServiceManager as ServiceManagerInterfacex
 };
 use Medas\ObjectInstantiator\ObjectInstantiator;
 use Medas\ServiceManager\Cache\CacheManager as CacheCacheManager;
 
-class ServiceManagerBugRelativeAlias implements ServiceManagerInterface
+class ServiceManagerBugRelativeAlias implements ServiceManagerInterfacex
 {
     private const CONFIG_CACHE_KEY = ServiceConfig::class;
 
