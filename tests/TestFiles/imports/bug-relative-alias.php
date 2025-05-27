@@ -9,7 +9,7 @@ use Medas\Core\{
     CorePackage,
     Interfaces\Cache,
     Interfaces\CacheManager,
-    Interfaces\ServiceManager as ServiceManagerInterfacex
+    Interfaces\ServiceManagerx as ServiceManagerInterfacex
 };
 use Medas\ObjectInstantiator\ObjectInstantiator;
 use Medas\ServiceManager\Cache\CacheManager as CacheCacheManager;
