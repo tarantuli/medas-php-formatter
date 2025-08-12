@@ -7,3 +7,7 @@ foreach ($this->values() as $value) {
 }
 
 $sets[$set][] = [$x, $y];
+
+foreach ($fileBlock->body->{'trans-unit'} ?? [] as $unitBlock) {
+    echo $unitBlock;
+}
