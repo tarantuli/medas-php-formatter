@@ -67,7 +67,9 @@ class BlockPrinter
             }
         }
 
-        echo $this->lineEnding;
+        if (!$statement->lastToken()->is(T_INLINE_HTML)) {
+            echo $this->lineEnding;
+        }
 
         if ($statement->blankLineAfter) {
             echo $this->lineEnding;

@@ -11,7 +11,8 @@ use Medas\PhpFormatter\Formatters\BlankLines\{
     BlankLinesBeforeBlocks,
     BlankLinesBetweenClassSections,
     BlankLinesBetweenStatementGroups,
-    MedasElseifWhileCatch
+    MedasElseifWhileCatch,
+    NoLineBreakAfterOpenTagWithEcho
 };
 use Medas\PhpFormatter\Formatters\Imports\NormalizeImports;
 use Medas\PhpFormatter\Formatters\LineSplitting\GenericLineSplitter\Sets\{
@@ -50,6 +51,7 @@ class Medas extends Psr12
         $this->formatters[] = service(KeepOriginalObjectOperatorBreaks::class);
         $this->formatters[] = service(LongLineSplitter::class);
         $this->formatters[] = service(MedasElseifWhileCatch::class);
+        $this->formatters[] = service(NoLineBreakAfterOpenTagWithEcho::class);
         $this->formatters[] = service(NormalizeImports::class);
         $this->formatters[] = service(SoftLineSplitter::class);
         $this->formatters[] = service(TrailingCommaSplitter::class);

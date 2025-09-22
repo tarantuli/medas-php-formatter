@@ -108,6 +108,7 @@ readonly class Psr12Whitespace extends BaseFormatter
     private function getSpaceBeforeForbidden(): array
     {
         return [
+            T_INLINE_HTML,
             T_ROUND_BRACKET_CLOSE,
             T_SEMICOLON,
             T_SQUARE_BRACKET_CLOSE,
@@ -122,6 +123,7 @@ readonly class Psr12Whitespace extends BaseFormatter
             T_ELLIPSIS,
             T_ENCAPSED_AND_WHITESPACE,
             T_EXCLAMATION_POINT,
+            T_INLINE_HTML,
             T_OBJECT_OPERATOR,
             T_ROUND_BRACKET_OPEN,
             T_SQUARE_BRACKET_OPEN,
