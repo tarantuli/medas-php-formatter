@@ -27,6 +27,7 @@ readonly class Finder
             && $statement->block->opener->containsType(T_MATCH);
 
         $foundDoubleArrow = false;
+        $inQuote = false;
 
         foreach ($statement as $index => $token) {
             if ($token === $lastToken) {
@@ -56,7 +57,11 @@ readonly class Finder
                 && $token->previous
                 && $token->previous->is(T_STRING);
 
-            if (!$questionPlusColonCheck && !$argumentNameCheck && $token->is($definition->separators)) {
+            if ($token->is(T_DOUBLE_QUOTE)) {
+                $inQuote = !$inQuote;
+            }
+
+            if (!$inQuote && !$questionPlusColonCheck && !$argumentNameCheck && $token->is($definition->separators)) {
                 if (!array_key_exists($cluster->id, $options)) {
                     $openerIndex = $cluster->openerIndex;
 
