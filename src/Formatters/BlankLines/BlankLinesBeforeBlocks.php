@@ -9,6 +9,7 @@ use Medas\PhpFormatter\{Formatters\BaseFormatter, Formatters\Helpers, Job};
 use Medas\PhpTokenizer\StatementTypes\{
     ClassDeclaration,
     ControlStatement,
+    FunctionDeclaration,
     ReturnStatement,
     SwitchBranch,
     ThrowStatement
@@ -33,8 +34,9 @@ readonly class BlankLinesBeforeBlocks extends BaseFormatter
         $this->blankLineAdder->beforeTypes($job->tree, [
             ClassDeclaration::class,
             ControlStatement::class,
-            SwitchBranch::class,
+            FunctionDeclaration::class,
             ReturnStatement::class,
+            SwitchBranch::class,
             ThrowStatement::class,
         ]);
     }
