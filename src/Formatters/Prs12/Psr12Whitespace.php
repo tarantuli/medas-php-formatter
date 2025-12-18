@@ -30,9 +30,9 @@ readonly class Psr12Whitespace extends BaseFormatter
     private array $operatorsKeywordsAndBrackets;
 
     public function __construct(
-        private TokenGroups         $tokenGroups,
-        private StatementTypeFinder $typeFinder,
         private ReturnTypeTokens    $returnTypeTokens,
+        private StatementTypeFinder $typeFinder,
+        private TokenGroups         $tokenGroups,
     )
     {
         $this->spaceBeforeRequired = $this->getSpaceBeforeRequired();

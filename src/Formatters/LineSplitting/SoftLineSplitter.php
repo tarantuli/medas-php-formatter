@@ -17,11 +17,12 @@ use Medas\PhpTokenizer\{
 readonly class SoftLineSplitter extends BaseFormatter
 {
     public function __construct(
-        #[ConfigValue(SoftMaxLineLength::class)]
-        private int                      $softMaxLineLength,
         private GenericLineSplitter      $genericLineSplitter,
         private Helpers\StatementLengths $lengthCounter,
         private StatementTypeFinder      $typeFinder,
+
+        #[ConfigValue(SoftMaxLineLength::class)]
+        private int                      $softMaxLineLength,
     )
     {
     }

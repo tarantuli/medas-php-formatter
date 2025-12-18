@@ -12,8 +12,8 @@ use Medas\PhpTokenizer\Statement;
 readonly class GenericLineSplitter
 {
     public function __construct(
-        private GenericLineSplitter\Options\Finder   $optionFinder,
         private GenericLineSplitter\Options\Assesser $assesser,
+        private GenericLineSplitter\Options\Finder   $optionFinder,
         private Helpers\StatementSplitter            $statementSplitter,
 
         #[ConfigValue(DumpOptionAssessment::class)]

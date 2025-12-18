@@ -12,8 +12,8 @@ use Medas\PhpFormatter\Formatters\Formatter;
 readonly class ListFormatters extends BaseConsoleCommand
 {
     public function __construct(
-        private PhpFormatterGroup $group,
         private ImplementorFinder $finder,
+        private PhpFormatterGroup $group,
     )
     {
     }

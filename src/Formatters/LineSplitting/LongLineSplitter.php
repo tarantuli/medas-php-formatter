@@ -18,12 +18,13 @@ use Medas\PhpTokenizer\{
 readonly class LongLineSplitter extends BaseFormatter
 {
     public function __construct(
+        private FunctionDeclarationSplitter $functionDeclarationSplitter,
+        private GenericLineSplitter         $genericLineSplitter,
+        private Helpers\StatementLengths    $lengthCounter,
+        private StatementTypeFinder         $typeFinder,
+
         #[ConfigValue(MaxLineLength::class)]
         private int                         $maxLineLength,
-        private StatementTypeFinder         $typeFinder,
-        private GenericLineSplitter         $genericLineSplitter,
-        private FunctionDeclarationSplitter $functionDeclarationSplitter,
-        private Helpers\StatementLengths    $lengthCounter,
     )
     {
     }

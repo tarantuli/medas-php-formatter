@@ -12,9 +12,9 @@ use Medas\PhpTokenizer\Token;
 readonly class ReorderClassElements implements Preparser
 {
     public function __construct(
-        private ReorderClassElements\ElementsFinder     $elementsFinder,
-        private ReorderClassElements\ElementsAnalyzer   $elementsAnalyzer,
         private ReorderClassElements\ElementSorter      $elementSorter,
+        private ReorderClassElements\ElementsAnalyzer   $elementsAnalyzer,
+        private ReorderClassElements\ElementsFinder     $elementsFinder,
         private ReorderClassElements\SortedCodeCompiler $sortedCodeCompiler,
     )
     {
