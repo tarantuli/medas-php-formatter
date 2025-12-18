@@ -14,8 +14,8 @@ use Medas\StorageManager\Structure\{Blueprint, Blueprint\ForeignKey, Blueprint\I
 readonly class TableStructureFinderx implements TableStructureFinderInterface
 {
     public function __construct(
-        private PdoStorageController       $pdoStorageController,
         private DefinitionToFieldConverter $definitionToFieldConverter,
+        private PdoStorageController       $pdoStorageController,
     )
     {
     }

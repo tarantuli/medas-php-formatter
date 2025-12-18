@@ -26,6 +26,7 @@ use Medas\PhpFormatter\Formatters\LineSplitting\LongLineSplitter;
 use Medas\PhpFormatter\Formatters\LineSplitting\SoftLineSplitter;
 use Medas\PhpFormatter\Formatters\LineSplitting\TrailingCommaSplitter;
 use Medas\PhpFormatter\Formatters\Replacements\{UseExitInsteadOfDie, UseUnionNullInsteadOfNullable};
+use Medas\PhpFormatter\Formatters\Sorting\ServiceConstructionParameters;
 use Medas\PhpFormatter\Preformatters\NoCommentsAtLineEnd;
 use Medas\PhpFormatter\Preparsers\ReorderClassElements;
 
@@ -53,6 +54,7 @@ class Medas extends Psr12
         $this->formatters[] = service(MedasElseifWhileCatch::class);
         $this->formatters[] = service(NoLineBreakAfterOpenTagWithEcho::class);
         $this->formatters[] = service(NormalizeImports::class);
+        $this->formatters[] = service(ServiceConstructionParameters::class);
         $this->formatters[] = service(SoftLineSplitter::class);
         $this->formatters[] = service(TrailingCommaSplitter::class);
         $this->formatters[] = service(UseExitInsteadOfDie::class);
