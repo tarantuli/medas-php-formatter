@@ -39,6 +39,10 @@ readonly class RequiredWhitespace extends BaseFormatter
                 elseif ($token->is($spaceAroundNotNeeded)) {
                     $token->previous->spaceAfter(false);
                 }
+
+                if ($token->is(T_STRING) && $token->previous->is(T_STRING)) {
+                    $token->previous->spaceAfter();
+                }
             }
 
             if ($token->is(T_COMMENT)) {

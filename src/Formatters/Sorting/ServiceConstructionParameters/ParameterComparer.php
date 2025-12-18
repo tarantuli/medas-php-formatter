@@ -44,10 +44,8 @@ readonly class ParameterComparer
     /** @param Token[] $tokens */
     private function hasDefault(array $tokens): int
     {
-        foreach ($tokens as $token) {
-            if ($token->is(T_IS_EQUAL)) {
-                return 1;
-            }
+        if (array_any($tokens, fn($token) => $token->is(T_IS_EQUAL))) {
+            return 1;
         }
 
         return 0;

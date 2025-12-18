@@ -85,4 +85,9 @@ class BugsTest extends BaseTestClass
     {
         $this->assertRemainsTheSame('bugs/non-block-curly-braces');
     }
+
+    public function testTypedConstants(): void
+    {
+        $this->assertRemainsTheSame('bugs/typed-constants');
+    }
 }

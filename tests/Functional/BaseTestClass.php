@@ -12,7 +12,7 @@ use SebastianBergmann\Diff\{Differ, Output\UnifiedDiffOutputBuilder};
 
 abstract class BaseTestClass extends TestCase
 {
-    protected function assertRemainsTheSame(string $sourceFile, Settings $settings = null): void
+    protected function assertRemainsTheSame(string $sourceFile, ?Settings $settings = null): void
     {
         if ($settings === null) {
             $settings = new Medas();
@@ -27,7 +27,7 @@ abstract class BaseTestClass extends TestCase
 
         if ($result !== $expected) {
             // Write the diff to output to ease development
-            $diff = (new Differ(new UnifiedDiffOutputBuilder("--- Expected\n+++ Actual\n")))->diff(
+            $diff = new Differ(new UnifiedDiffOutputBuilder("--- Expected\n+++ Actual\n"))->diff(
                 $expected,
                 $result
             );
@@ -57,7 +57,7 @@ abstract class BaseTestClass extends TestCase
         return [$formatter->format($source, $settings), $expected];
     }
 
-    protected function assertChanges(string $sourceFile, string $targetFile, Settings $settings = null): void
+    protected function assertChanges(string $sourceFile, string $targetFile, ?Settings $settings = null): void
     {
         if ($settings === null) {
             $settings = new Medas();
