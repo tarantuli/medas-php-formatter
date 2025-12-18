@@ -40,7 +40,7 @@ readonly class ListFormatters extends BaseConsoleCommand
         usort($formatters, fn(Formatter $a, Formatter $b) => $a->priority() <=> $b->priority());
 
         foreach ($formatters as $formatter) {
-            printf("%3u %s\n", $formatter->priority(), $formatter->name());
+            printf("%4u   %s\n", $formatter->priority(), $formatter::class);
         }
     }
 }
