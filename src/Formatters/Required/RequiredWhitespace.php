@@ -40,7 +40,7 @@ readonly class RequiredWhitespace extends BaseFormatter
                     $token->previous->spaceAfter(false);
                 }
 
-                if ($token->is(T_STRING) && $token->previous->is(T_STRING)) {
+                if ($token->is(T_STRING) && ($token->previous->is(T_STRING) || $token->previous->is(T_ARRAY))) {
                     $token->previous->spaceAfter();
                 }
             }
