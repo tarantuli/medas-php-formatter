@@ -21,3 +21,7 @@ class Tstsiodfsofijs
     {
     }
 }
+
+function cast(array $values, string $className, ArrayToObjectCaster\Settings|null $settings = null): object
+{
+}
