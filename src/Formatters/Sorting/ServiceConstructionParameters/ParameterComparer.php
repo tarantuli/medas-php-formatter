@@ -13,22 +13,19 @@ readonly class ParameterComparer
     /**
      * @param Token[] $a
      * @param Token[] $b
-     *
-     * TODO implement third sorting type (attributes)
      */
     public function compare(array $a, array $b): int
     {
         /**
          * - No default value > Default value
          * - No visibility markers > public > protected > private
-         * - With attributes > Without attributes
          * - Alphabetically
          */
         // No default value > Default value
         $diff = $this->hasDefault($a) - $this->hasDefault($b);
 
         if ($diff) {
-            return -$diff;
+            return $diff;
         }
 
         // No visibility markers > public > protected > private
@@ -44,7 +41,7 @@ readonly class ParameterComparer
     /** @param Token[] $tokens */
     private function hasDefault(array $tokens): int
     {
-        if (array_any($tokens, fn($token) => $token->is(T_IS_EQUAL))) {
+        if (array_any($tokens, fn($token) => $token->is('='))) {
             return 1;
         }
 
