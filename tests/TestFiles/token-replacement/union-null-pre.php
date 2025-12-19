@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+namespace Test;
+
 use Medas\Core\Attributes\Service;
 use Shared\Api\RestEntity;
 
@@ -28,5 +30,15 @@ class Tstsiodfsofijs
 }
 
 function cast(array $values, string $className, ?ArrayToObjectCaster\Settings $settings = null): object
+{
+}
+
+function fetchOrCreate(
+    Selector\Selector $selector,
+    array             $values,
+    ?\Closure         $creationValues = null,
+    bool              $persistOnCreate = true,
+    bool              $flushOnPersist = true,
+): object
 {
 }

@@ -9,7 +9,7 @@ use Medas\PhpFormatter\{Formatters\BaseFormatter, Job};
 use Medas\PhpTokenizer\Token;
 
 /**
- * Use "type|null" instead of "?type" in property, parameter and return type definitions
+ * Use "type|null" instead of "?type" in property, parameter, and return type definitions
  */
 #[Service]
 readonly class UseUnionNullInsteadOfNullable extends BaseFormatter
@@ -25,7 +25,7 @@ readonly class UseUnionNullInsteadOfNullable extends BaseFormatter
             if ($token->inTypeDeclaration
                     && $token->next
                     && $token->is(T_QUESTION_MARK)
-                    && $token->next->is([T_STRING, T_ARRAY, T_CALLABLE, T_NAME_QUALIFIED])) {
+                    && $token->next->is([T_STRING, T_ARRAY, T_CALLABLE, T_NAME_QUALIFIED, T_NAME_FULLY_QUALIFIED])) {
                 $this->replaceByUnionNull($token);
             }
         }

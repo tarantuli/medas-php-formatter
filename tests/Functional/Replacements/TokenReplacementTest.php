@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\PhpFormatterTest\Functional\Replacements;
 
+use Medas\PhpFormatter\Settings\Medas;
 use Medas\PhpFormatter\Formatters\Replacements\{
     UseDieInsteadOfExit,
     UseExitInsteadOfDie,
@@ -59,7 +60,7 @@ class TokenReplacementTest extends BaseTestClass
 
     public function testUnionNullInsteadOfNullable(): void
     {
-        $settings = new Psr12();
+        $settings = new Medas();
 
         $settings->formatters[] = service(UseUnionNullInsteadOfNullable::class);
 
