@@ -53,19 +53,19 @@ readonly class ParameterComparer
     {
         foreach ($tokens as $token) {
             if ($token->is(T_PRIVATE)) {
-                return 3;
+                return 0;
             }
 
             if ($token->is(T_PROTECTED)) {
-                return 2;
+                return 1;
             }
 
             if ($token->is(T_PUBLIC)) {
-                return 1;
+                return 2;
             }
         }
 
-        return 0;
+        return 3;
     }
 
     /** @param Token[] $tokens */

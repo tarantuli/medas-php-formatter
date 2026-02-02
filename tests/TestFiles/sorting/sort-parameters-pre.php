@@ -22,4 +22,11 @@ readonly class SortParamters extends BaseConsoleCommand
     )
     {
     }
+
+    public function __construct(
+        Serializer|null $serializer,
+        private string  $namespace,
+    )
+    {
+    }
 }
