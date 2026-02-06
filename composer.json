@@ -17,7 +17,8 @@
     "morphp/medas-core": "^2",
     "morphp/medas-file-system": "^2",
     "morphp/medas-php-class-analysis": "^2",
-    "morphp/medas-php-tokenizer": "^2"
+    "morphp/medas-php-tokenizer": "^2",
+    "php": "^8.4"
   },
   "require-dev": {
     "morphp/medas-config-manager": "^2",
