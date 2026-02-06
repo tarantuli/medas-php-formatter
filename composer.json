@@ -1,36 +1,35 @@
 {
-    "name": "morphp/medas-php-formatter",
-    "description": "Medas PHP formatter",
-    "keywords": [
-        "backend"
-    ],
-    "authors": [
-        {
-            "name": "Patrick Morpey",
-            "email": "patrick@morphp.nl"
-        }
-    ],
-    "type": "library",
-    "minimum-stability": "dev",
-    "prefer-stable": true,
-    "require": {
-        "morphp/medas-console": "dev-dev",
-        "morphp/medas-core": "dev-dev",
-        "morphp/medas-file-system": "dev-dev",
-        "morphp/medas-php-class-analysis": "dev-dev",
-        "morphp/medas-php-tokenizer": "dev-dev"
-    },
-    "require-dev": {
-        "morphp/medas-config-manager": "dev-dev",
-        "morphp/medas-config-options": "dev-dev",
-        "morphp/medas-console-printer": "dev-dev",
-        "morphp/medas-service-manager": "dev-dev",
-        "phpunit/phpunit": "^9.5"
-    },
-    "autoload": {
-        "psr-4": {
-            "Medas\\PhpFormatter\\": "src/",
-            "Medas\\PhpFormatterTest\\": "tests/"
-        }
+  "name": "morphp/medas-php-formatter",
+  "description": "Medas PHP formatter",
+  "version": "2.0.0",
+  "keywords": [
+    "backend"
+  ],
+  "authors": [
+    {
+      "name": "Patrick Morpey",
+      "email": "patrick@morphp.nl"
     }
+  ],
+  "type": "library",
+  "require": {
+    "morphp/medas-console": "^2",
+    "morphp/medas-core": "^2",
+    "morphp/medas-file-system": "^2",
+    "morphp/medas-php-class-analysis": "^2",
+    "morphp/medas-php-tokenizer": "^2"
+  },
+  "require-dev": {
+    "morphp/medas-config-manager": "^2",
+    "morphp/medas-config-options": "^2",
+    "morphp/medas-console-printer": "^2",
+    "morphp/medas-service-manager": "^2",
+    "phpunit/phpunit": "^9.5"
+  },
+  "autoload": {
+    "psr-4": {
+      "Medas\\PhpFormatter\\": "src/",
+      "Medas\\PhpFormatterTest\\": "tests/"
+    }
+  }
 }
