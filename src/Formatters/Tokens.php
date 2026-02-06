@@ -6,25 +6,25 @@ namespace Medas\PhpFormatter\Formatters;
 
 class Tokens
 {
-    public const VARIABLE_STARTERS = [
+    public const array VARIABLE_STARTERS = [
         T_AMPERSAND,
         T_ELLIPSIS,
         T_VARIABLE,
     ];
 
-    public const OPENING_BRACKETS = [
+    public const array OPENING_BRACKETS = [
         T_SQUARE_BRACKET_CLOSE => T_SQUARE_BRACKET_OPEN,
         T_CURLY_BRACKET_CLOSE => T_CURLY_BRACKET_OPEN,
         T_ROUND_BRACKET_CLOSE => T_ROUND_BRACKET_OPEN,
     ];
 
-    public const CLOSING_BRACKETS = [
+    public const array CLOSING_BRACKETS = [
         T_SQUARE_BRACKET_CLOSE,
         T_CURLY_BRACKET_CLOSE,
         T_ROUND_BRACKET_CLOSE,
     ];
 
-    public const CONSTRUCTS = [
+    public const array CONSTRUCTS = [
         T_BREAK,
         T_CONTINUE,
         T_ECHO,

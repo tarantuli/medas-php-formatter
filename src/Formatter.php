@@ -11,7 +11,6 @@ use Medas\PhpTokenizer\{AdditionalTokensDefiner, BlockDumper, Tokenizer, TreeBui
 readonly class Formatter
 {
     public function __construct(
-        AdditionalTokensDefiner          $additionalTokensDefiner,
         private BlockDumper              $blockDumper,
         private BlockPrinter             $blockPrinter,
         private CodeValidator            $codeValidator,
@@ -30,6 +29,7 @@ readonly class Formatter
 
         #[ConfigValue(ConfigOptions\ValidateReformattedCode::class)]
         private bool                     $validateReformattedCode,
+        AdditionalTokensDefiner          $additionalTokensDefiner,
     )
     {
         $additionalTokensDefiner->define();

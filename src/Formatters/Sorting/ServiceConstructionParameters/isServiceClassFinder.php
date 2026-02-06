@@ -9,7 +9,7 @@ use Medas\Core\Attributes\Service;
 #[Service]
 readonly class isServiceClassFinder
 {
-    private const SERVICE_ATTRIBUTE_NAMES = [
+    private const array SERVICE_ATTRIBUTE_NAMES = [
         'Service',
         'Route',
     ];

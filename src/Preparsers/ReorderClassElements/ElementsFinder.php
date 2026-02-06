@@ -10,7 +10,7 @@ use Medas\PhpTokenizer\TokenGroups;
 #[Service]
 readonly class ElementsFinder
 {
-    public const CURLY_BRACES = ['{', '}'];
+    public const array CURLY_BRACES = ['{', '}'];
 
     private array $structureTypes;
 

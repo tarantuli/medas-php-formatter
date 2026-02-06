@@ -9,7 +9,7 @@ use Medas\Core\Attributes\Service;
 #[Service]
 readonly class ElementsAnalyzer
 {
-    public const TOKENS_TO_SKIP = [T_WHITESPACE, T_OPEN_TAG, T_COMMENT, T_DOC_COMMENT];
+    public const array TOKENS_TO_SKIP = [T_WHITESPACE, T_OPEN_TAG, T_COMMENT, T_DOC_COMMENT];
 
     public function analyze(ReorderingJob $job): void
     {
