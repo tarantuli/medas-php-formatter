@@ -22,4 +22,9 @@ class ImportBugsTest extends BaseTestClass
     {
         $this->assertRemainsTheSame('imports/or-grouped-catches');
     }
+
+    public function testDocblockArrayType(): void
+    {
+        $this->assertRemainsTheSame('imports/docblock-array-type');
+    }
 }

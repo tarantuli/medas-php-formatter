@@ -14,7 +14,7 @@
   "require": {
     "morphp/medas-console": "^3",
     "morphp/medas-core": "^3",
-    "morphp/medas-file-syste": "^3",
+    "morphp/medas-file-system": "^3",
     "morphp/medas-php-class-analysis": "^3",
     "morphp/medas-php-tokenizer": "^3",
     "php": "^8.4"
