@@ -7,7 +7,7 @@ namespace Medas\PhpFormatter\Formatters\Sorting\ServiceConstructionParameters;
 use Medas\Core\Attributes\Service;
 
 #[Service]
-readonly class isServiceClassFinder
+readonly class IsServiceClassFinder
 {
     private const array SERVICE_ATTRIBUTE_NAMES = [
         'Service',

@@ -9,7 +9,7 @@ use Medas\PhpClassAnalysis\{ClassAnalysis, ClassReference};
 use Medas\PhpFormatter\Settings\ImportSettings;
 
 #[Service]
-class NewReferencesFinder
+readonly class NewReferencesFinder
 {
     public function determine(
         ClassAnalysis        $analysis,

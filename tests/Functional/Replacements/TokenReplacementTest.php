@@ -4,23 +4,13 @@ declare(strict_types=1);
 
 namespace Medas\PhpFormatterTest\Functional\Replacements;
 
-use Medas\PhpFormatter\Settings\Medas;
-use Medas\PhpFormatter\Formatters\Replacements\{
-    UseDieInsteadOfExit,
-    UseExitInsteadOfDie,
-    UseImplodeInsteadOfJoin,
-    UseUnionNullInsteadOfNullable
-};
-use Medas\PhpFormatter\Settings\Psr12;
 use Medas\PhpFormatterTest\Functional\BaseTestClass;
 
 class TokenReplacementTest extends BaseTestClass
 {
     public function testDieInsteadOfExit(): void
     {
-        $settings = new Psr12();
-
-        $settings->formatters[] = service(UseDieInsteadOfExit::class);
+        $settings = new UseDieInsteadOfExitSettings();
 
         $this->compare(
             'token-replacement/die-and-exit',
@@ -32,9 +22,7 @@ class TokenReplacementTest extends BaseTestClass
 
     public function testExitInsteadOfDie(): void
     {
-        $settings = new Psr12();
-
-        $settings->formatters[] = service(UseExitInsteadOfDie::class);
+        $settings = new UseExitInsteadOfDieSettings();
 
         $this->compare(
             'token-replacement/die-and-exit',
@@ -46,9 +34,7 @@ class TokenReplacementTest extends BaseTestClass
 
     public function testImplodeInsteadOfJoin(): void
     {
-        $settings = new Psr12();
-
-        $settings->formatters[] = service(UseImplodeInsteadOfJoin::class);
+        $settings = new UseImplodeInsteadOfJoinSettings();
 
         $this->compare(
             'token-replacement/implode-and-join',
@@ -60,9 +46,7 @@ class TokenReplacementTest extends BaseTestClass
 
     public function testUnionNullInsteadOfNullable(): void
     {
-        $settings = new Medas();
-
-        $settings->formatters[] = service(UseUnionNullInsteadOfNullable::class);
+        $settings = new UseUnionNullInsteadOfNullableSettings();
 
         $this->compare(
             'token-replacement/union-null-pre',

@@ -21,6 +21,8 @@ use Medas\PhpTokenizer\{
 #[Service]
 readonly class NewImportsInserter
 {
+    private const int GENERIC_TOKEN_ID = 123;
+
     private Token $baseToken;
 
     public function __construct(
@@ -108,7 +110,7 @@ readonly class NewImportsInserter
     private function appendGroupedAliases(Statement $statement, array $aliases): void
     {
         $statement->appendToken((clone $this->baseToken)->id(T_NS_SEPARATOR)->text('\\'));
-        $statement->appendToken((clone $this->baseToken)->id(123)->text('{'));
+        $statement->appendToken((clone $this->baseToken)->id(self::GENERIC_TOKEN_ID)->text('{'));
 
         $isFirst = true;
 
@@ -116,7 +118,7 @@ readonly class NewImportsInserter
 
         foreach ($aliases as $subPath => $alias) {
             if (!$isFirst) {
-                $statement->appendToken((clone $this->baseToken)->id(123)->text(','));
+                $statement->appendToken((clone $this->baseToken)->id(self::GENERIC_TOKEN_ID)->text(','));
             }
 
             $statement->appendToken((clone $this->baseToken)->id(T_STRING)->text($subPath));
@@ -128,7 +130,7 @@ readonly class NewImportsInserter
             $isFirst = false;
         }
 
-        $statement->appendToken((clone $this->baseToken)->id(123)->text('}'));
+        $statement->appendToken((clone $this->baseToken)->id(self::GENERIC_TOKEN_ID)->text('}'));
     }
 
     private function appendAlias(Statement $statement, string $alias): void

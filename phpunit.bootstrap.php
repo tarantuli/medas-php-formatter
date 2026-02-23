@@ -6,6 +6,7 @@ use Medas\ConfigManager\{ConfigManager, ConfigManagerPackage};
 use Medas\ConfigOptions\ConfigOptionsPackage;
 use Medas\ConsolePrinter\ConsolePrinterPackage;
 use Medas\PhpFormatter\PhpFormatterPackage;
+use Medas\PhpTokenizer\AdditionalTokensDefiner;
 use Medas\ServiceManager\{ServiceConfig, ServiceManager};
 
 new ServiceManager(function (): ServiceConfig {
@@ -24,3 +25,5 @@ new ServiceManager(function (): ServiceConfig {
 service(ConfigManager::class)
     ->readEnv(__DIR__)
     ->addDirectory(__DIR__ . '/tests/config');
+
+service(AdditionalTokensDefiner::class)->define();

@@ -4,30 +4,48 @@ declare(strict_types=1);
 
 namespace Medas\PhpFormatter\Settings;
 
-use Medas\PhpFormatter\Formatters\{
-    BlankLines\NoBlankLinesAtStatementEnd,
-    Prs12\KeywordsToLowercase,
-    Prs12\Psr12BlankLines,
-    Prs12\Psr12ElseifWhileCatch,
-    Prs12\Psr12VisibilityMarkers,
-    Prs12\Psr12Whitespace,
-    Replacements\SingleLineControlBodiesEncloser
+use Medas\PhpFormatter\Formatters\BlankLines\NoBlankLinesAtStatementEnd;
+use Medas\PhpFormatter\Formatters\LineSplitting\GenericLineSplitter\BreakpointSet;
+use Medas\PhpFormatter\Formatters\Psr12\{
+    KeywordsToLowercase,
+    Psr12BlankLines,
+    Psr12ElseifWhileCatch,
+    Psr12VisibilityMarkers,
+    Psr12Whitespace
 };
+use Medas\PhpFormatter\Formatters\Replacements\SingleLineControlBodiesEncloser;
 
-class Psr12 extends Settings
+readonly class Psr12 extends Settings
 {
-    public function __construct()
+    public function __construct(
+        array              $additionalFormatters = [],
+        array              $additionalPreparsers = [],
+        array              $additionalPreformatters = [],
+        BreakpointSet|null $classDeclarationSet = null,
+        BreakpointSet|null $controlStatementSet = null,
+        BreakpointSet|null $genericLineSet = null,
+        BreakpointSet|null $softLineSet = null,
+    )
     {
-        parent::__construct();
+        parent::__construct(
+            [
+                KeywordsToLowercase::class,
+                NoBlankLinesAtStatementEnd::class,
+                Psr12BlankLines::class,
+                Psr12ElseifWhileCatch::class,
+                Psr12VisibilityMarkers::class,
+                Psr12Whitespace::class,
+                SingleLineControlBodiesEncloser::class,
+                ...$additionalFormatters,
+            ],
+            $additionalPreparsers,
+            $additionalPreformatters,
+            $classDeclarationSet,
+            $controlStatementSet,
+            $genericLineSet,
+            $softLineSet,
+        );
 
         $this->document->setMaxLineLength(80);
-
-        $this->formatters[] = service(KeywordsToLowercase::class);
-        $this->formatters[] = service(NoBlankLinesAtStatementEnd::class);
-        $this->formatters[] = service(Psr12BlankLines::class);
-        $this->formatters[] = service(Psr12ElseifWhileCatch::class);
-        $this->formatters[] = service(Psr12VisibilityMarkers::class);
-        $this->formatters[] = service(Psr12Whitespace::class);
-        $this->formatters[] = service(SingleLineControlBodiesEncloser::class);
     }
 }

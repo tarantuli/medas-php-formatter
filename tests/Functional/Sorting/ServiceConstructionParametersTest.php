@@ -11,6 +11,10 @@ class ServiceConstructionParametersTest extends BaseTestClass
 {
     public function testSortParameters(): void
     {
-        $this->assertChanges('sorting/sort-parameters-pre', 'sorting/sort-parameters-post', new Medas());
+        $this->assertChanges(
+            'sorting/sort-parameters-pre',
+            'sorting/sort-parameters-post',
+            new Medas()
+        );
     }
 }

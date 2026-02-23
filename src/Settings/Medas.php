@@ -30,40 +30,38 @@ use Medas\PhpFormatter\Formatters\Sorting\ServiceConstructionParameters;
 use Medas\PhpFormatter\Preformatters\NoCommentsAtLineEnd;
 use Medas\PhpFormatter\Preparsers\ReorderClassElements;
 
-class Medas extends Psr12
+readonly class Medas extends Psr12
 {
-    public function __construct()
+    public function __construct(
+        array $additionalFormatters = [],
+    )
     {
-        parent::__construct();
-
-        // Preformatters
-        $this->preformatters[] = service(NoCommentsAtLineEnd::class);
-
-        // Preparsers
-        $this->preparsers[] = service(ReorderClassElements::class);
-
-        // Formatters
-        $this->formatters[] = service(AlignArgumentNames::class);
-        $this->formatters[] = service(BlankLineBetweenObjectCreationAndManipulation::class);
-        $this->formatters[] = service(BlankLinesAfterPropertiesWithAttributes::class);
-        $this->formatters[] = service(BlankLinesBeforeBlocks::class);
-        $this->formatters[] = service(BlankLinesBetweenClassSections::class);
-        $this->formatters[] = service(BlankLinesBetweenStatementGroups::class);
-        $this->formatters[] = service(KeepOriginalObjectOperatorBreaks::class);
-        $this->formatters[] = service(LongLineSplitter::class);
-        $this->formatters[] = service(MedasElseifWhileCatch::class);
-        $this->formatters[] = service(NoLineBreakAfterOpenTagWithEcho::class);
-        $this->formatters[] = service(NormalizeImports::class);
-        $this->formatters[] = service(ServiceConstructionParameters::class);
-        $this->formatters[] = service(SoftLineSplitter::class);
-        $this->formatters[] = service(TrailingCommaSplitter::class);
-        $this->formatters[] = service(UseExitInsteadOfDie::class);
-        $this->formatters[] = service(UseUnionNullInsteadOfNullable::class);
-
-        // Breakpoint sets
-        $this->classDeclarationSet = ClassDeclarationSet::instance();
-        $this->controlStatementSet = ControlStatementSet::instance();
-        $this->genericLineSet = GenericLineSet::instance();
-        $this->softLineSet = SoftLineSet::instance();
+        parent::__construct(
+            [
+                AlignArgumentNames::class,
+                BlankLineBetweenObjectCreationAndManipulation::class,
+                BlankLinesAfterPropertiesWithAttributes::class,
+                BlankLinesBeforeBlocks::class,
+                BlankLinesBetweenClassSections::class,
+                BlankLinesBetweenStatementGroups::class,
+                KeepOriginalObjectOperatorBreaks::class,
+                LongLineSplitter::class,
+                MedasElseifWhileCatch::class,
+                NoLineBreakAfterOpenTagWithEcho::class,
+                NormalizeImports::class,
+                ServiceConstructionParameters::class,
+                SoftLineSplitter::class,
+                TrailingCommaSplitter::class,
+                UseExitInsteadOfDie::class,
+                UseUnionNullInsteadOfNullable::class,
+                ...$additionalFormatters,
+            ],
+            [ReorderClassElements::class],
+            [NoCommentsAtLineEnd::class],
+            ClassDeclarationSet::instance(),
+            ControlStatementSet::instance(),
+            GenericLineSet::instance(),
+            SoftLineSet::instance(),
+        );
     }
 }

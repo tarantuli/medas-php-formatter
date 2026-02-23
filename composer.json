@@ -1,7 +1,6 @@
 {
   "name": "morphp/medas-php-formatter",
   "description": "Medas PHP formatter",
-  "version": "2.0.1",
   "keywords": [
     "backend"
   ],
@@ -13,19 +12,19 @@
   ],
   "type": "library",
   "require": {
-    "morphp/medas-console": "^2",
-    "morphp/medas-core": "^2",
-    "morphp/medas-file-system": "^2",
-    "morphp/medas-php-class-analysis": "^2",
-    "morphp/medas-php-tokenizer": "^2",
+    "morphp/medas-console": "^3",
+    "morphp/medas-core": "^3",
+    "morphp/medas-file-syste": "^3",
+    "morphp/medas-php-class-analysis": "^3",
+    "morphp/medas-php-tokenizer": "^3",
     "php": "^8.4"
   },
   "require-dev": {
-    "morphp/medas-config-manager": "^2",
-    "morphp/medas-config-options": "^2",
-    "morphp/medas-console-printer": "^2",
-    "morphp/medas-service-manager": "^2",
-    "phpunit/phpunit": "^9.5"
+    "morphp/medas-config-manager": "^3",
+    "morphp/medas-config-options": "^3",
+    "morphp/medas-console-printer": "^3",
+    "morphp/medas-service-manager": "^3",
+    "phpunit/phpunit": "^10"
   },
   "autoload": {
     "psr-4": {

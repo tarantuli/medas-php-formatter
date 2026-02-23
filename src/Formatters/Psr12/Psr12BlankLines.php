@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Medas\PhpFormatter\Formatters\Prs12;
+namespace Medas\PhpFormatter\Formatters\Psr12;
 
 use Medas\Core\Attributes\Service;
 use Medas\PhpFormatter\Formatters\{BaseFormatter, Helpers\BlankLineAdder};
@@ -72,10 +72,7 @@ readonly class Psr12BlankLines extends BaseFormatter
 
             if ($token->is(T_SQUARE_BRACKET_CLOSE)) {
                 if ($bracketDepth === 0) {
-                    if ($token->context instanceof MethodParameters) {
-                        // Do nothing
-                    }
-                    else {
+                    if (!$token->context instanceof MethodParameters) {
                         $token->lineBreakAfter();
                     }
                 }
@@ -181,7 +178,9 @@ readonly class Psr12BlankLines extends BaseFormatter
 
             // Add additional depth levels to each statement equal to the number of open switch blocks
             // decreased by one if this statement itself is a case or default statement
-            $statement->additionalDepth += count($switchDepths) - $type instanceof SwitchBranch;
+            $statement->additionalDepth += count($switchDepths)
+                - (int) ($type instanceof SwitchBranch);
+
             $firstNonCommentToken = $statement->firstNonCommentToken();
 
             if ($firstNonCommentToken && $firstNonCommentToken->is(T_SWITCH)) {

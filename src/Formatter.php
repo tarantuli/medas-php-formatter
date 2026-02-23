@@ -4,8 +4,14 @@ declare(strict_types=1);
 
 namespace Medas\PhpFormatter;
 
-use Medas\Core\Attributes\{ConfigValue, Entrypoint, HasMarkdownDocumentation, Service};
-use Medas\PhpTokenizer\{AdditionalTokensDefiner, BlockDumper, Tokenizer, TreeBuilder};
+use Medas\Core\{
+    Attributes\ConfigValue,
+    Attributes\Entrypoint,
+    Attributes\HasMarkdownDocumentation,
+    Attributes\Service,
+    Interfaces\ServiceManager
+};
+use Medas\PhpTokenizer\{BlockDumper, Tokenizer, TreeBuilder};
 
 #[Service, HasMarkdownDocumentation, Entrypoint]
 readonly class Formatter
@@ -14,6 +20,7 @@ readonly class Formatter
         private BlockDumper              $blockDumper,
         private BlockPrinter             $blockPrinter,
         private CodeValidator            $codeValidator,
+        private ServiceManager           $serviceManager,
         private Settings\SettingsHandler $settingsHandler,
         private Tokenizer                $tokenizer,
         private TreeBuilder              $treeBuilder,
@@ -29,10 +36,8 @@ readonly class Formatter
 
         #[ConfigValue(ConfigOptions\ValidateReformattedCode::class)]
         private bool                     $validateReformattedCode,
-        AdditionalTokensDefiner          $additionalTokensDefiner,
     )
     {
-        $additionalTokensDefiner->define();
     }
 
     public function format(string $code, Settings\Settings $settings): string
@@ -87,14 +92,20 @@ readonly class Formatter
 
     private function applyPreparsers(Job $job): void
     {
-        foreach ($job->settings->preparsers as $preparser) {
+        foreach ($job->settings->preparsers as $preparserName) {
+            /** @var Preparsers\Preparser $preparser */
+            $preparser = $this->serviceManager->resolve($preparserName);
+
             $preparser->preparse($job);
         }
     }
 
     private function applyPreformatters(Job $job): void
     {
-        foreach ($job->settings->preformatters as $preformatter) {
+        foreach ($job->settings->preformatters as $preformatterName) {
+            /** @var Preformatters\Preformatter $preformatter */
+            $preformatter = $this->serviceManager->resolve($preformatterName);
+
             $preformatter->preformat($job);
         }
     }

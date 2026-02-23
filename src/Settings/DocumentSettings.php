@@ -34,7 +34,7 @@ class DocumentSettings
         return $this;
     }
 
-    public function maxLineLength(): int
+    public function maxLineLength(): int|null
     {
         return $this->maxLineLength;
     }

@@ -4,40 +4,69 @@ declare(strict_types=1);
 
 namespace Medas\PhpFormatter\Settings;
 
-use Medas\PhpFormatter\Formatters\Formatter;
 use Medas\PhpFormatter\Formatters\LineSplitting\GenericLineSplitter\BreakpointSet;
 use Medas\PhpFormatter\Formatters\Required\RequiredWhitespace;
-use Medas\PhpFormatter\Preformatters\Preformatter;
-use Medas\PhpFormatter\Preparsers\Preparser;
 
-class Settings
+readonly class Settings
 {
     public DocumentSettings $document;
     public ImportSettings $import;
 
     // Breakpoint sets
-    public BreakpointSet $classDeclarationSet;
-    public BreakpointSet $controlStatementSet;
-    public BreakpointSet $genericLineSet;
-    public BreakpointSet $softLineSet;
+    public BreakpointSet|null $classDeclarationSet;
+    public BreakpointSet|null $controlStatementSet;
+    public BreakpointSet|null $genericLineSet;
+    public BreakpointSet|null $softLineSet;
 
-    /** @var Preparser[] */
-    public array $preparsers = [];
+    /**
+     * An array of Preparser class names
+     *
+     * @var string[]
+     */
+    public array $preparsers;
 
-    /** @var Preformatter[] */
-    public array $preformatters = [];
+    /**
+     * An array of Preformatter class names
+     *
+     * @var string[]
+     */
+    public array $preformatters;
 
-    /** @var Formatter[] */
-    public array $formatters = [];
+    /**
+     * An array of Formatter class names
+     *
+     * @var string[]
+     */
+    public array $formatters;
 
-    public function __construct()
+    public function __construct(
+        array              $additionalFormatters = [],
+        array              $additionalPreparsers = [],
+        array              $additionalPreformatters = [],
+        BreakpointSet|null $classDeclarationSet = null,
+        BreakpointSet|null $controlStatementSet = null,
+        BreakpointSet|null $genericLineSet = null,
+        BreakpointSet|null $softLineSet = null,
+    )
     {
-        $this->document = new DocumentSettings();
-        $this->import = new ImportSettings();
+        $document = new DocumentSettings();
 
-        $this->document->setLineEnding(new LineEndings\LineFeed())
+        $document->setLineEnding(new LineEndings\LineFeed())
             ->setIndentation(new Indentations\Spaces(4));
 
-        $this->formatters[] = service(RequiredWhitespace::class);
+        $this->document = $document;
+        $this->import = new ImportSettings();
+        $this->preparsers = $additionalPreparsers;
+        $this->preformatters = $additionalPreformatters;
+
+        $this->formatters = [
+            RequiredWhitespace::class,
+            ...$additionalFormatters,
+        ];
+
+        $this->classDeclarationSet = $classDeclarationSet;
+        $this->controlStatementSet = $controlStatementSet;
+        $this->genericLineSet = $genericLineSet;
+        $this->softLineSet = $softLineSet;
     }
 }

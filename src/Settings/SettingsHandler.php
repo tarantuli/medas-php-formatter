@@ -4,18 +4,31 @@ declare(strict_types=1);
 
 namespace Medas\PhpFormatter\Settings;
 
-use Medas\Core\Attributes\Service;
-use Medas\PhpFormatter\Formatters\Formatter;
+use Medas\Core\{Attributes\Service, Interfaces\ServiceManager};
+use Medas\PhpFormatter\{Formatters\Formatter, Preformatters\Preformatter};
 
 #[Service]
 readonly class SettingsHandler
 {
+    public function __construct(
+        private ServiceManager $serviceManager,
+    )
+    {
+    }
+
     /** @return Formatter[] */
     public function formatters(Settings $settings): array
     {
-        $formatters = $settings->formatters;
+        $formatters = [];
 
-        foreach ($settings->preformatters as $preformatter) {
+        foreach ($settings->formatters as $formatter) {
+            $formatters[] = $this->serviceManager->resolve($formatter);
+        }
+
+        foreach ($settings->preformatters as $preformatterName) {
+            /** @var Preformatter $preformatter */
+            $preformatter = $this->serviceManager->resolve($preformatterName);
+
             foreach ($preformatter->additionalFormatters() as $additionalFormatter) {
                 $formatters[] = $additionalFormatter;
             }

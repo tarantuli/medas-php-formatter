@@ -52,9 +52,9 @@ class LongLinesTest extends BaseTestClass
     {
         $this->assertRemainsTheSame('line-splitting/bug1');
     }
+
     public function testSlashInQuote(): void
     {
         $this->assertRemainsTheSame('line-splitting/slash-in-quote');
     }
 }
-

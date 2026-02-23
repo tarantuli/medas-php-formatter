@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\PhpFormatter\Settings;
 
-class MinimalSize extends Settings
+readonly class MinimalSize extends Settings
 {
     public function __construct()
     {

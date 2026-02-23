@@ -78,7 +78,7 @@ readonly class TrailingCommaSplitter extends BaseFormatter
     {
         $depth = 0;
 
-        for ($openerIndex = $index - 1; $index >= 0; --$openerIndex) {
+        for ($openerIndex = $index - 1; $openerIndex >= 0; --$openerIndex) {
             if (null === $token = $statement->getToken($openerIndex)) {
                 return null;
             }

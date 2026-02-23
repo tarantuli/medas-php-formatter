@@ -10,7 +10,7 @@ use Medas\PhpTokenizer\{Contexts\MethodParameters, Statement};
 #[Service]
 readonly class ParameterExtractor
 {
-    /**@return array[Token[][], int|null] */
+    /** @return array{Token[][], int|null} */
     public function extract(Statement $statement): array
     {
         $parameters = [];

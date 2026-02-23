@@ -7,6 +7,7 @@ namespace Medas\PhpFormatter\Formatters\LineSplitting;
 use Medas\Core\Attributes\{ConfigValue, Service};
 use Medas\PhpFormatter\ConfigOptions\DumpOptionAssessment;
 use Medas\PhpTokenizer\Statement;
+use Medas\ServiceManager\ServiceManager;
 
 #[Service]
 readonly class GenericLineSplitter
@@ -15,6 +16,7 @@ readonly class GenericLineSplitter
         private GenericLineSplitter\Options\Assesser $assesser,
         private GenericLineSplitter\Options\Finder   $optionFinder,
         private Helpers\StatementSplitter            $statementSplitter,
+        private ServiceManager                       $serviceManager,
 
         #[ConfigValue(DumpOptionAssessment::class)]
         private bool                                 $dumpOptionAssessment,
@@ -81,7 +83,7 @@ readonly class GenericLineSplitter
 
         if ($this->dumpOptionAssessment) {
             // Inject it here, so it's not initialized when not needed
-            service(GenericLineSplitter\Options\AssessmentDumper::class)->dump(
+            $this->serviceManager->resolve(GenericLineSplitter\Options\AssessmentDumper::class)->dump(
                 $statement,
                 $assessments
             );

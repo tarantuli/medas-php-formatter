@@ -17,9 +17,9 @@ use Medas\PhpTokenizer\{
 readonly class ServiceConstructionParameters extends BaseFormatter
 {
     public function __construct(
+        private ServiceConstructionParameters\IsServiceClassFinder $isServiceClassFinder,
         private ServiceConstructionParameters\ParameterComparer    $parameterComparer,
         private ServiceConstructionParameters\ParameterExtractor   $parameterExtractor,
-        private ServiceConstructionParameters\isServiceClassFinder $isServiceClassFinder,
         private StatementTypeFinder                                $typeFinder,
     )
     {
