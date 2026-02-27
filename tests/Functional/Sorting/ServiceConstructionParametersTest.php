@@ -17,4 +17,9 @@ class ServiceConstructionParametersTest extends BaseTestClass
             new Medas()
         );
     }
+
+    public function testDefaultClassInstance(): void
+    {
+        $this->assertRemainsTheSame('sorting/default-class-instance');
+    }
 }

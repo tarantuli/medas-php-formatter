@@ -28,7 +28,11 @@
   },
   "autoload": {
     "psr-4": {
-      "Medas\\PhpFormatter\\": "src/",
+      "Medas\\PhpFormatter\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
       "Medas\\PhpFormatterTest\\": "tests/"
     }
   }

@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Medas\PhpFormatter;
 
 use Medas\Core\AsSingleton;
+use Medas\Core\BasePackage;
 use Medas\FileSystem\FileSystemPackage;
 use Medas\PhpClassAnalysis\PhpClassAnalysisPackage;
 use Medas\PhpTokenizer\PhpTokenizerPackage;
-use Medas\ServiceManager\BasePackage;
 
 class PhpFormatterPackage extends BasePackage
 {

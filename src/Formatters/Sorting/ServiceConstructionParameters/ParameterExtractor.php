@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Medas\PhpFormatter\Formatters\Sorting\ServiceConstructionParameters;
 
 use Medas\Core\Attributes\Service;
-use Medas\PhpTokenizer\{Contexts\MethodParameters, Statement};
+use Medas\PhpTokenizer\{Contexts\MethodParameters, Statement, Token};
 
 #[Service]
 readonly class ParameterExtractor
