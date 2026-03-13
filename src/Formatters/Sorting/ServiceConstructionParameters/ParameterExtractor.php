@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Medas\PhpFormatter\Formatters\Sorting\ServiceConstructionParameters;
 
 use Medas\Core\Attributes\Service;
+use Medas\PhpFormatter\Formatters\Tokens;
 use Medas\PhpTokenizer\{Contexts\MethodParameters, Statement, Token};
 
 #[Service]
@@ -15,11 +16,16 @@ readonly class ParameterExtractor
     {
         $parameters = [];
         $stack = [];
+        $depth = 0;
         $firstIndex = null;
 
         foreach ($statement as $index => $token) {
             if (!$token->context instanceof MethodParameters) {
                 continue;
+            }
+
+            if ($token->is(Tokens::OPENING_BRACKETS)) {
+                ++$depth;
             }
 
             if ($firstIndex === null) {
@@ -28,9 +34,13 @@ readonly class ParameterExtractor
 
             $stack[] = $token;
 
-            if ($token->is(T_COMMA)) {
+            if ($depth === 0 && $token->is(T_COMMA)) {
                 $parameters[] = $stack;
                 $stack = [];
+            }
+
+            if ($token->is(Tokens::CLOSING_BRACKETS)) {
+                --$depth;
             }
         }
 
