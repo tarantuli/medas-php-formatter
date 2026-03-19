@@ -144,6 +144,7 @@ readonly class Psr12Whitespace extends BaseFormatter
     private function addSpaces(TokenTree $tree): void
     {
         $openTernaries = 0;
+        $squareDepth = 0;
 
         foreach ($tree as $token) {
             // No spaces in a declare statement
@@ -151,6 +152,10 @@ readonly class Psr12Whitespace extends BaseFormatter
 
             if ($statementType instanceof DeclareStatement) {
                 continue;
+            }
+
+            if ($token->is(T_ATTRIBUTE) || ($token->inAttribute && $token->is(T_SQUARE_BRACKET_OPEN))) {
+                ++$squareDepth;
             }
 
             if ($token->is($this->spaceAfterRequired)) {
@@ -174,7 +179,11 @@ readonly class Psr12Whitespace extends BaseFormatter
 
             // A space after attributes
             elseif ($token->inAttribute && $token->is(T_SQUARE_BRACKET_CLOSE)) {
-                $token->spaceAfter();
+                --$squareDepth;
+
+                if ($squareDepth === 0) {
+                    $token->spaceAfter();
+                }
             }
 
             if ($token->previous) {
@@ -263,7 +272,7 @@ readonly class Psr12Whitespace extends BaseFormatter
                     $token->spaceAfter(false);
                 }
 
-                // No space between pluses, minuses and ampersands before numbers and variables,
+                // No space between pluses, minuses and ampersands before numbers and variables
                 // that follow an operator or bracket
                 elseif ($token->is([T_PLUS, T_MINUS, T_AMPERSAND])
                         && $token->next->is([T_LNUMBER, T_DNUMBER, T_VARIABLE, T_STRING])) {
