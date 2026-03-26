@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\PhpFormatter\ConsoleCommands;
 
-use Medas\Console\Commands\{BaseConsoleCommand, ConsoleCommandGroup};
+use Medas\Console\Commands\{BaseConsoleCommand, CommandInput, ConsoleCommandGroup};
 use Medas\Core\{Attributes\Service, Interfaces\ImplementorFinder};
 use Medas\PhpFormatter\Formatters\Formatter;
 
@@ -33,7 +33,7 @@ readonly class ListFormatters extends BaseConsoleCommand
         return 'List all available formatters sorted by priority';
     }
 
-    public function process(array $arguments): void
+    public function process(CommandInput $input): void
     {
         $formatters = $this->finder->find(Formatter::class);
 
