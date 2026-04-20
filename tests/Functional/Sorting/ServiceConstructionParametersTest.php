@@ -22,4 +22,13 @@ class ServiceConstructionParametersTest extends BaseTestClass
     {
         $this->assertRemainsTheSame('sorting/default-class-instance');
     }
+
+    public function testFormatTwiceAfterSortingBug(): void
+    {
+        $this->assertChanges(
+            'sorting/after-sorting-bug-pre',
+            'sorting/after-sorting-bug-post',
+            new Medas()
+        );
+    }
 }

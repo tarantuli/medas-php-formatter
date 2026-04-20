@@ -12,7 +12,6 @@ use Medas\Core\{
     Interfaces\ServiceManagerx as ServiceManagerInterfacex
 };
 use Medas\ObjectInstantiator\ObjectInstantiator;
-use Medas\ServiceManager\Cache\CacheManager as CacheCacheManager;
 
 class ServiceManagerBugRelativeAlias implements ServiceManagerInterfacex
 {
@@ -75,7 +74,7 @@ class ServiceManagerBugRelativeAlias implements ServiceManagerInterfacex
 
     private function initializeCacheManager(Cache|null $cache): void
     {
-        $this->cacheManager = new CacheCacheManager();
+        $this->cacheManager = new Cache\CacheManager();
 
         if ($cache) {
             $this->cacheManager->register($cache);
