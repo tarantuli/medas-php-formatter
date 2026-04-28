@@ -5,8 +5,7 @@ declare(strict_types=1);
 namespace Medas\PhpFormatter\Formatters\Imports;
 
 use Medas\Core\Attributes\Service;
-use Medas\PhpClassAnalysis\{ClassAnalysis, ClassReference};
-use Medas\PhpClassAnalysis\ReferenceFinder\TextAnalyzer;
+use Medas\PhpClassAnalysis\{ClassAnalysis, ClassReference, ReferenceFinder\TextAnalyzer};
 use Medas\PhpTokenizer\{Token, TokenGroups, TokenTree};
 
 #[Service]
