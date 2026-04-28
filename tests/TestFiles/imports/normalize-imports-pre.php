@@ -3,6 +3,8 @@
 namespace MyNamespace;
 
 use AnotherNamespace\ClassName;
+use Getopt\Getopt;
+use Getopt\SerializerX;
 use GlobalNamespaceClass;
 use Unused\Alias as UnusedAlias;
 use N\Attributes\Types as Type;
@@ -39,6 +41,9 @@ class MyClass extends ChildNamespace\BaseClass implements Interfaces\MyInterface
 
     public function c(ClassA|ClassB $aClass): ClassC|ClassD|null
     {
+        Getopt::class;
+        SerializerX::class;
+
         return [
             \My\Clashing\ClassName::class,
             \My\Clashbash\ClassName::class,

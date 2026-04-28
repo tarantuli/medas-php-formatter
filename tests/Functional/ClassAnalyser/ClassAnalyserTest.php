@@ -26,6 +26,6 @@ class ClassAnalyserTest extends BaseTestClass
 
         self::assertCount(2, $results->implements);
         self::assertTrue($results->isClass);
-        self::assertCount(29, $results->uses);
+        self::assertCount(31, $results->uses);
     }
 }

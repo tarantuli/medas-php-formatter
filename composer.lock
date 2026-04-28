@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "morphp/medas-console",
-            "version": "v3.0.7",
+            "version": "v3.0.13",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tarantuli/medas-console.git",
-                "reference": "ef104fb6d90ee9e1262bd04a08814770ae0ee958"
+                "reference": "6b007bfa60179bbcb01a5ecf7827c406530736ac"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-console/zipball/ef104fb6d90ee9e1262bd04a08814770ae0ee958",
-                "reference": "ef104fb6d90ee9e1262bd04a08814770ae0ee958",
+                "url": "https://api.github.com/repos/tarantuli/medas-console/zipball/6b007bfa60179bbcb01a5ecf7827c406530736ac",
+                "reference": "6b007bfa60179bbcb01a5ecf7827c406530736ac",
                 "shasum": ""
             },
             "require": {
@@ -50,23 +50,23 @@
                 "console"
             ],
             "support": {
-                "source": "https://github.com/tarantuli/medas-console/tree/v3.0.7",
+                "source": "https://github.com/tarantuli/medas-console/tree/v3.0.13",
                 "issues": "https://github.com/tarantuli/medas-console/issues"
             },
-            "time": "2026-03-26T11:25:53+00:00"
+            "time": "2026-03-26T19:38:55+00:00"
         },
         {
             "name": "morphp/medas-core",
-            "version": "v3.0.23",
+            "version": "v3.0.27",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tarantuli/medas-core.git",
-                "reference": "cbbb8209d3c94adb875eefa73c0e7d214787562f"
+                "reference": "050e46e0ff3ec781ce8a18561f0c41e399f2f3d9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-core/zipball/cbbb8209d3c94adb875eefa73c0e7d214787562f",
-                "reference": "cbbb8209d3c94adb875eefa73c0e7d214787562f",
+                "url": "https://api.github.com/repos/tarantuli/medas-core/zipball/050e46e0ff3ec781ce8a18561f0c41e399f2f3d9",
+                "reference": "050e46e0ff3ec781ce8a18561f0c41e399f2f3d9",
                 "shasum": ""
             },
             "require": {
@@ -100,10 +100,10 @@
                 "medas"
             ],
             "support": {
-                "source": "https://github.com/tarantuli/medas-core/tree/v3.0.23",
+                "source": "https://github.com/tarantuli/medas-core/tree/v3.0.27",
                 "issues": "https://github.com/tarantuli/medas-core/issues"
             },
-            "time": "2026-03-25T10:43:41+00:00"
+            "time": "2026-04-13T09:15:30+00:00"
         },
         {
             "name": "morphp/medas-file-system",
@@ -157,16 +157,16 @@
         },
         {
             "name": "morphp/medas-php-class-analysis",
-            "version": "v3.0.2",
+            "version": "v3.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tarantuli/medas-php-class-analysis.git",
-                "reference": "7c917ae0b8d11461650cea113af8accff48394a4"
+                "reference": "c5ef26f776b1beeec08b5b6633a22761096c1118"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-php-class-analysis/zipball/7c917ae0b8d11461650cea113af8accff48394a4",
-                "reference": "7c917ae0b8d11461650cea113af8accff48394a4",
+                "url": "https://api.github.com/repos/tarantuli/medas-php-class-analysis/zipball/c5ef26f776b1beeec08b5b6633a22761096c1118",
+                "reference": "c5ef26f776b1beeec08b5b6633a22761096c1118",
                 "shasum": ""
             },
             "require": {
@@ -200,10 +200,10 @@
                 "backend"
             ],
             "support": {
-                "source": "https://github.com/tarantuli/medas-php-class-analysis/tree/v3.0.2",
+                "source": "https://github.com/tarantuli/medas-php-class-analysis/tree/v3.0.5",
                 "issues": "https://github.com/tarantuli/medas-php-class-analysis/issues"
             },
-            "time": "2026-02-27T12:35:34+00:00"
+            "time": "2026-04-28T10:37:29+00:00"
         },
         {
             "name": "morphp/medas-php-tokenizer",
@@ -424,16 +424,16 @@
         },
         {
             "name": "morphp/medas-config-options",
-            "version": "v3.0.5",
+            "version": "v3.0.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tarantuli/medas-config-options.git",
-                "reference": "87f408cd7b6e361ba4f9378b663db58cce802950"
+                "reference": "4dbb167dc2458959110f86b51984da70ee8b47d8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-config-options/zipball/87f408cd7b6e361ba4f9378b663db58cce802950",
-                "reference": "87f408cd7b6e361ba4f9378b663db58cce802950",
+                "url": "https://api.github.com/repos/tarantuli/medas-config-options/zipball/4dbb167dc2458959110f86b51984da70ee8b47d8",
+                "reference": "4dbb167dc2458959110f86b51984da70ee8b47d8",
                 "shasum": ""
             },
             "require": {
@@ -469,23 +469,23 @@
                 "configuration"
             ],
             "support": {
-                "source": "https://github.com/tarantuli/medas-config-options/tree/v3.0.5",
+                "source": "https://github.com/tarantuli/medas-config-options/tree/v3.0.7",
                 "issues": "https://github.com/tarantuli/medas-config-options/issues"
             },
-            "time": "2026-03-26T11:34:14+00:00"
+            "time": "2026-04-13T09:07:01+00:00"
         },
         {
             "name": "morphp/medas-console-printer",
-            "version": "v3.0.7",
+            "version": "v3.0.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tarantuli/medas-console-printer.git",
-                "reference": "bf9f097b5a98168b0c096d3dd529c2f635d829c0"
+                "reference": "dd9146e930d2078bda0c78124d1680dc05106ffb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-console-printer/zipball/bf9f097b5a98168b0c096d3dd529c2f635d829c0",
-                "reference": "bf9f097b5a98168b0c096d3dd529c2f635d829c0",
+                "url": "https://api.github.com/repos/tarantuli/medas-console-printer/zipball/dd9146e930d2078bda0c78124d1680dc05106ffb",
+                "reference": "dd9146e930d2078bda0c78124d1680dc05106ffb",
                 "shasum": ""
             },
             "require": {
@@ -522,23 +522,23 @@
                 "console"
             ],
             "support": {
-                "source": "https://github.com/tarantuli/medas-console-printer/tree/v3.0.7",
+                "source": "https://github.com/tarantuli/medas-console-printer/tree/v3.0.11",
                 "issues": "https://github.com/tarantuli/medas-console-printer/issues"
             },
-            "time": "2026-03-26T11:28:09+00:00"
+            "time": "2026-04-24T17:55:50+00:00"
         },
         {
             "name": "morphp/medas-object-instantiator",
-            "version": "v3.0.5",
+            "version": "v3.0.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tarantuli/medas-object-instantiator.git",
-                "reference": "01ccd7856616cc32542ecc9ff739614179b63e5e"
+                "reference": "901a843ce866d1fecd26f096476dbed72d7d16fd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-object-instantiator/zipball/01ccd7856616cc32542ecc9ff739614179b63e5e",
-                "reference": "01ccd7856616cc32542ecc9ff739614179b63e5e",
+                "url": "https://api.github.com/repos/tarantuli/medas-object-instantiator/zipball/901a843ce866d1fecd26f096476dbed72d7d16fd",
+                "reference": "901a843ce866d1fecd26f096476dbed72d7d16fd",
                 "shasum": ""
             },
             "require": {
@@ -571,23 +571,23 @@
                 "services"
             ],
             "support": {
-                "source": "https://github.com/tarantuli/medas-object-instantiator/tree/v3.0.5",
+                "source": "https://github.com/tarantuli/medas-object-instantiator/tree/v3.0.6",
                 "issues": "https://github.com/tarantuli/medas-object-instantiator/issues"
             },
-            "time": "2026-02-27T11:29:18+00:00"
+            "time": "2026-04-03T07:47:47+00:00"
         },
         {
             "name": "morphp/medas-service-manager",
-            "version": "v3.0.19",
+            "version": "v3.0.20",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tarantuli/medas-service-manager.git",
-                "reference": "981b0346a8a1ee669c210f88d9cb9cdf496ad9d4"
+                "reference": "c5b7ea67a39111e8118147ef57dd4f4e33ed743a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-service-manager/zipball/981b0346a8a1ee669c210f88d9cb9cdf496ad9d4",
-                "reference": "981b0346a8a1ee669c210f88d9cb9cdf496ad9d4",
+                "url": "https://api.github.com/repos/tarantuli/medas-service-manager/zipball/c5b7ea67a39111e8118147ef57dd4f4e33ed743a",
+                "reference": "c5b7ea67a39111e8118147ef57dd4f4e33ed743a",
                 "shasum": ""
             },
             "require": {
@@ -622,10 +622,10 @@
                 "services"
             ],
             "support": {
-                "source": "https://github.com/tarantuli/medas-service-manager/tree/v3.0.19",
+                "source": "https://github.com/tarantuli/medas-service-manager/tree/v3.0.20",
                 "issues": "https://github.com/tarantuli/medas-service-manager/issues"
             },
-            "time": "2026-03-26T11:32:12+00:00"
+            "time": "2026-04-24T18:01:11+00:00"
         },
         {
             "name": "myclabs/deep-copy",
@@ -2390,16 +2390,16 @@
         },
         {
             "name": "symfony/polyfill-ctype",
-            "version": "v1.33.0",
+            "version": "v1.37.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-ctype.git",
-                "reference": "a3cc8b044a6ea513310cbd48ef7333b384945638"
+                "reference": "141046a8f9477948ff284fa65be2095baafb94f2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-ctype/zipball/a3cc8b044a6ea513310cbd48ef7333b384945638",
-                "reference": "a3cc8b044a6ea513310cbd48ef7333b384945638",
+                "url": "https://api.github.com/repos/symfony/polyfill-ctype/zipball/141046a8f9477948ff284fa65be2095baafb94f2",
+                "reference": "141046a8f9477948ff284fa65be2095baafb94f2",
                 "shasum": ""
             },
             "require": {
@@ -2449,7 +2449,7 @@
                 "portable"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-ctype/tree/v1.33.0"
+                "source": "https://github.com/symfony/polyfill-ctype/tree/v1.37.0"
             },
             "funding": [
                 {
@@ -2469,20 +2469,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-09-09T11:45:10+00:00"
+            "time": "2026-04-10T16:19:22+00:00"
         },
         {
             "name": "symfony/polyfill-mbstring",
-            "version": "v1.33.0",
+            "version": "v1.37.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-mbstring.git",
-                "reference": "6d857f4d76bd4b343eac26d6b539585d2bc56493"
+                "reference": "6a21eb99c6973357967f6ce3708cd55a6bec6315"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/6d857f4d76bd4b343eac26d6b539585d2bc56493",
-                "reference": "6d857f4d76bd4b343eac26d6b539585d2bc56493",
+                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/6a21eb99c6973357967f6ce3708cd55a6bec6315",
+                "reference": "6a21eb99c6973357967f6ce3708cd55a6bec6315",
                 "shasum": ""
             },
             "require": {
@@ -2534,7 +2534,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-mbstring/tree/v1.33.0"
+                "source": "https://github.com/symfony/polyfill-mbstring/tree/v1.37.0"
             },
             "funding": [
                 {
@@ -2554,20 +2554,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-12-23T08:48:59+00:00"
+            "time": "2026-04-10T17:25:58+00:00"
         },
         {
             "name": "symfony/polyfill-php80",
-            "version": "v1.33.0",
+            "version": "v1.37.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-php80.git",
-                "reference": "0cc9dd0f17f61d8131e7df6b84bd344899fe2608"
+                "reference": "dfb55726c3a76ea3b6459fcfda1ec2d80a682411"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-php80/zipball/0cc9dd0f17f61d8131e7df6b84bd344899fe2608",
-                "reference": "0cc9dd0f17f61d8131e7df6b84bd344899fe2608",
+                "url": "https://api.github.com/repos/symfony/polyfill-php80/zipball/dfb55726c3a76ea3b6459fcfda1ec2d80a682411",
+                "reference": "dfb55726c3a76ea3b6459fcfda1ec2d80a682411",
                 "shasum": ""
             },
             "require": {
@@ -2618,7 +2618,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-php80/tree/v1.33.0"
+                "source": "https://github.com/symfony/polyfill-php80/tree/v1.37.0"
             },
             "funding": [
                 {
@@ -2638,20 +2638,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-01-02T08:10:11+00:00"
+            "time": "2026-04-10T16:19:22+00:00"
         },
         {
             "name": "symfony/yaml",
-            "version": "v7.4.6",
+            "version": "v7.4.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
-                "reference": "58751048de17bae71c5aa0d13cb19d79bca26391"
+                "reference": "c58fdf7b3d6c2995368264c49e4e8b05bcff2883"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/58751048de17bae71c5aa0d13cb19d79bca26391",
-                "reference": "58751048de17bae71c5aa0d13cb19d79bca26391",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/c58fdf7b3d6c2995368264c49e4e8b05bcff2883",
+                "reference": "c58fdf7b3d6c2995368264c49e4e8b05bcff2883",
                 "shasum": ""
             },
             "require": {
@@ -2694,7 +2694,7 @@
             "description": "Loads and dumps YAML files",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/yaml/tree/v7.4.6"
+                "source": "https://github.com/symfony/yaml/tree/v7.4.8"
             },
             "funding": [
                 {
@@ -2714,7 +2714,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-02-09T09:33:46+00:00"
+            "time": "2026-03-24T13:12:05+00:00"
         },
         {
             "name": "theseer/tokenizer",

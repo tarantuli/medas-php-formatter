@@ -61,9 +61,12 @@ readonly class ImportGrouper
     private function determineCandidates(Job $job): void
     {
         foreach ($job->prefixes as $prefix) {
+            // If max child depth is 1, then we ignore the minimum prefix depth, allowing grouping like "use A\{B, C};"
+            $effectiveMinPrefixDepth = $prefix->maxChildDepth <= 1 ? 1 : $this->minPrefixDepth;
+
             if ($prefix->count >= 2
                     && $prefix->maxChildDepth <= $this->maxChildDepth
-                    && $prefix->prefixDepth >= $this->minPrefixDepth
+                    && $prefix->prefixDepth >= $effectiveMinPrefixDepth
                     && !array_key_exists($prefix->prefix, $job->referencesAndImports->imports)) {
                 $job->candidates[] = $prefix;
             }

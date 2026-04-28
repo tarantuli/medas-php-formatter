@@ -6,6 +6,7 @@ use Absolute\ClassName;
 use Absolute\Path\To\AnotherInterface;
 use Absolute\ReturnType;
 use Clashing\MyClass as ClashMyClass;
+use Getopt\{Getopt, SerializerX};
 use My\Clashbash\ClassName as ClashClassName1;
 use My\Clashing\ClassName as ClashClassName;
 use MyNamespace\This\Relative\Path\Is\Too\Deep;
@@ -43,6 +44,10 @@ class MyClass extends ChildNamespace\BaseClass implements Interfaces\MyInterface
 
     public function c(ClassA|ClassB $aClass): ClassC|ClassD|null
     {
+        Getopt::class;
+
+        SerializerX::class;
+
         return [
             ClashClassName::class,
             ClashClassName1::class,
