@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use EntityStructureFinder;
 use Medas\BasicRequestHandler\Contexts\Context;
 use Medas\Core\Attributes\{ConfigOptions, ConfigValue};
 use Medas\PhpFormatter\{BlockPrinter, CodeValidator};

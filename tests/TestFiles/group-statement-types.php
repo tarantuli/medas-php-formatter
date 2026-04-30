@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-use Datasets;
-
 class GroupStatementTypes
 {
     public function addMovingAverage(

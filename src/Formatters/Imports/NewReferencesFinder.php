@@ -57,6 +57,10 @@ readonly class NewReferencesFinder
                 $referencesAndImports->references[$reference->fqn] = $reference->label;
                 $referencesAndImports->imports[$reference->fqn] = $reference->label;
             }
+            elseif ($analysis->namespace === '' && '\\' . $reference->label === $reference->fqn) {
+                // This is a complete FQN reference in the global namespace, keep it
+                $referencesAndImports->references[$reference->fqn] = $reference->label;
+            }
             else {
                 // The first part is an alias, the rest is relative to this
                 $alias = substr($reference->label, 0, strpos($reference->label, '\\'));

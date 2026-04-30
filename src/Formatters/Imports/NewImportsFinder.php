@@ -24,6 +24,16 @@ readonly class NewImportsFinder
     {
         foreach ($referencesAndImports->references as $fqn => $label) {
             if ($label !== null) {
+                foreach($referencesAndImports->references as $otherFqn => $otherLabel) {
+                    if ($fqn === $otherFqn) {
+                        continue;
+                    }
+
+                    if (str_starts_with($label, substr($otherFqn, 1) . '\\')) {
+                        // There's another import that this is a child of
+                        $referencesAndImports->references[$fqn] = $otherLabel . substr($fqn, strlen($otherFqn));
+                    }
+                }
                 // There is already a new label for this FQN
                 continue;
             }

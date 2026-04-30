@@ -34,4 +34,9 @@ class ImportBugsTest extends BaseTestClass
         $this->expectException(ImportLabelCaseMismatch::class);
         $this->assertRemainsTheSame('imports/throw-on-case-mismatch');
     }
+
+    public function testUselessImportBug(): void
+    {
+        $this->assertChanges('imports/useless-import-bug-pre', 'imports/useless-import-bug-post');
+    }
 }

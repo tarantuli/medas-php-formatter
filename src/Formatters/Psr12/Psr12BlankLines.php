@@ -55,6 +55,7 @@ readonly class Psr12BlankLines extends BaseFormatter
         $this->afterMostComments($job->tree);
         $this->additionalLines($job->tree);
         $this->addSwitchIndentation($job->tree);
+        $this->addLambdaFunctionIndentation($job->tree);
     }
 
     private function afterAttributes(TokenTree $tree): void
@@ -186,6 +187,45 @@ readonly class Psr12BlankLines extends BaseFormatter
             if ($firstNonCommentToken && $firstNonCommentToken->is(T_SWITCH)) {
                 $switchDepths[] = $statement->block->depth + 1;
             }
+        }
+    }
+    private function addLambdaFunctionIndentation(TokenTree $tree): void
+    {
+        $functionDepths = [];
+        $nextCurlyOpensDeclaration = false;
+        $nextStatementIncreaseDepth  =false;
+        $curlyDepth = 0;
+        $additionalDepth = 0;
+        foreach ($tree->statements() as $statement) {
+            if ($nextStatementIncreaseDepth) {
+                $additionalDepth++;
+                $nextStatementIncreaseDepth = false;
+            }
+
+            foreach ($statement as $token) {
+                if ($token->is(T_FUNCTION) && !$this->typeFinder->for($statement) instanceof FunctionDeclaration) {
+                    $nextCurlyOpensDeclaration = true;
+                }
+
+                if ($token->is(T_CURLY_BRACKET_OPEN)) {
+                    ++$curlyDepth;
+                    if ($nextCurlyOpensDeclaration) {
+                        $nextCurlyOpensDeclaration = false;
+                        $functionDepths[] = $curlyDepth;
+                        $nextStatementIncreaseDepth = true;
+                    }
+                }
+
+                if ($token->is(T_CURLY_BRACKET_CLOSE)) {
+                    if (in_array($curlyDepth, $functionDepths, true)) {
+                        unset($functionDepths[array_search($curlyDepth, $functionDepths, true)]);
+                        --$additionalDepth;
+                    }
+                    --$curlyDepth;
+                }
+            }
+
+            $statement->additionalDepth += $additionalDepth;
         }
     }
 }

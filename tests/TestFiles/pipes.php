@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use Exceptions;
 use Shared\Cmd\Colors;
 
 $directoryIteratorFlags = FilesystemIterator::KEY_AS_FILENAME | FilesystemIterator::CURRENT_AS_FILEINFO;
