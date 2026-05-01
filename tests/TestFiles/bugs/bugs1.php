@@ -23,8 +23,8 @@ class ClassNameNormalizerx
         $metaData = $this->cacheManager->get()->get(
             [static::class, $className],
             function () use ($className) {
-            return $this->compiler->compile($className);
-        });
+                return $this->compiler->compile($className);
+            });
 
         $this->cachePurgeAmount = $purgeAmount ?: (int) floor($triggerSize / 4);
 

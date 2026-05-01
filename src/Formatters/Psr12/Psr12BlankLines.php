@@ -54,8 +54,6 @@ readonly class Psr12BlankLines extends BaseFormatter
         $this->afterAttributes($job->tree);
         $this->afterMostComments($job->tree);
         $this->additionalLines($job->tree);
-        $this->addSwitchIndentation($job->tree);
-        $this->addLambdaFunctionIndentation($job->tree);
     }
 
     private function afterAttributes(TokenTree $tree): void
@@ -160,72 +158,6 @@ readonly class Psr12BlankLines extends BaseFormatter
             if ($type instanceof SwitchBranch && $previousStatement = $statement->previous()) {
                 $previousStatement->blankLineAfter(false);
             }
-        }
-    }
-
-    private function addSwitchIndentation(TokenTree $tree): void
-    {
-        $switchDepths = [];
-
-        foreach ($tree->statements() as $statement) {
-            $type = $this->typeFinder->for($statement);
-
-            if ($statement->firstToken()->is(T_CURLY_BRACKET_CLOSE)) {
-                $switchDepths = array_filter(
-                    $switchDepths,
-                    fn($depth) => $depth !== $statement->block->depth + 1
-                );
-            }
-
-            // Add additional depth levels to each statement equal to the number of open switch blocks
-            // decreased by one if this statement itself is a case or default statement
-            $statement->additionalDepth += count($switchDepths)
-                - (int) ($type instanceof SwitchBranch);
-
-            $firstNonCommentToken = $statement->firstNonCommentToken();
-
-            if ($firstNonCommentToken && $firstNonCommentToken->is(T_SWITCH)) {
-                $switchDepths[] = $statement->block->depth + 1;
-            }
-        }
-    }
-    private function addLambdaFunctionIndentation(TokenTree $tree): void
-    {
-        $functionDepths = [];
-        $nextCurlyOpensDeclaration = false;
-        $nextStatementIncreaseDepth  =false;
-        $curlyDepth = 0;
-        $additionalDepth = 0;
-        foreach ($tree->statements() as $statement) {
-            if ($nextStatementIncreaseDepth) {
-                $additionalDepth++;
-                $nextStatementIncreaseDepth = false;
-            }
-
-            foreach ($statement as $token) {
-                if ($token->is(T_FUNCTION) && !$this->typeFinder->for($statement) instanceof FunctionDeclaration) {
-                    $nextCurlyOpensDeclaration = true;
-                }
-
-                if ($token->is(T_CURLY_BRACKET_OPEN)) {
-                    ++$curlyDepth;
-                    if ($nextCurlyOpensDeclaration) {
-                        $nextCurlyOpensDeclaration = false;
-                        $functionDepths[] = $curlyDepth;
-                        $nextStatementIncreaseDepth = true;
-                    }
-                }
-
-                if ($token->is(T_CURLY_BRACKET_CLOSE)) {
-                    if (in_array($curlyDepth, $functionDepths, true)) {
-                        unset($functionDepths[array_search($curlyDepth, $functionDepths, true)]);
-                        --$additionalDepth;
-                    }
-                    --$curlyDepth;
-                }
-            }
-
-            $statement->additionalDepth += $additionalDepth;
         }
     }
 }

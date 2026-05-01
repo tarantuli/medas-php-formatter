@@ -7,11 +7,13 @@ namespace Medas\PhpFormatter\Settings;
 use Medas\PhpFormatter\Formatters\BlankLines\NoBlankLinesAtStatementEnd;
 use Medas\PhpFormatter\Formatters\LineSplitting\GenericLineSplitter\BreakpointSet;
 use Medas\PhpFormatter\Formatters\Psr12\{
+    CurlyBlockDepthPropagator,
     KeywordsToLowercase,
     Psr12BlankLines,
     Psr12ElseifWhileCatch,
     Psr12VisibilityMarkers,
-    Psr12Whitespace
+    Psr12Whitespace,
+    SwitchIndentationAdder
 };
 use Medas\PhpFormatter\Formatters\Replacements\SingleLineControlBodiesEncloser;
 
@@ -29,6 +31,7 @@ readonly class Psr12 extends Settings
     {
         parent::__construct(
             [
+                CurlyBlockDepthPropagator::class,
                 KeywordsToLowercase::class,
                 NoBlankLinesAtStatementEnd::class,
                 Psr12BlankLines::class,
@@ -36,6 +39,7 @@ readonly class Psr12 extends Settings
                 Psr12VisibilityMarkers::class,
                 Psr12Whitespace::class,
                 SingleLineControlBodiesEncloser::class,
+                SwitchIndentationAdder::class,
                 ...$additionalFormatters,
             ],
             $additionalPreparsers,
