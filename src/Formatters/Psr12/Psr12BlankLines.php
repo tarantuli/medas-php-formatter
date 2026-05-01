@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace Medas\PhpFormatter\Formatters\Psr12;
 
 use Medas\Core\Attributes\Service;
-use Medas\PhpFormatter\Formatters\{BaseFormatter, Helpers\BlankLineAdder};
+use Medas\PhpFormatter\Formatters\{BaseFormatter, Helpers\BlankLineAdder, Helpers\ReturnTypeTokens};
 use Medas\PhpFormatter\Job;
 use Medas\PhpTokenizer\{
+    Contexts\ClassBody,
     Contexts\MethodParameters,
+    Contexts\PropertyHook,
     StatementTypeFinder,
     StatementTypes\BlockCloser,
     StatementTypes\ClassDeclaration,
@@ -29,6 +31,7 @@ readonly class Psr12BlankLines extends BaseFormatter
 {
     public function __construct(
         private BlankLineAdder      $blankLineAdder,
+        private ReturnTypeTokens    $returnTypeTokens,
         private StatementTypeFinder $typeFinder,
         private TokenGroups         $tokenGroups,
     )
@@ -134,8 +137,11 @@ readonly class Psr12BlankLines extends BaseFormatter
 
             if ($type instanceof FunctionDeclaration) {
                 if ($statement->lastToken()->is(T_CURLY_BRACKET_OPEN)) {
-                    // It's a non-abstract function declaration
-                    $statement->getToken(-2)->lineBreakAfter();
+                    // Don't add a line break before { if the statement opens a promoted property hook.
+                    // Use the same return-type-token walk-back as ReturnTypeTokens::isReturnTypeToken.
+                    if ($this->returnTypeTokens->isReturnTypeToken($statement->lastToken())) {
+                        $statement->getToken(-2)->lineBreakAfter();
+                    }
                 }
                 else {
                     // It's an abstract function declaration
@@ -144,6 +150,17 @@ readonly class Psr12BlankLines extends BaseFormatter
             }
 
             if ($type instanceof BlockCloser && !$statement->lastToken()->is(T_CURLY_BRACKET_OPEN)) {
+                // Don't add blank lines for block closers that are direct children of a property
+                // hook block (e.g. the } closing a "get { }" or "set { }" body). These are
+                // identified by being in PropertyHook context whose parent block was opened by
+                // a ClassBody-context statement (the property declaration).
+                // Block closers deeper inside hook bodies (e.g. closing an "if" inside "set {}") are
+                // NOT skipped, so blank lines within hook body code are preserved normally.
+                if ($statement->firstToken()?->context instanceof PropertyHook
+                        && $statement->block->opener?->firstToken()?->context instanceof ClassBody) {
+                    continue;
+                }
+
                 $nextStatement = $statement->next();
 
                 if ($nextStatement && $nextStatement->firstToken()->is([T_SEMICOLON, T_COMMA, T_ROUND_BRACKET_CLOSE])) {

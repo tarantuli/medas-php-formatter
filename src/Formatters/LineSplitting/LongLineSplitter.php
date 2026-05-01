@@ -7,6 +7,7 @@ namespace Medas\PhpFormatter\Formatters\LineSplitting;
 use Medas\Core\Attributes\{ConfigValue, Service};
 use Medas\PhpFormatter\{ConfigOptions\MaxLineLength, Formatters\BaseFormatter, Job};
 use Medas\PhpTokenizer\{
+    Contexts\PropertyHook,
     Statement,
     StatementTypeFinder,
     StatementTypes\ClassDeclaration,
@@ -43,6 +44,16 @@ readonly class LongLineSplitter extends BaseFormatter
     {
         foreach ($job->tree->block() as $statement) {
             if (isset($job->checkedByLongLineSplitter[spl_object_id($statement)])) {
+                continue;
+            }
+
+            // Don't split statements inside hook bodies (set { }, get { }).
+            // Hook-block-level statements (get =>, set =>, etc.) can be split if too long,
+            // but content inside a long-form hook body is left as-is.
+            if ($statement->firstToken()?->context instanceof PropertyHook
+                    && $statement->block->opener?->firstToken()?->context instanceof PropertyHook) {
+                $job->checkedByLongLineSplitter[spl_object_id($statement)] = true;
+
                 continue;
             }
 

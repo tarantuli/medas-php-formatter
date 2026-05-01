@@ -13,6 +13,7 @@ use Medas\PhpFormatter\Formatters\Psr12\{
     Psr12ElseifWhileCatch,
     Psr12VisibilityMarkers,
     Psr12Whitespace,
+    PropertyHookFormatter,
     SwitchIndentationAdder
 };
 use Medas\PhpFormatter\Formatters\Replacements\SingleLineControlBodiesEncloser;
@@ -38,6 +39,7 @@ readonly class Psr12 extends Settings
                 Psr12ElseifWhileCatch::class,
                 Psr12VisibilityMarkers::class,
                 Psr12Whitespace::class,
+                PropertyHookFormatter::class,
                 SingleLineControlBodiesEncloser::class,
                 SwitchIndentationAdder::class,
                 ...$additionalFormatters,

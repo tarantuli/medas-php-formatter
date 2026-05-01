@@ -7,6 +7,7 @@ namespace Medas\PhpFormatter\Formatters\BlankLines;
 use Medas\Core\Attributes\Service;
 use Medas\PhpFormatter\{Formatters\BaseFormatter, Formatters\Tokens, Job};
 use Medas\PhpTokenizer\{
+    Contexts\PropertyHook,
     Statement,
     StatementTypeFinder,
     StatementTypes\GenericStatement,
@@ -43,6 +44,14 @@ readonly class BlankLinesBetweenStatementGroups extends BaseFormatter
             }
 
             if (!$this->typeFinder->for($statement) instanceof GenericStatement) {
+                $previousSubType = null;
+
+                continue;
+            }
+
+            // Don't add blank lines between any statements inside property hook blocks —
+            // neither between hook declarations (get/set) nor inside hook bodies.
+            if ($statement->firstToken()?->context instanceof PropertyHook) {
                 $previousSubType = null;
 
                 continue;
