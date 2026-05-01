@@ -36,7 +36,8 @@ readonly class PropertyHookFormatter extends BaseFormatter
     public function format(Job $job): void
     {
         foreach ($job->tree->statements() as $statement) {
-            $context = $statement->firstToken()?->context;
+            $firstToken = $statement->firstToken();
+            $context = $firstToken !== null && isset($firstToken->context) ? $firstToken->context : null;
             $type = $this->typeFinder->for($statement);
 
             // Property hook declaration in a class body:
