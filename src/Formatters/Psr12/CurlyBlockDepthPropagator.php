@@ -44,30 +44,44 @@ readonly class CurlyBlockDepthPropagator extends BaseFormatter
             // If this statement ends with {, determine how much depth to propagate into the
             // child block.
             if ($statement->lastToken()->is(T_CURLY_BRACKET_OPEN)) {
-                if ($this->isLambdaDeclaration($statement)) {
-                    // Closure/lambda: the child block inherits the full additionalDepth of this
-                    // statement, because the entire lambda was shifted as an argument in a split call.
+                if ($this->shouldPropagateOwnDepth($statement)) {
+                    // Lambda/closure or property hook opener: the child block inherits the full
+                    // additionalDepth of this statement, because the entire statement was shifted
+                    // as an argument inside a split call or promoted hook declaration.
                     $additionalByBlockDepth[$depth + 1] = $statement->additionalDepth;
                 }
                 else {
                     // Control structure, method, class etc.: only pass through the propagation
-                    // that was inherited from the parent block. A split condition's continuation
-                    // indent must not bleed into the body — the body aligns with the keyword, not
-                    // with the last continuation line.
+                    // that was inherited from the parent block.
                     $additionalByBlockDepth[$depth + 1] = $additionalByBlockDepth[$depth] ?? 0;
                 }
             }
         }
     }
 
-    private function isLambdaDeclaration(Statement $statement): bool
+    private function shouldPropagateOwnDepth(Statement $statement): bool
     {
+        $hasVariable = false;
+        $hasRoundBracketClose = false;
+
         foreach ($statement as $token) {
-            if ($token->is(T_FUNCTION) || $token->is(T_CLASS)) {
+            if ($token->is([T_FUNCTION, T_CLASS])) {
+                // Lambda or anonymous class: propagate own depth.
                 return true;
+            }
+
+            if ($token->is(T_VARIABLE)) {
+                $hasVariable = true;
+            }
+
+            if ($token->is(T_ROUND_BRACKET_CLOSE)) {
+                $hasRoundBracketClose = true;
             }
         }
 
-        return false;
+        // Property hook opener: ends with {, contains a variable but no ) before {.
+        // Control structures (while, if, foreach) always have ) before {, so they are
+        // correctly excluded. Regular method declarations have ) before { too.
+        return $hasVariable && !$hasRoundBracketClose;
     }
 }

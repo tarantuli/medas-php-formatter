@@ -9,11 +9,12 @@ use Medas\PhpFormatter\Formatters\LineSplitting\GenericLineSplitter\BreakpointSe
 use Medas\PhpFormatter\Formatters\Psr12\{
     CurlyBlockDepthPropagator,
     KeywordsToLowercase,
+    PromotedPropertyHookSplitter,
+    PropertyHookFormatter,
     Psr12BlankLines,
     Psr12ElseifWhileCatch,
     Psr12VisibilityMarkers,
     Psr12Whitespace,
-    PropertyHookFormatter,
     SwitchIndentationAdder
 };
 use Medas\PhpFormatter\Formatters\Replacements\SingleLineControlBodiesEncloser;
@@ -39,6 +40,7 @@ readonly class Psr12 extends Settings
                 Psr12ElseifWhileCatch::class,
                 Psr12VisibilityMarkers::class,
                 Psr12Whitespace::class,
+                PromotedPropertyHookSplitter::class,
                 PropertyHookFormatter::class,
                 SingleLineControlBodiesEncloser::class,
                 SwitchIndentationAdder::class,

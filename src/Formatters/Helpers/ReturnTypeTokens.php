@@ -19,7 +19,18 @@ readonly class ReturnTypeTokens
                 return true;
             }
 
-            if ($previousToken->is([T_STRING, T_ARRAY, T_CALLABLE, T_STATIC, T_COLON, T_PIPE, T_NAME_FULLY_QUALIFIED, T_NAME_QUALIFIED, T_NAME_RELATIVE, T_QUESTION_MARK])) {
+            if ($previousToken->is([
+                T_STRING,
+                T_ARRAY,
+                T_CALLABLE,
+                T_STATIC,
+                T_COLON,
+                T_PIPE,
+                T_NAME_FULLY_QUALIFIED,
+                T_NAME_QUALIFIED,
+                T_NAME_RELATIVE,
+                T_QUESTION_MARK
+            ])) {
                 continue;
             }
 

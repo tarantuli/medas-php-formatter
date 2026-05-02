@@ -5,14 +5,15 @@ declare(strict_types=1);
 namespace Medas\PhpFormatter\Formatters\Psr12;
 
 use Medas\Core\Attributes\Service;
-use Medas\PhpFormatter\{Formatters\BaseFormatter, Formatters\Helpers\ReturnTypeTokens, Job};
+use Medas\PhpFormatter\Formatters\{BaseFormatter, Helpers\ReturnTypeTokens};
+use Medas\PhpFormatter\Job;
 use Medas\PhpTokenizer\{
     Contexts\ClassBody,
     Contexts\MethodDeclaration,
     Contexts\PropertyHook,
     StatementTypeFinder,
     StatementTypes\BlockCloser,
-    StatementTypes\ClassPropertyDeclaration,
+    StatementTypes\ClassDeclaration,
     StatementTypes\FunctionDeclaration
 };
 
@@ -37,21 +38,32 @@ readonly class PropertyHookFormatter extends BaseFormatter
     {
         foreach ($job->tree->statements() as $statement) {
             $firstToken = $statement->firstToken();
-            $context = $firstToken !== null && isset($firstToken->context) ? $firstToken->context : null;
+
+            $context = $firstToken !== null && isset($firstToken->context)
+                ? $firstToken->context
+                : null;
+
             $type = $this->typeFinder->for($statement);
 
-            // Property hook declaration in a class body:
-            // e.g. "public string $name {" or "public string $name = 'default' {"
-            // Also handles subsequent promoted property hooks in constructors, which appear
-            // as ClassPropertyDeclaration after the first hook block closes.
+            // Clear blank lines on promoted hook closer statements at class body level.
+            // These are "}, " statements (start with }, end with ,) created by
+            // PromotedPropertyHookSplitter. BlankLinesBetweenClassSections would otherwise
+            // add a blank line between them and the next hook opener.
             if ($context instanceof ClassBody
-                    && $type instanceof ClassPropertyDeclaration
-                    && $statement->lastToken()->is(T_CURLY_BRACKET_OPEN)) {
-                // Ensure space before the opening { (e.g. "$name {" not "$name{")
-                $statement->getToken(-2)->spaceAfter();
+                    && $statement->firstToken()?->is(T_CURLY_BRACKET_CLOSE)
+                    && $statement->lastToken()?->is(T_COMMA)) {
+                $statement->blankLineAfter(false);
+            }
 
-                // Remove any blank line added after this declaration by BlankLinesBetweenClassSections —
-                // the blank line goes after the closing }, not after the opening {.
+            // Any ClassBody statement ending with { that is not a function or class declaration
+            // must be a property hook opener — either a regular property declaration
+            // ("public string $name {") or a promoted hook continuation in a constructor
+            // (", public int $age = 0 {"). Both need a space before { and no blank line after.
+            if ($context instanceof ClassBody
+                    && $statement->lastToken()->is(T_CURLY_BRACKET_OPEN)
+                    && !$type instanceof FunctionDeclaration
+                    && !$type instanceof ClassDeclaration) {
+                $statement->getToken(-2)->spaceAfter();
                 $statement->blankLineAfter(false);
             }
 
@@ -69,8 +81,7 @@ readonly class PropertyHookFormatter extends BaseFormatter
 
             // Inside a property hook block: add space before { for long-form hooks.
             // e.g. "get {" or "set {"
-            if ($context instanceof PropertyHook
-                    && $statement->lastToken()->is(T_CURLY_BRACKET_OPEN)) {
+            if ($context instanceof PropertyHook && $statement->lastToken()->is(T_CURLY_BRACKET_OPEN)) {
                 $statement->getToken(-2)->spaceAfter();
             }
 
@@ -83,8 +94,8 @@ readonly class PropertyHookFormatter extends BaseFormatter
             }
 
             // Inside a property hook block: remove blank lines after block closers that are
-            // DIRECT children of the hook block (i.e. closing get{}/set{} bodies).
-            // Closers deeper inside hook bodies (e.g. closing an if inside set{}) are left
+            // DIRECT children of the hook block (i.e., closing get{}/set{} bodies).
+            // Closers deeper inside hook bodies (e.g., closing an if inside set{}) are left
             // alone so that normal blank-line rules apply within hook body code.
             if ($context instanceof PropertyHook
                     && $type instanceof BlockCloser
