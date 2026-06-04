@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace Medas\PhpFormatter\Formatters\LineSplitting;
 
-use Medas\Core\Attributes\{ConfigValue, Service};
+use Medas\Core\{Attributes\ConfigValue, Attributes\Service, Interfaces\ServiceManager};
 use Medas\PhpFormatter\ConfigOptions\DumpOptionAssessment;
 use Medas\PhpTokenizer\Statement;
-use Medas\ServiceManager\ServiceManager;
 
 #[Service]
 readonly class GenericLineSplitter
