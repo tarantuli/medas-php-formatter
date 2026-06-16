@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace Medas\PhpFormatter\Formatters;
 
+use Medas\Core\Interfaces\DeclaresPriority;
 use Medas\PhpFormatter\Job;
 
-interface Formatter
+interface Formatter extends DeclaresPriority
 {
     public function format(Job $job): void;
 
