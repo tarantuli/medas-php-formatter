@@ -9,10 +9,10 @@ use Medas\ObjectInstantiator\ObjectInstantiator;
 use Medas\ObjectInstantiator\ObjectInstantiatorPackage;
 use Medas\PhpFormatter\PhpFormatterPackage;
 use Medas\PhpTokenizer\AdditionalTokensDefiner;
-use Medas\ServiceManager\{ServiceConfig, ServiceManager};
+use Medas\ServiceManager\{ServiceConfigBuilder, ServiceManager};
 
-new ServiceManager(function (): ServiceConfig {
-    $config = new ServiceConfig(ObjectInstantiator::class);
+new ServiceManager(function (): ServiceConfigBuilder {
+    $config = new ServiceConfigBuilder(ObjectInstantiator::class);
 
     $config->addPackages([
         ObjectInstantiatorPackage::instance(),

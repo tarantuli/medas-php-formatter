@@ -39,4 +39,9 @@ class ImportBugsTest extends BaseTestClass
     {
         $this->assertChanges('imports/useless-import-bug-pre', 'imports/useless-import-bug-post');
     }
+
+    public function testCaseCheckBug(): void
+    {
+        $this->assertRemainsTheSame('imports/case-check-bug');
+    }
 }
