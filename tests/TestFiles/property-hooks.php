@@ -255,20 +255,13 @@ class PromotedTypedValueWithDefault
 interface WithHookedProperties
 {
     // Get-only virtual property in interface
-    public string $fullName {
-        get;
-    }
+    public string $fullName { get; }
 
     // Both hooks declared in interface
-    public int $count {
-        get;
-        set;
-    }
+    public int $count { get; set; }
 
     // Set-only
-    public string $password {
-        set;
-    }
+    public string $password { set; }
 }
 
 // =============================================================================
@@ -277,9 +270,7 @@ interface WithHookedProperties
 abstract class AbstractWithHooks
 {
     // Abstract hook - subclass must provide the get body
-    abstract public string $label {
-        get;
-    }
+    abstract public string $label { get; }
 
     // Concrete hook in abstract class
     public string $name {

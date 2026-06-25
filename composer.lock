@@ -56,16 +56,16 @@
         },
         {
             "name": "morphp/medas-core",
-            "version": "v4.1.2",
+            "version": "v4.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tarantuli/medas-core.git",
-                "reference": "e3fc13a9ddcc62da5e62c493234f53c2833f5dc8"
+                "reference": "9b1a7125952beb6c24690033e9bc4c51beb1ae4a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-core/zipball/e3fc13a9ddcc62da5e62c493234f53c2833f5dc8",
-                "reference": "e3fc13a9ddcc62da5e62c493234f53c2833f5dc8",
+                "url": "https://api.github.com/repos/tarantuli/medas-core/zipball/9b1a7125952beb6c24690033e9bc4c51beb1ae4a",
+                "reference": "9b1a7125952beb6c24690033e9bc4c51beb1ae4a",
                 "shasum": ""
             },
             "require": {
@@ -98,10 +98,10 @@
                 "medas"
             ],
             "support": {
-                "source": "https://github.com/tarantuli/medas-core/tree/v4.1.2",
+                "source": "https://github.com/tarantuli/medas-core/tree/v4.1.4",
                 "issues": "https://github.com/tarantuli/medas-core/issues"
             },
-            "time": "2026-06-19T10:57:35+00:00"
+            "time": "2026-06-23T10:00:30+00:00"
         },
         {
             "name": "morphp/medas-file-system",
@@ -208,16 +208,16 @@
         },
         {
             "name": "morphp/medas-php-tokenizer",
-            "version": "v3.1.3",
+            "version": "v3.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tarantuli/medas-php-tokenizer.git",
-                "reference": "7c1d1a216bab9838eb8f656c22fb3905a2c50e2b"
+                "reference": "f8af62fa5f8ae791d4db76e1505179bf72d6bca6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-php-tokenizer/zipball/7c1d1a216bab9838eb8f656c22fb3905a2c50e2b",
-                "reference": "7c1d1a216bab9838eb8f656c22fb3905a2c50e2b",
+                "url": "https://api.github.com/repos/tarantuli/medas-php-tokenizer/zipball/f8af62fa5f8ae791d4db76e1505179bf72d6bca6",
+                "reference": "f8af62fa5f8ae791d4db76e1505179bf72d6bca6",
                 "shasum": ""
             },
             "require": {
@@ -253,10 +253,10 @@
                 "backend"
             ],
             "support": {
-                "source": "https://github.com/tarantuli/medas-php-tokenizer/tree/v3.1.3",
+                "source": "https://github.com/tarantuli/medas-php-tokenizer/tree/v3.1.4",
                 "issues": "https://github.com/tarantuli/medas-php-tokenizer/issues"
             },
-            "time": "2026-06-15T10:15:42+00:00"
+            "time": "2026-06-25T10:33:06+00:00"
         },
         {
             "name": "psr/event-dispatcher",
@@ -480,16 +480,16 @@
         },
         {
             "name": "morphp/medas-console-printer",
-            "version": "v4.0.2",
+            "version": "v4.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tarantuli/medas-console-printer.git",
-                "reference": "db3995ea44835b56a516f8989537fd59632ca675"
+                "reference": "23777f3dd434979981628c2f436376d3d6dd35a7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-console-printer/zipball/db3995ea44835b56a516f8989537fd59632ca675",
-                "reference": "db3995ea44835b56a516f8989537fd59632ca675",
+                "url": "https://api.github.com/repos/tarantuli/medas-console-printer/zipball/23777f3dd434979981628c2f436376d3d6dd35a7",
+                "reference": "23777f3dd434979981628c2f436376d3d6dd35a7",
                 "shasum": ""
             },
             "require": {
@@ -525,10 +525,10 @@
                 "console"
             ],
             "support": {
-                "source": "https://github.com/tarantuli/medas-console-printer/tree/v4.0.2",
+                "source": "https://github.com/tarantuli/medas-console-printer/tree/v4.0.3",
                 "issues": "https://github.com/tarantuli/medas-console-printer/issues"
             },
-            "time": "2026-06-15T09:46:28+00:00"
+            "time": "2026-06-22T13:24:15+00:00"
         },
         {
             "name": "morphp/medas-object-instantiator",
@@ -581,16 +581,16 @@
         },
         {
             "name": "morphp/medas-service-manager",
-            "version": "v4.0.10",
+            "version": "v4.0.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tarantuli/medas-service-manager.git",
-                "reference": "446a12fecb65544b19a435590bcc41ddd3ab9aa0"
+                "reference": "2a84562d60c2c8ba1e43de71973b84e21ae4f864"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-service-manager/zipball/446a12fecb65544b19a435590bcc41ddd3ab9aa0",
-                "reference": "446a12fecb65544b19a435590bcc41ddd3ab9aa0",
+                "url": "https://api.github.com/repos/tarantuli/medas-service-manager/zipball/2a84562d60c2c8ba1e43de71973b84e21ae4f864",
+                "reference": "2a84562d60c2c8ba1e43de71973b84e21ae4f864",
                 "shasum": ""
             },
             "require": {
@@ -624,10 +624,10 @@
                 "services"
             ],
             "support": {
-                "source": "https://github.com/tarantuli/medas-service-manager/tree/v4.0.10",
+                "source": "https://github.com/tarantuli/medas-service-manager/tree/v4.0.11",
                 "issues": "https://github.com/tarantuli/medas-service-manager/issues"
             },
-            "time": "2026-06-19T11:05:06+00:00"
+            "time": "2026-06-19T11:38:09+00:00"
         },
         {
             "name": "myclabs/deep-copy",
