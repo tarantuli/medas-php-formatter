@@ -101,11 +101,10 @@ readonly class Assesser
         }
 
         $depth = $option->depth < 1 ? 1 : $option->depth + 1;
-        $standardDeviation = $this->math->standardDeviation($lengths);
 
-        if ($standardDeviation < 1e-6) {
-            return null;
-        }
+        // Clamp stddev to a small positive value so that perfectly balanced splits
+        // (stddev ≈ 0) produce a very high quality score rather than null.
+        $standardDeviation = max($this->math->standardDeviation($lengths), 1e-6);
 
         return array_sum($lengths) / count($lengths) / $standardDeviation / pow($depth, 2);
     }

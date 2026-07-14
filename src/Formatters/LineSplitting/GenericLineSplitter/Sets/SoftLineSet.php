@@ -21,6 +21,14 @@ class SoftLineSet implements BreakpointSet
         // Sort the best breakpoints on top
         $this->groups = [
             [
+                new BreakpointDefinition(
+                    'depth 0 fat arrow',
+                    [T_DOUBLE_ARROW],
+                    maxDepth: 0,
+                    keepPrefixAndSuffix: true
+                ),
+            ],
+            [
                 new BreakpointDefinition('depth 0 ternary', [T_QUESTION_MARK, T_COLON], maxDepth: 0),
             ],
             [

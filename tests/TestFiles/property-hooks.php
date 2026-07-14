@@ -465,20 +465,22 @@ class MultilineExpressions
     }
 
     public string $description {
-        get => implode(
-            ' ',
-            array_map(
-                fn(string $word) => ucfirst($word),
-                explode(' a ridiculously long string ', $this->description),
-                explode(' a ridiculously long string ', $this->description),
-                explode(' a ridiculously long string ', $this->description)
-            )
-        );
-        set => $this->description = trim(
-            preg_replace('/\s+/', ' a ridiculously long string ', $value),
-            preg_replace('/\s+/', ' a ridiculously long string ', $value),
-            preg_replace('/\s+/', ' a ridiculously long string ', $value)
-        );
+        get
+            => implode(
+                ' ',
+                array_map(
+                    fn(string $word) => ucfirst($word),
+                    explode(' a ridiculously long string ', $this->description),
+                    explode(' a ridiculously long string ', $this->description),
+                    explode(' a ridiculously long string ', $this->description)
+                )
+            );
+        set
+            => $this->description = trim(
+                preg_replace('/\s+/', ' a ridiculously long string ', $value),
+                preg_replace('/\s+/', ' a ridiculously long string ', $value),
+                preg_replace('/\s+/', ' a ridiculously long string ', $value)
+            );
     }
 }
 

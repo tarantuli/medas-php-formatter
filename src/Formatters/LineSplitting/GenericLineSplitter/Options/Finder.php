@@ -9,6 +9,36 @@ use Medas\PhpFormatter\Formatters\LineSplitting\GenericLineSplitter\BreakpointDe
 use Medas\PhpFormatter\Formatters\Tokens;
 use Medas\PhpTokenizer\Statement;
 
+/**
+ * Finds candidate split points (Options) within a statement for a given BreakpointDefinition.
+ *
+ * For each definition, the finder scans the statement's tokens and records every token index
+ * that matches the definition's separators (e.g., commas, object operators). Each candidate
+ * is grouped into a Cluster by bracket depth, so splits at different nesting levels are
+ * assessed independently. The result is a list of Options, each describing a possible split:
+ * which tokens are the breakpoints, what the opener and closer indices are, and how deep
+ * the split sits in the bracket hierarchy.
+ *
+ * Specifics:
+ *
+ * - Bracket depth tracking: every opening bracket increments the depth and starts a new
+ *   Cluster; every closing bracket decrements it and returns to the parent Cluster. This
+ *   means separators inside nested brackets are considered as separate, independent options
+ *   from separators at the outer level.
+ *
+ * - Match branch handling: when the statement is a match branch (contains => and lives
+ *   inside a match block), all tokens before the => are skipped. This prevents the finder
+ *   from proposing a split inside the match condition; only the value expression (after =>)
+ *   is eligible for splitting.
+ *
+ * - Quote tracking: separators inside double-quoted strings are ignored.
+ *
+ * - Named argument colons and ternary ?-: pairs are excluded as separator candidates even
+ *   when T_COLON is listed as a separator in the definition.
+ *
+ * - Options that contain no real breakpoints (opener+1 >= closer) are removed in cleanup,
+ *   as are options that exceed the definition's maxDepth.
+ */
 #[Service]
 readonly class Finder
 {

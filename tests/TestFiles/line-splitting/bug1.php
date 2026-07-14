@@ -23,9 +23,8 @@ class AutoProviderClassx extends AbstractClassBuilder
         {
             usort(
                 $this->processors,
-                fn(ConsoleCommand $a, ConsoleCommand $b) => strcasecmp(
-                    $a->fullCommand(),
-                    $b->fullCommand()
+                fn(ConsoleCommand $a, ConsoleCommand $b)
+                    => strcasecmp($a->fullCommand(), $b->fullCommand()
                 )
             );
         }
