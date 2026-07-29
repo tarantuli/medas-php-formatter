@@ -12,7 +12,7 @@
   ],
   "type": "library",
   "require": {
-    "morphp/medas-console": "^3",
+    "morphp/medas-console": "^4",
     "morphp/medas-core": "^4",
     "morphp/medas-file-system": "^3",
     "morphp/medas-php-class-analysis": "^3",
@@ -22,7 +22,7 @@
   "require-dev": {
     "morphp/medas-config-manager": "^3",
     "morphp/medas-config-options": "^3",
-    "morphp/medas-console-printer": "^4",
+    "morphp/medas-console-printer": "^5",
     "morphp/medas-object-instantiator": "^4",
     "morphp/medas-service-manager": "^4",
     "phpunit/phpunit": "^10"
