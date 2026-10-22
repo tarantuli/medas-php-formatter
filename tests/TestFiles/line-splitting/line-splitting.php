@@ -77,7 +77,7 @@ class Test
                 T_COLON,
                 T_DOC_COMMENT,
                 T_DOUBLE_ARROW,
-                T_PIPE,
+                T_VERTICAL_BAR,
                 T_QUESTION_MARK,
                 T_RETURN,
             ],

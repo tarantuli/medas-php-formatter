@@ -53,7 +53,7 @@ class GenericLineSet implements BreakpointSet
                 new BreakpointDefinition('ternary', [T_QUESTION_MARK, T_COLON]),
             ],
             [
-                new BreakpointDefinition('pipe', [T_PIPE]),
+                new BreakpointDefinition('vertical bar', [T_VERTICAL_BAR]),
                 new BreakpointDefinition('arithmetic', [T_PLUS, T_MINUS, T_ASTERISK]),
                 new BreakpointDefinition('depth 0 assignment', [T_ASSIGNMENT], maxDepth: 0),
             ],

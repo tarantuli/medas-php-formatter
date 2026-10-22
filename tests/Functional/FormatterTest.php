@@ -66,9 +66,9 @@ class FormatterTest extends BaseTestClass
         $this->assertRemainsTheSame('basic-preformatted');
     }
 
-    public function testPipes(): void
+    public function testVerticalBars(): void
     {
-        $this->assertRemainsTheSame('pipes');
+        $this->assertRemainsTheSame('vertical-bars');
     }
 
     public function testStatementTypeGrouping(): void

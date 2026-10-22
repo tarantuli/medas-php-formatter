@@ -35,11 +35,11 @@ readonly class UseUnionNullInsteadOfNullable extends BaseFormatter
     {
         $statement = $token->statement;
 
-        // Pipe token
-        $pipeToken = new Token(124, '|');
+        // Vertical bar token
+        $barToken = new Token(124, '|');
 
-        $pipeToken->context = $token->context;
-        $pipeToken->inTypeDeclaration = true;
+        $barToken->context = $token->context;
+        $barToken->inTypeDeclaration = true;
 
         // Null token
         $nullToken = new Token(T_STRING, 'null');
@@ -47,8 +47,8 @@ readonly class UseUnionNullInsteadOfNullable extends BaseFormatter
         $nullToken->context = $token->context;
         $nullToken->inTypeDeclaration = true;
 
-        $statement->insertTokenAfter($pipeToken, $token->next);
-        $statement->insertTokenAfter($nullToken, $pipeToken);
+        $statement->insertTokenAfter($barToken, $token->next);
+        $statement->insertTokenAfter($nullToken, $barToken);
         $statement->removeToken($token);
     }
 }

@@ -58,7 +58,7 @@ readonly class Psr12Whitespace extends BaseFormatter
             [
                 T_AMPERSAND,
                 T_ELLIPSIS,
-                T_PIPE,
+                T_VERTICAL_BAR,
                 T_QUESTION_MARK,
                 T_SQUARE_BRACKET_OPEN,
                 T_VARIABLE,
@@ -98,7 +98,7 @@ readonly class Psr12Whitespace extends BaseFormatter
                 T_COLON,
                 T_DOC_COMMENT,
                 T_DOUBLE_ARROW,
-                T_PIPE,
+                T_VERTICAL_BAR,
                 T_QUESTION_MARK,
                 T_RETURN,
             ],
@@ -223,7 +223,7 @@ readonly class Psr12Whitespace extends BaseFormatter
                 }
 
                 // No space around "|" in function declarations and catch statements
-                elseif ($token->is(T_PIPE)) {
+                elseif ($token->is(T_VERTICAL_BAR)) {
                     $stripSpaces = $token->inTypeDeclaration
                         || $token->statement->getToken(1)->is(T_CATCH)
                         || $this->returnTypeTokens->isReturnTypeToken($token->previous);

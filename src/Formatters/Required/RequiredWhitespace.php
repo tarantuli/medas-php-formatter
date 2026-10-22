@@ -61,7 +61,7 @@ readonly class RequiredWhitespace extends BaseFormatter
         return array_merge(
             $this->tokenGroups->symbolOperators(),
             $this->tokenGroups->brackets(),
-            [T_PIPE]
+            [T_VERTICAL_BAR]
         );
     }
 }

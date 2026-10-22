@@ -25,7 +25,7 @@ readonly class ReturnTypeTokens
                 T_CALLABLE,
                 T_STATIC,
                 T_COLON,
-                T_PIPE,
+                T_VERTICAL_BAR,
                 T_NAME_FULLY_QUALIFIED,
                 T_NAME_QUALIFIED,
                 T_NAME_RELATIVE,
