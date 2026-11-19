@@ -11,6 +11,7 @@ use Medas\PhpTokenizer\{
     Statement,
     StatementTypeFinder,
     StatementTypes\FunctionDeclaration,
+    Token,
     TokenTree
 };
 
@@ -50,9 +51,9 @@ readonly class Psr12VisibilityMarkers extends BaseFormatter
 
     private function processStatement(Statement $statement): void
     {
-        $abstractFinal = $statement->findToken([T_ABSTRACT, T_FINAL]);
-        $visibility = $statement->findToken([T_PUBLIC, T_PROTECTED, T_PRIVATE]);
-        $static = $statement->findToken(T_STATIC);
+        $abstractFinal = $this->findModifier($statement, [T_ABSTRACT, T_FINAL]);
+        $visibility = $this->findModifier($statement, [T_PUBLIC, T_PROTECTED, T_PRIVATE]);
+        $static = $this->findModifier($statement, T_STATIC);
 
         if (!$visibility) {
             // Ensure that there is a visibility marker, defaulting to "public"
@@ -71,5 +72,24 @@ readonly class Psr12VisibilityMarkers extends BaseFormatter
         if ($static) {
             $statement->moveTokenAfter($static, $visibility);
         }
+    }
+
+    /**
+     * Modifiers only appear before the "function" keyword; searching the whole statement would also
+     * match a "static" return type or a "static::" in a parameter default.
+     */
+    private function findModifier(Statement $statement, array|int $type): Token|null
+    {
+        foreach ($statement as $token) {
+            if ($token->is(T_FUNCTION)) {
+                return null;
+            }
+
+            if ($token->is($type)) {
+                return $token;
+            }
+        }
+
+        return null;
     }
 }

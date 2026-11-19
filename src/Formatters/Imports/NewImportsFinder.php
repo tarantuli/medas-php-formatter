@@ -66,6 +66,9 @@ readonly class NewImportsFinder
                 while (in_array($alias, $referencesAndImports->references) || $alias === $analysis->name) {
                     $alias = $baseAlias . (++$counter);
                 }
+
+                // A generated alias only resolves through an import, even for a class in the current namespace
+                $doImport = true;
             }
 
             $referencesAndImports->references[$fqn] = $alias;

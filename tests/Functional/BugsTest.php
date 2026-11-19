@@ -90,4 +90,14 @@ class BugsTest extends BaseTestClass
     {
         $this->assertRemainsTheSame('bugs/typed-constants');
     }
+
+    public function testStaticReturnType(): void
+    {
+        $this->assertRemainsTheSame('bugs/static-return-type');
+    }
+
+    public function testPostPost(): void
+    {
+        $this->assertRemainsTheSame('bugs/post-post');
+    }
 }
