@@ -172,7 +172,8 @@ readonly class PromotedPropertyHookSplitter extends BaseFormatter
 
     private function isConstructorBodyOpener(Statement $statement): bool
     {
-        return $statement->containsType(T_ROUND_BRACKET_CLOSE) && $statement->lastToken()?->is(T_CURLY_BRACKET_OPEN);
+        return $statement->containsType(T_ROUND_BRACKET_CLOSE)
+            && $statement->lastToken()?->is(T_CURLY_BRACKET_OPEN);
     }
 
     /**
