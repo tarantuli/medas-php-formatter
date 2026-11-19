@@ -74,15 +74,16 @@ readonly class StatementSplitter
                 $currentStatement = $this->startNewStatement($statement, $additionalDepth);
             }
 
-            if (!$token->inAttribute && in_array($text, Tokens::CLOSING_BRACKETS)) {
+            if (in_array($text, Tokens::CLOSING_BRACKETS)) {
                 ++$depth;
             }
 
-            if (!$token->inAttribute && in_array($text, Tokens::OPENING_BRACKETS)) {
+            // "#[" opens an attribute, and is closed by a regular "]"
+            if (in_array($text, Tokens::OPENING_BRACKETS) || $token->is(T_ATTRIBUTE)) {
                 --$depth;
             }
 
-            if ($token->inAttribute && $token->is(T_SQUARE_BRACKET_CLOSE)) {
+            if ($token->closesAttribute) {
                 $token->lineBreakAfter();
             }
 
@@ -113,7 +114,7 @@ readonly class StatementSplitter
         $lastToken = $statement->lastToken();
 
         foreach ($statement as $token) {
-            if ($token !== $lastToken && $token->is(Tokens::OPENING_BRACKETS)) {
+            if ($token !== $lastToken && $token->is([...Tokens::OPENING_BRACKETS, T_ATTRIBUTE])) {
                 ++$openers;
             }
             elseif ($token->is(Tokens::CLOSING_BRACKETS)) {
