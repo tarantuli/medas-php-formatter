@@ -100,4 +100,8 @@ class BugsTest extends BaseTestClass
     {
         $this->assertRemainsTheSame('bugs/post-post');
     }
+
+    public function testNamedArgumentCasing(): void {
+        $this->assertRemainsTheSame('bugs/named-argument-casing');
+    }
 }
