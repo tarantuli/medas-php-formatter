@@ -13,19 +13,23 @@ use Vich\UploaderBundle\Mapping\Attribute\{Uploadable, UploadableField};
 
 #[Uploadable]
 #[ApiResource(operations: [
-    new Post(processor: ProductImportProcessor::class, deserialize: false, openapi: new Operation(requestBody: new RequestBody(content: new \ArrayObject([
-        'multipart/form-data' => [
-            'schema' => [
-                'type' => 'object',
-                'properties' => [
-                    'file' => [
-                        'type' => 'string',
-                        'format' => 'binary',
+    new Post(
+        processor: ProductImportProcessor::class,
+        deserialize: false,
+        openapi: new Operation(requestBody: new RequestBody(content: new \ArrayObject([
+            'multipart/form-data' => [
+                'schema' => [
+                    'type' => 'object',
+                    'properties' => [
+                        'file' => [
+                            'type' => 'string',
+                            'format' => 'binary',
+                        ],
                     ],
                 ],
             ],
-        ],
-    ])))),
+        ]))),
+    ),
 ])]
 #[Entity]
 class ProductImport
