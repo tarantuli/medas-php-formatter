@@ -57,12 +57,7 @@ readonly class Psr12VisibilityMarkers extends BaseFormatter
 
         if (!$visibility) {
             // Ensure that there is a visibility marker, defaulting to "public"
-            $visibility = clone $statement->firstToken();
-
-            $visibility->id = T_PUBLIC;
-            $visibility->text = 'public';
-
-            $statement->prependToken($visibility);
+            $visibility = $this->insertVisibility($statement);
         }
 
         if ($abstractFinal) {
@@ -72,6 +67,35 @@ readonly class Psr12VisibilityMarkers extends BaseFormatter
         if ($static) {
             $statement->moveTokenAfter($static, $visibility);
         }
+    }
+
+    /**
+     * Inserts "public" before the declaration itself, which comes after any doc comment, comments and attributes.
+     */
+    private function insertVisibility(Statement $statement): Token
+    {
+        $declarationStart = $statement->firstToken();
+
+        while ($declarationStart->is([T_COMMENT, T_DOC_COMMENT, T_ATTRIBUTE]) || $declarationStart->inAttribute) {
+            $declarationStart = $statement->getTokenAfter($declarationStart);
+        }
+
+        $visibility = clone $declarationStart;
+
+        $visibility->id = T_PUBLIC;
+        $visibility->text = 'public';
+        $visibility->spaceAfter = true;
+        $visibility->lineBreakAfter = false;
+        $visibility->extraSpacesAfter = 0;
+
+        if ($declarationStart === $statement->firstToken()) {
+            $statement->prependToken($visibility);
+        }
+        else {
+            $statement->insertTokenAfter($visibility, $declarationStart->previous);
+        }
+
+        return $visibility;
     }
 
     /**

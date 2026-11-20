@@ -7,6 +7,7 @@ namespace Medas\PhpFormatter\Formatters\BlankLines;
 use Medas\Core\Attributes\Service;
 use Medas\PhpFormatter\{Formatters\BaseFormatter, Formatters\Tokens, Job};
 use Medas\PhpTokenizer\{
+    BlockType,
     Contexts\PropertyHook,
     Statement,
     StatementTypeFinder,
@@ -44,6 +45,13 @@ readonly class BlankLinesBetweenStatementGroups extends BaseFormatter
             }
 
             if (!$this->typeFinder->for($statement) instanceof GenericStatement) {
+                $previousSubType = null;
+
+                continue;
+            }
+
+            // The rules of a trait use (A::foo insteadof B;) belong together
+            if ($statement->block->type === BlockType::TraitAdaptation) {
                 $previousSubType = null;
 
                 continue;

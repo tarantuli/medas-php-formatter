@@ -18,7 +18,7 @@ readonly class MedasElseifWhileCatch extends BaseFormatter
     public function format(Job $job): void
     {
         foreach ($job->tree as $token) {
-            if ($token->is([T_ELSE, T_ELSEIF, T_CATCH])) {
+            if ($token->is([T_ELSE, T_ELSEIF, T_CATCH, T_FINALLY])) {
                 $token->previous->lineBreakAfter();
             }
         }

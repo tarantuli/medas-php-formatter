@@ -49,30 +49,24 @@ readonly class ReferencesUpdater
         ReferencesAndImports $referencesAndImports
     ): void
     {
-        if (!preg_match_all(
-            '/@(?:param|var|return|throws)\s+((?:[^{}\s]+|\{[^}]*})+)/',
-            $token->text,
-            $matches,
-            PREG_SET_ORDER
-        )) {
-            return;
-        }
+        foreach ($this->textAnalyzer->docTypeExpressions($token->text) as [$match, $typeExpression]) {
+            $newLine = $match;
 
-        foreach ($matches as $match) {
-            $newLine = $match[0];
-
-            foreach ($this->textAnalyzer->extractDocTypeNames($match[1]) as $tag) {
+            foreach ($this->textAnalyzer->extractDocTypeNames($typeExpression) as $tag) {
                 if ($tag === $reference->label) {
-                    $newLine = str_replace(
-                        $tag,
-                        $this->getNewText($referencesAndImports, $reference, $analysis),
+                    $newText = $this->getNewText($referencesAndImports, $reference, $analysis);
+
+                    // Only replace whole names, so "Foo" doesn't change "FooBar" or "Bar\Foo"
+                    $newLine = preg_replace_callback(
+                        '/(?<![\w\\\\])' . preg_quote($tag, '/') . '(?![\w\\\\])/',
+                        fn() => $newText,
                         $newLine
                     );
                 }
             }
 
-            if ($match[0] !== $newLine) {
-                $token->text = str_replace($match[0], $newLine, $token->text);
+            if ($match !== $newLine) {
+                $token->text = str_replace($match, $newLine, $token->text);
             }
         }
     }

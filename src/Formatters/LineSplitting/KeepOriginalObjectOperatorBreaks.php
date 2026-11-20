@@ -11,7 +11,7 @@ use Medas\PhpTokenizer\{Statement, Token};
 /**
  * There is not a "static analysis agnostic" way to determine which object operators are good points to break on,
  * and which are not. This is the only formatter that looks at the original given code and its whitespace;
- * it keeps the line breaks before operator breaks in the original layout.
+ * it keeps the line breaks before object operators (`->` and `?->`) in the original layout.
  */
 #[Service]
 readonly class KeepOriginalObjectOperatorBreaks extends BaseFormatter
@@ -24,7 +24,9 @@ readonly class KeepOriginalObjectOperatorBreaks extends BaseFormatter
     public function format(Job $job): void
     {
         foreach ($job->tokens as $token) {
-            if ($token->is(T_OBJECT_OPERATOR) && $token->line !== $token->previous->line) {
+            $isObjectOperator = $token->is([T_OBJECT_OPERATOR, T_NULLSAFE_OBJECT_OPERATOR]);
+
+            if ($isObjectOperator && $token->line !== $token->previous->line) {
                 $this->splitStatementFrom($token);
             }
         }

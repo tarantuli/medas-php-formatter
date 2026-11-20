@@ -7,6 +7,8 @@ namespace Medas\PhpFormatter\Formatters\Imports;
 use Medas\Core\Attributes\Service;
 use Medas\PhpClassAnalysis\FqnProperties;
 use Medas\PhpTokenizer\{
+    Block,
+    BlockType,
     Contexts\GlobalScope,
     Statement,
     StatementTypeFinder,
@@ -39,7 +41,7 @@ readonly class NewImportsInserter
 
     public function insert(TokenTree $tree, ReferencesAndImports $referencesAndImports): void
     {
-        $this->removeExistingImportStatements($tree);
+        $comments = $this->removeExistingImportStatements($tree);
 
         $after = $this->findImportInsertionSpot($tree);
         $groupedImports = $this->importGrouper->group($referencesAndImports);
@@ -50,21 +52,129 @@ readonly class NewImportsInserter
             return -1 * (str_replace('\\', ' ', $a) <=> str_replace('\\', ' ', $b));
         });
 
+        // Because of the reverse order, the statement inserted last is the first import
+        $firstImport = null;
+
         foreach ($groupedImports as $fqn => $alias) {
-            $statement = $tree->block()->appendNewStatement();
+            $statement = $this->insertAtSpot($tree, $after, $firstImport);
 
             $this->addImportToStatement($statement, $fqn, $alias);
 
-            $tree->block()->moveStatementAfter($statement, $after);
+            $firstImport = $statement;
         }
+
+        $this->restoreComments($tree, $comments, $firstImport, $after);
     }
 
-    private function removeExistingImportStatements(TokenTree $tree): void
+    /**
+     * Inserts a new statement at the start of the imports: right after the insertion spot, or, after "namespace X {",
+     * at the start of the namespace block.
+     *
+     * @param Statement|null $firstImport The import inserted before, which the new statement goes in front of
+     */
+    private function insertAtSpot(TokenTree $tree, Statement $after, Statement|null $firstImport): Statement
+    {
+        $namespaceBlock = $this->namespaceBlock($tree, $after);
+
+        if ($namespaceBlock === null) {
+            $statement = $after->block->appendNewStatement();
+            $after->block->moveStatementAfter($statement, $after);
+
+            return $statement;
+        }
+
+        $before = $firstImport ?? $this->firstStatementIn($tree, $namespaceBlock);
+        $statement = $namespaceBlock->appendNewStatement();
+
+        if ($before !== null) {
+            $namespaceBlock->removeStatement($statement);
+            $namespaceBlock->insertStatementBefore($statement, $before);
+        }
+
+        return $statement;
+    }
+
+    /**
+     * The block of "namespace X { ... }", if the insertion spot opens one.
+     */
+    private function namespaceBlock(TokenTree $tree, Statement $after): Block|null
+    {
+        if ($after->lastToken()?->opensBlock !== BlockType::Namespace) {
+            return null;
+        }
+
+        foreach ($tree->statements() as $statement) {
+            if ($statement->block->opener === $after) {
+                return $statement->block;
+            }
+        }
+
+        return null;
+    }
+
+    private function firstStatementIn(TokenTree $tree, Block $block): Statement|null
     {
         foreach ($tree->statements() as $statement) {
-            if ($this->statementTypeFinder->for($statement) instanceof UseClassStatement) {
-                $tree->block()->removeStatement($statement, true);
+            if ($statement->block === $block) {
+                return $statement;
             }
+        }
+
+        return null;
+    }
+
+    /**
+     * Removes all class import statements.
+     *
+     * @return Token[] The comments in front of the removed statements, in their original order
+     */
+    private function removeExistingImportStatements(TokenTree $tree): array
+    {
+        $comments = [];
+
+        foreach ($tree->statements() as $statement) {
+            if (!$this->statementTypeFinder->for($statement) instanceof UseClassStatement) {
+                continue;
+            }
+
+            foreach ($statement as $token) {
+                if (!$token->is([T_COMMENT, T_DOC_COMMENT])) {
+                    break;
+                }
+
+                $comments[] = $token;
+            }
+
+            $statement->block->removeStatement($statement, true);
+        }
+
+        return $comments;
+    }
+
+    /**
+     * The imports are regrouped and sorted, so a comment can't stay with the import it was in front of. All comments
+     * are put in front of the first import instead, or after the insertion spot if no imports are left.
+     *
+     * @param Token[] $comments
+     */
+    private function restoreComments(
+        TokenTree      $tree,
+        array          $comments,
+        Statement|null $firstImport,
+        Statement      $after
+    ): void
+    {
+        if ($comments === []) {
+            return;
+        }
+
+        if ($firstImport === null) {
+            $firstImport = $this->insertAtSpot($tree, $after, null);
+            $firstImport->blankLineAfter();
+        }
+
+        foreach (array_reverse($comments) as $comment) {
+            $firstImport->prependToken($comment);
         }
     }
 

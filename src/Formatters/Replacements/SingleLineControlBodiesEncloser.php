@@ -32,25 +32,78 @@ readonly class SingleLineControlBodiesEncloser extends BaseFormatter
     public function format(Job $job): void
     {
         foreach ($job->tree->block() as $statement) {
-            $isSingleLineControlBody = $this->typeFinder->for($statement) instanceof ControlStatement
-                && !$statement->lastToken()->is(T_CURLY_BRACKET_OPEN);
+            if (!$this->typeFinder->for($statement) instanceof ControlStatement) {
+                continue;
+            }
 
-            $isWhileAfterDo = $statement->firstToken()->is(T_WHILE)
-                && $statement->lastToken()->previous->is(T_ROUND_BRACKET_CLOSE);
+            if ($statement->lastToken()->is(T_CURLY_BRACKET_OPEN)) {
+                continue;
+            }
 
-            if ($isSingleLineControlBody && !$isWhileAfterDo) {
-                $this->process($statement);
+            if (null !== $bodyStart = $this->findBodyStart($statement)) {
+                $this->process($statement, $bodyStart);
             }
         }
     }
 
-    private function process(Statement $statement): void
+    /**
+     * Finds the index of the first token of the single-line body.
+     *
+     * @return int|null `null` when there is no body to enclose: the `while (…);` that ends a do-while loop, an empty
+     *                  loop body, or the alternative syntax with `:`
+     */
+    private function findBodyStart(Statement $statement): int|null
+    {
+        $tokens = iterator_to_array($statement, false);
+        $index = 0;
+
+        while (isset($tokens[$index]) && $tokens[$index]->is([T_COMMENT, T_DOC_COMMENT])) {
+            ++$index;
+        }
+
+        // "else" and "do" have no condition, unlike "else if"
+        if ($tokens[$index]->is(T_DO) || ($tokens[$index]->is(T_ELSE) && !($tokens[$index + 1] ?? null)?->is(T_IF))) {
+            $bodyStart = $index + 1;
+        }
+        else {
+            $bodyStart = $this->findIndexAfterCondition($tokens, $index);
+        }
+
+        if ($bodyStart === null || !isset($tokens[$bodyStart])) {
+            return null;
+        }
+
+        if ($tokens[$bodyStart]->is([T_SEMICOLON, T_COLON])) {
+            return null;
+        }
+
+        return $bodyStart;
+    }
+
+    /** @param Token[] $tokens */
+    private function findIndexAfterCondition(array $tokens, int $index): int|null
+    {
+        $depth = 0;
+
+        for (; isset($tokens[$index]); ++$index) {
+            if ($tokens[$index]->is(T_ROUND_BRACKET_OPEN)) {
+                ++$depth;
+            }
+            elseif ($tokens[$index]->is(T_ROUND_BRACKET_CLOSE) && --$depth === 0) {
+                return $index + 1;
+            }
+        }
+
+        return null;
+    }
+
+    private function process(Statement $statement, int $bodyStart): void
     {
         $this->appendClosingStatement($statement);
 
         $bodyStatement = $this->insertBodyStatement($statement);
 
-        $this->transferTokens($statement, $bodyStatement);
+        $this->transferTokens($statement, $bodyStatement, $bodyStart);
         $this->appendBlockOpener($statement);
     }
 
@@ -77,29 +130,12 @@ readonly class SingleLineControlBodiesEncloser extends BaseFormatter
         return $bodyStatement;
     }
 
-    private function transferTokens(Statement $statement, Statement $bodyStatement): void
+    private function transferTokens(Statement $statement, Statement $bodyStatement, int $bodyStart): void
     {
-        $depth = 0;
-        $inBody = false;
+        foreach (array_slice(iterator_to_array($statement, false), $bodyStart) as $token) {
+            $statement->removeToken($token);
 
-        foreach ($statement as $token) {
-            if ($inBody) {
-                $statement->removeToken($token);
-
-                $bodyStatement->appendToken($token);
-            }
-
-            if ($token->is(T_ROUND_BRACKET_OPEN)) {
-                ++$depth;
-            }
-
-            if ($token->is(T_ROUND_BRACKET_CLOSE)) {
-                --$depth;
-
-                if ($depth === 0) {
-                    $inBody = true;
-                }
-            }
+            $bodyStatement->appendToken($token);
         }
     }
 

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ce49ba2e63b5fa5dc20b4b19c3e48d26",
+    "content-hash": "42cae991e137eb7160fb24ab1128f7b3",
     "packages": [
         {
             "name": "morphp/medas-console",
@@ -157,22 +157,22 @@
         },
         {
             "name": "morphp/medas-php-class-analysis",
-            "version": "v3.1.6",
+            "version": "v3.1.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tarantuli/medas-php-class-analysis.git",
-                "reference": "4326094e2fdc6da804dee7c2dbfac0818209dd3a"
+                "reference": "17b4cb38e24477b7144a59b79a8febe5164e6c2a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-php-class-analysis/zipball/4326094e2fdc6da804dee7c2dbfac0818209dd3a",
-                "reference": "4326094e2fdc6da804dee7c2dbfac0818209dd3a",
+                "url": "https://api.github.com/repos/tarantuli/medas-php-class-analysis/zipball/17b4cb38e24477b7144a59b79a8febe5164e6c2a",
+                "reference": "17b4cb38e24477b7144a59b79a8febe5164e6c2a",
                 "shasum": ""
             },
             "require": {
                 "ext-mbstring": "*",
                 "morphp/medas-core": "^4",
-                "morphp/medas-php-tokenizer": "^3",
+                "morphp/medas-php-tokenizer": "^3.2.1|^4",
                 "php": "^8.4"
             },
             "require-dev": {
@@ -202,23 +202,23 @@
                 "backend"
             ],
             "support": {
-                "source": "https://github.com/tarantuli/medas-php-class-analysis/tree/v3.1.6",
+                "source": "https://github.com/tarantuli/medas-php-class-analysis/tree/v3.1.8",
                 "issues": "https://github.com/tarantuli/medas-php-class-analysis/issues"
             },
-            "time": "2026-11-19T14:16:27+00:00"
+            "time": "2026-11-20T11:35:08+00:00"
         },
         {
             "name": "morphp/medas-php-tokenizer",
-            "version": "v3.2.0",
+            "version": "v4.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tarantuli/medas-php-tokenizer.git",
-                "reference": "e0e6bfde32abbad838446facba1aa2bcc531c230"
+                "reference": "89282c3ca26e89f82bc8eddc7de1aef5adebd550"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-php-tokenizer/zipball/e0e6bfde32abbad838446facba1aa2bcc531c230",
-                "reference": "e0e6bfde32abbad838446facba1aa2bcc531c230",
+                "url": "https://api.github.com/repos/tarantuli/medas-php-tokenizer/zipball/89282c3ca26e89f82bc8eddc7de1aef5adebd550",
+                "reference": "89282c3ca26e89f82bc8eddc7de1aef5adebd550",
                 "shasum": ""
             },
             "require": {
@@ -254,10 +254,10 @@
                 "backend"
             ],
             "support": {
-                "source": "https://github.com/tarantuli/medas-php-tokenizer/tree/v3.2.0",
+                "source": "https://github.com/tarantuli/medas-php-tokenizer/tree/v4.0.2",
                 "issues": "https://github.com/tarantuli/medas-php-tokenizer/issues"
             },
-            "time": "2026-11-19T14:38:03+00:00"
+            "time": "2026-11-20T12:16:35+00:00"
         },
         {
             "name": "psr/event-dispatcher",
@@ -585,16 +585,16 @@
         },
         {
             "name": "morphp/medas-service-manager",
-            "version": "v4.0.25",
+            "version": "v4.0.26",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tarantuli/medas-service-manager.git",
-                "reference": "7326eebd2052306dfd5f6c53a12afdfd11d7161b"
+                "reference": "e236c132c8530a27e970e40a64d4792e8ba0deb5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-service-manager/zipball/7326eebd2052306dfd5f6c53a12afdfd11d7161b",
-                "reference": "7326eebd2052306dfd5f6c53a12afdfd11d7161b",
+                "url": "https://api.github.com/repos/tarantuli/medas-service-manager/zipball/e236c132c8530a27e970e40a64d4792e8ba0deb5",
+                "reference": "e236c132c8530a27e970e40a64d4792e8ba0deb5",
                 "shasum": ""
             },
             "require": {
@@ -629,10 +629,10 @@
                 "services"
             ],
             "support": {
-                "source": "https://github.com/tarantuli/medas-service-manager/tree/v4.0.25",
+                "source": "https://github.com/tarantuli/medas-service-manager/tree/v4.0.26",
                 "issues": "https://github.com/tarantuli/medas-service-manager/issues"
             },
-            "time": "2026-11-12T15:38:06+00:00"
+            "time": "2026-11-19T14:43:20+00:00"
         },
         {
             "name": "myclabs/deep-copy",

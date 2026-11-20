@@ -39,7 +39,10 @@ readonly class BlankLineAdder
 
             foreach ($afterTypes as $groupType) {
                 if ($type instanceof $groupType) {
-                    if ($statement->next()?->rootStatement !== $statement) {
+                    // "namespace X {" opens a block, and there's never a blank line at the start of a block
+                    $opensBlock = $statement->lastToken()?->opensBlock !== null;
+
+                    if (!$opensBlock && $statement->next()?->rootStatement !== $statement) {
                         $statement->blankLineAfter();
                     }
 

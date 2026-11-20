@@ -10,7 +10,8 @@ use Medas\PhpTokenizer\{
     Statement,
     StatementTypeFinder,
     StatementTypes\ClassDeclaration,
-    StatementTypes\FunctionDeclaration
+    StatementTypes\FunctionDeclaration,
+    Token
 };
 
 #[Service]
@@ -64,8 +65,13 @@ readonly class ServiceConstructionParameters extends BaseFormatter
     {
         [$parameters, $firstIndex] = $this->parameterExtractor->extract($statement);
 
+        if (count($parameters) < 2) {
+            return;
+        }
+
         usort($parameters, $this->parameterComparer->compare(...));
 
+        $parameters = $this->repairCommas($parameters);
         $previousToken = $statement->getToken($firstIndex - 1);
 
         foreach ($parameters as $parameter) {
@@ -77,5 +83,29 @@ readonly class ServiceConstructionParameters extends BaseFormatter
                 $previousToken = $token;
             }
         }
+    }
+
+    /**
+     * Without a trailing comma, the last parameter has no comma of its own. If sorting moved it away from the end, it
+     * takes the comma of the parameter that's now last.
+     *
+     * @param Token[][] $parameters
+     * @return Token[][]
+     */
+    private function repairCommas(array $parameters): array
+    {
+        $lastIndex = array_key_last($parameters);
+
+        foreach ($parameters as $index => $parameter) {
+            if ($index === $lastIndex || end($parameter)->is(T_COMMA)) {
+                continue;
+            }
+
+            if (end($parameters[$lastIndex])->is(T_COMMA)) {
+                $parameters[$index][] = array_pop($parameters[$lastIndex]);
+            }
+        }
+
+        return $parameters;
     }
 }

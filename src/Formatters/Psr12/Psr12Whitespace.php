@@ -8,6 +8,7 @@ use Medas\Core\Attributes\Service;
 use Medas\PhpFormatter\Formatters\{BaseFormatter, Helpers\ReturnTypeTokens, Tokens};
 use Medas\PhpFormatter\Job;
 use Medas\PhpTokenizer\{
+    BlockType,
     Contexts\MethodParameters,
     Contexts\MethodReturnType,
     StatementTypeFinder,
@@ -98,6 +99,7 @@ readonly class Psr12Whitespace extends BaseFormatter
                 T_COLON,
                 T_DOC_COMMENT,
                 T_DOUBLE_ARROW,
+                T_FINALLY,
                 T_VERTICAL_BAR,
                 T_QUESTION_MARK,
                 T_RETURN,
@@ -162,8 +164,10 @@ readonly class Psr12Whitespace extends BaseFormatter
                 $token->spaceAfter();
             }
 
-            // One space between ") {" and "): <type> {"
-            if ($token->is(T_CURLY_BRACKET_OPEN) && $this->returnTypeTokens->isReturnTypeToken($token)) {
+            // One space between ") {", "): <type> {" and "namespace X {"
+            if ($token->is(T_CURLY_BRACKET_OPEN) && (
+                $this->returnTypeTokens->isReturnTypeToken($token) || $token->opensBlock === BlockType::Namespace
+            )) {
                 $token->previous->spaceAfter();
             }
 
@@ -232,6 +236,11 @@ readonly class Psr12Whitespace extends BaseFormatter
                         $token->previous->spaceAfter(false);
                         $token->spaceAfter(false);
                     }
+                }
+                // No space around the "&" of an intersection type, as in (A&B)|null
+                elseif ($token->is(T_AMPERSAND) && $token->typeDeclaration !== null) {
+                    $token->previous->spaceAfter(false);
+                    $token->spaceAfter(false);
                 }
                 elseif ($token->previous->is(T_FUNCTION) && !$statementType instanceof FunctionDeclaration) {
                     $token->previous->spaceAfter();

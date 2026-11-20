@@ -184,3 +184,18 @@ php-formatter:
 ```
 
 This outputs the tree to stdout via `medas-console`. Disable in production.
+
+## Checking the formatter on a large code base
+
+`bin/check-corpus.php` formats every PHP file in one or more directories and reports files where the formatter
+crashes, where the formatted code means something else, and where formatting the result again changes it. Meaning is
+compared on the syntax tree from `nikic/php-parser`, ignoring what the formatter changes on purpose: imports, comments,
+`?T` versus `T|null`, implicit `public`, and the order of class members and constructor parameters.
+
+```bash
+php bin/check-corpus.php [--settings=Medas|Psr12|MinimalSize] <output directory> <source directory>...
+```
+
+The formatted files are written to the output directory. Run it before and after a change and compare the two outputs
+with `git diff --no-index <before> <after>` to see every file the change affects. The output directory gets a file `.check-corpus-output`,
+and directories with that file are skipped, so an output directory inside a source directory is never checked itself.

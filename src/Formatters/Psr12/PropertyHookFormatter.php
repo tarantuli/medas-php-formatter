@@ -72,7 +72,7 @@ readonly class PropertyHookFormatter extends BaseFormatter
             // Promoted property hook opening inside a FunctionDeclaration:
             // e.g. "public function __construct(public string $name {" or
             // "public function __construct(public string $email = 'user@example.com' {"
-            // Detected by the same walk-back logic used in ContextAdder.
+            // The { opens a hook list rather than the method body when it follows neither the ) nor a return type.
             if ($context instanceof MethodDeclaration
                     && $type instanceof FunctionDeclaration
                     && $statement->lastToken()->is(T_CURLY_BRACKET_OPEN)
