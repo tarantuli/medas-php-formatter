@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Medas\PhpFormatter\Formatters\LineSplitting\GenericLineSplitter\Options;
 
 use Medas\Core\Attributes\Service;
-use Medas\PhpFormatter\Formatters\{Helpers\Math, Tokens};
+use Medas\PhpFormatter\Formatters\Helpers\Math;
 use Medas\PhpTokenizer\Statement;
 
 #[Service]
@@ -30,13 +30,8 @@ readonly class Assesser
         $currentLength = 0;
         $inPrefix = true;
         $inSuffix = false;
-        $depth = 0;
 
         foreach ($statement as $index => $token) {
-            if ($token->is(Tokens::OPENING_BRACKETS)) {
-                ++$depth;
-            }
-
             if ($option->breakpointDefinition->splitAfter) {
                 $currentLength += strlen($token->text) + $token->extraSpacesAfter;
 
@@ -82,10 +77,6 @@ readonly class Assesser
                     $currentLength = 0;
                     $inPrefix = false;
                 }
-            }
-
-            if ($token->is(Tokens::CLOSING_BRACKETS)) {
-                --$depth;
             }
         }
 

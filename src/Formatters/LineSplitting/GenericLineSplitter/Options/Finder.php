@@ -7,7 +7,7 @@ namespace Medas\PhpFormatter\Formatters\LineSplitting\GenericLineSplitter\Option
 use Medas\Core\Attributes\Service;
 use Medas\PhpFormatter\Formatters\LineSplitting\GenericLineSplitter\BreakpointDefinition;
 use Medas\PhpFormatter\Formatters\Tokens;
-use Medas\PhpTokenizer\Statement;
+use Medas\PhpTokenizer\{BlockType, Statement, Token, TokenRole, TokenType};
 
 /**
  * Finds candidate split points (Options) within a statement for a given BreakpointDefinition.
@@ -31,10 +31,11 @@ use Medas\PhpTokenizer\Statement;
  *   from proposing a split inside the match condition; only the value expression (after =>)
  *   is eligible for splitting.
  *
- * - Quote tracking: separators inside double-quoted strings are ignored.
+ * - Separators inside strings are ignored.
  *
- * - Named argument colons and ternary ?-: pairs are excluded as separator candidates even
- *   when T_COLON is listed as a separator in the definition.
+ * - Of the colons, only the "else" colon of a ternary is a separator candidate, and of the
+ *   question marks, not the one of a nullable type. Named argument colons, case colons and
+ *   the colon of ?: are excluded even when T_COLON is listed as a separator in the definition.
  *
  * - Options that contain no real breakpoints (opener+1 >= closer) are removed in cleanup,
  *   as are options that exceed the definition's maxDepth.
@@ -53,11 +54,8 @@ readonly class Finder
         $tokenCount = $statement->tokenCount();
         $lastToken = $statement->lastToken();
 
-        $isMatchBranch = $statement->containsType(T_DOUBLE_ARROW)
-            && $statement->block->opener->containsType(T_MATCH);
-
+        $isMatchBranch = $statement->block->type === BlockType::Match && $statement->containsType(T_DOUBLE_ARROW);
         $foundDoubleArrow = false;
-        $inQuote = false;
 
         foreach ($statement as $index => $token) {
             if ($token === $lastToken) {
@@ -79,19 +77,7 @@ readonly class Finder
                 }
             }
 
-            $questionPlusColonCheck = $token->is(T_COLON)
-                && $token->previous
-                && $token->previous->is(T_QUESTION_MARK);
-
-            $argumentNameCheck = $token->is(T_COLON)
-                && $token->previous
-                && $token->previous->is(T_STRING);
-
-            if ($token->is(T_DOUBLE_QUOTE)) {
-                $inQuote = !$inQuote;
-            }
-
-            if (!$inQuote && !$questionPlusColonCheck && !$argumentNameCheck && $token->is($definition->separators)) {
+            if (!$token->inString && $this->isSeparator($token, $definition)) {
                 if (!array_key_exists($cluster->id, $options)) {
                     $openerIndex = $cluster->openerIndex;
 
@@ -129,6 +115,19 @@ readonly class Finder
         }
 
         return $this->cleanUpOptions($options, $definition);
+    }
+
+    private function isSeparator(Token $token, BreakpointDefinition $definition): bool
+    {
+        if (!$token->is($definition->separators)) {
+            return false;
+        }
+
+        if ($token->is(TokenType::COLON)) {
+            return $token->role === TokenRole::TernaryElse;
+        }
+
+        return $token->role !== TokenRole::NullableMarker;
     }
 
     private function cleanUpOptions(array $options, BreakpointDefinition $definition): array

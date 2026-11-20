@@ -7,7 +7,7 @@ namespace Medas\PhpFormatter\Formatters\LineSplitting;
 use Medas\Core\Attributes\{ConfigValue, Service};
 use Medas\PhpFormatter\{ConfigOptions\SoftMaxLineLength, Formatters\BaseFormatter, Job};
 use Medas\PhpTokenizer\{
-    Contexts\PropertyHook,
+    BlockType,
     Statement,
     StatementTypeFinder,
     StatementTypes\ClassDeclaration,
@@ -46,8 +46,7 @@ readonly class SoftLineSplitter extends BaseFormatter
             }
 
             // Don't split statements inside hook bodies.
-            if ($statement->firstToken()?->context instanceof PropertyHook
-                    && $statement->block->opener?->firstToken()?->context instanceof PropertyHook) {
+            if ($statement->block->isInside(BlockType::HookBody)) {
                 $job->checkedBySoftLineSplitter[spl_object_id($statement)] = true;
 
                 continue;

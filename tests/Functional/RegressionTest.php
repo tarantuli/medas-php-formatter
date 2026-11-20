@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\PhpFormatterTest\Functional;
 
+use Medas\PhpFormatter\Settings\Psr12;
 use Medas\PhpFormatterTest\Functional\Replacements\UseImplodeInsteadOfJoinSettings;
 
 /**
@@ -124,6 +125,15 @@ class RegressionTest extends BaseTestClass
     public function testFunctionInBracedNamespace(): void
     {
         $this->assertRemainsTheSame('bugs/function-in-braced-namespace');
+    }
+
+    /**
+     * `PropertyHookFormatter` took the first `}` in the class body for the end of a hook list, so with a method before
+     * it, the property moved into the method. With `Psr12` settings, because `ReorderClassElements` hides it.
+     */
+    public function testVirtualHooksAfterMethod(): void
+    {
+        $this->assertRemainsTheSame('psr12/virtual-hooks-after-method', new Psr12());
     }
 
     // ---------------------------------------------------------------------------------------------------------------

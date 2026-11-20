@@ -24,6 +24,10 @@ readonly class Psr12ElseifWhileCatch extends BaseFormatter
         foreach ($job->tree->statements() as $statement) {
             $first = $statement->firstToken();
 
+            if ($first === null) {
+                continue;
+            }
+
             // An else: or elseif (...): of alternative syntax closes the block before it, and stays on its own line
             if ($first->is([T_ELSE, T_ELSEIF, T_CATCH, T_FINALLY]) && !$first->closesBlock) {
                 $statement->mergeWithPrevious();

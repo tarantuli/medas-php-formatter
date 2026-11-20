@@ -5,30 +5,12 @@ declare(strict_types=1);
 namespace Medas\PhpFormatter\Formatters\Psr12;
 
 use Medas\Core\Attributes\Service;
-use Medas\PhpFormatter\Formatters\{BaseFormatter, Helpers\ReturnTypeTokens};
-use Medas\PhpFormatter\Job;
-use Medas\PhpTokenizer\{
-    Block,
-    Contexts\ClassBody,
-    Contexts\MethodDeclaration,
-    Contexts\PropertyHook,
-    Statement,
-    StatementTypeFinder,
-    StatementTypes\BlockCloser,
-    StatementTypes\ClassDeclaration,
-    StatementTypes\FunctionDeclaration
-};
+use Medas\PhpFormatter\{Formatters\BaseFormatter, Job};
+use Medas\PhpTokenizer\{Block, BlockType, DeclarationKind, Statement, TokenType};
 
 #[Service]
 readonly class PropertyHookFormatter extends BaseFormatter
 {
-    public function __construct(
-        private ReturnTypeTokens    $returnTypeTokens,
-        private StatementTypeFinder $typeFinder,
-    )
-    {
-    }
-
     public function priority(): int
     {
         // Run after all blank line formatters (900+) and whitespace formatters (1200),
@@ -39,69 +21,31 @@ readonly class PropertyHookFormatter extends BaseFormatter
     public function format(Job $job): void
     {
         foreach ($job->tree->statements() as $statement) {
-            $firstToken = $statement->firstToken();
+            $first = $statement->firstToken();
+            $last = $statement->lastToken();
 
-            $context = $firstToken !== null && isset($firstToken->context)
-                ? $firstToken->context
-                : null;
-
-            $type = $this->typeFinder->for($statement);
-
-            // Clear blank lines on promoted hook closer statements at class body level.
-            // These are "}, " statements (start with }, end with ,) created by
-            // PromotedPropertyHookSplitter. BlankLinesBetweenClassSections would otherwise
-            // add a blank line between them and the next hook opener.
-            if ($context instanceof ClassBody
-                    && $statement->firstToken()?->is(T_CURLY_BRACKET_CLOSE)
-                    && $statement->lastToken()?->is(T_COMMA)) {
+            // A "}," that closes the hook list of a promoted property, as split by PromotedPropertyHookSplitter.
+            // BlankLinesBetweenClassSections would otherwise add a blank line before the next parameter.
+            if ($first?->is(TokenType::CURLY_BRACKET_CLOSE)
+                    && $first->matchingBracket?->opensBlock === BlockType::HookList
+                    && $last->is(TokenType::COMMA)) {
                 $statement->blankLineAfter(false);
             }
 
-            // Any ClassBody statement ending with { that is not a function or class declaration
-            // must be a property hook opener — either a regular property declaration
-            // ("public string $name {") or a promoted hook continuation in a constructor
-            // (", public int $age = 0 {"). Both need a space before { and no blank line after.
-            if ($context instanceof ClassBody
-                    && $statement->lastToken()->is(T_CURLY_BRACKET_OPEN)
-                    && !$type instanceof FunctionDeclaration
-                    && !$type instanceof ClassDeclaration) {
+            // The opener of a hook list, like "public string $name {", ", public int $age = 0 {" or
+            // "public function __construct(public string $name {": a space before { and no blank line after it
+            if ($last?->opensBlock === BlockType::HookList) {
                 $statement->getToken(-2)->spaceAfter();
                 $statement->blankLineAfter(false);
             }
 
-            // Promoted property hook opening inside a FunctionDeclaration:
-            // e.g. "public function __construct(public string $name {" or
-            // "public function __construct(public string $email = 'user@example.com' {"
-            // The { opens a hook list rather than the method body when it follows neither the ) nor a return type.
-            if ($context instanceof MethodDeclaration
-                    && $type instanceof FunctionDeclaration
-                    && $statement->lastToken()->is(T_CURLY_BRACKET_OPEN)
-                    && !$this->returnTypeTokens->isReturnTypeToken($statement->lastToken())) {
-                $statement->getToken(-2)->spaceAfter();
-                $statement->blankLineAfter(false);
-            }
-
-            // Inside a property hook block: add space before { for long-form hooks.
-            // e.g. "get {" or "set {"
-            if ($context instanceof PropertyHook && $statement->lastToken()->is(T_CURLY_BRACKET_OPEN)) {
+            // The opener of a hook body, like "get {" or "set (string $value) {"
+            if ($last?->opensBlock === BlockType::HookBody) {
                 $statement->getToken(-2)->spaceAfter();
             }
 
-            // Clear blankLineAfter from all direct hook-block-level statements.
-            // Any formatter that ran earlier may have added a blank line between hooks
-            // (get/set declarations); this ensures none survives into the output.
-            if ($context instanceof PropertyHook
-                    && $statement->block->opener?->firstToken()?->context instanceof ClassBody) {
-                $statement->blankLineAfter(false);
-            }
-
-            // Inside a property hook block: remove blank lines after block closers that are
-            // DIRECT children of the hook block (i.e., closing get{}/set{} bodies).
-            // Closers deeper inside hook bodies (e.g., closing an if inside set{}) are left
-            // alone so that normal blank-line rules apply within hook body code.
-            if ($context instanceof PropertyHook
-                    && $type instanceof BlockCloser
-                    && $statement->block->opener?->firstToken()?->context instanceof ClassBody) {
+            // No blank lines between the hooks, also when a formatter that ran earlier added them
+            if ($statement->block->type === BlockType::HookList) {
                 $statement->blankLineAfter(false);
             }
         }
@@ -115,105 +59,64 @@ readonly class PropertyHookFormatter extends BaseFormatter
      * This applies to interface properties and abstract class properties.
      *
      * Tree structure for "public string $fullName { get; }":
-     *   Statement (ClassBody):  "public string $fullName {"   ← opener
-     *   Block (PropertyHook):
+     *   Statement:              "public string $fullName {"   ← opener
+     *   Block (HookList):
      *     Statement:            "get;"                        ← virtual
-     *   Statement (ClassBody):  "}"                           ← closer, in parent block
+     *   Statement:              "}"                           ← closer, in the class body
      *
-     * StructureFinder places the } in the parent (class body) block after popping the
-     * hook block off the stack. The } closer shares the same parent block as the opener,
-     * so we find it by checking ClassBody } statements whose block matches the opener's block.
-     * We use the hook block's opener reference to link them.
+     * The closer is found through the matching bracket of the opener's {.
      */
     private function collapseVirtualHookBlocks(Job $job): void
     {
-        // First pass: collect virtual-only hook blocks, keyed by opener object id.
-        $blockGroups = [];
+        // The hook lists of properties, by object id
+        $hookLists = [];
 
         foreach ($job->tree->statements() as $statement) {
-            $context = $statement->firstToken()?->context ?? null;
+            $block = $statement->block;
 
-            if (!$context instanceof PropertyHook) {
-                continue;
+            if ($block->type === BlockType::HookList && $this->isPropertyHookList($block)) {
+                $hookLists[spl_object_id($block)] = $block;
             }
-
-            // Only care about hook blocks whose opener is a ClassBody property declaration.
-            if (!$statement->block->opener?->firstToken()?->context instanceof ClassBody) {
-                continue;
-            }
-
-            $openerId = spl_object_id($statement->block->opener);
-
-            if (!isset($blockGroups[$openerId])) {
-                $blockGroups[$openerId] = [
-                    'opener' => $statement->block->opener,
-                    'block' => $statement->block,
-                    'virtual' => [],
-                    'closer' => null,
-                    'isVirtualOnly' => true,
-                ];
-            }
-
-            // A virtual hook statement ends with ; and has no arrow or block body.
-            $isVirtual = $statement->lastToken()?->is(T_SEMICOLON)
-                && !$statement->containsType(T_DOUBLE_ARROW)
-                && !$statement->containsType(T_CURLY_BRACKET_OPEN);
-
-            if (!$isVirtual) {
-                $blockGroups[$openerId]['isVirtualOnly'] = false;
-
-                continue;
-            }
-
-            $blockGroups[$openerId]['virtual'][] = $statement;
         }
 
-        // Second pass: find the } closer for each virtual-only group.
-        // The } is a ClassBody statement in the same parent block as the opener.
-        // Its $statement->block->opener is the hook block's opener (our property declaration).
-        // We match by checking if the statement's block is the opener's parent block AND
-        // the hook block's opener === the property opener we recorded.
-        foreach ($job->tree->statements() as $statement) {
-            $context = $statement->firstToken()?->context ?? null;
+        foreach ($hookLists as $hookList) {
+            $virtualStatements = [];
 
-            if (!$context instanceof ClassBody) {
-                continue;
-            }
-
-            if (!$statement->firstToken()?->is(T_CURLY_BRACKET_CLOSE)) {
-                continue;
-            }
-
-            // The } statement's block is the class body. Walk each group and check
-            // whether this } belongs to one of our openers by comparing blocks.
-            foreach ($blockGroups as &$group) {
-                if ($group['closer'] !== null) {
-                    continue;
+            foreach ($hookList as $element) {
+                if (!$element instanceof Statement || !$this->isVirtualHook($element)) {
+                    continue 2;
                 }
 
-                // The opener and the } are siblings in the same parent block.
-                if ($statement->block === $group['opener']->block) {
-                    $group['closer'] = $statement;
-
-                    break;
-                }
+                $virtualStatements[] = $element;
             }
 
-            unset($group);
-        }
+            $closer = $hookList->opener->lastToken()->matchingBracket?->statement;
 
-        foreach ($blockGroups as $group) {
-            if (!$group['isVirtualOnly'] || $group['closer'] === null || $group['virtual'] === []) {
-                continue;
+            if ($virtualStatements !== [] && $closer !== null) {
+                $this->collapseToInline($hookList->opener, $virtualStatements, $hookList, $closer);
             }
-
-            $this->collapseToInline(
-                $group['opener'],
-                $group['virtual'],
-                $group['block'],
-                $group['closer']
-            );
         }
+    }
+
+    /**
+     * The hooks of a property declared in the class body, not of a promoted constructor parameter.
+     */
+    private function isPropertyHookList(Block $hookList): bool
+    {
+        $opener = $hookList->opener;
+
+        return $opener->block->type === BlockType::ClassLike
+            && $opener->declaration?->kind !== DeclarationKind::Method;
+    }
+
+    /**
+     * A virtual hook ends with ; and has no arrow or block body.
+     */
+    private function isVirtualHook(Statement $statement): bool
+    {
+        return $statement->lastToken()?->is(TokenType::SEMICOLON)
+            && !$statement->containsType(T_DOUBLE_ARROW)
+            && !$statement->containsType(TokenType::CURLY_BRACKET_OPEN);
     }
 
     /**
@@ -231,7 +134,7 @@ readonly class PropertyHookFormatter extends BaseFormatter
         Statement $closer
     ): void
     {
-        $opener->findToken(T_CURLY_BRACKET_OPEN)->spaceAfter();
+        $opener->lastToken()->spaceAfter();
 
         foreach ($virtualStatements as $virtualStatement) {
             foreach (iterator_to_array($virtualStatement) as $token) {

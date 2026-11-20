@@ -164,9 +164,10 @@ readonly class Psr12Whitespace extends BaseFormatter
                 $token->spaceAfter();
             }
 
-            // One space between ") {", "): <type> {" and "namespace X {"
+            // One space between ") {", "): <type> {", "namespace X {" and "use A, B {"
             if ($token->is(T_CURLY_BRACKET_OPEN) && (
-                $this->returnTypeTokens->isReturnTypeToken($token) || $token->opensBlock === BlockType::Namespace
+                $this->returnTypeTokens->isReturnTypeToken($token)
+                || in_array($token->opensBlock, [BlockType::Namespace, BlockType::TraitAdaptation], true)
             )) {
                 $token->previous->spaceAfter();
             }

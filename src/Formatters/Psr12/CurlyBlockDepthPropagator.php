@@ -6,11 +6,26 @@ namespace Medas\PhpFormatter\Formatters\Psr12;
 
 use Medas\Core\Attributes\Service;
 use Medas\PhpFormatter\{Formatters\BaseFormatter, Job};
-use Medas\PhpTokenizer\Statement;
+use Medas\PhpTokenizer\BlockType;
 
+/**
+ * A closure, anonymous class or hook list that is shifted along with a split call or a promoted parameter takes its
+ * body with it: the statements in its block get the same additional depth.
+ */
 #[Service]
 readonly class CurlyBlockDepthPropagator extends BaseFormatter
 {
+    /**
+     * The blocks whose statements are indented relative to the statement that opens them, shifted or not. The body of
+     * a control structure, match, switch etc. only passes on what its own block got.
+     */
+    private const array OWN_DEPTH_BLOCKS = [
+        BlockType::Closure,
+        BlockType::ClassLike,
+        BlockType::Function,
+        BlockType::HookList,
+    ];
+
     public function priority(): int
     {
         return 480;
@@ -18,70 +33,29 @@ readonly class CurlyBlockDepthPropagator extends BaseFormatter
 
     public function format(Job $job): void
     {
-        $tree = $job->tree;
-
-        // Maps block->depth to the additionalDepth that should be added to statements at that depth,
-        // because a parent lambda/closure statement opened a curly block while itself being shifted
-        // as an argument inside a split call.
+        // The additional depth for the statements in a block, by block depth
         $additionalByBlockDepth = [];
 
-        foreach ($tree->statements() as $statement) {
+        foreach ($job->tree->statements() as $statement) {
             $depth = $statement->block->depth;
 
-            // Apply propagated depth for this block level
             $statement->additionalDepth += $additionalByBlockDepth[$depth] ?? 0;
 
-            // If this statement starts with }, it closes the block at depth+1.
-            // Apply the difference so the } aligns with the statement that opened the block,
-            // then clear the tracking for the closed depth.
-            if ($statement->firstToken()->is(T_CURLY_BRACKET_CLOSE) && isset($additionalByBlockDepth[$depth + 1])) {
+            // A closer, like "}" or "endif", lines up with the statement that opened its block
+            if ($statement->firstToken()?->closesBlock && isset($additionalByBlockDepth[$depth + 1])) {
                 $statement->additionalDepth += $additionalByBlockDepth[$depth + 1]
                     - ($additionalByBlockDepth[$depth] ?? 0);
 
                 unset($additionalByBlockDepth[$depth + 1]);
             }
 
-            // If this statement ends with {, determine how much depth to propagate into the
-            // child block.
-            if ($statement->lastToken()->is(T_CURLY_BRACKET_OPEN)) {
-                if ($this->shouldPropagateOwnDepth($statement)) {
-                    // Lambda/closure or property hook opener: the child block inherits the full
-                    // additionalDepth of this statement, because the entire statement was shifted
-                    // as an argument inside a split call or promoted hook declaration.
-                    $additionalByBlockDepth[$depth + 1] = $statement->additionalDepth;
-                }
-                else {
-                    // Control structure, method, class etc.: only pass through the propagation
-                    // that was inherited from the parent block.
-                    $additionalByBlockDepth[$depth + 1] = $additionalByBlockDepth[$depth] ?? 0;
-                }
+            $opens = $statement->lastToken()?->opensBlock;
+
+            if ($opens !== null) {
+                $additionalByBlockDepth[$depth + 1] = in_array($opens, self::OWN_DEPTH_BLOCKS, true)
+                    ? $statement->additionalDepth
+                    : $additionalByBlockDepth[$depth] ?? 0;
             }
         }
-    }
-
-    private function shouldPropagateOwnDepth(Statement $statement): bool
-    {
-        $hasVariable = false;
-        $hasRoundBracketClose = false;
-
-        foreach ($statement as $token) {
-            if ($token->is([T_FUNCTION, T_CLASS])) {
-                // Lambda or anonymous class: propagate own depth.
-                return true;
-            }
-
-            if ($token->is(T_VARIABLE)) {
-                $hasVariable = true;
-            }
-
-            if ($token->is(T_ROUND_BRACKET_CLOSE)) {
-                $hasRoundBracketClose = true;
-            }
-        }
-
-        // Property hook opener: ends with {, contains a variable but no ) before {.
-        // Control structures (while, if, foreach) always have ) before {, so they are
-        // correctly excluded. Regular method declarations have ) before { too.
-        return $hasVariable && !$hasRoundBracketClose;
     }
 }
