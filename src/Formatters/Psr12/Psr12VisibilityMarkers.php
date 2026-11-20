@@ -6,24 +6,11 @@ namespace Medas\PhpFormatter\Formatters\Psr12;
 
 use Medas\Core\Attributes\Service;
 use Medas\PhpFormatter\{Formatters\BaseFormatter, Job};
-use Medas\PhpTokenizer\{
-    Contexts\MethodDeclaration,
-    Statement,
-    StatementTypeFinder,
-    StatementTypes\FunctionDeclaration,
-    Token,
-    TokenTree
-};
+use Medas\PhpTokenizer\{DeclarationKind, Statement, Token, TokenTree};
 
 #[Service]
 readonly class Psr12VisibilityMarkers extends BaseFormatter
 {
-    public function __construct(
-        private StatementTypeFinder $typeFinder,
-    )
-    {
-    }
-
     public function priority(): int
     {
         return 1500;
@@ -37,15 +24,9 @@ readonly class Psr12VisibilityMarkers extends BaseFormatter
     private function sortVisibilityMarkers(TokenTree $tree): void
     {
         foreach ($tree->statements() as $statement) {
-            if (!$this->typeFinder->for($statement) instanceof FunctionDeclaration) {
-                continue;
+            if ($statement->declaration?->kind === DeclarationKind::Method) {
+                $this->processStatement($statement);
             }
-
-            if (!$statement->firstToken()->context instanceof MethodDeclaration) {
-                continue;
-            }
-
-            $this->processStatement($statement);
         }
     }
 
@@ -105,7 +86,7 @@ readonly class Psr12VisibilityMarkers extends BaseFormatter
     private function findModifier(Statement $statement, array|int $type): Token|null
     {
         foreach ($statement as $token) {
-            if ($token->is(T_FUNCTION)) {
+            if ($token === $statement->declaration->keyword) {
                 return null;
             }
 

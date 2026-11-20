@@ -6,13 +6,7 @@ namespace Medas\PhpFormatter\Formatters\Sorting;
 
 use Medas\Core\Attributes\Service;
 use Medas\PhpFormatter\{Formatters\BaseFormatter, Job};
-use Medas\PhpTokenizer\{
-    Statement,
-    StatementTypeFinder,
-    StatementTypes\ClassDeclaration,
-    StatementTypes\FunctionDeclaration,
-    Token
-};
+use Medas\PhpTokenizer\{DeclarationKind, Statement, Token, TokenType};
 
 #[Service]
 readonly class ServiceConstructionParameters extends BaseFormatter
@@ -21,7 +15,6 @@ readonly class ServiceConstructionParameters extends BaseFormatter
         private ServiceConstructionParameters\IsServiceClassFinder $isServiceClassFinder,
         private ServiceConstructionParameters\ParameterComparer    $parameterComparer,
         private ServiceConstructionParameters\ParameterExtractor   $parameterExtractor,
-        private StatementTypeFinder                                $typeFinder,
     )
     {
     }
@@ -36,29 +29,18 @@ readonly class ServiceConstructionParameters extends BaseFormatter
         $inServiceClass = false;
 
         foreach ($job->tree->statements() as $statement) {
-            $statementType = $this->typeFinder->for($statement);
+            $declaration = $statement->declaration;
 
-            if ($statementType instanceof ClassDeclaration) {
+            if ($declaration?->kind->isClassLike()) {
                 $inServiceClass = $this->isServiceClassFinder->isServiceClass($statement);
             }
 
-            if ($statementType instanceof FunctionDeclaration && $inServiceClass) {
-                if ($this->getFunctionName($statement) === '__construct') {
-                    $this->sortParameters($statement);
-                }
+            if ($inServiceClass
+                    && $declaration?->kind === DeclarationKind::Method
+                    && strtolower($declaration->name) === '__construct') {
+                $this->sortParameters($statement);
             }
         }
-    }
-
-    private function getFunctionName(Statement $statement): string|null
-    {
-        foreach ($statement as $token) {
-            if ($token->is(T_FUNCTION)) {
-                return $statement->getTokenAfter($token)->text;
-            }
-        }
-
-        return null;
     }
 
     private function sortParameters(Statement $statement): void
@@ -97,11 +79,11 @@ readonly class ServiceConstructionParameters extends BaseFormatter
         $lastIndex = array_key_last($parameters);
 
         foreach ($parameters as $index => $parameter) {
-            if ($index === $lastIndex || end($parameter)->is(T_COMMA)) {
+            if ($index === $lastIndex || end($parameter)->is(TokenType::COMMA)) {
                 continue;
             }
 
-            if (end($parameters[$lastIndex])->is(T_COMMA)) {
+            if (end($parameters[$lastIndex])->is(TokenType::COMMA)) {
                 $parameters[$index][] = array_pop($parameters[$lastIndex]);
             }
         }
