@@ -157,16 +157,16 @@
         },
         {
             "name": "morphp/medas-php-class-analysis",
-            "version": "v3.2.0",
+            "version": "v3.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tarantuli/medas-php-class-analysis.git",
-                "reference": "2b7980c8188c23819fb2e94989919bbb1cd69f8f"
+                "reference": "756b711391afa3b007e245c352c01059d5a73f2f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-php-class-analysis/zipball/2b7980c8188c23819fb2e94989919bbb1cd69f8f",
-                "reference": "2b7980c8188c23819fb2e94989919bbb1cd69f8f",
+                "url": "https://api.github.com/repos/tarantuli/medas-php-class-analysis/zipball/756b711391afa3b007e245c352c01059d5a73f2f",
+                "reference": "756b711391afa3b007e245c352c01059d5a73f2f",
                 "shasum": ""
             },
             "require": {
@@ -202,23 +202,23 @@
                 "backend"
             ],
             "support": {
-                "source": "https://github.com/tarantuli/medas-php-class-analysis/tree/v3.2.0",
+                "source": "https://github.com/tarantuli/medas-php-class-analysis/tree/v3.2.2",
                 "issues": "https://github.com/tarantuli/medas-php-class-analysis/issues"
             },
-            "time": "2026-11-20T12:42:28+00:00"
+            "time": "2026-11-21T13:35:15+00:00"
         },
         {
             "name": "morphp/medas-php-tokenizer",
-            "version": "v4.1.1",
+            "version": "v4.1.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tarantuli/medas-php-tokenizer.git",
-                "reference": "ea6a06df08542f31b83dfb80c83593910bab9f51"
+                "reference": "8fc9755b1fb62fe95449067e1e4903079b637b50"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-php-tokenizer/zipball/ea6a06df08542f31b83dfb80c83593910bab9f51",
-                "reference": "ea6a06df08542f31b83dfb80c83593910bab9f51",
+                "url": "https://api.github.com/repos/tarantuli/medas-php-tokenizer/zipball/8fc9755b1fb62fe95449067e1e4903079b637b50",
+                "reference": "8fc9755b1fb62fe95449067e1e4903079b637b50",
                 "shasum": ""
             },
             "require": {
@@ -254,10 +254,10 @@
                 "backend"
             ],
             "support": {
-                "source": "https://github.com/tarantuli/medas-php-tokenizer/tree/v4.1.1",
+                "source": "https://github.com/tarantuli/medas-php-tokenizer/tree/v4.1.11",
                 "issues": "https://github.com/tarantuli/medas-php-tokenizer/issues"
             },
-            "time": "2026-11-20T13:05:28+00:00"
+            "time": "2026-11-21T13:34:01+00:00"
         },
         {
             "name": "psr/event-dispatcher",
