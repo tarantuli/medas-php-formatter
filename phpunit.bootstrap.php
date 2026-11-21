@@ -8,7 +8,6 @@ use Medas\ConsolePrinter\ConsolePrinterPackage;
 use Medas\ObjectInstantiator\ObjectInstantiator;
 use Medas\ObjectInstantiator\ObjectInstantiatorPackage;
 use Medas\PhpFormatter\PhpFormatterPackage;
-use Medas\PhpTokenizer\AdditionalTokensDefiner;
 use Medas\ServiceManager\{ServiceConfigBuilder, ServiceManager};
 
 new ServiceManager(function (): ServiceConfigBuilder {
@@ -28,5 +27,3 @@ new ServiceManager(function (): ServiceConfigBuilder {
 service(ConfigManager::class)
     ->readEnv(__DIR__)
     ->addDirectory(__DIR__ . '/tests/config');
-
-service(AdditionalTokensDefiner::class)->define();

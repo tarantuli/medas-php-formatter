@@ -29,14 +29,14 @@ readonly class ElementsAnalyzer
         foreach ($tokens as $index => $token) {
             if (!is_array($token)) {
                 switch ($token) {
-                    case T_SQUARE_BRACKET_OPEN:
+                    case '[':
                         if ($inAttribute) {
                             ++$attributeDepth;
                         }
 
                         break;
 
-                    case T_SQUARE_BRACKET_CLOSE:
+                    case ']':
                         if ($inAttribute) {
                             if ($attributeDepth === 0) {
                                 $inAttribute = false;
@@ -186,7 +186,7 @@ readonly class ElementsAnalyzer
             return;
         }
 
-        if ($tokens[$index + 3][0] !== T_ROUND_BRACKET_OPEN) {
+        if ($tokens[$index + 3] !== '(') {
             return;
         }
 

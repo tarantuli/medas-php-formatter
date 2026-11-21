@@ -14,7 +14,6 @@ class ReorderingJob
     public bool $inClassCode = false;
     public bool $inTrailingCode = false;
     public bool $inStatement = false;
-    public bool $inString = false;
 
     // Property variables
     public int|null $classBraceDepth = null;

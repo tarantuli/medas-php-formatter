@@ -8,11 +8,12 @@ use Medas\Core\Attributes\Service;
 use Medas\PhpFormatter\{Formatters\BaseFormatter, Job};
 use Medas\PhpTokenizer\{
     Block,
-    Contexts\GlobalScope,
+    BlockType,
     Statement,
     StatementTypeFinder,
     StatementTypes\ControlStatement,
-    Token
+    Token,
+    TokenType
 };
 
 #[Service]
@@ -36,7 +37,7 @@ readonly class SingleLineControlBodiesEncloser extends BaseFormatter
                 continue;
             }
 
-            if ($statement->lastToken()->is(T_CURLY_BRACKET_OPEN)) {
+            if ($statement->lastToken()->is(TokenType::CURLY_BRACKET_OPEN)) {
                 continue;
             }
 
@@ -73,7 +74,7 @@ readonly class SingleLineControlBodiesEncloser extends BaseFormatter
             return null;
         }
 
-        if ($tokens[$bodyStart]->is([T_SEMICOLON, T_COLON])) {
+        if ($tokens[$bodyStart]->is([TokenType::SEMICOLON, TokenType::COLON])) {
             return null;
         }
 
@@ -86,10 +87,10 @@ readonly class SingleLineControlBodiesEncloser extends BaseFormatter
         $depth = 0;
 
         for (; isset($tokens[$index]); ++$index) {
-            if ($tokens[$index]->is(T_ROUND_BRACKET_OPEN)) {
+            if ($tokens[$index]->is(TokenType::ROUND_BRACKET_OPEN)) {
                 ++$depth;
             }
-            elseif ($tokens[$index]->is(T_ROUND_BRACKET_CLOSE) && --$depth === 0) {
+            elseif ($tokens[$index]->is(TokenType::ROUND_BRACKET_CLOSE) && --$depth === 0) {
                 return $index + 1;
             }
         }
@@ -99,30 +100,49 @@ readonly class SingleLineControlBodiesEncloser extends BaseFormatter
 
     private function process(Statement $statement, int $bodyStart): void
     {
-        $this->appendClosingStatement($statement);
+        [$opener, $closer] = $this->makeBraces($statement);
+
+        $this->appendClosingStatement($statement, $closer);
 
         $bodyStatement = $this->insertBodyStatement($statement);
 
         $this->transferTokens($statement, $bodyStatement, $bodyStart);
-        $this->appendBlockOpener($statement);
+
+        $statement->appendToken($opener);
     }
 
-    private function appendClosingStatement(Statement $statement): void
+    /**
+     * The braces get what the tokenizer would have given them, so the formatters after this one see a block.
+     *
+     * @return Token[]
+     */
+    private function makeBraces(Statement $statement): array
+    {
+        $opener = Token::fromText('{', $statement->lastToken());
+        $closer = Token::fromText('}', $statement->lastToken());
+
+        $opener->opensBlock = BlockType::Control;
+        $opener->matchingBracket = $closer;
+        $opener->bracketDepth = $statement->firstToken()->bracketDepth;
+        $closer->closesBlock = true;
+        $closer->matchingBracket = $opener;
+        $closer->bracketDepth = $opener->bracketDepth;
+
+        return [$opener, $closer];
+    }
+
+    private function appendClosingStatement(Statement $statement, Token $closer): void
     {
         $closingStatement = new Statement($statement->block);
-        $token = new Token(1, '}');
-
-        $token->context
-            = $statement->block->getNextStatement($statement)?->firstToken()->context ?? GlobalScope::instance();
-
-        $closingStatement->appendToken($token);
 
         $statement->block->insertStatementAfter($closingStatement, $statement);
+
+        $closingStatement->appendToken($closer);
     }
 
     private function insertBodyStatement(Statement $statement): Statement
     {
-        $bodyBlock = new Block($statement->block->depth + 1, $statement);
+        $bodyBlock = new Block($statement->block->depth + 1, $statement, BlockType::Control);
         $bodyStatement = $bodyBlock->appendNewStatement();
 
         $statement->block->insertStatementAfter($bodyBlock, $statement);
@@ -137,10 +157,5 @@ readonly class SingleLineControlBodiesEncloser extends BaseFormatter
 
             $bodyStatement->appendToken($token);
         }
-    }
-
-    private function appendBlockOpener(Statement $statement): void
-    {
-        $statement->appendToken(new Token(1, '{'));
     }
 }

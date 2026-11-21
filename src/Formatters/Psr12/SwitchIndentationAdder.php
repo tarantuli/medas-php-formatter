@@ -6,8 +6,12 @@ namespace Medas\PhpFormatter\Formatters\Psr12;
 
 use Medas\Core\Attributes\Service;
 use Medas\PhpFormatter\{Formatters\BaseFormatter, Job};
-use Medas\PhpTokenizer\{StatementTypeFinder, StatementTypes\SwitchBranch};
+use Medas\PhpTokenizer\{Block, BlockType, StatementTypeFinder, StatementTypes\SwitchBranch};
 
+/**
+ * The case and default lines of a switch and the statements below them are in the same block. This indents the
+ * statements one level more than the case they belong to.
+ */
 #[Service]
 readonly class SwitchIndentationAdder extends BaseFormatter
 {
@@ -24,29 +28,33 @@ readonly class SwitchIndentationAdder extends BaseFormatter
 
     public function format(Job $job): void
     {
-        $tree = $job->tree;
-        $switchDepths = [];
+        foreach ($job->tree->statements() as $statement) {
+            // One level for each switch the statement is in, minus one for a case or default
+            $statement->additionalDepth += $this->switchesAround($statement->block)
+                - (int) ($this->typeFinder->for($statement) instanceof SwitchBranch);
+        }
+    }
 
-        foreach ($tree->statements() as $statement) {
-            $type = $this->typeFinder->for($statement);
+    /**
+     * The number of switch blocks this block is, or is inside, with braces or with the alternative syntax.
+     */
+    private function switchesAround(Block $block): int
+    {
+        $switches = 0;
 
-            if ($statement->firstToken()->is(T_CURLY_BRACKET_CLOSE)) {
-                $switchDepths = array_filter(
-                    $switchDepths,
-                    fn($depth) => $depth !== $statement->block->depth + 1
-                );
+        while (true) {
+            if ($block->type === BlockType::Switch) {
+                ++$switches;
             }
 
-            // Add additional depth levels to each statement equal to the number of open switch blocks
-            // decreased by one if this statement itself is a case or default statement
-            $statement->additionalDepth += count($switchDepths)
-                - (int) ($type instanceof SwitchBranch);
+            $parent = $block->opener?->block;
 
-            $firstNonCommentToken = $statement->firstNonCommentToken();
-
-            if ($firstNonCommentToken && $firstNonCommentToken->is(T_SWITCH)) {
-                $switchDepths[] = $statement->block->depth + 1;
+            // The opener of the file block is the open tag, which is in the file block itself
+            if ($parent === null || $parent === $block) {
+                return $switches;
             }
+
+            $block = $parent;
         }
     }
 }

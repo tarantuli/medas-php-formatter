@@ -8,11 +8,10 @@ A PHP source code formatter built on `medas-php-tokenizer`. It tokenizes PHP sou
 
 **Pipeline stages:**
 
-| Stage         | Classes                     | Purpose                                                                  |
-|---------------|-----------------------------|--------------------------------------------------------------------------|
-| Preparsers    | `Preparser` implementors    | Text-level transforms before tokenization (e.g. `ReorderClassElements`)  |
-| Preformatters | `Preformatter` implementors | Token-level transforms before tree building (e.g. `NoCommentsAtLineEnd`) |
-| Formatters    | `Formatter` implementors    | Tree-level transforms — the main formatting pass                         |
+| Stage      | Classes                  | Purpose                                                                 |
+|------------|--------------------------|-------------------------------------------------------------------------|
+| Preparsers | `Preparser` implementors | Text-level transforms before tokenization (e.g. `ReorderClassElements`) |
+| Formatters | `Formatter` implementors | Tree-level transforms — the main formatting pass                        |
 
 **Two built-in settings profiles:**
 
@@ -112,19 +111,26 @@ file_put_contents($path, $formatted);
 **Writing a custom formatter:**
 
 ```php
-use Medas\PhpFormatter\{Formatters\Formatter as FormatterInterface, Job};
 use Medas\Core\Attributes\Service;
+use Medas\PhpFormatter\{Formatters\BaseFormatter, Job};
+use Medas\PhpTokenizer\Token;
 
 #[Service]
-readonly class RemoveFinalKeyword implements FormatterInterface
+readonly class RemoveFinalKeyword extends BaseFormatter
 {
+    // Formatters with a higher priority run earlier; this one runs before the whitespace formatters
+    public function priority(): int
+    {
+        return 2000;
+    }
+
     public function format(Job $job): void
     {
-        // Walk the token tree and remove T_FINAL tokens
-        foreach ($job->tree->block()->tokens() as $token) {
-            if ($token->is(\T_FINAL)) {
-                $token->remove();
-            }
+        // Collected first, as removing tokens while walking the tree would skip some
+        $finals = array_filter(iterator_to_array($job->tree, false), fn(Token $token) => $token->is(T_FINAL));
+
+        foreach ($finals as $token) {
+            $token->statement->removeToken($token);
         }
     }
 }
@@ -199,3 +205,28 @@ php bin/check-corpus.php [--settings=Medas|Psr12|MinimalSize] <output directory>
 The formatted files are written to the output directory. Run it before and after a change and compare the two outputs
 with `git diff --no-index <before> <after>` to see every file the change affects. The output directory gets a file `.check-corpus-output`,
 and directories with that file are skipped, so an output directory inside a source directory is never checked itself.
+
+## Upgrading from 3.x
+
+4.0 needs `medas-php-tokenizer` 4.1 and `medas-php-class-analysis` 3.2, and reads everything about the code from the data the tokenizer now provides.
+
+**Removed:**
+
+| Removed                                                    | Instead                                                                                      |
+|------------------------------------------------------------|----------------------------------------------------------------------------------------------|
+| The preformatter stage: `Preformatters\Preformatter`       | A formatter with a high `priority()`; the original layout is in `originalLineBreaksAfter`    |
+| `Preformatters\NoCommentsAtLineEnd`                        | `Formatters\Replacements\NoCommentsAtLineEnd`, now an ordinary formatter                     |
+| `Formatters\Replacements\MoveCommentsAtLineEnd`            | Merged into `NoCommentsAtLineEnd`                                                            |
+| `$additionalPreformatters` of `Settings`, `Psr12`, `Medas` | Pass a formatter in `$additionalFormatters`. Positional arguments after it move up one place |
+| `Settings::$preformatters`                                 | Nothing                                                                                      |
+| `Formatters\Helpers\ReturnTypeTokens`                      | `Token::$typeDeclaration === TypeDeclarationKind::ReturnType`, `TokenRole::ReturnTypeColon`  |
+
+**Changed:** `Formatters\Tokens` holds token ids (`TokenType::…`) instead of the old text constants. A custom formatter that uses the tokenizer's `T_COMMA`-style constants, `Contexts` or `inTypeDeclaration` has to move to the tokenizer 4.1 data; its README has a table of replacements.
+
+**Formatted output** changes in a few places, all of them fixes. Format a project once after upgrading, and review the diff, for example with `bin/check-corpus.php`:
+
+- The `{` of an anonymous class stays on the line of `new class`, and there is a space between `)` and a keyword, as in `new class(1) extends Base {`.
+- A comment at the end of a line that only closes brackets, like `}, // Comment`, stays after it, on a line of its own. A comment on a line of its own inside a statement keeps that line.
+- A `match` that is an argument of a split call is indented along with it, like a closure, and has no blank lines between its arms.
+- A statement that is split before `->` keeps its blank line after its last part, not after its first.
+- `use A, B { … }`, `namespace App { … }`, `Foo::{$m}()`, DNF types and alternative syntax are formatted correctly.

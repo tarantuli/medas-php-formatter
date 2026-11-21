@@ -5,26 +5,23 @@ declare(strict_types=1);
 namespace Medas\PhpFormatter\Formatters\Replacements;
 
 use Medas\Core\Attributes\Service;
-use Medas\PhpFormatter\{Formatters\BaseFormatter, Formatters\Tokens, Job, Preformatters\NoCommentsAtLineEnd};
-use Medas\PhpTokenizer\{Statement, Token};
+use Medas\PhpFormatter\{Formatters\BaseFormatter, Formatters\Tokens, Job};
+use Medas\PhpTokenizer\{Statement, Token, TokenType};
 
 /**
- * This formatter processes the tokens marked by the preformatter NoCommentsAtLineEnd. That class also registers this
- * class, so no need to add it manually to Settings.
+ * Moves comments that are at the end of a line in the original code, like in `$a = 1; // Comment`.
  *
  * A comment that starts its statement belongs to the line of the previous statement, and is moved before that
  * statement. A comment inside a statement that spans several lines is moved to the start of its own line within that
  * statement, so it stays with the code it describes.
+ *
+ * The line breaks after a moved comment were line breaks in the original code between the token before it and the
+ * token after it, so they go to the token before it. That way, formatters that look at the original layout, like
+ * `KeepOriginalObjectOperatorBreaks`, still see them.
  */
 #[Service]
-readonly class MoveCommentsAtLineEnd extends BaseFormatter
+readonly class NoCommentsAtLineEnd extends BaseFormatter
 {
-    public function __construct(
-        private NoCommentsAtLineEnd $preformatter,
-    )
-    {
-    }
-
     public function priority(): int
     {
         return 1900;
@@ -32,26 +29,73 @@ readonly class MoveCommentsAtLineEnd extends BaseFormatter
 
     public function format(Job $job): void
     {
-        if (!$this->preformatter->tokensToMove()) {
-            return;
-        }
-
+        // Find them all first, as moving them changes which token is before which
         $tokensToMove = array_filter(
             iterator_to_array($job->tree, false),
-            fn(Token $token) => in_array($token, $this->preformatter->tokensToMove(), true)
+            fn(Token $token) => $this->isAtLineEnd($token)
         );
 
         // The last comment moved before each statement, by object id, so several comments keep their order
         $lastPrepended = [];
 
         foreach ($tokensToMove as $token) {
+            $this->keepLineBreaks($token);
+
             if ($token->isFirstToken()) {
                 $this->moveBeforePreviousStatement($token, $lastPrepended);
             }
-            else {
+            elseif (!$this->onlyClosesBefore($token)) {
                 $this->moveToStartOfLine($token, $lastPrepended);
             }
         }
+
+        $this->breakLinesBeforeComments($job);
+    }
+
+    /**
+     * A comment inside a statement is on a line of its own, also when the statement isn't split. Otherwise it would
+     * end up at the end of a line, and be moved the next time.
+     */
+    private function breakLinesBeforeComments(Job $job): void
+    {
+        foreach ($job->tree as $token) {
+            if ($token->is(T_COMMENT) && $token->previous?->statement === $token->statement) {
+                $token->previous->lineBreakAfter();
+            }
+        }
+    }
+
+    /**
+     * A comment after a line like "}," that only closes brackets is about the code after it, so it stays there, on a
+     * line of its own.
+     */
+    private function onlyClosesBefore(Token $comment): bool
+    {
+        for ($token = $this->findStartOfLine($comment); $token !== $comment; $token = $token->next) {
+            if (!$token->is([TokenType::ROUND_BRACKET_CLOSE, TokenType::SQUARE_BRACKET_CLOSE, TokenType::CURLY_BRACKET_CLOSE, TokenType::COMMA])) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private function isAtLineEnd(Token $token): bool
+    {
+        return $token->is(T_COMMENT)
+            && $token->previous !== null
+            && $token->previous->originalLineBreaksAfter === 0
+            && !$token->previous->is([T_OPEN_TAG, TokenType::CURLY_BRACKET_OPEN]);
+    }
+
+    private function keepLineBreaks(Token $comment): void
+    {
+        $previous = $comment->previous;
+
+        $previous->originalLineBreaksAfter = max(
+            $previous->originalLineBreaksAfter,
+            $comment->originalLineBreaksAfter
+        );
     }
 
     /** @param Token[] $lastPrepended */
@@ -131,7 +175,7 @@ readonly class MoveCommentsAtLineEnd extends BaseFormatter
             }
             elseif ($this->isClosingBracket($token)) {
                 if ($depth === 0) {
-                    return $previous?->is(T_COMMA) ?? false;
+                    return $previous?->is(TokenType::COMMA) ?? false;
                 }
 
                 --$depth;
@@ -183,7 +227,7 @@ readonly class MoveCommentsAtLineEnd extends BaseFormatter
         $lineStart = $comment->previous;
 
         while ($lineStart->previous?->statement === $comment->statement
-                && $lineStart->previous->line === $comment->line) {
+                && $lineStart->previous->originalLineBreaksAfter === 0) {
             $lineStart = $lineStart->previous;
         }
 

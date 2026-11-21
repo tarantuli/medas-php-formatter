@@ -4,24 +4,29 @@ declare(strict_types=1);
 
 namespace Medas\PhpFormatter\Formatters;
 
+use Medas\PhpTokenizer\TokenType;
+
 class Tokens
 {
     public const array VARIABLE_STARTERS = [
-        T_AMPERSAND,
+        ...TokenType::AMPERSANDS,
         T_ELLIPSIS,
         T_VARIABLE,
     ];
 
+    // With the { of "{$a}" and the ${ of "${a}", which are closed by a } too
     public const array OPENING_BRACKETS = [
-        T_SQUARE_BRACKET_CLOSE => T_SQUARE_BRACKET_OPEN,
-        T_CURLY_BRACKET_CLOSE => T_CURLY_BRACKET_OPEN,
-        T_ROUND_BRACKET_CLOSE => T_ROUND_BRACKET_OPEN,
+        TokenType::SQUARE_BRACKET_OPEN,
+        TokenType::CURLY_BRACKET_OPEN,
+        TokenType::ROUND_BRACKET_OPEN,
+        T_CURLY_OPEN,
+        T_DOLLAR_OPEN_CURLY_BRACES,
     ];
 
     public const array CLOSING_BRACKETS = [
-        T_SQUARE_BRACKET_CLOSE,
-        T_CURLY_BRACKET_CLOSE,
-        T_ROUND_BRACKET_CLOSE,
+        TokenType::SQUARE_BRACKET_CLOSE,
+        TokenType::CURLY_BRACKET_CLOSE,
+        TokenType::ROUND_BRACKET_CLOSE,
     ];
 
     public const array CONSTRUCTS = [

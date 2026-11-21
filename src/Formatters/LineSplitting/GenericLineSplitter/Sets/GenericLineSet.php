@@ -9,6 +9,7 @@ use Medas\PhpFormatter\Formatters\LineSplitting\GenericLineSplitter\{
     BreakpointDefinition,
     BreakpointSet
 };
+use Medas\PhpTokenizer\TokenType;
 
 class GenericLineSet implements BreakpointSet
 {
@@ -29,10 +30,10 @@ class GenericLineSet implements BreakpointSet
                 ),
             ],
             [
-                new BreakpointDefinition('depth 0 ternary', [T_QUESTION_MARK, T_COLON], maxDepth: 0),
+                new BreakpointDefinition('depth 0 ternary', [TokenType::QUESTION_MARK, TokenType::COLON], maxDepth: 0),
             ],
             [
-                new BreakpointDefinition('depth 0-1 comma', [T_COMMA], splitAfter: true, maxDepth: 1),
+                new BreakpointDefinition('depth 0-1 comma', [TokenType::COMMA], splitAfter: true, maxDepth: 1),
                 new BreakpointDefinition(
                     'depth 0 and/or',
                     [T_BOOLEAN_AND, T_BOOLEAN_OR, T_LOGICAL_AND, T_LOGICAL_OR],
@@ -40,25 +41,25 @@ class GenericLineSet implements BreakpointSet
                 ),
                 new BreakpointDefinition(
                     'depth 0 plus/minus/concat',
-                    [T_PLUS, T_MINUS, T_CONCATENATOR],
+                    [TokenType::PLUS, TokenType::MINUS, TokenType::CONCATENATOR],
                     maxDepth: 0
                 ),
             ],
             [
-                new BreakpointDefinition('comma', [T_COMMA], true),
+                new BreakpointDefinition('comma', [TokenType::COMMA], true),
                 new BreakpointDefinition(
                     'and/or',
                     [T_BOOLEAN_AND, T_BOOLEAN_OR, T_LOGICAL_AND, T_LOGICAL_OR]
                 ),
-                new BreakpointDefinition('ternary', [T_QUESTION_MARK, T_COLON]),
+                new BreakpointDefinition('ternary', [TokenType::QUESTION_MARK, TokenType::COLON]),
             ],
             [
-                new BreakpointDefinition('vertical bar', [T_VERTICAL_BAR]),
-                new BreakpointDefinition('arithmetic', [T_PLUS, T_MINUS, T_ASTERISK]),
-                new BreakpointDefinition('depth 0 assignment', [T_ASSIGNMENT], maxDepth: 0),
+                new BreakpointDefinition('vertical bar', [TokenType::VERTICAL_BAR]),
+                new BreakpointDefinition('arithmetic', [TokenType::PLUS, TokenType::MINUS, TokenType::ASTERISK]),
+                new BreakpointDefinition('depth 0 assignment', [TokenType::ASSIGNMENT], maxDepth: 0),
             ],
             [
-                new BreakpointDefinition('arithmetic slash', [T_SLASH]),
+                new BreakpointDefinition('arithmetic slash', [TokenType::SLASH]),
             ],
             [
                 new BreakpointDefinition('fat arrow', [T_DOUBLE_ARROW], keepPrefixAndSuffix: true),

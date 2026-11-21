@@ -43,6 +43,10 @@ class BlockPrinter
     {
         $this->printIndentation($statement);
 
+        if ($statement->extraSpacesBefore > 0) {
+            echo str_repeat(' ', $statement->extraSpacesBefore);
+        }
+
         $lastToken = $statement->lastToken();
 
         foreach ($statement as $token) {

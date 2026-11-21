@@ -9,7 +9,8 @@ use Medas\PhpTokenizer\{
     Statement,
     StatementTypeFinder,
     StatementTypes\SwitchBranch,
-    StatementTypes\UseClassStatement
+    StatementTypes\UseClassStatement,
+    TokenType
 };
 
 #[Service]
@@ -45,7 +46,7 @@ readonly class BlankLineInserter
             return;
         }
 
-        if ($previousStatement->lastToken()->is(T_COMMA)) {
+        if ($previousStatement->lastToken()->is(TokenType::COMMA)) {
             // No blank lines between comma separated listing
             return;
         }

@@ -5,20 +5,14 @@ declare(strict_types=1);
 namespace Medas\PhpFormatter\Formatters\Psr12;
 
 use Medas\Core\Attributes\Service;
-use Medas\PhpFormatter\Formatters\{BaseFormatter, Helpers\ReturnTypeTokens};
+use Medas\PhpFormatter\Formatters\BaseFormatter;
 use Medas\PhpFormatter\Job;
-use Medas\PhpTokenizer\{
-    Contexts\MethodDeclaration,
-    Statement,
-    StatementTypeFinder,
-    StatementTypes\FunctionDeclaration
-};
+use Medas\PhpTokenizer\{BlockType, Statement, StatementTypeFinder, StatementTypes\FunctionDeclaration, TokenType};
 
 #[Service]
 readonly class PromotedPropertyHookSplitter extends BaseFormatter
 {
     public function __construct(
-        private ReturnTypeTokens    $returnTypeTokens,
         private StatementTypeFinder $typeFinder,
     )
     {
@@ -49,24 +43,9 @@ readonly class PromotedPropertyHookSplitter extends BaseFormatter
 
     private function isPromotedHookConstructor(Statement $statement): bool
     {
-        $context = $statement->firstToken()?->context ?? null;
-
-        if (!$context instanceof MethodDeclaration) {
-            return false;
-        }
-
-        if (!$this->typeFinder->for($statement) instanceof FunctionDeclaration) {
-            return false;
-        }
-
-        if (!$statement->lastToken()?->is(T_CURLY_BRACKET_OPEN)) {
-            return false;
-        }
-
-        // isReturnTypeToken returns true for normal method declarations where { is preceded
-        // by ) through return-type tokens. A promoted hook constructor has { preceded by a
-        // variable or default value, so isReturnTypeToken returns false.
-        return !$this->returnTypeTokens->isReturnTypeToken($statement->lastToken());
+        // The statement of a constructor with a promoted property with hooks ends at the { of the hooks
+        return $this->typeFinder->for($statement) instanceof FunctionDeclaration
+            && $statement->lastToken()?->opensBlock === BlockType::HookList;
     }
 
     private function split(Job $job, Statement $constructorStatement): void
@@ -107,7 +86,7 @@ readonly class PromotedPropertyHookSplitter extends BaseFormatter
 
         // Process each class-body-level statement that belongs to this constructor.
         foreach ($classLevelStatements as $statement) {
-            if (!$statement->firstToken()?->is(T_CURLY_BRACKET_CLOSE)) {
+            if (!$statement->firstToken()?->is(TokenType::CURLY_BRACKET_CLOSE)) {
                 continue;
             }
 
@@ -129,7 +108,7 @@ readonly class PromotedPropertyHookSplitter extends BaseFormatter
         $parenIndex = null;
 
         foreach ($constructorStatement as $i => $token) {
-            if ($token->is(T_ROUND_BRACKET_OPEN)) {
+            if ($token->is(TokenType::ROUND_BRACKET_OPEN)) {
                 $parenIndex = $i;
 
                 break;
@@ -165,15 +144,15 @@ readonly class PromotedPropertyHookSplitter extends BaseFormatter
         }
 
         // Add space before { in the first promoted hook opener.
-        if ($firstParamStatement->lastToken()?->is(T_CURLY_BRACKET_OPEN)) {
+        if ($firstParamStatement->lastToken()?->is(TokenType::CURLY_BRACKET_OPEN)) {
             $firstParamStatement->getToken(-2)?->spaceAfter();
         }
     }
 
     private function isConstructorBodyOpener(Statement $statement): bool
     {
-        return $statement->containsType(T_ROUND_BRACKET_CLOSE)
-            && $statement->lastToken()?->is(T_CURLY_BRACKET_OPEN);
+        return $statement->containsType(TokenType::ROUND_BRACKET_CLOSE)
+            && $statement->lastToken()?->is(TokenType::CURLY_BRACKET_OPEN);
     }
 
     /**
@@ -191,7 +170,7 @@ readonly class PromotedPropertyHookSplitter extends BaseFormatter
                 continue;
             }
 
-            if ($token->is(T_COMMA)) {
+            if ($token->is(TokenType::COMMA)) {
                 $commaIndex = $i;
 
                 break;
@@ -230,7 +209,7 @@ readonly class PromotedPropertyHookSplitter extends BaseFormatter
 
     private function addLineBreakBeforeOpenBrace(Statement $statement): void
     {
-        $closingParen = $statement->findToken(T_ROUND_BRACKET_CLOSE);
+        $closingParen = $statement->findToken(TokenType::ROUND_BRACKET_CLOSE);
 
         $closingParen?->lineBreakAfter();
     }
@@ -251,7 +230,7 @@ readonly class PromotedPropertyHookSplitter extends BaseFormatter
                 continue;
             }
 
-            if ($token->is(T_COMMA)) {
+            if ($token->is(TokenType::COMMA)) {
                 $commaIndex = $i;
 
                 break;
@@ -289,7 +268,7 @@ readonly class PromotedPropertyHookSplitter extends BaseFormatter
         // CurlyBlockDepthPropagator adds the correct +1 from the hook body propagation.
         $statement->additionalDepth = 0;
 
-        if ($nextStatement->lastToken()?->is(T_CURLY_BRACKET_OPEN)) {
+        if ($nextStatement->lastToken()?->is(TokenType::CURLY_BRACKET_OPEN)) {
             $nextStatement->getToken(-2)?->spaceAfter();
         }
     }

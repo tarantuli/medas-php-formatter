@@ -5,19 +5,20 @@ declare(strict_types=1);
 namespace Medas\PhpFormatter\Formatters\Psr12;
 
 use Medas\Core\Attributes\Service;
-use Medas\PhpFormatter\Formatters\{BaseFormatter, Helpers\ReturnTypeTokens, Tokens};
+use Medas\PhpFormatter\Formatters\{BaseFormatter, Tokens};
 use Medas\PhpFormatter\Job;
 use Medas\PhpTokenizer\{
     BlockType,
-    Contexts\MethodParameters,
-    Contexts\MethodReturnType,
     StatementTypeFinder,
     StatementTypes\DeclareStatement,
     StatementTypes\FunctionDeclaration,
-    StatementTypes\SwitchBranch,
     StatementTypes\UseTraitStatement,
+    Token,
     TokenGroups,
-    TokenTree
+    TokenRole,
+    TokenTree,
+    TokenType,
+    TypeDeclarationKind
 };
 
 #[Service]
@@ -29,9 +30,9 @@ readonly class Psr12Whitespace extends BaseFormatter
     private array $spaceAfterForbidden;
     private array $operatorsAndKeywords;
     private array $operatorsKeywordsAndBrackets;
+    private array $keywords;
 
     public function __construct(
-        private ReturnTypeTokens    $returnTypeTokens,
         private StatementTypeFinder $typeFinder,
         private TokenGroups         $tokenGroups,
     )
@@ -40,6 +41,7 @@ readonly class Psr12Whitespace extends BaseFormatter
         $this->spaceAfterRequired = $this->getSpaceAfterRequired();
         $this->spaceBeforeForbidden = $this->getSpaceBeforeForbidden();
         $this->spaceAfterForbidden = $this->getSpaceAfterForbidden();
+        $this->keywords = $this->tokenGroups->keywords();
 
         $this->operatorsAndKeywords = array_merge(
             $this->tokenGroups->keywords(),
@@ -57,11 +59,11 @@ readonly class Psr12Whitespace extends BaseFormatter
         return array_merge(
             $this->getSpaceAroundRequired(),
             [
-                T_AMPERSAND,
+                ...TokenType::AMPERSANDS,
                 T_ELLIPSIS,
-                T_VERTICAL_BAR,
-                T_QUESTION_MARK,
-                T_SQUARE_BRACKET_OPEN,
+                TokenType::VERTICAL_BAR,
+                TokenType::QUESTION_MARK,
+                TokenType::SQUARE_BRACKET_OPEN,
                 T_VARIABLE,
             ],
         );
@@ -73,9 +75,9 @@ readonly class Psr12Whitespace extends BaseFormatter
             $this->getSpaceAroundRequired(),
             $this->tokenGroups->casts(),
             [
-                T_COMMA,
+                TokenType::COMMA,
                 T_NEW,
-                T_SEMICOLON,
+                TokenType::SEMICOLON,
                 T_THROW,
             ],
         );
@@ -92,16 +94,16 @@ readonly class Psr12Whitespace extends BaseFormatter
             $this->tokenGroups->logicalOperators(),
             $this->tokenGroups->typeOperators(),
             [
-                T_AMPERSAND,
+                ...TokenType::AMPERSANDS,
                 T_AS,
-                T_ASSIGNMENT,
+                TokenType::ASSIGNMENT,
                 T_CASE,
-                T_COLON,
+                TokenType::COLON,
                 T_DOC_COMMENT,
                 T_DOUBLE_ARROW,
                 T_FINALLY,
-                T_VERTICAL_BAR,
-                T_QUESTION_MARK,
+                TokenType::VERTICAL_BAR,
+                TokenType::QUESTION_MARK,
                 T_RETURN,
             ],
         );
@@ -111,24 +113,26 @@ readonly class Psr12Whitespace extends BaseFormatter
     {
         return [
             T_INLINE_HTML,
-            T_ROUND_BRACKET_CLOSE,
-            T_SEMICOLON,
-            T_SQUARE_BRACKET_CLOSE,
+            TokenType::ROUND_BRACKET_CLOSE,
+            TokenType::SEMICOLON,
+            TokenType::SQUARE_BRACKET_CLOSE,
         ];
     }
 
     private function getSpaceAfterForbidden(): array
     {
         return [
-            T_CURLY_BRACKET_OPEN,
+            TokenType::CURLY_BRACKET_OPEN,
+            T_CURLY_OPEN,
+            T_DOLLAR_OPEN_CURLY_BRACES,
             T_DOUBLE_COLON,
             T_ELLIPSIS,
             T_ENCAPSED_AND_WHITESPACE,
-            T_EXCLAMATION_POINT,
+            TokenType::EXCLAMATION_POINT,
             T_INLINE_HTML,
             T_OBJECT_OPERATOR,
-            T_ROUND_BRACKET_OPEN,
-            T_SQUARE_BRACKET_OPEN,
+            TokenType::ROUND_BRACKET_OPEN,
+            TokenType::SQUARE_BRACKET_OPEN,
         ];
     }
 
@@ -145,7 +149,6 @@ readonly class Psr12Whitespace extends BaseFormatter
 
     private function addSpaces(TokenTree $tree): void
     {
-        $openTernaries = 0;
         $squareDepth = 0;
 
         foreach ($tree as $token) {
@@ -156,7 +159,7 @@ readonly class Psr12Whitespace extends BaseFormatter
                 continue;
             }
 
-            if ($token->is(T_ATTRIBUTE) || ($token->inAttribute && $token->is(T_SQUARE_BRACKET_OPEN))) {
+            if ($token->is(T_ATTRIBUTE) || ($token->inAttribute && $token->is(TokenType::SQUARE_BRACKET_OPEN))) {
                 ++$squareDepth;
             }
 
@@ -164,26 +167,22 @@ readonly class Psr12Whitespace extends BaseFormatter
                 $token->spaceAfter();
             }
 
-            // One space between ") {", "): <type> {", "namespace X {" and "use A, B {"
-            if ($token->is(T_CURLY_BRACKET_OPEN) && (
-                $this->returnTypeTokens->isReturnTypeToken($token)
-                || in_array($token->opensBlock, [BlockType::Namespace, BlockType::TraitAdaptation], true)
-            )) {
+            // One space between ") {", "): <type> {", "namespace X {", "use A, B {" and "new class {". Not in a class
+            // declaration, which has a line break before its {.
+            $spaceBefore = in_array($token->opensBlock, [BlockType::Namespace, BlockType::TraitAdaptation], true)
+                || ($token->opensBlock === BlockType::ClassLike && $token->statement->declaration === null);
+
+            if ($token->is(TokenType::CURLY_BRACKET_OPEN) && ($this->followsParenthesesOrReturnType($token) || $spaceBefore)) {
                 $token->previous->spaceAfter();
             }
 
             // No space between "?type"
-            elseif ($token->is(T_QUESTION_MARK)) {
-                if ($token->inTypeDeclaration) {
-                    $token->spaceAfter(false);
-                }
-                else {
-                    ++$openTernaries;
-                }
+            elseif ($token->role === TokenRole::NullableMarker) {
+                $token->spaceAfter(false);
             }
 
             // A space after attributes
-            elseif ($token->inAttribute && $token->is(T_SQUARE_BRACKET_CLOSE)) {
+            elseif ($token->inAttribute && $token->is(TokenType::SQUARE_BRACKET_CLOSE)) {
                 --$squareDepth;
 
                 if ($squareDepth === 0) {
@@ -196,50 +195,30 @@ readonly class Psr12Whitespace extends BaseFormatter
                     $token->previous->spaceAfter();
                 }
 
-                // No space between & and variable starters in method parameters
-                if ($token->previous->is(T_AMPERSAND)
-                        && $token->is(Tokens::VARIABLE_STARTERS)
-                        && $token->context instanceof MethodParameters) {
+                // A space between a closing bracket and a keyword, like in "new class(1) extends A", which PHP
+                // doesn't need
+                if ($token->is($this->keywords)
+                        && $token->previous->is([TokenType::ROUND_BRACKET_CLOSE, TokenType::SQUARE_BRACKET_CLOSE])) {
+                    $token->previous->spaceAfter();
+                }
+
+                // No space after the & of a reference, like in "function f(int &...$a)" or "$a = &$b"
+                if ($token->previous->role === TokenRole::ByReference && $token->is(Tokens::VARIABLE_STARTERS)) {
                     $token->previous->spaceAfter(false);
                 }
-                elseif ($token->is(T_COLON)) {
-                    // No space between "):" in return type declarations
-                    if ($token->context instanceof MethodReturnType) {
-                        $token->previous->spaceAfter(false);
-                    }
-
-                    // No space between "?:"
-                    elseif ($token->previous->is(T_QUESTION_MARK)) {
-                        $token->previous->spaceAfter(false);
-                    }
-
-                    // No space before ":" in case/default statements if it's the last token
-                    elseif ($statementType instanceof SwitchBranch && $token->isLastToken()) {
-                        $token->previous->spaceAfter(false);
-                    }
-
-                    // No space between strings and ":" in named arguments
-                    if ($openTernaries === 0) {
-                        $token->previous->spaceAfter(false);
-                    }
-                    else {
-                        --$openTernaries;
-                    }
+                // No space before a colon, like the one of a return type, a named argument, "case 1:" or "?:",
+                // except before the "else" colon of a ternary
+                elseif ($token->is(TokenType::COLON) && $token->role !== TokenRole::TernaryElse) {
+                    $token->previous->spaceAfter(false);
                 }
 
-                // No space around "|" in function declarations and catch statements
-                elseif ($token->is(T_VERTICAL_BAR)) {
-                    $stripSpaces = $token->inTypeDeclaration
-                        || $token->statement->getToken(1)->is(T_CATCH)
-                        || $this->returnTypeTokens->isReturnTypeToken($token->previous);
-
-                    if ($stripSpaces) {
-                        $token->previous->spaceAfter(false);
-                        $token->spaceAfter(false);
-                    }
+                // No space around the "|" of a union type
+                elseif ($token->is(TokenType::VERTICAL_BAR) && $token->typeDeclaration !== null) {
+                    $token->previous->spaceAfter(false);
+                    $token->spaceAfter(false);
                 }
                 // No space around the "&" of an intersection type, as in (A&B)|null
-                elseif ($token->is(T_AMPERSAND) && $token->typeDeclaration !== null) {
+                elseif ($token->is(TokenType::AMPERSANDS) && $token->typeDeclaration !== null) {
                     $token->previous->spaceAfter(false);
                     $token->spaceAfter(false);
                 }
@@ -252,6 +231,12 @@ readonly class Psr12Whitespace extends BaseFormatter
                 }
             }
         }
+    }
+
+    private function followsParenthesesOrReturnType(Token $brace): bool
+    {
+        return $brace->previous?->is(TokenType::ROUND_BRACKET_CLOSE)
+            || $brace->previous?->typeDeclaration === TypeDeclarationKind::ReturnType;
     }
 
     private function removeSpaces(TokenTree $tree): void
@@ -277,16 +262,16 @@ readonly class Psr12Whitespace extends BaseFormatter
             if ($token->next) {
                 // No space between pluses and minuses followed by opening round brackets
                 if ($token->previous->is($this->operatorsAndKeywords)
-                        && $token->is([T_PLUS, T_MINUS])
-                        && $token->next->is(T_ROUND_BRACKET_OPEN)) {
+                        && $token->is([TokenType::PLUS, TokenType::MINUS])
+                        && $token->next->is(TokenType::ROUND_BRACKET_OPEN)) {
                     $token->spaceAfter(false);
                 }
 
                 // No space between pluses, minuses and ampersands before numbers and variables
                 // that follow an operator or bracket
-                elseif ($token->is([T_PLUS, T_MINUS, T_AMPERSAND])
+                elseif ($token->is([TokenType::PLUS, TokenType::MINUS, ...TokenType::AMPERSANDS])
                         && $token->next->is([T_LNUMBER, T_DNUMBER, T_VARIABLE, T_STRING])) {
-                    if ($token->previous->is([T_ROUND_BRACKET_CLOSE, T_SQUARE_BRACKET_CLOSE])) {
+                    if ($token->previous->is([TokenType::ROUND_BRACKET_CLOSE, TokenType::SQUARE_BRACKET_CLOSE])) {
                         $token->spaceAfter();
                     }
                     elseif ($token->previous->is($this->operatorsKeywordsAndBrackets)) {
@@ -295,18 +280,18 @@ readonly class Psr12Whitespace extends BaseFormatter
                 }
 
                 // No spaces between variables and [
-                elseif ($token->is([T_VARIABLE, T_ROUND_BRACKET_CLOSE, T_STRING])
-                        && $token->next->is(T_SQUARE_BRACKET_OPEN)) {
+                elseif ($token->is([T_VARIABLE, TokenType::ROUND_BRACKET_CLOSE, T_STRING])
+                        && $token->next->is(TokenType::SQUARE_BRACKET_OPEN)) {
                     $token->spaceAfter(false);
                 }
 
                 // No spaces between ] and [
-                elseif ($token->is(T_SQUARE_BRACKET_CLOSE) && $token->next->is(T_SQUARE_BRACKET_OPEN)) {
+                elseif ($token->is(TokenType::SQUARE_BRACKET_CLOSE) && $token->next->is(TokenType::SQUARE_BRACKET_OPEN)) {
                     $token->spaceAfter(false);
                 }
 
                 // No space between "static" and "()"
-                elseif ($token->is(T_STATIC) && $token->next->is(T_ROUND_BRACKET_OPEN)) {
+                elseif ($token->is(T_STATIC) && $token->next->is(TokenType::ROUND_BRACKET_OPEN)) {
                     $token->spaceAfter(false);
                 }
             }

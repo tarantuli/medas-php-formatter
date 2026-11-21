@@ -26,7 +26,7 @@ readonly class KeepOriginalObjectOperatorBreaks extends BaseFormatter
         foreach ($job->tokens as $token) {
             $isObjectOperator = $token->is([T_OBJECT_OPERATOR, T_NULLSAFE_OBJECT_OPERATOR]);
 
-            if ($isObjectOperator && $token->line !== $token->previous->line) {
+            if ($isObjectOperator && $token->previous->originalLineBreaksAfter > 0) {
                 $this->splitStatementFrom($token);
             }
         }
@@ -42,6 +42,10 @@ readonly class KeepOriginalObjectOperatorBreaks extends BaseFormatter
         $newStatement->additionalDepth = $rootStatement->additionalDepth + 1;
 
         $statement->block->insertStatementAfter($newStatement, $statement);
+
+        // A blank line after the statement comes after its last part
+        $newStatement->blankLineAfter($statement->blankLineAfter);
+        $statement->blankLineAfter(false);
 
         $index = $statement->getIndex($token);
 

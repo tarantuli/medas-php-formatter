@@ -47,17 +47,13 @@ readonly class AlignArgumentNames extends BaseFormatter
                     continue;
                 }
 
-                if ($token->previous) {
+                // A parameter without a type starts its line, so there is no token before it on that line to pad
+                if (!$token->isFirstToken()) {
                     $token->previous->extraSpacesAfter += $prefixLengthsPerRootStatement[$id]
                         - $currentLength;
                 }
                 else {
-                    $placeholder = new Token(
-                        1,
-                        str_repeat(' ', $prefixLengthsPerRootStatement[$id])
-                    );
-
-                    $token->statement->prependToken($placeholder);
+                    $token->statement->extraSpacesBefore = $prefixLengthsPerRootStatement[$id];
                 }
 
                 break;

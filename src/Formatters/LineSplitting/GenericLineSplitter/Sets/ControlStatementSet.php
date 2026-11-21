@@ -9,6 +9,7 @@ use Medas\PhpFormatter\Formatters\LineSplitting\GenericLineSplitter\{
     BreakpointDefinition,
     BreakpointSet
 };
+use Medas\PhpTokenizer\TokenType;
 
 class ControlStatementSet implements BreakpointSet
 {
@@ -26,7 +27,7 @@ class ControlStatementSet implements BreakpointSet
                 keepPrefixAndSuffix: true,
                 additionalDepth: 2
             ),
-            new BreakpointDefinition('comma', [T_COMMA], splitAfter: true),
+            new BreakpointDefinition('comma', [TokenType::COMMA], splitAfter: true),
         ]];
     }
 

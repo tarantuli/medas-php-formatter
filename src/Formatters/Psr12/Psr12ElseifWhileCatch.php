@@ -6,7 +6,7 @@ namespace Medas\PhpFormatter\Formatters\Psr12;
 
 use Medas\Core\Attributes\Service;
 use Medas\PhpFormatter\{Formatters\BaseFormatter, Job};
-use Medas\PhpTokenizer\Statement;
+use Medas\PhpTokenizer\{Statement, TokenType};
 
 /**
  * Puts `else`, `elseif`, `catch`, `finally` and the `while` of a do-while loop on the same line as the preceding `}`.
@@ -45,13 +45,13 @@ readonly class Psr12ElseifWhileCatch extends BaseFormatter
      */
     private function isDoWhileCondition(Statement $statement): bool
     {
-        if (!$statement->firstToken()->is(T_WHILE) || !$statement->lastToken()->is(T_SEMICOLON)) {
+        if (!$statement->firstToken()->is(T_WHILE) || !$statement->lastToken()->is(TokenType::SEMICOLON)) {
             return false;
         }
 
         $closer = $statement->previous();
 
-        if ($closer === null || $closer->tokenCount() !== 1 || !$closer->firstToken()->is(T_CURLY_BRACKET_CLOSE)) {
+        if ($closer === null || $closer->tokenCount() !== 1 || !$closer->firstToken()->is(TokenType::CURLY_BRACKET_CLOSE)) {
             return false;
         }
 

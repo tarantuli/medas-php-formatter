@@ -6,7 +6,7 @@ namespace Medas\PhpFormatter\Formatters\Required;
 
 use Medas\Core\Attributes\Service;
 use Medas\PhpFormatter\{Formatters\BaseFormatter, Job};
-use Medas\PhpTokenizer\TokenGroups;
+use Medas\PhpTokenizer\{TokenGroups, TokenType};
 
 #[Service]
 readonly class RequiredWhitespace extends BaseFormatter
@@ -61,7 +61,7 @@ readonly class RequiredWhitespace extends BaseFormatter
         return array_merge(
             $this->tokenGroups->symbolOperators(),
             $this->tokenGroups->brackets(),
-            [T_VERTICAL_BAR]
+            [TokenType::VERTICAL_BAR]
         );
     }
 }

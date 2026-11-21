@@ -24,7 +24,6 @@ readonly class Psr12 extends Settings
     public function __construct(
         array              $additionalFormatters = [],
         array              $additionalPreparsers = [],
-        array              $additionalPreformatters = [],
         BreakpointSet|null $classDeclarationSet = null,
         BreakpointSet|null $controlStatementSet = null,
         BreakpointSet|null $genericLineSet = null,
@@ -47,7 +46,6 @@ readonly class Psr12 extends Settings
                 ...$additionalFormatters,
             ],
             $additionalPreparsers,
-            $additionalPreformatters,
             $classDeclarationSet,
             $controlStatementSet,
             $genericLineSet,

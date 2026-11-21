@@ -9,7 +9,6 @@ use Medas\PhpClassAnalysis\FqnProperties;
 use Medas\PhpTokenizer\{
     Block,
     BlockType,
-    Contexts\GlobalScope,
     Statement,
     StatementTypeFinder,
     StatementTypes\DeclareStatement,
@@ -23,8 +22,6 @@ use Medas\PhpTokenizer\{
 #[Service]
 readonly class NewImportsInserter
 {
-    private const int GENERIC_TOKEN_ID = 123;
-
     private Token $baseToken;
 
     public function __construct(
@@ -34,7 +31,6 @@ readonly class NewImportsInserter
     )
     {
         $this->baseToken = new Token(ord(';'), ';');
-        $this->baseToken->context = GlobalScope::instance();
         $this->baseToken->inString = false;
         $this->baseToken->inAttribute = false;
     }
@@ -204,8 +200,8 @@ readonly class NewImportsInserter
 
     private function addImportToStatement(Statement $statement, int|string $fqn, array|string $alias): void
     {
-        $statement->appendToken((clone $this->baseToken)->id(T_USE)->text('use'));
-        $statement->appendToken((clone $this->baseToken)->id(T_NAME_QUALIFIED)->text(substr($fqn, 1)));
+        $statement->appendToken($this->token('use'));
+        $statement->appendToken($this->token(substr($fqn, 1)));
 
         if (is_array($alias)) {
             $this->appendGroupedAliases($statement, $alias);
@@ -214,13 +210,19 @@ readonly class NewImportsInserter
             $this->appendAlias($statement, $alias);
         }
 
-        $statement->appendToken(clone $this->baseToken);
+        $statement->appendToken($this->token(';'));
     }
 
     private function appendGroupedAliases(Statement $statement, array $aliases): void
     {
-        $statement->appendToken((clone $this->baseToken)->id(T_NS_SEPARATOR)->text('\\'));
-        $statement->appendToken((clone $this->baseToken)->id(self::GENERIC_TOKEN_ID)->text('{'));
+        $open = $this->token('{');
+        $close = $this->token('}');
+
+        $open->matchingBracket = $close;
+        $close->matchingBracket = $open;
+
+        $statement->appendToken($this->token('\\'));
+        $statement->appendToken($open);
 
         $isFirst = true;
 
@@ -228,10 +230,10 @@ readonly class NewImportsInserter
 
         foreach ($aliases as $subPath => $alias) {
             if (!$isFirst) {
-                $statement->appendToken((clone $this->baseToken)->id(self::GENERIC_TOKEN_ID)->text(','));
+                $statement->appendToken($this->token(','));
             }
 
-            $statement->appendToken((clone $this->baseToken)->id(T_STRING)->text($subPath));
+            $statement->appendToken($this->token($subPath));
 
             if ($this->fqnProperties->getLastPart($subPath) !== $alias) {
                 $this->appendAlias($statement, $alias);
@@ -240,12 +242,20 @@ readonly class NewImportsInserter
             $isFirst = false;
         }
 
-        $statement->appendToken((clone $this->baseToken)->id(self::GENERIC_TOKEN_ID)->text('}'));
+        $statement->appendToken($close);
     }
 
     private function appendAlias(Statement $statement, string $alias): void
     {
-        $statement->appendToken((clone $this->baseToken)->id(T_AS)->text('as'));
-        $statement->appendToken((clone $this->baseToken)->id(T_STRING)->text($alias));
+        $statement->appendToken($this->token('as'));
+        $statement->appendToken($this->token($alias));
+    }
+
+    /**
+     * A new token with the id PHP gives its text, like T_NAME_QUALIFIED for "Medas\Core\Date".
+     */
+    private function token(string $text): Token
+    {
+        return Token::fromText($text, $this->baseToken);
     }
 }

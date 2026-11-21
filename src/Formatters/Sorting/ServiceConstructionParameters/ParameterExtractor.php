@@ -5,49 +5,48 @@ declare(strict_types=1);
 namespace Medas\PhpFormatter\Formatters\Sorting\ServiceConstructionParameters;
 
 use Medas\Core\Attributes\Service;
-use Medas\PhpFormatter\Formatters\Tokens;
-use Medas\PhpTokenizer\{Contexts\MethodParameters, Statement, Token};
+use Medas\PhpFormatter\Formatters\Helpers\ParameterList;
+use Medas\PhpTokenizer\{Statement, Token, TokenType};
 
 #[Service]
 readonly class ParameterExtractor
 {
-    /** @return array{Token[][], int|null} */
+    public function __construct(
+        private ParameterList $parameterList,
+    )
+    {
+    }
+
+    /**
+     * The parameters of a method declaration, each with its trailing comma, and the index of the first one.
+     *
+     * @return array{Token[][], int|null}
+     */
     public function extract(Statement $statement): array
     {
+        $open = $this->parameterList->opener($statement);
+
+        if ($open === null || $open->next === $open->matchingBracket) {
+            return [[], null];
+        }
+
         $parameters = [];
-        $stack = [];
-        $depth = 0;
-        $firstIndex = null;
+        $parameter = [];
 
-        foreach ($statement as $index => $token) {
-            if (!$token->context instanceof MethodParameters) {
-                continue;
-            }
+        for ($token = $open->next; $token !== $open->matchingBracket; $token = $token->next) {
+            $parameter[] = $token;
 
-            if ($token->is(Tokens::OPENING_BRACKETS)) {
-                ++$depth;
-            }
-
-            if ($firstIndex === null) {
-                $firstIndex = $index;
-            }
-
-            $stack[] = $token;
-
-            if ($depth === 0 && $token->is(T_COMMA)) {
-                $parameters[] = $stack;
-                $stack = [];
-            }
-
-            if ($token->is(Tokens::CLOSING_BRACKETS)) {
-                --$depth;
+            // A comma between parameters, not one in a default value like [1, 2]
+            if ($token->is(TokenType::COMMA) && $token->bracketDepth === $open->bracketDepth + 1) {
+                $parameters[] = $parameter;
+                $parameter = [];
             }
         }
 
-        if ($stack) {
-            $parameters[] = $stack;
+        if ($parameter) {
+            $parameters[] = $parameter;
         }
 
-        return [$parameters, $firstIndex];
+        return [$parameters, $statement->getIndex($open->next)];
     }
 }

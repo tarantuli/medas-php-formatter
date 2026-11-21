@@ -5,12 +5,18 @@ declare(strict_types=1);
 namespace Medas\PhpFormatter\Formatters\LineSplitting;
 
 use Medas\Core\Attributes\Service;
-use Medas\PhpFormatter\{Formatters\BaseFormatter, Formatters\Tokens, Job};
-use Medas\PhpTokenizer\Statement;
+use Medas\PhpFormatter\{Formatters\BaseFormatter, Job};
+use Medas\PhpTokenizer\{Token, TokenType};
 
 #[Service]
 readonly class TrailingCommaSplitter extends BaseFormatter
 {
+    private const array CLOSING_BRACKETS = [
+        TokenType::ROUND_BRACKET_CLOSE,
+        TokenType::SQUARE_BRACKET_CLOSE,
+        TokenType::CURLY_BRACKET_CLOSE,
+    ];
+
     public function __construct(
         private Helpers\StatementSplitter $splitter,
     )
@@ -27,42 +33,26 @@ readonly class TrailingCommaSplitter extends BaseFormatter
         whileTrue(fn() => $this->findSomethingToSplit($job));
     }
 
+    /**
+     * Splits a list with a trailing comma, like "[1, 2,]" or "foo($a, $b,)", over several lines.
+     */
     private function findSomethingToSplit(Job $job): bool
     {
         foreach ($job->tree->block() as $statement) {
             for ($commaIndex = $statement->tokenCount() - 1; $commaIndex >= 0; --$commaIndex) {
-                $token = $statement->getToken($commaIndex);
+                $comma = $statement->getToken($commaIndex);
+                $opener = $this->openerOfList($comma);
 
-                if (!$token->is(T_COMMA)) {
-                    continue;
-                }
-
-                if (!$token->next) {
-                    continue;
-                }
-
-                $nextText = $token->next->text;
-
-                if (!array_key_exists($nextText, Tokens::OPENING_BRACKETS)) {
-                    continue;
-                }
-
-                $openerIndex = $this->findOpener(
-                    $statement,
-                    $commaIndex,
-                    Tokens::OPENING_BRACKETS[$nextText],
-                    $nextText
-                );
-
-                if ($openerIndex === null) {
+                // The list has to start in this statement, which isn't so for the arms of a match
+                if ($opener?->statement !== $statement) {
                     continue;
                 }
 
                 $this->splitter->split(
                     $statement,
-                    [T_COMMA],
+                    [TokenType::COMMA],
                     true,
-                    $openerIndex,
+                    $statement->getIndex($opener),
                     $commaIndex + 1,
                     1
                 );
@@ -74,30 +64,21 @@ readonly class TrailingCommaSplitter extends BaseFormatter
         return false;
     }
 
-    private function findOpener(Statement $statement, int $index, string $opener, string $closer): int|null
+    /**
+     * The opening bracket of the list that a trailing comma ends, if the token is one.
+     */
+    private function openerOfList(Token $token): Token|null
     {
-        $depth = 0;
-
-        for ($openerIndex = $index - 1; $openerIndex >= 0; --$openerIndex) {
-            if (null === $token = $statement->getToken($openerIndex)) {
-                return null;
-            }
-
-            $text = $token->text;
-
-            if ($text === $closer) {
-                ++$depth;
-            }
-
-            if ($text === $opener && $depth === 0) {
-                return $openerIndex;
-            }
-
-            if ($text === $opener) {
-                --$depth;
-            }
+        if (!$token->is(TokenType::COMMA)) {
+            return null;
         }
 
-        return null;
+        $closer = $token->next;
+
+        if (!$closer?->is(self::CLOSING_BRACKETS)) {
+            return null;
+        }
+
+        return $closer->matchingBracket;
     }
 }

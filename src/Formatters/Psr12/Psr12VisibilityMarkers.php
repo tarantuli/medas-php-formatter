@@ -61,13 +61,10 @@ readonly class Psr12VisibilityMarkers extends BaseFormatter
             $declarationStart = $statement->getTokenAfter($declarationStart);
         }
 
-        $visibility = clone $declarationStart;
+        $visibility = Token::fromText('public', $declarationStart);
 
-        $visibility->id = T_PUBLIC;
-        $visibility->text = 'public';
+        $visibility->bracketDepth = $declarationStart->bracketDepth;
         $visibility->spaceAfter = true;
-        $visibility->lineBreakAfter = false;
-        $visibility->extraSpacesAfter = 0;
 
         if ($declarationStart === $statement->firstToken()) {
             $statement->prependToken($visibility);

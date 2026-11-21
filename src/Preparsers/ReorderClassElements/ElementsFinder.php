@@ -10,8 +10,6 @@ use Medas\PhpTokenizer\TokenGroups;
 #[Service]
 readonly class ElementsFinder
 {
-    public const array CURLY_BRACES = ['{', '}'];
-
     private array $structureTypes;
 
     public function __construct(
@@ -24,16 +22,9 @@ readonly class ElementsFinder
     public function find(ReorderingJob $job): void
     {
         foreach ($job->tokens as $index => $token) {
-            if ($token->text === '"') {
-                $job->inString = !$job->inString;
-            }
-
-            if ($job->inString && in_array($token->id, self::CURLY_BRACES)) {
-                $token->id = T_STRING;
-            }
-
-            // Increase current brace and parenthesis depths if needed
-            if ($token->text === '{') {
+            // Increase current brace and parenthesis depths if needed. The { of "{$a}" and the ${ of "${a}" in a string
+            // count too, as a } closes them.
+            if ($token->text === '{' || $token->id === T_DOLLAR_OPEN_CURLY_BRACES) {
                 ++$job->currentBraceDepth;
             }
             elseif ($token->text === '(') {

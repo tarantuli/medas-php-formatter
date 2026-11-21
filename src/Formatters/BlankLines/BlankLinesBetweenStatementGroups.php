@@ -8,7 +8,6 @@ use Medas\Core\Attributes\Service;
 use Medas\PhpFormatter\{Formatters\BaseFormatter, Formatters\Tokens, Job};
 use Medas\PhpTokenizer\{
     BlockType,
-    Contexts\PropertyHook,
     Statement,
     StatementTypeFinder,
     StatementTypes\GenericStatement,
@@ -59,7 +58,7 @@ readonly class BlankLinesBetweenStatementGroups extends BaseFormatter
 
             // Don't add blank lines between any statements inside property hook blocks —
             // neither between hook declarations (get/set) nor inside hook bodies.
-            if ($statement->firstToken()?->context instanceof PropertyHook) {
+            if ($statement->block->isInside(BlockType::HookList, BlockType::HookBody)) {
                 $previousSubType = null;
 
                 continue;
@@ -96,7 +95,7 @@ readonly class BlankLinesBetweenStatementGroups extends BaseFormatter
                 return 2;
             }
 
-            if ($token->is(T_DOUBLE_ARROW) && $statement->block->opener->containsType(T_MATCH)) {
+            if ($token->is(T_DOUBLE_ARROW) && $statement->block->type === BlockType::Match) {
                 return 3;
             }
 

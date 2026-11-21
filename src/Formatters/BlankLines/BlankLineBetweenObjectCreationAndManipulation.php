@@ -19,6 +19,7 @@ readonly class BlankLineBetweenObjectCreationAndManipulation extends BaseFormatt
     {
         $previousStatementIsCreation = false;
         $previousVariable = null;
+        $previousStatement = null;
 
         foreach ($job->tree->statements() as $statement) {
             if ($statement->rootStatement !== null) {
@@ -33,7 +34,10 @@ readonly class BlankLineBetweenObjectCreationAndManipulation extends BaseFormatt
 
             $secondToken = $statement->getToken($statement->getIndex($firstToken) + 1);
 
+            // The creation has to be the statement right before this one in the same block, not one that opens the
+            // closure this statement is in
             if ($previousStatementIsCreation
+                    && $statement->previous() === $previousStatement
                     && $firstToken->is(T_VARIABLE)
                     && $firstToken->text === $previousVariable
                     && $secondToken
@@ -54,6 +58,7 @@ readonly class BlankLineBetweenObjectCreationAndManipulation extends BaseFormatt
                     || !$secondToken->is(T_OBJECT_OPERATOR);
 
                 $previousVariable = $firstToken->text;
+                $previousStatement = $statement;
             }
             else {
                 $previousStatementIsCreation = false;

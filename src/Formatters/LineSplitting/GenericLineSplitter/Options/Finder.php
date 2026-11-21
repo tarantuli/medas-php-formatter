@@ -35,7 +35,7 @@ use Medas\PhpTokenizer\{BlockType, Statement, Token, TokenRole, TokenType};
  *
  * - Of the colons, only the "else" colon of a ternary is a separator candidate, and of the
  *   question marks, not the one of a nullable type. Named argument colons, case colons and
- *   the colon of ?: are excluded even when T_COLON is listed as a separator in the definition.
+ *   the colon of ?: are excluded even when `TokenType::COLON` is listed as a separator in the definition.
  *
  * - Options that contain no real breakpoints (opener+1 >= closer) are removed in cleanup,
  *   as are options that exceed the definition's maxDepth.

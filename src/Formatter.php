@@ -56,8 +56,6 @@ readonly class Formatter
 
         $job->tokens = $this->tokenizer->tokenize($job->code);
 
-        $this->applyPreformatters($job);
-
         $job->tree = $this->treeBuilder->fromCollection($job->tokens);
 
         if ($this->dumpParsedTree) {
@@ -97,16 +95,6 @@ readonly class Formatter
             $preparser = $this->serviceManager->resolve($preparserName);
 
             $preparser->preparse($job);
-        }
-    }
-
-    private function applyPreformatters(Job $job): void
-    {
-        foreach ($job->settings->preformatters as $preformatterName) {
-            /** @var Preformatters\Preformatter $preformatter */
-            $preformatter = $this->serviceManager->resolve($preformatterName);
-
-            $preformatter->preformat($job);
         }
     }
 

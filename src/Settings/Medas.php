@@ -25,9 +25,12 @@ use Medas\PhpFormatter\Formatters\LineSplitting\KeepOriginalObjectOperatorBreaks
 use Medas\PhpFormatter\Formatters\LineSplitting\LongLineSplitter;
 use Medas\PhpFormatter\Formatters\LineSplitting\SoftLineSplitter;
 use Medas\PhpFormatter\Formatters\LineSplitting\TrailingCommaSplitter;
-use Medas\PhpFormatter\Formatters\Replacements\{UseExitInsteadOfDie, UseUnionNullInsteadOfNullable};
+use Medas\PhpFormatter\Formatters\Replacements\{
+    NoCommentsAtLineEnd,
+    UseExitInsteadOfDie,
+    UseUnionNullInsteadOfNullable
+};
 use Medas\PhpFormatter\Formatters\Sorting\ServiceConstructionParameters;
-use Medas\PhpFormatter\Preformatters\NoCommentsAtLineEnd;
 use Medas\PhpFormatter\Preparsers\ReorderClassElements;
 
 readonly class Medas extends Psr12
@@ -47,6 +50,7 @@ readonly class Medas extends Psr12
                 KeepOriginalObjectOperatorBreaks::class,
                 LongLineSplitter::class,
                 MedasElseifWhileCatch::class,
+                NoCommentsAtLineEnd::class,
                 NoLineBreakAfterOpenTagWithEcho::class,
                 NormalizeImports::class,
                 ServiceConstructionParameters::class,
@@ -57,7 +61,6 @@ readonly class Medas extends Psr12
                 ...$additionalFormatters,
             ],
             [ReorderClassElements::class],
-            [NoCommentsAtLineEnd::class],
             ClassDeclarationSet::instance(),
             ControlStatementSet::instance(),
             GenericLineSet::instance(),

@@ -98,7 +98,7 @@ class RegressionTest extends BaseTestClass
     }
 
     /**
-     * `MoveCommentsAtLineEnd` moves a comment inside a multi-line statement to before the previous statement, which
+     * `NoCommentsAtLineEnd` moves a comment inside a multi-line statement to before the previous statement, which
      * here is `<?php`, turning it into inline HTML.
      */
     public function testCommentInMultiLineArray(): void
@@ -182,7 +182,7 @@ class RegressionTest extends BaseTestClass
     }
 
     /**
-     * `MoveCommentsAtLineEnd` moved a comment that was a statement of its own, and left the empty statement behind.
+     * `NoCommentsAtLineEnd` moved a comment that was a statement of its own, and left the empty statement behind.
      */
     public function testCommentAloneAfterCase(): void
     {
@@ -268,6 +268,128 @@ class RegressionTest extends BaseTestClass
             'sorting/qualified-service-attribute-pre',
             'sorting/qualified-service-attribute-post'
         );
+    }
+
+    /**
+     * `Psr12BlankLines` took an anonymous class for a class declaration and put its `{` on the next line, and
+     * `SwitchIndentationAdder` only closed a switch at a `}`, so after `endswitch;` everything was indented.
+     */
+    public function testAnonymousClassAndAlternativeSwitch(): void
+    {
+        $this->assertRemainsTheSame('bugs/anonymous-class-and-alternative-switch');
+    }
+
+    /**
+     * `Psr12Whitespace` put a space before the `{` of every class, also of a named class, which has it on the next
+     * line. A class header that just fits then got too long, and was split before `implements`.
+     */
+    public function testClassHeaderAtLineLength(): void
+    {
+        $this->assertRemainsTheSame('bugs/class-header-at-line-length');
+    }
+
+    /**
+     * `BlockTypeResolver` didn't skip a comment when it looked back from a `{`, so the body of
+     * `function f(): void // Comment` was a plain block, and the `{` moved onto the line of the function.
+     */
+    public function testCommentBeforeFunctionBody(): void
+    {
+        $this->assertChanges('bugs/comment-before-function-body-pre', 'bugs/comment-before-function-body-post');
+    }
+
+    /**
+     * `ElementsFinder` counted the `}` of `"${a}"` but not its `${`, so reordering the class elements broke the code.
+     */
+    public function testDollarBraceInterpolation(): void
+    {
+        $this->assertChanges('bugs/dollar-brace-interpolation-pre', 'bugs/dollar-brace-interpolation-post');
+    }
+
+    /**
+     * The `{` of `"{$a}"` is `T_CURLY_OPEN`, but the `}` that closes it is a plain `}`. The text constant
+     * `T_CURLY_BRACKET_OPEN` matched both kinds of `{`; `TokenType::CURLY_BRACKET_OPEN` only the plain one, so the line
+     * splitter took that `}` for the end of the arguments, and split after `$tag->name`.
+     */
+    public function testInterpolationInSplitCall(): void
+    {
+        $this->assertRemainsTheSame('bugs/interpolation-in-split-call');
+    }
+
+    /**
+     * `AlignArgumentNames` lined up a parameter without a type with a placeholder token of spaces, which later
+     * formatters took for the first token of the statement. Now the statement has `extraSpacesBefore`.
+     */
+    public function testUntypedParameterAlignment(): void
+    {
+        $this->assertRemainsTheSame('bugs/untyped-parameter-alignment');
+    }
+
+    /**
+     * A comment on a line of its own between the arguments of a call that hugs a closure ended up after the "}," of
+     * the closure, and was moved somewhere else the next time. A comment at the end of the line "}," was moved between
+     * the "}" and the ",".
+     */
+    public function testCommentsBetweenClosureArguments(): void
+    {
+        $this->assertChanges(
+            'bugs/comments-between-closure-arguments-pre',
+            'bugs/comments-between-closure-arguments-post'
+        );
+    }
+
+    /**
+     * `CurlyBlockDepthPropagator` didn't take the arms of a match along when the call it is an argument of was split.
+     */
+    public function testMatchInSplitCall(): void
+    {
+        $this->assertChanges('bugs/match-in-split-call-pre', 'bugs/match-in-split-call-post');
+    }
+
+    /**
+     * `NoCommentsAtLineEnd` found the start of a line by line numbers. Now it uses the original layout, and hands the
+     * line break after a moved comment to the token before it, so `KeepOriginalObjectOperatorBreaks` still sees the
+     * line break before `->where()`. That formatter left the blank line of a statement it split after its first part.
+     */
+    public function testCommentBeforeObjectOperator(): void
+    {
+        $this->assertChanges('bugs/comment-before-object-operator-pre', 'bugs/comment-before-object-operator-post');
+    }
+
+    /**
+     * `Psr12Whitespace` put no space between a closing bracket and a keyword, as in `new class(1)extends Base`. PHP
+     * doesn't need it, so `RequiredWhitespace` doesn't add it either.
+     */
+    public function testAnonymousClassArguments(): void
+    {
+        $this->assertRemainsTheSame('bugs/anonymous-class-arguments');
+    }
+
+    /**
+     * `StatementSplitter` counted brackets from the end of the region, so after splitting off the `use (` list of a
+     * closure it no longer split the list itself. And `BlankLineBetweenObjectCreationAndManipulation` crashed on
+     * `$entity->...` as the first statement in a closure that `$entity = ...` opens.
+     */
+    public function testClosureUseList(): void
+    {
+        $this->assertChanges('line-splitting/closure-use-list-pre', 'line-splitting/closure-use-list-post');
+    }
+
+    /**
+     * `UseUnionNullInsteadOfNullable` and `Psr12Whitespace` only knew parameter, return and property types, so the type
+     * of a class constant became `? int`.
+     */
+    public function testNullableConstantType(): void
+    {
+        $this->assertChanges('token-replacement/union-null-constant-pre', 'token-replacement/union-null-constant-post');
+    }
+
+    /**
+     * `ParameterExtractor` counted the `]` of an attribute as a closing bracket but its `#[` not as an opening one, so
+     * all parameters after the first one with an attribute were taken for one, and weren't sorted.
+     */
+    public function testAttributedParametersAreSorted(): void
+    {
+        $this->assertChanges('sorting/attributed-parameters-pre', 'sorting/attributed-parameters-post');
     }
 
     /**

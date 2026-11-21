@@ -5,11 +5,17 @@ declare(strict_types=1);
 namespace Medas\PhpFormatter\Formatters\Sorting\ServiceConstructionParameters;
 
 use Medas\Core\Attributes\Service;
-use Medas\PhpTokenizer\Token;
+use Medas\PhpTokenizer\{Token, TokenGroups, TokenType};
 
 #[Service]
 readonly class ParameterComparer
 {
+    public function __construct(
+        private TokenGroups $tokenGroups,
+    )
+    {
+    }
+
     /**
      * @param Token[] $a
      * @param Token[] $b
@@ -41,7 +47,7 @@ readonly class ParameterComparer
     /** @param Token[] $tokens */
     private function hasDefault(array $tokens): int
     {
-        if (array_any($tokens, fn($token) => $token->is('='))) {
+        if (array_any($tokens, fn($token) => $token->is(TokenType::ASSIGNMENT))) {
             return 1;
         }
 
@@ -72,7 +78,7 @@ readonly class ParameterComparer
     private function type(array $tokens): string
     {
         foreach ($tokens as $token) {
-            if ($token->inTypeDeclaration) {
+            if ($token->typeDeclaration !== null && $token->is($this->tokenGroups->typeDeclarationTypes())) {
                 return $token->text;
             }
         }

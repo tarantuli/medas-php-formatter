@@ -26,13 +26,6 @@ readonly class Settings
     public array $preparsers;
 
     /**
-     * An array of Preformatter class names
-     *
-     * @var string[]
-     */
-    public array $preformatters;
-
-    /**
      * An array of Formatter class names
      *
      * @var string[]
@@ -42,7 +35,6 @@ readonly class Settings
     public function __construct(
         array              $additionalFormatters = [],
         array              $additionalPreparsers = [],
-        array              $additionalPreformatters = [],
         BreakpointSet|null $classDeclarationSet = null,
         BreakpointSet|null $controlStatementSet = null,
         BreakpointSet|null $genericLineSet = null,
@@ -57,7 +49,6 @@ readonly class Settings
         $this->document = $document;
         $this->import = new ImportSettings();
         $this->preparsers = $additionalPreparsers;
-        $this->preformatters = $additionalPreformatters;
 
         $this->formatters = [
             RequiredWhitespace::class,

@@ -9,21 +9,23 @@ use Medas\PhpFormatter\{Formatters\BaseFormatter, Job};
 use Medas\PhpTokenizer\BlockType;
 
 /**
- * A closure, anonymous class or hook list that is shifted along with a split call or a promoted parameter takes its
- * body with it: the statements in its block get the same additional depth.
+ * A closure, anonymous class, match or hook list that is shifted along with a split call or a promoted parameter takes
+ * its body with it: the statements in its block get the same additional depth.
  */
 #[Service]
 readonly class CurlyBlockDepthPropagator extends BaseFormatter
 {
     /**
-     * The blocks whose statements are indented relative to the statement that opens them, shifted or not. The body of
-     * a control structure, match, switch etc. only passes on what its own block got.
+     * The blocks whose statements are indented relative to the statement that opens them, shifted or not. These are
+     * the ones that can be part of an expression, like an argument. The body of a control structure, switch etc. only
+     * passes on what its own block got.
      */
     private const array OWN_DEPTH_BLOCKS = [
         BlockType::Closure,
         BlockType::ClassLike,
         BlockType::Function,
         BlockType::HookList,
+        BlockType::Match,
     ];
 
     public function priority(): int

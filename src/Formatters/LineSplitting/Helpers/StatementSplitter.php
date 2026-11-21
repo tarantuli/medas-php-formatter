@@ -6,7 +6,7 @@ namespace Medas\PhpFormatter\Formatters\LineSplitting\Helpers;
 
 use Medas\Core\Attributes\Service;
 use Medas\PhpFormatter\Formatters\Tokens;
-use Medas\PhpTokenizer\{Statement, TokenGroups};
+use Medas\PhpTokenizer\{Statement, Token, TokenGroups, TokenRole};
 
 #[Service]
 readonly class StatementSplitter
@@ -33,11 +33,12 @@ readonly class StatementSplitter
         $this->blankLineInserter->addBlankLineBefore($statement);
 
         $currentStatement = null;
-        $depth = $this->determineInitialDepth($statement);
 
-        if ($statement->lastToken()->is(Tokens::CLOSING_BRACKETS)) {
+        if ($statement->lastToken()->is(Tokens::CLOSING_BRACKETS)
+                && !$this->opensInRegion($statement, $statement->lastToken(), $openerIndex)) {
             // Statements that end with closing brackets are hard to process correctly elsewhere,
-            // so skip the last token here
+            // so skip the last token here. Not one that closes a bracket in the region, like the "]" of
+            // "fn() => ['name' => $name]" as the last argument.
             $closerIndex = $statement->tokenCount() - 1;
         }
 
@@ -51,16 +52,12 @@ readonly class StatementSplitter
 
         $this->extractTrailingTokens($statement, $statement->tokenCount() - 1, $closerIndex);
 
+        $regionDepth = $this->separatorDepth($statement, $separators, $openerIndex, $closerIndex);
+
         for ($i = $closerIndex - 1; $i > $openerIndex; --$i) {
             $token = $statement->getToken($i);
 
-            $questionPlusColonCheck = $token->previous
-                && $token->previous->is(T_QUESTION_MARK)
-                && $token->is(T_COLON);
-
             $statement->removeToken($token);
-
-            $text = $token->text;
 
             if (!$splitAfter) {
                 if ($currentStatement === null) {
@@ -70,17 +67,10 @@ readonly class StatementSplitter
                 $currentStatement->prependToken($token);
             }
 
-            if (!$questionPlusColonCheck && $token->is($separators) && $depth === 0 && $i > $openerIndex + 1) {
+            $isSeparator = $this->isSeparator($token, $separators) && $token->bracketDepth === $regionDepth;
+
+            if ($isSeparator && $i > $openerIndex + 1) {
                 $currentStatement = $this->startNewStatement($statement, $additionalDepth);
-            }
-
-            if (in_array($text, Tokens::CLOSING_BRACKETS)) {
-                ++$depth;
-            }
-
-            // "#[" opens an attribute, and is closed by a regular "]"
-            if (in_array($text, Tokens::OPENING_BRACKETS) || $token->is(T_ATTRIBUTE)) {
-                --$depth;
             }
 
             if ($token->closesAttribute) {
@@ -107,22 +97,43 @@ readonly class StatementSplitter
         }
     }
 
-    private function determineInitialDepth(Statement $statement): int
+    private function opensInRegion(Statement $statement, Token $closer, int $openerIndex): bool
     {
-        $openers = 0;
-        $closers = 0;
-        $lastToken = $statement->lastToken();
+        $opener = $closer->matchingBracket;
 
-        foreach ($statement as $token) {
-            if ($token !== $lastToken && $token->is([...Tokens::OPENING_BRACKETS, T_ATTRIBUTE])) {
-                ++$openers;
-            }
-            elseif ($token->is(Tokens::CLOSING_BRACKETS)) {
-                ++$closers;
+        return $opener?->statement === $statement && $statement->getIndex($opener) > $openerIndex;
+    }
+
+    /**
+     * The colon of "?:" is no separator, even when colons are.
+     */
+    private function isSeparator(Token $token, array $separators): bool
+    {
+        return $token->is($separators) && $token->role !== TokenRole::ShortTernary;
+    }
+
+    /**
+     * The bracket depth at which the region between the opener and the closer is split: that of its outermost
+     * separators. Separators inside brackets in the region, like the commas of a nested call, are deeper.
+     */
+    private function separatorDepth(
+        Statement $statement,
+        array     $separators,
+        int       $openerIndex,
+        int       $closerIndex
+    ): int|null
+    {
+        $depth = null;
+
+        for ($i = $openerIndex + 1; $i < $closerIndex; ++$i) {
+            $token = $statement->getToken($i);
+
+            if ($this->isSeparator($token, $separators)) {
+                $depth = $depth === null ? $token->bracketDepth : min($depth, $token->bracketDepth);
             }
         }
 
-        return $openers > $closers ? $openers - $closers : 0;
+        return $depth;
     }
 
     private function extractTrailingTokens(Statement $statement, int $lastIndex, int $closerIndex): void

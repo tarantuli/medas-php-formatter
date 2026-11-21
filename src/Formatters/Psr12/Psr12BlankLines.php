@@ -5,17 +5,14 @@ declare(strict_types=1);
 namespace Medas\PhpFormatter\Formatters\Psr12;
 
 use Medas\Core\Attributes\Service;
-use Medas\PhpFormatter\Formatters\{BaseFormatter, Helpers\BlankLineAdder, Helpers\ReturnTypeTokens};
+use Medas\PhpFormatter\Formatters\{BaseFormatter, Helpers\BlankLineAdder};
 use Medas\PhpFormatter\Job;
 use Medas\PhpTokenizer\{
-    Contexts\ClassBody,
-    Contexts\MethodParameters,
-    Contexts\PropertyHook,
+    BlockType,
+    DeclarationKind,
     StatementTypeFinder,
     StatementTypes\BlockCloser,
-    StatementTypes\ClassDeclaration,
     StatementTypes\DeclareStatement,
-    StatementTypes\FunctionDeclaration,
     StatementTypes\NamespaceDeclaration,
     StatementTypes\PhpOpenTag,
     StatementTypes\SwitchBranch,
@@ -23,7 +20,8 @@ use Medas\PhpTokenizer\{
     StatementTypes\UseConstStatement,
     StatementTypes\UseFunctionStatement,
     TokenGroups,
-    TokenTree
+    TokenTree,
+    TokenType
 };
 
 #[Service]
@@ -31,7 +29,6 @@ readonly class Psr12BlankLines extends BaseFormatter
 {
     public function __construct(
         private BlankLineAdder      $blankLineAdder,
-        private ReturnTypeTokens    $returnTypeTokens,
         private StatementTypeFinder $typeFinder,
         private TokenGroups         $tokenGroups,
     )
@@ -59,28 +56,15 @@ readonly class Psr12BlankLines extends BaseFormatter
         $this->additionalLines($job->tree);
     }
 
+    /**
+     * A line break after the attributes of a declaration, but not after those of a parameter, which are inside the
+     * parentheses of the parameter list.
+     */
     private function afterAttributes(TokenTree $tree): void
     {
-        $bracketDepth = 0;
-
         foreach ($tree as $token) {
-            if (!$token->inAttribute) {
-                continue;
-            }
-
-            if ($token->is(T_SQUARE_BRACKET_OPEN)) {
-                ++$bracketDepth;
-            }
-
-            if ($token->is(T_SQUARE_BRACKET_CLOSE)) {
-                if ($bracketDepth === 0) {
-                    if (!$token->context instanceof MethodParameters) {
-                        $token->lineBreakAfter();
-                    }
-                }
-                else {
-                    --$bracketDepth;
-                }
+            if ($token->closesAttribute && $token->bracketDepth === 0) {
+                $token->lineBreakAfter();
             }
         }
     }
@@ -130,40 +114,41 @@ readonly class Psr12BlankLines extends BaseFormatter
     {
         foreach ($tree->statements() as $statement) {
             $type = $this->typeFinder->for($statement);
+            $kind = $statement->declaration?->kind;
+            $opens = $statement->lastToken()?->opensBlock;
 
-            if ($type instanceof ClassDeclaration) {
+            // The { of a class declaration on a line of its own, but not that of an anonymous class
+            if ($kind?->isClassLike() && $opens === BlockType::ClassLike) {
                 $statement->getToken(-2)->lineBreakAfter();
             }
 
-            if ($type instanceof FunctionDeclaration) {
-                if ($statement->lastToken()->is(T_CURLY_BRACKET_OPEN)) {
-                    // Don't add a line break before { if the statement opens a promoted property hook.
-                    // Use the same return-type-token walk-back as ReturnTypeTokens::isReturnTypeToken.
-                    if ($this->returnTypeTokens->isReturnTypeToken($statement->lastToken())) {
-                        $statement->getToken(-2)->lineBreakAfter();
-                    }
+            if ($kind === DeclarationKind::Function || $kind === DeclarationKind::Method) {
+                // The { of the body on a line of its own, but not one that opens the hooks of a promoted property
+                if ($opens === BlockType::Function) {
+                    $statement->getToken(-2)->lineBreakAfter();
                 }
-                else {
-                    // It's an abstract function declaration
+
+                // An abstract or interface method
+                elseif ($statement->lastToken()?->is(TokenType::SEMICOLON)) {
                     $statement->blankLineAfter();
                 }
             }
 
-            if ($type instanceof BlockCloser && !$statement->lastToken()->is(T_CURLY_BRACKET_OPEN)) {
-                // Don't add blank lines for block closers that are direct children of a property
-                // hook block (e.g. the } closing a "get { }" or "set { }" body). These are
-                // identified by being in PropertyHook context whose parent block was opened by
-                // a ClassBody-context statement (the property declaration).
-                // Block closers deeper inside hook bodies (e.g. closing an "if" inside "set {}") are
-                // NOT skipped, so blank lines within hook body code are preserved normally.
-                if ($statement->firstToken()?->context instanceof PropertyHook
-                        && $statement->block->opener?->firstToken()?->context instanceof ClassBody) {
+            if ($type instanceof BlockCloser && !$statement->lastToken()->is(TokenType::CURLY_BRACKET_OPEN)) {
+                // No blank lines after the } of a hook body like "get { }", which is in the hook list. Block closers
+                // deeper inside hook bodies, like that of an if in "set { }", keep their blank lines.
+                if ($statement->block->type === BlockType::HookList) {
                     continue;
                 }
 
                 $nextStatement = $statement->next();
+                $closesLambda = $nextStatement?->firstToken()->is([
+                    TokenType::SEMICOLON,
+                    TokenType::COMMA,
+                    TokenType::ROUND_BRACKET_CLOSE,
+                ]);
 
-                if ($nextStatement && $nextStatement->firstToken()->is([T_SEMICOLON, T_COMMA, T_ROUND_BRACKET_CLOSE])) {
+                if ($closesLambda) {
                     // Lambda function body closer
                     $nextStatement->mergeWithPrevious();
                 }
