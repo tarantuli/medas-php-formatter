@@ -30,10 +30,19 @@ class GenericLineSet implements BreakpointSet
                 ),
             ],
             [
-                new BreakpointDefinition('depth 0 ternary', [TokenType::QUESTION_MARK, TokenType::COLON], maxDepth: 0),
+                new BreakpointDefinition(
+                    'depth 0 ternary',
+                    [TokenType::QUESTION_MARK, TokenType::COLON],
+                    maxDepth: 0
+                ),
             ],
             [
-                new BreakpointDefinition('depth 0-1 comma', [TokenType::COMMA], splitAfter: true, maxDepth: 1),
+                new BreakpointDefinition(
+                    'depth 0-1 comma',
+                    [TokenType::COMMA],
+                    splitAfter: true,
+                    maxDepth: 1
+                ),
                 new BreakpointDefinition(
                     'depth 0 and/or',
                     [T_BOOLEAN_AND, T_BOOLEAN_OR, T_LOGICAL_AND, T_LOGICAL_OR],
@@ -55,7 +64,10 @@ class GenericLineSet implements BreakpointSet
             ],
             [
                 new BreakpointDefinition('vertical bar', [TokenType::VERTICAL_BAR]),
-                new BreakpointDefinition('arithmetic', [TokenType::PLUS, TokenType::MINUS, TokenType::ASTERISK]),
+                new BreakpointDefinition(
+                    'arithmetic',
+                    [TokenType::PLUS, TokenType::MINUS, TokenType::ASTERISK]
+                ),
                 new BreakpointDefinition('depth 0 assignment', [TokenType::ASSIGNMENT], maxDepth: 0),
             ],
             [

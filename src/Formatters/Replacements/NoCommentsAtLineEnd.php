@@ -52,34 +52,6 @@ readonly class NoCommentsAtLineEnd extends BaseFormatter
         $this->breakLinesBeforeComments($job);
     }
 
-    /**
-     * A comment inside a statement is on a line of its own, also when the statement isn't split. Otherwise it would
-     * end up at the end of a line, and be moved the next time.
-     */
-    private function breakLinesBeforeComments(Job $job): void
-    {
-        foreach ($job->tree as $token) {
-            if ($token->is(T_COMMENT) && $token->previous?->statement === $token->statement) {
-                $token->previous->lineBreakAfter();
-            }
-        }
-    }
-
-    /**
-     * A comment after a line like "}," that only closes brackets is about the code after it, so it stays there, on a
-     * line of its own.
-     */
-    private function onlyClosesBefore(Token $comment): bool
-    {
-        for ($token = $this->findStartOfLine($comment); $token !== $comment; $token = $token->next) {
-            if (!$token->is([TokenType::ROUND_BRACKET_CLOSE, TokenType::SQUARE_BRACKET_CLOSE, TokenType::CURLY_BRACKET_CLOSE, TokenType::COMMA])) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
     private function isAtLineEnd(Token $token): bool
     {
         return $token->is(T_COMMENT)
@@ -122,6 +94,26 @@ readonly class NoCommentsAtLineEnd extends BaseFormatter
     }
 
     /**
+     * A comment after a line like "}," that only closes brackets is about the code after it, so it stays there, on a
+     * line of its own.
+     */
+    private function onlyClosesBefore(Token $comment): bool
+    {
+        for ($token = $this->findStartOfLine($comment); $token !== $comment; $token = $token->next) {
+            if (!$token->is([
+                TokenType::ROUND_BRACKET_CLOSE,
+                TokenType::SQUARE_BRACKET_CLOSE,
+                TokenType::CURLY_BRACKET_CLOSE,
+                TokenType::COMMA
+            ])) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
      * Only a list with a trailing comma is certain to be split over multiple lines (by `TrailingCommaSplitter`). In
      * any other case, the comment is moved before the whole statement, so it doesn't end up in the middle of a line.
      *
@@ -131,7 +123,9 @@ readonly class NoCommentsAtLineEnd extends BaseFormatter
     {
         $statement = $token->statement;
         $lineStart = $this->findStartOfLine($token);
-        $keepInStatement = $lineStart !== $statement->firstToken() && $this->isInListWithTrailingComma($lineStart);
+
+        $keepInStatement = $lineStart !== $statement->firstToken()
+            && $this->isInListWithTrailingComma($lineStart);
 
         $statement->removeToken($token);
 
@@ -143,19 +137,19 @@ readonly class NoCommentsAtLineEnd extends BaseFormatter
         }
     }
 
-    /** @param Token[] $lastPrepended */
-    private function prependInOrder(Statement $statement, Token $token, array &$lastPrepended): void
+    /**
+     * Finds the first token of the statement that was on the same line as the comment in the original code.
+     */
+    private function findStartOfLine(Token $comment): Token
     {
-        $id = spl_object_id($statement);
+        $lineStart = $comment->previous;
 
-        if (isset($lastPrepended[$id])) {
-            $statement->insertTokenAfter($token, $lastPrepended[$id]);
-        }
-        else {
-            $statement->prependToken($token);
+        while ($lineStart->previous?->statement === $comment->statement
+                && $lineStart->previous->originalLineBreaksAfter === 0) {
+            $lineStart = $lineStart->previous;
         }
 
-        $lastPrepended[$id] = $token;
+        return $lineStart;
     }
 
     private function isInListWithTrailingComma(Token $lineStart): bool
@@ -219,18 +213,31 @@ readonly class NoCommentsAtLineEnd extends BaseFormatter
         return !$token->inString && $token->is(Tokens::CLOSING_BRACKETS);
     }
 
-    /**
-     * Finds the first token of the statement that was on the same line as the comment in the original code.
-     */
-    private function findStartOfLine(Token $comment): Token
+    /** @param Token[] $lastPrepended */
+    private function prependInOrder(Statement $statement, Token $token, array &$lastPrepended): void
     {
-        $lineStart = $comment->previous;
+        $id = spl_object_id($statement);
 
-        while ($lineStart->previous?->statement === $comment->statement
-                && $lineStart->previous->originalLineBreaksAfter === 0) {
-            $lineStart = $lineStart->previous;
+        if (isset($lastPrepended[$id])) {
+            $statement->insertTokenAfter($token, $lastPrepended[$id]);
+        }
+        else {
+            $statement->prependToken($token);
         }
 
-        return $lineStart;
+        $lastPrepended[$id] = $token;
+    }
+
+    /**
+     * A comment inside a statement is on a line of its own, also when the statement isn't split. Otherwise it would
+     * end up at the end of a line, and be moved the next time.
+     */
+    private function breakLinesBeforeComments(Job $job): void
+    {
+        foreach ($job->tree as $token) {
+            if ($token->is(T_COMMENT) && $token->previous?->statement === $token->statement) {
+                $token->previous->lineBreakAfter();
+            }
+        }
     }
 }

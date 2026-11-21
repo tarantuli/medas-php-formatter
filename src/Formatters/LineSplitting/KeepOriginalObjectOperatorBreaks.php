@@ -45,6 +45,7 @@ readonly class KeepOriginalObjectOperatorBreaks extends BaseFormatter
 
         // A blank line after the statement comes after its last part
         $newStatement->blankLineAfter($statement->blankLineAfter);
+
         $statement->blankLineAfter(false);
 
         $index = $statement->getIndex($token);

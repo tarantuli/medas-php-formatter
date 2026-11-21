@@ -67,7 +67,8 @@ readonly class StatementSplitter
                 $currentStatement->prependToken($token);
             }
 
-            $isSeparator = $this->isSeparator($token, $separators) && $token->bracketDepth === $regionDepth;
+            $isSeparator = $this->isSeparator($token, $separators)
+                && $token->bracketDepth === $regionDepth;
 
             if ($isSeparator && $i > $openerIndex + 1) {
                 $currentStatement = $this->startNewStatement($statement, $additionalDepth);
@@ -104,38 +105,6 @@ readonly class StatementSplitter
         return $opener?->statement === $statement && $statement->getIndex($opener) > $openerIndex;
     }
 
-    /**
-     * The colon of "?:" is no separator, even when colons are.
-     */
-    private function isSeparator(Token $token, array $separators): bool
-    {
-        return $token->is($separators) && $token->role !== TokenRole::ShortTernary;
-    }
-
-    /**
-     * The bracket depth at which the region between the opener and the closer is split: that of its outermost
-     * separators. Separators inside brackets in the region, like the commas of a nested call, are deeper.
-     */
-    private function separatorDepth(
-        Statement $statement,
-        array     $separators,
-        int       $openerIndex,
-        int       $closerIndex
-    ): int|null
-    {
-        $depth = null;
-
-        for ($i = $openerIndex + 1; $i < $closerIndex; ++$i) {
-            $token = $statement->getToken($i);
-
-            if ($this->isSeparator($token, $separators)) {
-                $depth = $depth === null ? $token->bracketDepth : min($depth, $token->bracketDepth);
-            }
-        }
-
-        return $depth;
-    }
-
     private function extractTrailingTokens(Statement $statement, int $lastIndex, int $closerIndex): void
     {
         if ($lastIndex < $closerIndex) {
@@ -162,6 +131,38 @@ readonly class StatementSplitter
 
             $finalStatement->prependToken($token);
         }
+    }
+
+    /**
+     * The bracket depth at which the region between the opener and the closer is split: that of its outermost
+     * separators. Separators inside brackets in the region, like the commas of a nested call, are deeper.
+     */
+    private function separatorDepth(
+        Statement $statement,
+        array     $separators,
+        int       $openerIndex,
+        int       $closerIndex
+    ): int|null
+    {
+        $depth = null;
+
+        for ($i = $openerIndex + 1; $i < $closerIndex; ++$i) {
+            $token = $statement->getToken($i);
+
+            if ($this->isSeparator($token, $separators)) {
+                $depth = $depth === null ? $token->bracketDepth : min($depth, $token->bracketDepth);
+            }
+        }
+
+        return $depth;
+    }
+
+    /**
+     * The colon of "?:" is no separator, even when colons are.
+     */
+    private function isSeparator(Token $token, array $separators): bool
+    {
+        return $token->is($separators) && $token->role !== TokenRole::ShortTernary;
     }
 
     private function startNewStatement(Statement $statement, int $additionalDepth): Statement

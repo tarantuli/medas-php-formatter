@@ -51,6 +51,25 @@ readonly class Psr12VisibilityMarkers extends BaseFormatter
     }
 
     /**
+     * Modifiers only appear before the "function" keyword; searching the whole statement would also
+     * match a "static" return type or a "static::" in a parameter default.
+     */
+    private function findModifier(Statement $statement, array|int $type): Token|null
+    {
+        foreach ($statement as $token) {
+            if ($token === $statement->declaration->keyword) {
+                return null;
+            }
+
+            if ($token->is($type)) {
+                return $token;
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * Inserts "public" before the declaration itself, which comes after any doc comment, comments and attributes.
      */
     private function insertVisibility(Statement $statement): Token
@@ -74,24 +93,5 @@ readonly class Psr12VisibilityMarkers extends BaseFormatter
         }
 
         return $visibility;
-    }
-
-    /**
-     * Modifiers only appear before the "function" keyword; searching the whole statement would also
-     * match a "static" return type or a "static::" in a parameter default.
-     */
-    private function findModifier(Statement $statement, array|int $type): Token|null
-    {
-        foreach ($statement as $token) {
-            if ($token === $statement->declaration->keyword) {
-                return null;
-            }
-
-            if ($token->is($type)) {
-                return $token;
-            }
-        }
-
-        return null;
     }
 }

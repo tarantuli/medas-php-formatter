@@ -54,7 +54,9 @@ readonly class Finder
         $tokenCount = $statement->tokenCount();
         $lastToken = $statement->lastToken();
 
-        $isMatchBranch = $statement->block->type === BlockType::Match && $statement->containsType(T_DOUBLE_ARROW);
+        $isMatchBranch = $statement->block->type === BlockType::Match
+            && $statement->containsType(T_DOUBLE_ARROW);
+
         $foundDoubleArrow = false;
 
         foreach ($statement as $index => $token) {

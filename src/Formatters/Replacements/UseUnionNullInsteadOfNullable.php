@@ -32,7 +32,6 @@ readonly class UseUnionNullInsteadOfNullable extends BaseFormatter
     private function replaceByUnionNull(Token $token): void
     {
         $statement = $token->statement;
-
         $barToken = $this->typeToken('|', $token);
         $nullToken = $this->typeToken('null', $token);
 

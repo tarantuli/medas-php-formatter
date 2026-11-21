@@ -30,10 +30,19 @@ class SoftLineSet implements BreakpointSet
                 ),
             ],
             [
-                new BreakpointDefinition('depth 0 ternary', [TokenType::QUESTION_MARK, TokenType::COLON], maxDepth: 0),
+                new BreakpointDefinition(
+                    'depth 0 ternary',
+                    [TokenType::QUESTION_MARK, TokenType::COLON],
+                    maxDepth: 0
+                ),
             ],
             [
-                new BreakpointDefinition('depth 0 comma', [TokenType::COMMA], splitAfter: true, maxDepth: 0),
+                new BreakpointDefinition(
+                    'depth 0 comma',
+                    [TokenType::COMMA],
+                    splitAfter: true,
+                    maxDepth: 0
+                ),
                 new BreakpointDefinition(
                     'depth 0 and/or',
                     [T_BOOLEAN_AND, T_BOOLEAN_OR, T_LOGICAL_AND, T_LOGICAL_OR],
@@ -49,7 +58,12 @@ class SoftLineSet implements BreakpointSet
                 new BreakpointDefinition('depth 0 slash', [TokenType::SLASH], maxDepth: 0),
             ],
             [
-                new BreakpointDefinition('depth 1 comma', [TokenType::COMMA], splitAfter: true, maxDepth: 1),
+                new BreakpointDefinition(
+                    'depth 1 comma',
+                    [TokenType::COMMA],
+                    splitAfter: true,
+                    maxDepth: 1
+                ),
             ],
         ];
     }

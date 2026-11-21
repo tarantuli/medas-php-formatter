@@ -15,8 +15,8 @@ use Medas\PhpTokenizer\{Statement, TokenType};
 readonly class FunctionDeclarationSplitter
 {
     public function __construct(
-        private ParameterList             $parameterList,
         private Helpers\StatementSplitter $splitter,
+        private ParameterList             $parameterList,
     )
     {
     }

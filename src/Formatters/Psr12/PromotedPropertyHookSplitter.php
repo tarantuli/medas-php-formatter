@@ -5,9 +5,14 @@ declare(strict_types=1);
 namespace Medas\PhpFormatter\Formatters\Psr12;
 
 use Medas\Core\Attributes\Service;
-use Medas\PhpFormatter\Formatters\BaseFormatter;
-use Medas\PhpFormatter\Job;
-use Medas\PhpTokenizer\{BlockType, Statement, StatementTypeFinder, StatementTypes\FunctionDeclaration, TokenType};
+use Medas\PhpFormatter\{Formatters\BaseFormatter, Job};
+use Medas\PhpTokenizer\{
+    BlockType,
+    Statement,
+    StatementTypeFinder,
+    StatementTypes\FunctionDeclaration,
+    TokenType
+};
 
 #[Service]
 readonly class PromotedPropertyHookSplitter extends BaseFormatter

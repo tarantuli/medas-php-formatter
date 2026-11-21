@@ -5,8 +5,7 @@ declare(strict_types=1);
 namespace Medas\PhpFormatter\Formatters\Psr12;
 
 use Medas\Core\Attributes\Service;
-use Medas\PhpFormatter\Formatters\{BaseFormatter, Tokens};
-use Medas\PhpFormatter\Job;
+use Medas\PhpFormatter\{Formatters\BaseFormatter, Formatters\Tokens, Job};
 use Medas\PhpTokenizer\{
     BlockType,
     StatementTypeFinder,
@@ -172,7 +171,8 @@ readonly class Psr12Whitespace extends BaseFormatter
             $spaceBefore = in_array($token->opensBlock, [BlockType::Namespace, BlockType::TraitAdaptation], true)
                 || ($token->opensBlock === BlockType::ClassLike && $token->statement->declaration === null);
 
-            if ($token->is(TokenType::CURLY_BRACKET_OPEN) && ($this->followsParenthesesOrReturnType($token) || $spaceBefore)) {
+            if ($token->is(TokenType::CURLY_BRACKET_OPEN)
+                    && ($this->followsParenthesesOrReturnType($token) || $spaceBefore)) {
                 $token->previous->spaceAfter();
             }
 
@@ -206,6 +206,7 @@ readonly class Psr12Whitespace extends BaseFormatter
                 if ($token->previous->role === TokenRole::ByReference && $token->is(Tokens::VARIABLE_STARTERS)) {
                     $token->previous->spaceAfter(false);
                 }
+
                 // No space before a colon, like the one of a return type, a named argument, "case 1:" or "?:",
                 // except before the "else" colon of a ternary
                 elseif ($token->is(TokenType::COLON) && $token->role !== TokenRole::TernaryElse) {
@@ -217,6 +218,7 @@ readonly class Psr12Whitespace extends BaseFormatter
                     $token->previous->spaceAfter(false);
                     $token->spaceAfter(false);
                 }
+
                 // No space around the "&" of an intersection type, as in (A&B)|null
                 elseif ($token->is(TokenType::AMPERSANDS) && $token->typeDeclaration !== null) {
                     $token->previous->spaceAfter(false);
@@ -286,7 +288,8 @@ readonly class Psr12Whitespace extends BaseFormatter
                 }
 
                 // No spaces between ] and [
-                elseif ($token->is(TokenType::SQUARE_BRACKET_CLOSE) && $token->next->is(TokenType::SQUARE_BRACKET_OPEN)) {
+                elseif ($token->is(TokenType::SQUARE_BRACKET_CLOSE)
+                        && $token->next->is(TokenType::SQUARE_BRACKET_OPEN)) {
                     $token->spaceAfter(false);
                 }
 

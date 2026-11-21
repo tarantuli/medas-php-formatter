@@ -38,7 +38,6 @@ readonly class NewImportsInserter
     public function insert(TokenTree $tree, ReferencesAndImports $referencesAndImports): void
     {
         $comments = $this->removeExistingImportStatements($tree);
-
         $after = $this->findImportInsertionSpot($tree);
         $groupedImports = $this->importGrouper->group($referencesAndImports);
 
@@ -60,63 +59,6 @@ readonly class NewImportsInserter
         }
 
         $this->restoreComments($tree, $comments, $firstImport, $after);
-    }
-
-    /**
-     * Inserts a new statement at the start of the imports: right after the insertion spot, or, after "namespace X {",
-     * at the start of the namespace block.
-     *
-     * @param Statement|null $firstImport The import inserted before, which the new statement goes in front of
-     */
-    private function insertAtSpot(TokenTree $tree, Statement $after, Statement|null $firstImport): Statement
-    {
-        $namespaceBlock = $this->namespaceBlock($tree, $after);
-
-        if ($namespaceBlock === null) {
-            $statement = $after->block->appendNewStatement();
-            $after->block->moveStatementAfter($statement, $after);
-
-            return $statement;
-        }
-
-        $before = $firstImport ?? $this->firstStatementIn($tree, $namespaceBlock);
-        $statement = $namespaceBlock->appendNewStatement();
-
-        if ($before !== null) {
-            $namespaceBlock->removeStatement($statement);
-            $namespaceBlock->insertStatementBefore($statement, $before);
-        }
-
-        return $statement;
-    }
-
-    /**
-     * The block of "namespace X { ... }", if the insertion spot opens one.
-     */
-    private function namespaceBlock(TokenTree $tree, Statement $after): Block|null
-    {
-        if ($after->lastToken()?->opensBlock !== BlockType::Namespace) {
-            return null;
-        }
-
-        foreach ($tree->statements() as $statement) {
-            if ($statement->block->opener === $after) {
-                return $statement->block;
-            }
-        }
-
-        return null;
-    }
-
-    private function firstStatementIn(TokenTree $tree, Block $block): Statement|null
-    {
-        foreach ($tree->statements() as $statement) {
-            if ($statement->block === $block) {
-                return $statement;
-            }
-        }
-
-        return null;
     }
 
     /**
@@ -145,33 +87,6 @@ readonly class NewImportsInserter
         }
 
         return $comments;
-    }
-
-    /**
-     * The imports are regrouped and sorted, so a comment can't stay with the import it was in front of. All comments
-     * are put in front of the first import instead, or after the insertion spot if no imports are left.
-     *
-     * @param Token[] $comments
-     */
-    private function restoreComments(
-        TokenTree      $tree,
-        array          $comments,
-        Statement|null $firstImport,
-        Statement      $after
-    ): void
-    {
-        if ($comments === []) {
-            return;
-        }
-
-        if ($firstImport === null) {
-            $firstImport = $this->insertAtSpot($tree, $after, null);
-            $firstImport->blankLineAfter();
-        }
-
-        foreach (array_reverse($comments) as $comment) {
-            $firstImport->prependToken($comment);
-        }
     }
 
     private function findImportInsertionSpot(TokenTree $tree): Statement
@@ -217,7 +132,6 @@ readonly class NewImportsInserter
     {
         $open = $this->token('{');
         $close = $this->token('}');
-
         $open->matchingBracket = $close;
         $close->matchingBracket = $open;
 
@@ -257,5 +171,91 @@ readonly class NewImportsInserter
     private function token(string $text): Token
     {
         return Token::fromText($text, $this->baseToken);
+    }
+
+    /**
+     * The imports are regrouped and sorted, so a comment can't stay with the import it was in front of. All comments
+     * are put in front of the first import instead, or after the insertion spot if no imports are left.
+     *
+     * @param Token[] $comments
+     */
+    private function restoreComments(
+        TokenTree      $tree,
+        array          $comments,
+        Statement|null $firstImport,
+        Statement      $after
+    ): void
+    {
+        if ($comments === []) {
+            return;
+        }
+
+        if ($firstImport === null) {
+            $firstImport = $this->insertAtSpot($tree, $after, null);
+
+            $firstImport->blankLineAfter();
+        }
+
+        foreach (array_reverse($comments) as $comment) {
+            $firstImport->prependToken($comment);
+        }
+    }
+
+    /**
+     * Inserts a new statement at the start of the imports: right after the insertion spot, or, after "namespace X {",
+     * at the start of the namespace block.
+     *
+     * @param Statement|null $firstImport The import inserted before, which the new statement goes in front of
+     */
+    private function insertAtSpot(TokenTree $tree, Statement $after, Statement|null $firstImport): Statement
+    {
+        $namespaceBlock = $this->namespaceBlock($tree, $after);
+
+        if ($namespaceBlock === null) {
+            $statement = $after->block->appendNewStatement();
+
+            $after->block->moveStatementAfter($statement, $after);
+
+            return $statement;
+        }
+
+        $before = $firstImport ?? $this->firstStatementIn($tree, $namespaceBlock);
+        $statement = $namespaceBlock->appendNewStatement();
+
+        if ($before !== null) {
+            $namespaceBlock->removeStatement($statement);
+            $namespaceBlock->insertStatementBefore($statement, $before);
+        }
+
+        return $statement;
+    }
+
+    /**
+     * The block of "namespace X { ... }", if the insertion spot opens one.
+     */
+    private function namespaceBlock(TokenTree $tree, Statement $after): Block|null
+    {
+        if ($after->lastToken()?->opensBlock !== BlockType::Namespace) {
+            return null;
+        }
+
+        foreach ($tree->statements() as $statement) {
+            if ($statement->block->opener === $after) {
+                return $statement->block;
+            }
+        }
+
+        return null;
+    }
+
+    private function firstStatementIn(TokenTree $tree, Block $block): Statement|null
+    {
+        foreach ($tree->statements() as $statement) {
+            if ($statement->block === $block) {
+                return $statement;
+            }
+        }
+
+        return null;
     }
 }

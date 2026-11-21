@@ -80,23 +80,14 @@ class BlockPrinter
         }
     }
 
-    private function printIndentation(Statement $statement): void
-    {
-        echo $this->getIndentation($statement);
-    }
-
-    private function getIndentation(Statement $statement): string
-    {
-        return str_repeat($this->indentation, $statement->block->depth + $statement->additionalDepth);
-    }
-
     /**
      * Doc comments and block comments keep their original indentation and line endings in the token text. Their lines
      * that start with `*` are re-indented to the statement, and all their line endings become the document's.
      */
     private function tokenText(Token $token, Statement $statement): string
     {
-        $isBlockComment = $token->is(T_DOC_COMMENT) || ($token->is(T_COMMENT) && str_starts_with($token->text, '/*'));
+        $isBlockComment = $token->is(T_DOC_COMMENT)
+            || ($token->is(T_COMMENT) && str_starts_with($token->text, '/*'));
 
         if (!$isBlockComment || $this->lineEndingLength === 0 || !preg_match('/\R/', $token->text)) {
             return $token->text;
@@ -114,5 +105,18 @@ class BlockPrinter
         }
 
         return implode($this->lineEnding, $lines);
+    }
+
+    private function printIndentation(Statement $statement): void
+    {
+        echo $this->getIndentation($statement);
+    }
+
+    private function getIndentation(Statement $statement): string
+    {
+        return str_repeat(
+            $this->indentation,
+            $statement->block->depth + $statement->additionalDepth
+        );
     }
 }

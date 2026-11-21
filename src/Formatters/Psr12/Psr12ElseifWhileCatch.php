@@ -51,7 +51,9 @@ readonly class Psr12ElseifWhileCatch extends BaseFormatter
 
         $closer = $statement->previous();
 
-        if ($closer === null || $closer->tokenCount() !== 1 || !$closer->firstToken()->is(TokenType::CURLY_BRACKET_CLOSE)) {
+        if ($closer === null
+                || $closer->tokenCount() !== 1
+                || !$closer->firstToken()->is(TokenType::CURLY_BRACKET_CLOSE)) {
             return false;
         }
 

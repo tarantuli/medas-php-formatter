@@ -55,7 +55,6 @@ readonly class Formatter
         $this->applyPreparsers($job);
 
         $job->tokens = $this->tokenizer->tokenize($job->code);
-
         $job->tree = $this->treeBuilder->fromCollection($job->tokens);
 
         if ($this->dumpParsedTree) {

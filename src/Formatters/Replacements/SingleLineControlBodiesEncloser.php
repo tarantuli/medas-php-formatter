@@ -120,7 +120,6 @@ readonly class SingleLineControlBodiesEncloser extends BaseFormatter
     {
         $opener = Token::fromText('{', $statement->lastToken());
         $closer = Token::fromText('}', $statement->lastToken());
-
         $opener->opensBlock = BlockType::Control;
         $opener->matchingBracket = $closer;
         $opener->bracketDepth = $statement->firstToken()->bracketDepth;

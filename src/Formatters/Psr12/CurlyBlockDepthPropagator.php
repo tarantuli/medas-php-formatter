@@ -40,7 +40,6 @@ readonly class CurlyBlockDepthPropagator extends BaseFormatter
 
         foreach ($job->tree->statements() as $statement) {
             $depth = $statement->block->depth;
-
             $statement->additionalDepth += $additionalByBlockDepth[$depth] ?? 0;
 
             // A closer, like "}" or "endif", lines up with the statement that opened its block

@@ -142,6 +142,7 @@ readonly class Psr12BlankLines extends BaseFormatter
                 }
 
                 $nextStatement = $statement->next();
+
                 $closesLambda = $nextStatement?->firstToken()->is([
                     TokenType::SEMICOLON,
                     TokenType::COMMA,
