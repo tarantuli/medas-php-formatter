@@ -53,6 +53,10 @@ readonly class StatementSplitter
         $this->extractTrailingTokens($statement, $statement->tokenCount() - 1, $closerIndex);
 
         $regionDepth = $this->separatorDepth($statement, $separators, $openerIndex, $closerIndex);
+        $arrowFunctionsByArrow = $this->arrowFunctionsByArrow($statement);
+
+        /** @var Statement[] $segments */
+        $segments = [];
 
         for ($i = $closerIndex - 1; $i > $openerIndex; --$i) {
             $token = $statement->getToken($i);
@@ -62,6 +66,8 @@ readonly class StatementSplitter
             if (!$splitAfter) {
                 if ($currentStatement === null) {
                     $currentStatement = $this->startNewStatement($statement, $additionalDepth);
+
+                    array_unshift($segments, $currentStatement);
                 }
 
                 $currentStatement->prependToken($token);
@@ -72,6 +78,8 @@ readonly class StatementSplitter
 
             if ($isSeparator && $i > $openerIndex + 1) {
                 $currentStatement = $this->startNewStatement($statement, $additionalDepth);
+
+                array_unshift($segments, $currentStatement);
             }
 
             if ($token->closesAttribute) {
@@ -81,6 +89,8 @@ readonly class StatementSplitter
             if ($splitAfter) {
                 if ($currentStatement === null) {
                     $currentStatement = $this->startNewStatement($statement, $additionalDepth);
+
+                    array_unshift($segments, $currentStatement);
                 }
 
                 if ($currentStatement->tokenCount() === 0
@@ -95,6 +105,62 @@ readonly class StatementSplitter
 
                 $currentStatement->prependToken($token);
             }
+        }
+
+        $this->indentArrowFunctionBodies($statement, $segments, $arrowFunctionsByArrow);
+    }
+
+    /**
+     * The fn tokens of the statement's arrow functions, keyed by the object id of their => token.
+     *
+     * @return Token[]
+     */
+    private function arrowFunctionsByArrow(Statement $statement): array
+    {
+        $arrowFunctionsByArrow = [];
+
+        // The fn tokens still waiting for their =>, innermost last
+        $openArrowFunctions = [];
+
+        foreach ($statement as $token) {
+            if ($token->is(T_FN)) {
+                $openArrowFunctions[] = $token;
+            }
+            elseif ($token->is(T_DOUBLE_ARROW)
+                    && $openArrowFunctions
+                    && end($openArrowFunctions)->bracketDepth === $token->bracketDepth) {
+                $arrowFunctionsByArrow[spl_object_id($token)] = array_pop($openArrowFunctions);
+            }
+        }
+
+        return $arrowFunctionsByArrow;
+    }
+
+    /**
+     * The body of an arrow function that starts on a split-off line belongs to that line, so it goes one level
+     * deeper than it, like the body after the second => of "'key' => fn() => $body".
+     *
+     * @param Statement[] $segments
+     * @param Token[]     $arrowFunctionsByArrow
+     */
+    private function indentArrowFunctionBodies(
+        Statement $statement,
+        array     $segments,
+        array     $arrowFunctionsByArrow
+    ): void
+    {
+        $extraDepth = 0;
+
+        foreach ($segments as $segment) {
+            $firstToken = $segment->firstToken();
+            $arrowFunction = $firstToken ? $arrowFunctionsByArrow[spl_object_id($firstToken)] ?? null : null;
+
+            // An arrow function that starts in the root statement keeps its body at the normal depth
+            if ($arrowFunction !== null && $arrowFunction->statement !== $statement) {
+                ++$extraDepth;
+            }
+
+            $segment->additionalDepth += $extraDepth;
         }
     }
 

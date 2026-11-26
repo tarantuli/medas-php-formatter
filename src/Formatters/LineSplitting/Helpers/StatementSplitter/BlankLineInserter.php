@@ -41,8 +41,9 @@ readonly class BlankLineInserter
             return;
         }
 
-        if ($statement->rootStatement === $previousStatement) {
-            // No blank lines between a root statement and its children
+        if ($this->topRootStatement($statement) === $this->topRootStatement($previousStatement)) {
+            // No blank lines between parts of the same split statement: a root statement and its children,
+            // nor two children, like when a child is split again
             return;
         }
 
@@ -54,5 +55,14 @@ readonly class BlankLineInserter
         if ($statement->block === $previousStatement->block) {
             $previousStatement->blankLineAfter();
         }
+    }
+
+    private function topRootStatement(Statement $statement): Statement
+    {
+        while ($statement->rootStatement !== null) {
+            $statement = $statement->rootStatement;
+        }
+
+        return $statement;
     }
 }

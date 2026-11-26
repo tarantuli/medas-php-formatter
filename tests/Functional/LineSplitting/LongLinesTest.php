@@ -43,6 +43,28 @@ class LongLinesTest extends BaseTestClass
         $this->assertRemainsTheSame('line-splitting/fat-arrows');
     }
 
+    // The arrow of an arrow function that is itself the value after an array key's arrow belongs to that value, so
+    // when both are split it goes one level deeper; it came out at the same level as the key's arrow
+    public function testNestedFatArrowsAreSplitOneLevelDeeper(): void
+    {
+        $this->assertChanges('line-splitting/nested-fat-arrows-pre', 'line-splitting/nested-fat-arrows-post');
+    }
+
+    public function testNestedFatArrowsKeepTheirDeeperIndentation(): void
+    {
+        $this->assertRemainsTheSame('line-splitting/nested-fat-arrows-post');
+    }
+
+    // A part of a split array item that is split again gets no blank line before it; one was added in between the
+    // arrow function's line and its body when the body was split on its concatenations
+    public function testNoBlankLineInsideSplitArrayItem(): void
+    {
+        $this->assertChanges(
+            'line-splitting/no-blank-line-inside-split-array-item-pre',
+            'line-splitting/no-blank-line-inside-split-array-item-post'
+        );
+    }
+
     public function testMatches(): void
     {
         $this->assertRemainsTheSame('line-splitting/matches');
